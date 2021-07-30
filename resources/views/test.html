@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" type="text/css" href="./css/base.css" />
+        <!--Import Google Icon Font-->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    </head>
+    <body>
+        <div class="main-container">
+            <!-- Insert you test HTML -->
+            <h4>
+                !!{entityLogicalName}
+                <h6 style="display: inline">Schema Name: !!{entitySchemaName}</h6>
+            </h4>
+            <div>!!{description}</div>
+
+            <ul id="tabs-swipe-demo" class="tabs">
+                <li class="tab col s3"><a class="active" href="#entity">Entity Details</a></li>
+                <li class="tab col s3"><a href="#attributes">Attributes</a></li>
+            </ul>
+            <br /><br />
+            <div id="entity" class="col s12">
+                <form>
+                    <div>
+                        <label>SLA:</label>
+                        <input id="sla" type="text" value="!!{sla}" readonly />
+                    </div>
+                    <div>
+                        <label>Type:</label>
+                        <input type="text" value="!!{entityType}" readonly />
+                    </div>
+                    <div>
+                        <label>Object Type Code:</label>
+                        <input id="objtypecode" type="text" value="!!{objectTypeCode}" readonly />
+                        <i class="material-icons trailing" onclick="copyToClipboard('objtypecode')">content_copy</i>
+                    </div>
+                    <div>
+                        <label>Primary ID Attribute:</label>
+                        <input type="text" value="!!{idAttr}" readonly />
+                        <i class="material-icons trailing">content_copy</i>
+                    </div>
+                    <div>
+                        <label>Primary Name Attribute:</label>
+                        <input type="text" value="!!{nameAttr}" readonly />
+                        <i class="material-icons trailing">content_copy</i>
+                    </div>
+                    <div>
+                        <label>Entity Set Name:</label>
+                        <input type="text" value="!!{setName}" readonly />
+                        <i class="material-icons trailing">content_copy</i>
+                    </div>
+                </form>
+            </div>
+            <div id="attributes" class="col s12">
+                <table>
+                    <thead>
+                        <th>Id</th>
+                        <th>Logical Name</th>
+                        <th>Schema Name</th>
+                        <th>Type</th>
+                        <th>Required Level</th>
+                    </thead>
+                    !!{attributes}
+                </table>
+            </div>
+        </div>
+        <script src="./js/base.js"></script>
+    </body>
+</html>

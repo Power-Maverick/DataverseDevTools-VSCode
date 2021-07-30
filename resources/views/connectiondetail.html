@@ -1,0 +1,19 @@
+<h3>!!{connName}</h3>
+<h5>!!{connType}</h5>
+<form>
+    <div>
+        <label>Environment URL:</label>
+        <input id="envurl" type="text" value="!!{envUrl}" readonly />
+        <i class="material-icons trailing" onclick="copyToClipboard('envurl')">content_copy</i>
+    </div>
+    <div>
+        <label>Username:</label>
+        <input id="uname" type="text" value="!!{userName}" readonly />
+        <i class="material-icons trailing" onclick="copyToClipboard('uname')">content_copy</i>
+    </div>
+    <div>
+        <label>Access Token:</label>
+        <input id="pass" type="text" value="!!{token}" readonly />
+        <i class="material-icons trailing" onclick="copyToClipboard('pass')">content_copy</i>
+    </div>
+</form>

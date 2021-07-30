@@ -1,0 +1,223 @@
+{
+    "name": "dataverse-devtools",
+    "displayName": "Dataverse DevTools",
+    "description": "The all-in-one tool to develop code for Dataverse/Dynamics 365. Helps you connect to a Dataverse environment, generate TypeScript definations for entities, create different type of Dataverse-specific projects and much more.",
+    "publisher": "danish-naglekar",
+    "version": "0.0.1",
+    "engines": {
+        "vscode": "^1.58.0"
+    },
+    "categories": [
+        "Extension Packs"
+    ],
+    "keywords": [
+        "Dataverse",
+        "Power Apps",
+        "Power Platform",
+        "Dynamics 365",
+        "Xrm",
+        "Dev Tools"
+    ],
+    "activationEvents": [
+        "*"
+    ],
+    "main": "./out/extension.js",
+    "contributes": {
+        "views": {
+            "dvd-explorer": [
+                {
+                    "id": "dvConnections",
+                    "name": "Connections"
+                },
+                {
+                    "id": "dvEntities",
+                    "name": "Entities"
+                },
+                {
+                    "id": "dvWebResources",
+                    "name": "Web Resources"
+                }
+            ]
+        },
+        "menus": {
+            "explorer/context": [
+                {
+                    "command": "dvExplorer.initPlugin",
+                    "group": "%dvd.menus.group%"
+                }
+            ],
+            "view/title": [
+                {
+                    "command": "dvExplorer.addConnection",
+                    "when": "view == dvConnections",
+                    "group": "navigation@1"
+                },
+                {
+                    "command": "dvExplorer.refreshConnection",
+                    "when": "view == dvConnections",
+                    "group": "navigation@2"
+                },
+                {
+                    "command": "dvExplorer.loadEntities",
+                    "when": "view == dvEntities",
+                    "group": "navigation@1"
+                }
+            ],
+            "view/item/context": [
+                {
+                    "command": "dvExplorer.connectDataverse",
+                    "when": "view == dvConnections && viewItem == connection",
+                    "group": "inline"
+                },
+                {
+                    "command": "dvExplorer.connectDataverse",
+                    "when": "view == dvConnections && viewItem == connection",
+                    "group": "navigation@1"
+                },
+                {
+                    "command": "dvExplorer.openConnection",
+                    "when": "view == dvConnections && viewItem == connection",
+                    "group": "navigation@2"
+                },
+                {
+                    "command": "dvExplorer.deleteConnection",
+                    "when": "view == dvConnections && viewItem == connection",
+                    "group": "danger"
+                },
+                {
+                    "command": "dvExplorer.showConnectionDetails",
+                    "when": "view == dvConnections && viewItem == connection",
+                    "group": "navigation@3"
+                },
+                {
+                    "command": "dvExplorer.showEntityDetails",
+                    "when": "view == dvEntities && viewItem == entitymedata",
+                    "group": "navigation"
+                }
+            ]
+        },
+        "viewsWelcome": [
+            {
+                "view": "dvConnections",
+                "contents": "No connections found.\n[Create New Connection](command:dvExplorer.addConnection)"
+            }
+        ],
+        "viewsContainers": {
+            "activitybar": [
+                {
+                    "id": "dvd-explorer",
+                    "title": "Dataverse DevTools",
+                    "icon": "./resources/ddt.png"
+                }
+            ]
+        },
+        "commands": [
+            {
+                "command": "dvExplorer.refreshConnection",
+                "title": "Refresh",
+                "category": "%dvd.commands.category%",
+                "icon": {
+                    "light": "resources/light/refresh.svg",
+                    "dark": "resources/dark/refresh.svg"
+                }
+            },
+            {
+                "command": "dvExplorer.addConnection",
+                "title": "Add Connection",
+                "category": "%dvd.commands.category%",
+                "icon": "$(add)"
+            },
+            {
+                "command": "dvExplorer.openConnection",
+                "title": "Open Environment",
+                "category": "%dvd.commands.category%",
+                "icon": {
+                    "light": "resources/light/popout.svg",
+                    "dark": "resources/dark/popout.svg"
+                }
+            },
+            {
+                "command": "dvExplorer.deleteConnection",
+                "title": "Delete Connection",
+                "category": "%dvd.commands.category%",
+                "icon": {
+                    "light": "resources/light/delete.svg",
+                    "dark": "resources/dark/delete.svg"
+                }
+            },
+            {
+                "command": "dvExplorer.connectDataverse",
+                "title": "Connect to Dataverse",
+                "category": "%dvd.commands.category%",
+                "icon": {
+                    "light": "resources/light/connect.svg",
+                    "dark": "resources/dark/connect.svg"
+                }
+            },
+            {
+                "command": "dvExplorer.loadEntities",
+                "title": "Load Entities",
+                "category": "%dvd.commands.category%",
+                "icon": {
+                    "light": "resources/light/refresh.svg",
+                    "dark": "resources/dark/refresh.svg"
+                }
+            },
+            {
+                "command": "dvExplorer.showConnectionDetails",
+                "title": "Show Connection Details",
+                "category": "%dvd.commands.category%"
+            },
+            {
+                "command": "dvExplorer.showEntityDetails",
+                "title": "Show Entity Details",
+                "category": "%dvd.commands.category%"
+            },
+            {
+                "command": "dvExplorer.initPlugin",
+                "title": "Create Plugin Project",
+                "category": "%dvd.commands.category%"
+            },
+            {
+                "command": "dvExplorer.loadWebResources",
+                "title": "Load Web Resources",
+                "category": "%dvd.commands.category%",
+                "icon": {
+                    "light": "resources/light/refresh.svg",
+                    "dark": "resources/dark/refresh.svg"
+                }
+            }
+        ]
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "pretest": "npm run compile && npm run lint",
+        "lint": "eslint src --ext ts",
+        "test": "node ./out/test/runTest.js"
+    },
+    "devDependencies": {
+        "@types/glob": "^7.1.3",
+        "@types/mocha": "^8.2.2",
+        "@types/node": "14.x",
+        "@types/node-fetch": "^2.5.11",
+        "@types/uuid": "^8.3.1",
+        "@types/vscode": "^1.58.0",
+        "@typescript-eslint/eslint-plugin": "^4.26.0",
+        "@typescript-eslint/parser": "^4.26.0",
+        "eslint": "^7.27.0",
+        "glob": "^7.1.7",
+        "mocha": "^8.4.0",
+        "typescript": "^4.3.2",
+        "vscode-test": "^1.5.2"
+    },
+    "dependencies": {
+        "@azure/msal-node": "^1.2.0",
+        "@types/lodash": "^4.14.171",
+        "adal-node": "^0.2.2",
+        "mobx": "^6.3.2",
+        "node-fetch": "^2.6.1",
+        "uuid": "^8.3.2"
+    }
+}
