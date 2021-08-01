@@ -1,0 +1,17 @@
+{
+    "name": "typescript-dataverse-project",
+    "version": "1.0.0",
+    "description": "",
+    "scripts": {
+        "build-dev": "webpack --config webpack.config.dev.js",
+        "build": "webpack --config webpack.config.prod.js"
+    },
+    "author": "Dataverse DevTools",
+    "devDependencies": {
+        "clean-webpack-plugin": "^4.0.0-alpha.0",
+        "ts-loader": "^9.2.4",
+        "webpack": "^5.47.1",
+        "webpack-cli": "^4.7.2",
+        "webpack-merge": "^5.8.0"
+    }
+}

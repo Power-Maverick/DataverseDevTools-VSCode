@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import { CLIHelper } from "../helpers/CLIHelper";
 import { DataverseHelper } from "../helpers/DataverseHelper";
+import { TemplateHelper } from "../helpers/TemplateHelper";
 import { DataverseConnectionTreeItem } from "../trees/DataverseConnectionDataProvider";
 import { EntitiesTreeItem } from "../trees/EntitiesDataProvider";
 import { connectionStatusBarUniqueId } from "../utils/Constants";
@@ -10,10 +11,11 @@ import { addConnection } from "./connections";
 
 let dvStatusBarItem: vscode.StatusBarItem;
 
-export function registerCommands(vscontext: vscode.ExtensionContext): void {
+export async function registerCommands(vscontext: vscode.ExtensionContext): Promise<void> {
     const dvHelper = new DataverseHelper(vscontext);
     const views = new ViewBase(vscontext);
     const cliHelper = new CLIHelper(vscontext);
+    const templateHelper = new TemplateHelper(vscontext);
 
     dvStatusBarItem = vscode.window.createStatusBarItem(connectionStatusBarUniqueId, vscode.StatusBarAlignment.Left);
     vscontext.subscriptions.push(dvStatusBarItem);
@@ -50,10 +52,16 @@ export function registerCommands(vscontext: vscode.ExtensionContext): void {
             command: "dvExplorer.initPlugin",
             callback: (uri: vscode.Uri) => cliHelper.initiatePluginProject(uri.fsPath),
         },
+        {
+            command: "dvExplorer.initTS",
+            callback: async (uri: vscode.Uri) => await templateHelper.initiateTypeScriptProject(uri.fsPath),
+        },
     );
     cmds.forEach((c) => {
         vscontext.subscriptions.push(vscode.commands.registerCommand(c.command, c.callback));
     });
+
+    updateConnectionStatusBar(await dvHelper.reloadWorkspaceConnection());
 }
 
 export function updateConnectionStatusBar(conn: IConnection | undefined): void {

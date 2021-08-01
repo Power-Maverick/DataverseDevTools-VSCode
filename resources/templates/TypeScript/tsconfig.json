@@ -1,0 +1,13 @@
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es6",
+    "strict": true,
+    "outDir": "./WebResources/js",
+    "sourceMap": true,
+  },
+  "include": [
+    "./src/**/*"
+  ]
+}

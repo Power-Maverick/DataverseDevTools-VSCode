@@ -9,6 +9,12 @@ class Commands {
     static InitPlugin() {
         return `pac plugin init`;
     }
+    static LoadNpmPackages() {
+        return `npm install`;
+    }
+    static LinkGlobalTypeScript() {
+        return `npm link typescript`;
+    }
 }
 exports.Commands = Commands;
 //# sourceMappingURL=Commands.js.map

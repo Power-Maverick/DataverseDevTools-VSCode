@@ -40,25 +40,6 @@ class DataverseHelper {
                     const tokenResponse = yield Login_1.loginWithUsernamePassword(conn.environmentUrl, conn.userName, conn.password);
                     conn.currentAccessToken = tokenResponse.access_token;
                     this.vsstate.saveInWorkspace(Constants_1.connectionCurrentStoreKey, conn);
-                    /*
-                    const requestUrl = `${conn.environmentUrl}${apiPartUrl}accounts?$select=name,accountnumber&$top=3`;
-                    const response = await fetch(requestUrl, {
-                        headers: {
-                            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-                            // eslint-disable-next-line @typescript-eslint/naming-convention
-                            Authorization: `Bearer ${conn.currentAccessToken}`,
-                            "x-ms-client-request-id": uuid(),
-                            // eslint-disable-next-line @typescript-eslint/naming-convention
-                            "Content-Type": "application/json; charset=utf-8",
-                        },
-                    });
-    
-                    if (response.ok) {
-                        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-                        const json = await response.json();
-                        console.log(json);
-                    }
-                    */
                 }
             }
             catch (err) {
@@ -107,6 +88,17 @@ class DataverseHelper {
                 }
             }
             catch (err) { }
+        });
+    }
+    reloadWorkspaceConnection() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const connFromWS = this.vsstate.getFromWorkspace(Constants_1.connectionCurrentStoreKey);
+            if (connFromWS) {
+                yield this.getEntityDefinitions();
+                yield this.getWebResources();
+                return connFromWS;
+            }
+            return undefined;
         });
     }
     getEntityDefinitions() {
@@ -239,10 +231,16 @@ class DataverseHelper {
         });
     }
     getConnectionByName(connName) {
-        const jsonConn = this.vsstate.getFromGlobal(Constants_1.connectionStoreKey);
-        if (jsonConn) {
-            const conns = JSON.parse(jsonConn);
-            return conns.find((c) => c.connectionName === connName);
+        const connFromWS = this.vsstate.getFromWorkspace(Constants_1.connectionCurrentStoreKey);
+        if (connFromWS && connFromWS.connectionName === connName) {
+            return connFromWS;
+        }
+        else {
+            const jsonConn = this.vsstate.getFromGlobal(Constants_1.connectionStoreKey);
+            if (jsonConn) {
+                const conns = JSON.parse(jsonConn);
+                return conns.find((c) => c.connectionName === connName);
+            }
         }
         return undefined;
     }

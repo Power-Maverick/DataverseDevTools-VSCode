@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.terminalName = exports.maxRetries = exports.connectionStatusBarUniqueId = exports.environmentTypes = exports.wrDefinitionsStoreKey = exports.entityDefinitionsStoreKey = exports.connectionCurrentStoreKey = exports.connectionStoreKey = exports.apiPartUrl = exports.environmentVersion = exports.defaultDataverseClientId = exports.tokenEndpointUrl = exports.extensionPrefix = void 0;
+exports.terminalName = exports.maxRetries = exports.connectionStatusBarUniqueId = exports.environmentTypes = exports.wrDefinitionsStoreKey = exports.entityDefinitionsStoreKey = exports.connectionCurrentStoreKey = exports.connectionStoreKey = exports.apiPartUrl = exports.environmentVersion = exports.defaultDataverseClientId = exports.tokenEndpointUrl = exports.extensionPrefix = exports.extensionName = void 0;
+exports.extensionName = "Dataverse DevTools";
 exports.extensionPrefix = "devtools";
 exports.tokenEndpointUrl = `https://login.microsoftonline.com/organizations/oauth2/v2.0/token`;
 exports.defaultDataverseClientId = `51f81489-12ee-4a9e-aaae-a2591f45987d`;

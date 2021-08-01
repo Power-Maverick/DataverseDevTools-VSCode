@@ -7,4 +7,12 @@ export class Commands {
     public static InitPlugin() {
         return `pac plugin init`;
     }
+
+    public static LoadNpmPackages() {
+        return `npm install`;
+    }
+
+    public static LinkGlobalTypeScript() {
+        return `npm link typescript`;
+    }
 }

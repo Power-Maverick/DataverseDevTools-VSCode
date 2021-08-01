@@ -44,6 +44,10 @@
                 {
                     "command": "dvExplorer.initPlugin",
                     "group": "%dvd.menus.group%"
+                },
+                {
+                    "command": "dvExplorer.initTS",
+                    "group": "%dvd.menus.group%"
                 }
             ],
             "view/title": [
@@ -186,6 +190,11 @@
                     "light": "resources/light/refresh.svg",
                     "dark": "resources/dark/refresh.svg"
                 }
+            },
+            {
+                "command": "dvExplorer.initTS",
+                "title": "Create TypeScript Project",
+                "category": "%dvd.commands.category%"
             }
         ]
     },
@@ -214,8 +223,10 @@
     },
     "dependencies": {
         "@azure/msal-node": "^1.2.0",
+        "@types/fs-extra": "^9.0.12",
         "@types/lodash": "^4.14.171",
         "adal-node": "^0.2.2",
+        "fs-extra": "^10.0.0",
         "mobx": "^6.3.2",
         "node-fetch": "^2.6.1",
         "uuid": "^8.3.2"

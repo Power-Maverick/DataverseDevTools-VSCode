@@ -36,25 +36,6 @@ export class DataverseHelper {
                 const tokenResponse = await loginWithUsernamePassword(conn.environmentUrl, conn.userName, conn.password);
                 conn.currentAccessToken = tokenResponse.access_token!;
                 this.vsstate.saveInWorkspace(connectionCurrentStoreKey, conn);
-                /*
-                const requestUrl = `${conn.environmentUrl}${apiPartUrl}accounts?$select=name,accountnumber&$top=3`;
-                const response = await fetch(requestUrl, {
-                    headers: {
-                        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-                        // eslint-disable-next-line @typescript-eslint/naming-convention
-                        Authorization: `Bearer ${conn.currentAccessToken}`,
-                        "x-ms-client-request-id": uuid(),
-                        // eslint-disable-next-line @typescript-eslint/naming-convention
-                        "Content-Type": "application/json; charset=utf-8",
-                    },
-                });
-
-                if (response.ok) {
-                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-                    const json = await response.json();
-                    console.log(json);
-                }
-                */
             }
         } catch (err) {
             throw err;
@@ -102,6 +83,16 @@ export class DataverseHelper {
                 return undefined;
             }
         } catch (err) {}
+    }
+
+    public async reloadWorkspaceConnection(): Promise<IConnection | undefined> {
+        const connFromWS: IConnection = this.vsstate.getFromWorkspace(connectionCurrentStoreKey);
+        if (connFromWS) {
+            await this.getEntityDefinitions();
+            await this.getWebResources();
+            return connFromWS;
+        }
+        return undefined;
     }
 
     public async getEntityDefinitions() {
@@ -235,12 +226,16 @@ export class DataverseHelper {
     }
 
     getConnectionByName(connName: string): IConnection | undefined {
-        const jsonConn: string = this.vsstate.getFromGlobal(connectionStoreKey);
-        if (jsonConn) {
-            const conns: IConnection[] = JSON.parse(jsonConn);
-            return conns.find((c) => c.connectionName === connName);
+        const connFromWS: IConnection = this.vsstate.getFromWorkspace(connectionCurrentStoreKey);
+        if (connFromWS && connFromWS.connectionName === connName) {
+            return connFromWS;
+        } else {
+            const jsonConn: string = this.vsstate.getFromGlobal(connectionStoreKey);
+            if (jsonConn) {
+                const conns: IConnection[] = JSON.parse(jsonConn);
+                return conns.find((c) => c.connectionName === connName);
+            }
         }
-
         return undefined;
     }
 

@@ -1,3 +1,4 @@
+export const extensionName: string = "Dataverse DevTools";
 export const extensionPrefix: string = "devtools";
 export const tokenEndpointUrl: string = `https://login.microsoftonline.com/organizations/oauth2/v2.0/token`;
 export const defaultDataverseClientId: string = `51f81489-12ee-4a9e-aaae-a2591f45987d`;
