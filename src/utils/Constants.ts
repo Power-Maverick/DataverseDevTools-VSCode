@@ -12,3 +12,10 @@ export const environmentTypes: string[] = ["Dev", "QA", "UAT", "Prod"];
 export const connectionStatusBarUniqueId: string = `${extensionPrefix}.StatusBarConnectStatus`;
 export const maxRetries: number = 3;
 export const terminalName: string = "Dataverse DevTools";
+export const fileExtensions: string[] = [".js", ".html", ".css"];
+
+export enum WebResourceType {
+    html = 1,
+    css = 2,
+    script = 3,
+}

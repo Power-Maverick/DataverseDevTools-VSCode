@@ -43,6 +43,12 @@ class Placeholders {
             case this.connectionType:
                 qpOptions = { placeHolder: this.ipConnectionType.placeHolderText, title: this.ipConnectionType.prompt, ignoreFocusOut: ignoreFocus };
                 break;
+            case this.webResourceSelection:
+                qpOptions = { placeHolder: this.ipWebResourceSelection.placeHolderText, title: this.ipWebResourceSelection.prompt, ignoreFocusOut: ignoreFocus };
+                break;
+            case this.typingDirSelection:
+                qpOptions = { placeHolder: this.ipTypingDirSelection.placeHolderText, title: this.ipTypingDirSelection.prompt, ignoreFocusOut: ignoreFocus };
+                break;
             default:
                 qpOptions = { placeHolder: "", ignoreFocusOut: ignoreFocus };
                 break;
@@ -56,6 +62,8 @@ Placeholders.userName = "UserName";
 Placeholders.password = "Password";
 Placeholders.connectionName = "ConnectionName";
 Placeholders.connectionType = "ConnectionType";
+Placeholders.webResourceSelection = "WebResourceSelection";
+Placeholders.typingDirSelection = "TypingDirSelection";
 Placeholders.required = "[Required]";
 Placeholders.optional = "[Optional]";
 Placeholders.ipEnvironmentURL = {
@@ -77,5 +85,13 @@ Placeholders.ipConnectionName = {
 Placeholders.ipConnectionType = {
     placeHolderText: `${Placeholders.optional} Type (e.g.: Dev, Test, QA, PROD)`,
     prompt: `Pick your desired type`,
+};
+Placeholders.ipWebResourceSelection = {
+    placeHolderText: `Select the web resource to link`,
+    prompt: `Pick your web resource to link with your local file`,
+};
+Placeholders.ipTypingDirSelection = {
+    placeHolderText: `Select the directory`,
+    prompt: `Pick your directory to add the type definition file`,
 };
 //# sourceMappingURL=Placeholders.js.map

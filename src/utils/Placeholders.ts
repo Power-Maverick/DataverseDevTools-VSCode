@@ -51,6 +51,12 @@ export class Placeholders {
             case this.connectionType:
                 qpOptions = { placeHolder: this.ipConnectionType.placeHolderText, title: this.ipConnectionType.prompt, ignoreFocusOut: ignoreFocus };
                 break;
+            case this.webResourceSelection:
+                qpOptions = { placeHolder: this.ipWebResourceSelection.placeHolderText, title: this.ipWebResourceSelection.prompt, ignoreFocusOut: ignoreFocus };
+                break;
+            case this.typingDirSelection:
+                qpOptions = { placeHolder: this.ipTypingDirSelection.placeHolderText, title: this.ipTypingDirSelection.prompt, ignoreFocusOut: ignoreFocus };
+                break;
             default:
                 qpOptions = { placeHolder: "", ignoreFocusOut: ignoreFocus };
                 break;
@@ -64,6 +70,8 @@ export class Placeholders {
     public static password: string = "Password";
     public static connectionName: string = "ConnectionName";
     public static connectionType: string = "ConnectionType";
+    public static webResourceSelection: string = "WebResourceSelection";
+    public static typingDirSelection: string = "TypingDirSelection";
 
     public static required: string = "[Required]";
     public static optional: string = "[Optional]";
@@ -87,5 +95,13 @@ export class Placeholders {
     private static ipConnectionType: IPlaceholder = {
         placeHolderText: `${Placeholders.optional} Type (e.g.: Dev, Test, QA, PROD)`,
         prompt: `Pick your desired type`,
+    };
+    private static ipWebResourceSelection: IPlaceholder = {
+        placeHolderText: `Select the web resource to link`,
+        prompt: `Pick your web resource to link with your local file`,
+    };
+    private static ipTypingDirSelection: IPlaceholder = {
+        placeHolderText: `Select the directory`,
+        prompt: `Pick your directory to add the type definition file`,
     };
 }

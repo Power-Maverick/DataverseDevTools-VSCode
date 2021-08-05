@@ -1,4 +1,5 @@
 {
-    "dvd.commands.category": "Dataverse DevTools",
-    "dvd.menus.group": "d=devtools"
+    "dvdt.commands.category": "Dataverse DevTools",
+    "dvdt.explorer.category": "Explorer",
+    "dvdt.menus.group": "dvdevtools"
 }

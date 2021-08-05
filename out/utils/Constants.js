@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.terminalName = exports.maxRetries = exports.connectionStatusBarUniqueId = exports.environmentTypes = exports.wrDefinitionsStoreKey = exports.entityDefinitionsStoreKey = exports.connectionCurrentStoreKey = exports.connectionStoreKey = exports.apiPartUrl = exports.environmentVersion = exports.defaultDataverseClientId = exports.tokenEndpointUrl = exports.extensionPrefix = exports.extensionName = void 0;
+exports.WebResourceType = exports.fileExtensions = exports.terminalName = exports.maxRetries = exports.connectionStatusBarUniqueId = exports.environmentTypes = exports.wrDefinitionsStoreKey = exports.entityDefinitionsStoreKey = exports.connectionCurrentStoreKey = exports.connectionStoreKey = exports.apiPartUrl = exports.environmentVersion = exports.defaultDataverseClientId = exports.tokenEndpointUrl = exports.extensionPrefix = exports.extensionName = void 0;
 exports.extensionName = "Dataverse DevTools";
 exports.extensionPrefix = "devtools";
 exports.tokenEndpointUrl = `https://login.microsoftonline.com/organizations/oauth2/v2.0/token`;
@@ -15,4 +15,11 @@ exports.environmentTypes = ["Dev", "QA", "UAT", "Prod"];
 exports.connectionStatusBarUniqueId = `${exports.extensionPrefix}.StatusBarConnectStatus`;
 exports.maxRetries = 3;
 exports.terminalName = "Dataverse DevTools";
+exports.fileExtensions = [".js", ".html", ".css"];
+var WebResourceType;
+(function (WebResourceType) {
+    WebResourceType[WebResourceType["html"] = 1] = "html";
+    WebResourceType[WebResourceType["css"] = 2] = "css";
+    WebResourceType[WebResourceType["script"] = 3] = "script";
+})(WebResourceType = exports.WebResourceType || (exports.WebResourceType = {}));
 //# sourceMappingURL=Constants.js.map

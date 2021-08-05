@@ -1,13 +1,15 @@
 {
-  "compileOnSave": true,
-  "compilerOptions": {
-    "module": "commonjs",
-    "target": "es6",
-    "strict": true,
-    "outDir": "./WebResources/js",
-    "sourceMap": true,
-  },
-  "include": [
-    "./src/**/*"
-  ]
+    "compileOnSave": true,
+    "compilerOptions": {
+        "target": "es6",
+        "module": "commonjs",
+        "outDir": "./WebResources/js",
+        "strict": true,
+        "moduleResolution": "node",
+        "sourceMap": true,
+        "removeComments": false,
+        "allowJs": true,
+        "resolveJsonModule": true
+    },
+    "include": ["**/*.ts"]
 }

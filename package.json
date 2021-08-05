@@ -42,68 +42,83 @@
         "menus": {
             "explorer/context": [
                 {
-                    "command": "dvExplorer.initPlugin",
-                    "group": "%dvd.menus.group%"
+                    "command": "dvdt.commands.initPlugin",
+                    "group": "%dvdt.menus.group%"
                 },
                 {
-                    "command": "dvExplorer.initTS",
-                    "group": "%dvd.menus.group%"
+                    "command": "dvdt.commands.initTS",
+                    "group": "%dvdt.menus.group%"
+                },
+                {
+                    "command": "dvdt.explorer.webresources.linkExistingWebResource",
+                    "when": "resourceExtname in devtools.resourcesExtn",
+                    "group": "%dvdt.menus.group%"
+                },
+                {
+                    "command": "dvdt.explorer.webresources.uploadWebResource",
+                    "when": "resourceFilename in devtools.linkedResources",
+                    "group": "%dvdt.menus.group%"
                 }
             ],
             "view/title": [
                 {
-                    "command": "dvExplorer.addConnection",
+                    "command": "dvdt.explorer.connections.addConnection",
                     "when": "view == dvConnections",
                     "group": "navigation@1"
                 },
                 {
-                    "command": "dvExplorer.refreshConnection",
+                    "command": "dvdt.explorer.connections.refreshConnection",
                     "when": "view == dvConnections",
                     "group": "navigation@2"
                 },
                 {
-                    "command": "dvExplorer.loadEntities",
+                    "command": "dvdt.explorer.entities.loadEntities",
                     "when": "view == dvEntities",
                     "group": "navigation@1"
                 }
             ],
             "view/item/context": [
                 {
-                    "command": "dvExplorer.connectDataverse",
+                    "command": "dvdt.explorer.connections.connectDataverse",
                     "when": "view == dvConnections && viewItem == connection",
                     "group": "inline"
                 },
                 {
-                    "command": "dvExplorer.connectDataverse",
+                    "command": "dvdt.explorer.connections.connectDataverse",
                     "when": "view == dvConnections && viewItem == connection",
                     "group": "navigation@1"
                 },
                 {
-                    "command": "dvExplorer.openConnection",
+                    "command": "dvdt.explorer.connections.openConnection",
                     "when": "view == dvConnections && viewItem == connection",
                     "group": "navigation@2"
                 },
                 {
-                    "command": "dvExplorer.deleteConnection",
+                    "command": "dvdt.explorer.connections.deleteConnection",
                     "when": "view == dvConnections && viewItem == connection",
                     "group": "danger"
                 },
                 {
-                    "command": "dvExplorer.showConnectionDetails",
+                    "command": "dvdt.explorer.connections.showConnectionDetails",
                     "when": "view == dvConnections && viewItem == connection",
                     "group": "navigation@3"
                 },
                 {
-                    "command": "dvExplorer.showEntityDetails",
+                    "command": "dvdt.explorer.entities.showEntityDetails",
                     "when": "view == dvEntities && viewItem == entitymedata",
-                    "group": "navigation"
+                    "group": "navigation@2"
+                },
+                {
+                    "command": "dvdt.explorer.entities.generateTyping",
+                    "when": "view == dvEntities && viewItem == entitymedata",
+                    "group": "navigation@1"
                 }
             ]
         },
         "viewsWelcome": [
             {
                 "view": "dvConnections",
-                "contents": "No connections found.\n[Create New Connection](command:dvExplorer.addConnection)"
+                "contents": "No connections found.\n[Create New Connection](command:dvdt.explorer.connections.addConnection)"
             }
         ],
         "viewsContainers": {
@@ -117,84 +132,107 @@
         },
         "commands": [
             {
-                "command": "dvExplorer.refreshConnection",
+                "command": "dvdt.explorer.connections.refreshConnection",
                 "title": "Refresh",
-                "category": "%dvd.commands.category%",
+                "when": "false",
+                "category": "%dvdt.explorer.category%",
                 "icon": {
                     "light": "resources/light/refresh.svg",
                     "dark": "resources/dark/refresh.svg"
                 }
             },
             {
-                "command": "dvExplorer.addConnection",
+                "command": "dvdt.explorer.connections.addConnection",
                 "title": "Add Connection",
-                "category": "%dvd.commands.category%",
+                "when": "false",
+                "category": "%dvdt.explorer.category%",
                 "icon": "$(add)"
             },
             {
-                "command": "dvExplorer.openConnection",
+                "command": "dvdt.explorer.connections.openConnection",
                 "title": "Open Environment",
-                "category": "%dvd.commands.category%",
+                "when": "false",
+                "category": "%dvdt.explorer.category%",
                 "icon": {
                     "light": "resources/light/popout.svg",
                     "dark": "resources/dark/popout.svg"
                 }
             },
             {
-                "command": "dvExplorer.deleteConnection",
+                "command": "dvdt.explorer.connections.deleteConnection",
                 "title": "Delete Connection",
-                "category": "%dvd.commands.category%",
+                "when": "false",
+                "category": "%dvdt.explorer.category%",
                 "icon": {
                     "light": "resources/light/delete.svg",
                     "dark": "resources/dark/delete.svg"
                 }
             },
             {
-                "command": "dvExplorer.connectDataverse",
+                "command": "dvdt.explorer.connections.connectDataverse",
                 "title": "Connect to Dataverse",
-                "category": "%dvd.commands.category%",
+                "category": "%dvdt.explorer.category%",
                 "icon": {
                     "light": "resources/light/connect.svg",
                     "dark": "resources/dark/connect.svg"
                 }
             },
             {
-                "command": "dvExplorer.loadEntities",
+                "command": "dvdt.explorer.entities.loadEntities",
                 "title": "Load Entities",
-                "category": "%dvd.commands.category%",
+                "category": "%dvdt.explorer.category%",
                 "icon": {
                     "light": "resources/light/refresh.svg",
                     "dark": "resources/dark/refresh.svg"
                 }
             },
             {
-                "command": "dvExplorer.showConnectionDetails",
+                "command": "dvdt.explorer.connections.showConnectionDetails",
                 "title": "Show Connection Details",
-                "category": "%dvd.commands.category%"
+                "category": "%dvdt.explorer.category%"
             },
             {
-                "command": "dvExplorer.showEntityDetails",
+                "command": "dvdt.explorer.entities.showEntityDetails",
                 "title": "Show Entity Details",
-                "category": "%dvd.commands.category%"
+                "when": "false",
+                "category": "%dvdt.explorer.category%"
             },
             {
-                "command": "dvExplorer.initPlugin",
+                "command": "dvdt.commands.initPlugin",
                 "title": "Create Plugin Project",
-                "category": "%dvd.commands.category%"
+                "category": "%dvdt.commands.category%"
             },
             {
-                "command": "dvExplorer.loadWebResources",
+                "command": "dvdt.explorer.webresources.loadWebResources",
                 "title": "Load Web Resources",
-                "category": "%dvd.commands.category%",
+                "category": "%dvdt.explorer.category%",
                 "icon": {
                     "light": "resources/light/refresh.svg",
                     "dark": "resources/dark/refresh.svg"
                 }
             },
             {
-                "command": "dvExplorer.initTS",
+                "command": "dvdt.commands.initTS",
                 "title": "Create TypeScript Project",
-                "category": "%dvd.commands.category%"
+                "category": "%dvdt.commands.category%"
+            },
+            {
+                "command": "dvdt.explorer.entities.generateTyping",
+                "title": "Generate Typing",
+                "when": "false",
+                "category": "%dvdt.explorer.category%"
+            },
+            {
+                "command": "dvdt.explorer.webresources.linkExistingWebResource",
+                "title": "Link to Existing Web Resource",
+                "when": "false",
+                "category": "%dvdt.explorer.category%"
+            },
+            {
+                "command": "dvdt.explorer.webresources.uploadWebResource",
+                "title": "Upload Web Resource",
+                "when": "false",
+                "category": "%dvdt.explorer.category%"
             }
         ]
     },
@@ -226,6 +264,9 @@
         "@types/fs-extra": "^9.0.12",
         "@types/lodash": "^4.14.171",
         "adal-node": "^0.2.2",
+        "conditional-reduce": "^1.2.0",
+        "dts-dom": "^3.6.0",
+        "fast-xml-parser": "^3.19.0",
         "fs-extra": "^10.0.0",
         "mobx": "^6.3.2",
         "node-fetch": "^2.6.1",

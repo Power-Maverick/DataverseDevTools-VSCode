@@ -2,7 +2,6 @@ import * as url from "url";
 import { defaultDataverseClientId, tokenEndpointUrl } from "../utils/Constants";
 import { Token } from "./Tokens";
 import fetch from "node-fetch";
-import { error } from "console";
 
 export async function loginWithUsernamePassword(envUrl: string, un: string, p: string): Promise<Token> {
     const requestUrl = tokenEndpointUrl;

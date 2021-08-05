@@ -168,3 +168,22 @@ export interface IWebResource {
     iscustomizable: IIs;
     canbedeleted: IIs;
 }
+
+export interface ILinkerFile {
+    DVDT: ILinkerRoot;
+}
+
+export interface ILinkerRoot {
+    WebResources: ILinkerWR;
+    Settings: any[];
+}
+export interface ILinkerWR {
+    Resource: ILinkerRes[];
+}
+
+export interface ILinkerRes {
+    "@_localFileName": string;
+    "@_dvDisplayName": string;
+    "@_dvFilePath": string;
+    "@_Id": string;
+}

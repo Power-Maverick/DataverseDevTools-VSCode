@@ -12,7 +12,7 @@ export class RequestHelper {
     /**
      * Initialization constructor for VS Code Context
      */
-    constructor(context: vscode.ExtensionContext, private dvHelper?: DataverseHelper) {
+    constructor(context: vscode.ExtensionContext, private dvHelper: DataverseHelper) {
         this.vsstate = new State(context);
     }
 

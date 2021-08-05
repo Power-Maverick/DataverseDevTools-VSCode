@@ -16,17 +16,21 @@ const State_1 = require("../utils/State");
 const Constants_1 = require("../utils/Constants");
 const mobx_1 = require("mobx");
 const TreeItemBase_1 = require("./TreeItemBase");
+const ExtensionMethods_1 = require("../utils/ExtensionMethods");
 class WebResourcesDataProvider {
-    constructor(vscontext, dvHelper) {
+    constructor(vscontext, commonHelper) {
         this.vscontext = vscontext;
-        this.dvHelper = dvHelper;
+        this.commonHelper = commonHelper;
         this.refreshTreeData = new vscode.EventEmitter();
         this.webResource = [];
+        this.linkedResources = [];
         this.onDidChangeTreeData = this.refreshTreeData.event;
     }
     refresh() {
-        this.populateWebResources();
-        this.refreshTreeData.fire();
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.populateWebResources();
+            this.refreshTreeData.fire();
+        });
     }
     getTreeItem(element) {
         return element;
@@ -35,43 +39,68 @@ class WebResourcesDataProvider {
         return __awaiter(this, void 0, void 0, function* () {
             if (!element) {
                 // Parent
-                return Promise.resolve(this.webResource
-                    .sort((e1, e2) => {
-                    if (e1.displayname > e2.displayname) {
-                        return 1;
-                    }
-                    if (e1.displayname < e2.displayname) {
-                        return -1;
-                    }
-                    return 0;
-                })
-                    .map((e) => new WebResourcesTreeItem(e.displayname, e.name, vscode.TreeItemCollapsibleState.None)));
+                let parentTree = [];
+                ExtensionMethods_1.toArray(Constants_1.WebResourceType).map((t) => {
+                    parentTree.push(new WebResourcesTreeItem(t, undefined, vscode.TreeItemCollapsibleState.Expanded, 1));
+                });
+                return Promise.resolve(parentTree);
+            }
+            else {
+                // Child
+                const selectedType = Constants_1.WebResourceType[element.label];
+                const checkType = this.webResource.filter((w) => w.webresourcetype === selectedType);
+                if (checkType) {
+                    return Promise.resolve(checkType
+                        .sort((e1, e2) => {
+                        if (e1.displayname > e2.displayname) {
+                            return 1;
+                        }
+                        if (e1.displayname < e2.displayname) {
+                            return -1;
+                        }
+                        return 0;
+                    })
+                        .map((e) => {
+                        let showCheckmark = false;
+                        if (this.linkedResources) {
+                            let foundLinkedResc = this.linkedResources.find((lr) => lr["@_dvFilePath"] === e.name);
+                            if (foundLinkedResc) {
+                                showCheckmark = true;
+                            }
+                        }
+                        return new WebResourcesTreeItem(e.displayname, e.name, vscode.TreeItemCollapsibleState.None, 2, showCheckmark);
+                    }));
+                }
             }
             return Promise.resolve([]);
         });
     }
     populateWebResources() {
-        const vsstate = new State_1.State(this.vscontext);
-        const jsonConn = vsstate.getFromWorkspace(Constants_1.wrDefinitionsStoreKey);
-        if (jsonConn) {
-            this.webResource = jsonConn.value;
-        }
-        else {
-            this.webResource = [];
-        }
+        return __awaiter(this, void 0, void 0, function* () {
+            const vsstate = new State_1.State(this.vscontext);
+            const jsonConn = vsstate.getFromWorkspace(Constants_1.wrDefinitionsStoreKey);
+            if (jsonConn) {
+                this.webResource = jsonConn.value;
+                this.linkedResources = yield this.commonHelper.getLinkedResources();
+            }
+            else {
+                this.webResource = [];
+            }
+        });
     }
 }
 exports.WebResourcesDataProvider = WebResourcesDataProvider;
 class WebResourcesTreeItem extends TreeItemBase_1.TreeItemBase {
-    constructor(label, desc, collapsibleState, command) {
+    constructor(label, desc, collapsibleState, level, showCheck) {
         super(label, desc, collapsibleState);
         this.label = label;
         this.desc = desc;
         this.collapsibleState = collapsibleState;
-        this.command = command;
+        this.level = level;
+        this.showCheck = showCheck;
         this.iconPath = {
-            light: path.join(__filename, "..", "..", "..", "resources", "light", "webpack.svg"),
-            dark: path.join(__filename, "..", "..", "..", "resources", "dark", "webpack.svg"),
+            light: path.join(__filename, "..", "..", "..", "resources", "light", this.level === 1 ? "webpack.svg" : this.level === 2 && !this.showCheck ? "layers-off.svg" : this.level === 2 && this.showCheck ? "layers.svg" : "generic.svg"),
+            dark: path.join(__filename, "..", "..", "..", "resources", "dark", this.level === 1 ? "webpack.svg" : this.level === 2 && !this.showCheck ? "layers-off.svg" : this.level === 2 && this.showCheck ? "layers.svg" : "generic.svg"),
         };
         this.contextValue = "webresources";
     }

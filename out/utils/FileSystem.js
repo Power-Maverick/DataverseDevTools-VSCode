@@ -9,12 +9,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createFolder = exports.copyFolderOrFile = exports.readFileSync = void 0;
+exports.getWorkspaceFolder = exports.getFileName = exports.createFolder = exports.copyFolderOrFile = exports.writeFileSync = exports.readFileSync = void 0;
+const vscode = require("vscode");
 const fs = require("fs-extra");
 function readFileSync(source) {
     return fs.readFileSync(source);
 }
 exports.readFileSync = readFileSync;
+function writeFileSync(source, data) {
+    return fs.writeFileSync(source, data);
+}
+exports.writeFileSync = writeFileSync;
 function copyFolderOrFile(source, target) {
     return __awaiter(this, void 0, void 0, function* () {
         yield fs.copy(source, target);
@@ -27,4 +32,15 @@ function createFolder(folderDirPath) {
     });
 }
 exports.createFolder = createFolder;
+function getFileName(fullPath) {
+    return fullPath.replace(/^.*[\\\/]/, "");
+}
+exports.getFileName = getFileName;
+function getWorkspaceFolder() {
+    if (vscode.workspace.workspaceFolders !== undefined) {
+        return vscode.workspace.workspaceFolders[0].uri;
+        //let f = vscode.workspace.workspaceFolders[0].uri.fsPath;
+    }
+}
+exports.getWorkspaceFolder = getWorkspaceFolder;
 //# sourceMappingURL=FileSystem.js.map

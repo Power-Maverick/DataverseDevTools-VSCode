@@ -23,7 +23,7 @@ export class DataverseHelper {
      */
     constructor(private vscontext: vscode.ExtensionContext) {
         this.vsstate = new State(vscontext);
-        this.request = new RequestHelper(vscontext);
+        this.request = new RequestHelper(vscontext, this);
     }
 
     //#region Public
@@ -40,7 +40,7 @@ export class DataverseHelper {
         } catch (err) {
             throw err;
         } finally {
-            vscode.commands.executeCommand("dvExplorer.refreshConnection");
+            vscode.commands.executeCommand("dvdt.explorer.connections.refreshConnection");
         }
 
         return conn;
@@ -48,7 +48,7 @@ export class DataverseHelper {
 
     public async deleteConnection(connItem: DataverseConnectionTreeItem) {
         this.removeConnection(connItem.label);
-        vscode.commands.executeCommand("dvExplorer.refreshConnection");
+        vscode.commands.executeCommand("dvdt.explorer.connections.refreshConnection");
     }
 
     public async connectToDataverse(connItem: DataverseConnectionTreeItem): Promise<IConnection | undefined> {
@@ -98,7 +98,7 @@ export class DataverseHelper {
     public async getEntityDefinitions() {
         const respData = await this.request.requestData<IEntityMetadata>("EntityDefinitions");
         this.vsstate.saveInWorkspace(entityDefinitionsStoreKey, respData);
-        vscode.commands.executeCommand("dvExplorer.loadEntities");
+        vscode.commands.executeCommand("dvdt.explorer.entities.loadEntities");
     }
 
     public async getAttributesForEntity(entityLogicalName: string): Promise<IAttributeDefinition[]> {
@@ -135,9 +135,11 @@ export class DataverseHelper {
     }
 
     public async getWebResources() {
-        const respData = await this.request.requestData<IEntityMetadata>("webresourceset?$filter=(webresourcetype%20eq%203%20and%20ismanaged%20eq%20false%20and%20iscustomizable/Value%20eq%20true%20)");
+        const respData = await this.request.requestData<IEntityMetadata>(
+            "webresourceset?$filter=(Microsoft.Dynamics.CRM.In(PropertyName=%27webresourcetype%27,PropertyValues=[%271%27,%272%27,%273%27])%20and%20ismanaged%20eq%20false%20and%20iscustomizable/Value%20eq%20true%20)",
+        );
         this.vsstate.saveInWorkspace(wrDefinitionsStoreKey, respData);
-        vscode.commands.executeCommand("dvExplorer.loadWebResources");
+        vscode.commands.executeCommand("dvdt.explorer.webresources.loadWebResources");
     }
 
     //#endregion Public
