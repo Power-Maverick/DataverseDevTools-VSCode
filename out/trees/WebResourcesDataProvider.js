@@ -50,17 +50,7 @@ class WebResourcesDataProvider {
                 const selectedType = Constants_1.WebResourceType[element.label];
                 const checkType = this.webResource.filter((w) => w.webresourcetype === selectedType);
                 if (checkType) {
-                    return Promise.resolve(checkType
-                        .sort((e1, e2) => {
-                        if (e1.displayname > e2.displayname) {
-                            return 1;
-                        }
-                        if (e1.displayname < e2.displayname) {
-                            return -1;
-                        }
-                        return 0;
-                    })
-                        .map((e) => {
+                    return Promise.resolve(checkType.sort(this.sortWebResources).map((e) => {
                         let showCheckmark = false;
                         if (this.linkedResources) {
                             let foundLinkedResc = this.linkedResources.find((lr) => lr["@_dvFilePath"] === e.name);
@@ -87,6 +77,15 @@ class WebResourcesDataProvider {
                 this.webResource = [];
             }
         });
+    }
+    sortWebResources(w1, w2) {
+        if (w1.displayname > w2.displayname) {
+            return 1;
+        }
+        if (w1.displayname < w2.displayname) {
+            return -1;
+        }
+        return 0;
     }
 }
 exports.WebResourcesDataProvider = WebResourcesDataProvider;

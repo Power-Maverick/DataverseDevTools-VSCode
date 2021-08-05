@@ -187,3 +187,28 @@ export interface ILinkerRes {
     "@_dvFilePath": string;
     "@_Id": string;
 }
+
+export interface IOptionSetMetadata {
+    LogicalName: string;
+    MetadataId: string;
+    OptionSet: IOptionSet;
+    // GlobalOptionSet: IOptionSet;
+}
+
+export interface IOptionSet {
+    MetadataId?: string;
+    Options: IOption[];
+}
+
+export interface IOption {
+    Value: number;
+    IsManaged: boolean;
+    MetadataId: null;
+    Label: IDescription;
+    Description: IDescription;
+}
+
+export interface IOptionValue {
+    name: string;
+    value: number;
+}

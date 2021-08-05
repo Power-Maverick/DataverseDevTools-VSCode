@@ -40,27 +40,17 @@ export class WebResourcesDataProvider implements vscode.TreeDataProvider<WebReso
 
             if (checkType) {
                 return Promise.resolve(
-                    checkType
-                        .sort((e1, e2) => {
-                            if (e1.displayname > e2.displayname) {
-                                return 1;
+                    checkType.sort(this.sortWebResources).map((e) => {
+                        let showCheckmark = false;
+                        if (this.linkedResources) {
+                            let foundLinkedResc = this.linkedResources.find((lr) => lr["@_dvFilePath"] === e.name);
+                            if (foundLinkedResc) {
+                                showCheckmark = true;
                             }
-                            if (e1.displayname < e2.displayname) {
-                                return -1;
-                            }
-                            return 0;
-                        })
-                        .map((e) => {
-                            let showCheckmark = false;
-                            if (this.linkedResources) {
-                                let foundLinkedResc = this.linkedResources.find((lr) => lr["@_dvFilePath"] === e.name);
-                                if (foundLinkedResc) {
-                                    showCheckmark = true;
-                                }
-                            }
+                        }
 
-                            return new WebResourcesTreeItem(e.displayname, e.name, vscode.TreeItemCollapsibleState.None, 2, showCheckmark);
-                        }),
+                        return new WebResourcesTreeItem(e.displayname, e.name, vscode.TreeItemCollapsibleState.None, 2, showCheckmark);
+                    }),
                 );
             }
         }
@@ -76,6 +66,16 @@ export class WebResourcesDataProvider implements vscode.TreeDataProvider<WebReso
         } else {
             this.webResource = [];
         }
+    }
+
+    private sortWebResources(w1: IWebResource, w2: IWebResource) {
+        if (w1.displayname > w2.displayname) {
+            return 1;
+        }
+        if (w1.displayname < w2.displayname) {
+            return -1;
+        }
+        return 0;
     }
 
     readonly onDidChangeTreeData: vscode.Event<WebResourcesTreeItem | undefined | void> = this.refreshTreeData.event;

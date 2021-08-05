@@ -34,15 +34,7 @@ export class EntitiesDataProvider implements vscode.TreeDataProvider<EntitiesTre
             // Parent
             return Promise.resolve(
                 this.entities
-                    .sort((e1, e2) => {
-                        if (e1.DisplayName.UserLocalizedLabel?.Label > e2.DisplayName.UserLocalizedLabel?.Label) {
-                            return 1;
-                        }
-                        if (e1.DisplayName.UserLocalizedLabel?.Label < e2.DisplayName.UserLocalizedLabel?.Label) {
-                            return -1;
-                        }
-                        return 0;
-                    })
+                    .sort(this.sortEntities)
                     .filter((e) => e.IsCustomizable.Value)
                     .map((e) => new EntitiesTreeItem(e.DisplayName.UserLocalizedLabel?.Label, e.SchemaName.toLowerCase(), vscode.TreeItemCollapsibleState.Collapsed, 1)),
             );
@@ -59,6 +51,22 @@ export class EntitiesDataProvider implements vscode.TreeDataProvider<EntitiesTre
         } else {
             this.entities = [];
         }
+    }
+
+    private sortEntities(e1: IEntityDefinition, e2: IEntityDefinition) {
+        if (e1.DisplayName.UserLocalizedLabel?.Label > e2.DisplayName.UserLocalizedLabel?.Label) {
+            return 1;
+        }
+        if (e1.DisplayName.UserLocalizedLabel?.Label < e2.DisplayName.UserLocalizedLabel?.Label) {
+            return -1;
+        }
+        if (e1.DisplayName.UserLocalizedLabel === null || e1.DisplayName.UserLocalizedLabel === undefined) {
+            return 1;
+        }
+        if (e2.DisplayName.UserLocalizedLabel === null || e2.DisplayName.UserLocalizedLabel === undefined) {
+            return -1;
+        }
+        return 0;
     }
 
     readonly onDidChangeTreeData: vscode.Event<EntitiesTreeItem | undefined | void> = this.refreshTreeData.event;

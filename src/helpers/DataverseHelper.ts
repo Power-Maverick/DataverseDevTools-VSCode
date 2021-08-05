@@ -3,7 +3,7 @@ import { loginWithUsernamePassword } from "../login/Login";
 import { Placeholders } from "../utils/Placeholders";
 import { ErrorMessages } from "../utils/ErrorMessages";
 import { State } from "../utils/State";
-import { IAttributeDefinition, IAttributeMetadata, IConnection, IEntityDefinition, IEntityMetadata, IProgressOptions } from "../utils/Interfaces";
+import { IAttributeDefinition, IAttributeMetadata, IConnection, IEntityDefinition, IEntityMetadata, IOptionSet, IOptionSetMetadata, IProgressOptions } from "../utils/Interfaces";
 import { connectionCurrentStoreKey, connectionStoreKey, entityDefinitionsStoreKey, environmentTypes, wrDefinitionsStoreKey } from "../utils/Constants";
 import { DataverseConnectionTreeItem } from "../trees/DataverseConnectionDataProvider";
 import { RequestHelper } from "./RequestHelper";
@@ -107,6 +107,18 @@ export class DataverseHelper {
             return Promise.resolve(respData.value);
         } else {
             return Promise.resolve([]);
+        }
+    }
+
+    public async getOptionsetForAttribute(entityLogicalName: string, attrLogicalName: string): Promise<IOptionSet> {
+        const respData = await this.request.requestData<IOptionSetMetadata>(
+            `EntityDefinitions(LogicalName='${entityLogicalName}')/Attributes(LogicalName='${attrLogicalName}')/Microsoft.Dynamics.CRM.PicklistAttributeMetadata?$select=LogicalName&$expand=OptionSet($select=Options),GlobalOptionSet($select=Options)`,
+        );
+        if (respData) {
+            return Promise.resolve(respData.OptionSet);
+        } else {
+            // eslint-disable-next-line @typescript-eslint/naming-convention
+            return Promise.resolve({ Options: [] });
         }
     }
 

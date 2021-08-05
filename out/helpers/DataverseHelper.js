@@ -119,6 +119,18 @@ class DataverseHelper {
             }
         });
     }
+    getOptionsetForAttribute(entityLogicalName, attrLogicalName) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const respData = yield this.request.requestData(`EntityDefinitions(LogicalName='${entityLogicalName}')/Attributes(LogicalName='${attrLogicalName}')/Microsoft.Dynamics.CRM.PicklistAttributeMetadata?$select=LogicalName&$expand=OptionSet($select=Options),GlobalOptionSet($select=Options)`);
+            if (respData) {
+                return Promise.resolve(respData.OptionSet);
+            }
+            else {
+                // eslint-disable-next-line @typescript-eslint/naming-convention
+                return Promise.resolve({ Options: [] });
+            }
+        });
+    }
     openEnvironment(connItem) {
         const conn = this.getConnectionByName(connItem.label);
         if (conn) {

@@ -44,16 +44,7 @@ class EntitiesDataProvider {
             else {
                 // Parent
                 return Promise.resolve(this.entities
-                    .sort((e1, e2) => {
-                    var _a, _b, _c, _d;
-                    if (((_a = e1.DisplayName.UserLocalizedLabel) === null || _a === void 0 ? void 0 : _a.Label) > ((_b = e2.DisplayName.UserLocalizedLabel) === null || _b === void 0 ? void 0 : _b.Label)) {
-                        return 1;
-                    }
-                    if (((_c = e1.DisplayName.UserLocalizedLabel) === null || _c === void 0 ? void 0 : _c.Label) < ((_d = e2.DisplayName.UserLocalizedLabel) === null || _d === void 0 ? void 0 : _d.Label)) {
-                        return -1;
-                    }
-                    return 0;
-                })
+                    .sort(this.sortEntities)
                     .filter((e) => e.IsCustomizable.Value)
                     .map((e) => { var _a; return new EntitiesTreeItem((_a = e.DisplayName.UserLocalizedLabel) === null || _a === void 0 ? void 0 : _a.Label, e.SchemaName.toLowerCase(), vscode.TreeItemCollapsibleState.Collapsed, 1); }));
             }
@@ -69,6 +60,22 @@ class EntitiesDataProvider {
         else {
             this.entities = [];
         }
+    }
+    sortEntities(e1, e2) {
+        var _a, _b, _c, _d;
+        if (((_a = e1.DisplayName.UserLocalizedLabel) === null || _a === void 0 ? void 0 : _a.Label) > ((_b = e2.DisplayName.UserLocalizedLabel) === null || _b === void 0 ? void 0 : _b.Label)) {
+            return 1;
+        }
+        if (((_c = e1.DisplayName.UserLocalizedLabel) === null || _c === void 0 ? void 0 : _c.Label) < ((_d = e2.DisplayName.UserLocalizedLabel) === null || _d === void 0 ? void 0 : _d.Label)) {
+            return -1;
+        }
+        if (e1.DisplayName.UserLocalizedLabel === null || e1.DisplayName.UserLocalizedLabel === undefined) {
+            return 1;
+        }
+        if (e2.DisplayName.UserLocalizedLabel === null || e2.DisplayName.UserLocalizedLabel === undefined) {
+            return -1;
+        }
+        return 0;
     }
 }
 exports.EntitiesDataProvider = EntitiesDataProvider;
