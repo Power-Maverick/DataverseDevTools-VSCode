@@ -71,11 +71,13 @@ class UploadHelper {
             if (linkerFile) {
                 const linkerFileData = FileSystem_1.readFileSync(linkerFile.fsPath).toString();
                 const linkerFileDataJson = Parsers_1.xmlToJSON(linkerFileData);
-                if (Array.isArray(linkerFileDataJson.DVDT.WebResources.Resource)) {
-                    return linkerFileDataJson.DVDT.WebResources.Resource.map((r) => r[attrName]);
-                }
-                else {
-                    return [linkerFileDataJson.DVDT.WebResources.Resource[attrName]];
+                if (linkerFileDataJson.DVDT.WebResources.Resource) {
+                    if (Array.isArray(linkerFileDataJson.DVDT.WebResources.Resource)) {
+                        return linkerFileDataJson.DVDT.WebResources.Resource.map((r) => r[attrName]);
+                    }
+                    else {
+                        return [linkerFileDataJson.DVDT.WebResources.Resource[attrName]];
+                    }
                 }
             }
         });
@@ -161,26 +163,38 @@ class UploadHelper {
     }
     uploadWebResourceInternal(fullPath, resc) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (resc) {
-                const wr = {
-                    content: ExtensionMethods_1.encodeToBase64(FileSystem_1.readFileSync(fullPath)),
-                };
-                yield this.dvHelper.updateWebResourceContent(resc["@_Id"], wr);
-            }
-            else {
-                const wr = yield this.webResourceCreateWizard(fullPath);
-                if (wr) {
-                    const solutionUniqueName = wr.description;
-                    wr.description = null;
-                    let wrId = yield this.dvHelper.createWebResource(wr);
-                    if (wrId) {
-                        wrId = ExtensionMethods_1.extractGuid(wrId);
-                        this.dvHelper.addWRToSolution(solutionUniqueName, wrId);
-                        wr.webresourceid = wrId;
-                        return wr;
+            return vscode.window.withProgress({
+                location: vscode.ProgressLocation.Notification,
+                title: "Uploading Web Resources",
+            }, (progress, token) => __awaiter(this, void 0, void 0, function* () {
+                token.onCancellationRequested(() => {
+                    console.log("User canceled the long running operation");
+                    return;
+                });
+                progress.report({ increment: 0, message: "Uploading..." });
+                if (resc) {
+                    const wr = {
+                        content: ExtensionMethods_1.encodeToBase64(FileSystem_1.readFileSync(fullPath)),
+                    };
+                    yield this.dvHelper.updateWebResourceContent(resc["@_Id"], wr);
+                }
+                else {
+                    const wr = yield this.webResourceCreateWizard(fullPath);
+                    if (wr) {
+                        const solutionUniqueName = wr.description;
+                        wr.description = null;
+                        let wrId = yield this.dvHelper.createWebResource(wr);
+                        if (wrId) {
+                            wrId = ExtensionMethods_1.extractGuid(wrId);
+                            this.dvHelper.addWRToSolution(solutionUniqueName, wrId);
+                            wr.webresourceid = wrId;
+                            return wr;
+                        }
                     }
                 }
-            }
+                progress.report({ increment: 100 });
+                vscode.window.showInformationMessage(`Web Resource uploaded.`);
+            }));
         });
     }
     getLinkedResourceByLocalFileName(fullFilePath) {

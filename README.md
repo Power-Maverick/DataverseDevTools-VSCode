@@ -1,78 +1,92 @@
-# dataverse-devtools README
+[![Sponsor](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub)](https://github.com/sponsors/Power-Maverick)
 
-This is the README for your extension "dataverse-devtools". After writing up a brief description, we recommend including the following sections.
+[![Twitter Follow](https://img.shields.io/twitter/follow/DanzMaverick?style=social)](https://twitter.com/Danzmaverick)
 
-## Features
+# Dataverse DevTools
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+The all-in-one tool to develop code for Dataverse/Dynamics 365. Helps you connect to a Dataverse environment, generate TypeScript definitions for entities, create different type of Dataverse-specific projects, upload web-resources right from VS Code and much more.
 
-For example if there is an image subfolder under your extension project workspace:
+**Table of contents**
 
-\!\[feature X\]\(images/feature-x.png\)
+- [Dataverse DevTools](#dataverse-devtools)
+  - [⚙ Features](#-features)
+      - [Connect to your Dataverse environment](#connect-to-your-dataverse-environment)
+      - [Remembers the connected environment per workspace](#remembers-the-connected-environment-per-workspace)
+      - [See connection and entity details (with copy feature)](#see-connection-and-entity-details-with-copy-feature)
+      - [Initialize TypeScript project](#initialize-typescript-project)
+      - [Generate Typings](#generate-typings)
+      - [Intellisense for type generated](#intellisense-for-type-generated)
+      - [Upload Web Resources](#upload-web-resources)
+  - [⌨ Keyboard Shortcuts](#-keyboard-shortcuts)
+  - [💭 Planned Features](#-planned-features)
+  - [🔌 Contributing](#-contributing)
+  - [🔉 Discussions](#-discussions)
+  - [📃 License](#-license)
+  - [💙 Big Thanks](#-big-thanks)
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+## ⚙ Features
 
-## Requirements
+#### Connect to your Dataverse environment
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+![Create & Connect](https://github.com/Power-Maverick/DataverseDevTools-VSCode/blob/master/assets/Create&Connect.gif?raw=true)
 
-## Extension Settings
+#### Remembers the connected environment per workspace
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+![Silent Connection Reload](https://github.com/Power-Maverick/DataverseDevTools-VSCode/blob/master/assets/RememberConnection.gif?raw=true)
 
-For example:
+#### See connection and entity details (with copy feature)
 
-This extension contributes the following settings:
+![See Details](https://github.com/Power-Maverick/DataverseDevTools-VSCode/blob/master/assets/Connection&EntityDetails.gif?raw=true)
 
--   `myExtension.enable`: enable/disable this extension
--   `myExtension.thing`: set to `blah` to do something
+#### Initialize TypeScript project
 
-## Known Issues
+**Loads with [`@types/xrm`](https://www.npmjs.com/package/@types/xrm) npm package installed**
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+![TypeScript Project](https://github.com/Power-Maverick/DataverseDevTools-VSCode/blob/master/assets/TypeScriptInitialization.gif?raw=true)
 
-## Release Notes
+#### Generate Typings
 
-Users appreciate release notes as you update your extension.
+**Typings are also integrated with [`@types/xrm`](https://www.npmjs.com/package/@types/xrm)**
 
-### 1.0.0
+![Typings](https://github.com/Power-Maverick/DataverseDevTools-VSCode/blob/master/assets/GenerateTypings.gif?raw=true)
 
-Initial release of ...
+#### Intellisense for type generated
 
-### 1.0.1
+![IntellisenseTypeScript](https://github.com/Power-Maverick/DataverseDevTools-VSCode/blob/master/assets/IntellisenseForTypeScript.gif?raw=true)
 
-Fixed issue #.
+#### Upload Web Resources
 
-### 1.1.0
+![WebResourceUpload](https://github.com/Power-Maverick/DataverseDevTools-VSCode/blob/master/assets/WebResourceUpload.gif?raw=true)
 
-Added features X, Y, and Z.
+## ⌨ Keyboard Shortcuts
 
----
+| Command                   | Keyboard Shortcut    |
+| ------------------------- | -------------------- |
+| Create TypeScript project | `Ctrl + D, Ctrl + T` |
 
-## Following extension guidelines
+## 💭 Planned Features
 
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
+-   Authenticate using MSFT login popup instead of username & password.
+-   Integrate with [Dataverse-ify](https://github.com/scottdurow/dataverse-ify/).
+-   Smart matching web resource with local files.
+-   Bulk deploy web resources.
 
--   [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
+## 🔌 Contributing
 
-## Working with Markdown
+Before creating the pull request for contributing, please read the [Contributing Guidelines](CONTRIBUTING.md).
 
-**Note:** You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
+## 🔉 Discussions
 
--   Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux)
--   Toggle preview (`Shift+CMD+V` on macOS or `Shift+Ctrl+V` on Windows and Linux)
--   Press `Ctrl+Space` (Windows, Linux) or `Cmd+Space` (macOS) to see a list of Markdown snippets
+If you want to have any discussions on any feature, please use the [Discussion Board](https://github.com/Power-Maverick/DataverseDevTools-VSCode/discussions).
 
-### For more information
+## 📃 License
 
--   [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
--   [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
+This software is released under [MIT License](http://www.opensource.org/licenses/mit-license.php)
 
-**Enjoy!**
+## 💙 Big Thanks
 
-## People to mention
+**Matt Barbour** for explaining the authentication using MSAL/ADAL in Dataverse.
 
--   Matt Barbour (login)
--   Magnus (TypeScript definitions)
--   Temmy (pac plugin)
--   Scott Durow (???)
+[Magnus Gether Sørensen](https://www.linkedin.com/in/xrmwizard/) for helping in providing insights for XrmDefinitelyTyped.
+
+[Temmy Raharjo](https://www.linkedin.com/in/temmy-wahyu-raharjo/) for encouraging me to start using `pac cli command` to generate Plugin project.

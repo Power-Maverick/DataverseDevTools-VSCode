@@ -237,6 +237,12 @@
                 "when": "false",
                 "category": "%dvdt.explorer.category%"
             }
+        ],
+        "keybindings": [
+            {
+                "command": "dvdt.commands.initTS",
+                "key": "ctrl+d ctrl+t"
+            }
         ]
     },
     "scripts": {
