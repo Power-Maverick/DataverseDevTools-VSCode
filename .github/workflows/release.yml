@@ -1,0 +1,24 @@
+name: Release
+on:
+  release:
+    types:
+      - published
+  workflow_dispatch:
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      - name: Install the dependencies
+        run: npm install
+      - name: Install vsce
+        run: npm install -g vsce
+      - name: Publish
+        run: vsce publish -p ${{ secrets.VSCE_PAT }}
