@@ -26,37 +26,37 @@ The all-in-one tool to develop code for Dataverse/Dynamics 365. Helps you connec
 
 ## ⚙ Features
 
-#### Connect to your Dataverse environment
+### Connect to your Dataverse environment
 
-![Create & Connect](https://github.com/Power-Maverick/DataverseDevTools-VSCode/blob/master/assets/Create&Connect.gif?raw=true)
+![Create & Connect](https://github.com/Power-Maverick/DataverseDevTools-VSCode/blob/main/assets/Create&Connect.gif?raw=true)
 
-#### Remembers the connected environment per workspace
+### Remembers the connected environment per workspace
 
-![Silent Connection Reload](https://github.com/Power-Maverick/DataverseDevTools-VSCode/blob/master/assets/RememberConnection.gif?raw=true)
+![Silent Connection Reload](https://github.com/Power-Maverick/DataverseDevTools-VSCode/blob/main/assets/RememberConnection.gif?raw=true)
 
-#### See connection and entity details (with copy feature)
+### See connection and entity details (with copy feature)
 
-![See Details](https://github.com/Power-Maverick/DataverseDevTools-VSCode/blob/master/assets/Connection&EntityDetails.gif?raw=true)
+![See Details](https://github.com/Power-Maverick/DataverseDevTools-VSCode/blob/main/assets/Connection&EntityDetails.gif?raw=true)
 
-#### Initialize TypeScript project
+### Initialize TypeScript project
 
 **Loads with [`@types/xrm`](https://www.npmjs.com/package/@types/xrm) npm package installed**
 
-![TypeScript Project](https://github.com/Power-Maverick/DataverseDevTools-VSCode/blob/master/assets/TypeScriptInitialization.gif?raw=true)
+![TypeScript Project](https://github.com/Power-Maverick/DataverseDevTools-VSCode/blob/main/assets/TypeScriptInitialization.gif?raw=true)
 
-#### Generate Typings
+### Generate Typings
 
 **Typings are also integrated with [`@types/xrm`](https://www.npmjs.com/package/@types/xrm)**
 
-![Typings](https://github.com/Power-Maverick/DataverseDevTools-VSCode/blob/master/assets/GenerateTypings.gif?raw=true)
+![Typings](https://github.com/Power-Maverick/DataverseDevTools-VSCode/blob/main/assets/GenerateTypings.gif?raw=true)
 
-#### Intellisense for type generated
+### Intellisense for type generated
 
-![IntellisenseTypeScript](https://github.com/Power-Maverick/DataverseDevTools-VSCode/blob/master/assets/IntellisenseForTypeScript.gif?raw=true)
+![IntellisenseTypeScript](https://github.com/Power-Maverick/DataverseDevTools-VSCode/blob/main/assets/IntellisenseForTypeScript.gif?raw=true)
 
-#### Upload Web Resources
+### Upload Web Resources
 
-![WebResourceUpload](https://github.com/Power-Maverick/DataverseDevTools-VSCode/blob/master/assets/WebResourceUpload.gif?raw=true)
+![WebResourceUpload](https://github.com/Power-Maverick/DataverseDevTools-VSCode/blob/main/assets/WebResourceUpload.gif?raw=true)
 
 ## ⌨ Keyboard Shortcuts
 
