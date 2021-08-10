@@ -82,7 +82,34 @@ class RequestHelper {
                     redirect: "follow",
                 });
                 if (response.ok) {
-                    console.log(response.headers.get("OData-EntityId"));
+                    return response.headers.get("OData-EntityId") !== null ? (_a = response.headers.get("OData-EntityId")) === null || _a === void 0 ? void 0 : _a.toString() : undefined;
+                }
+            }
+            catch (err) {
+                console.log(err);
+            }
+        });
+    }
+    updateData(query, data) {
+        var _a;
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const currentConnection = this.vsstate.getFromWorkspace(Constants_1.connectionCurrentStoreKey);
+                const requestUrl = `${currentConnection.environmentUrl}${Constants_1.apiPartUrl}${query}`;
+                const response = yield node_fetch_1.default(requestUrl, {
+                    method: "PATCH",
+                    headers: {
+                        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+                        // eslint-disable-next-line @typescript-eslint/naming-convention
+                        Authorization: `Bearer ${currentConnection.currentAccessToken}`,
+                        // "x-ms-client-request-id": uuid(),
+                        // eslint-disable-next-line @typescript-eslint/naming-convention
+                        "Content-Type": "application/json",
+                    },
+                    body: data,
+                    redirect: "follow",
+                });
+                if (response.ok) {
                     return response.headers.get("OData-EntityId") !== null ? (_a = response.headers.get("OData-EntityId")) === null || _a === void 0 ? void 0 : _a.toString() : undefined;
                 }
             }

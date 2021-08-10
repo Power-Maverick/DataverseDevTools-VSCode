@@ -72,7 +72,32 @@ export class RequestHelper {
             });
 
             if (response.ok) {
-                console.log(response.headers.get("OData-EntityId"));
+                return response.headers.get("OData-EntityId") !== null ? response.headers.get("OData-EntityId")?.toString() : undefined;
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    async updateData(query: string, data: string): Promise<string | undefined> {
+        try {
+            const currentConnection: IConnection = this.vsstate.getFromWorkspace(connectionCurrentStoreKey);
+            const requestUrl = `${currentConnection.environmentUrl}${apiPartUrl}${query}`;
+            const response = await fetch(requestUrl, {
+                method: "PATCH",
+                headers: {
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+                    // eslint-disable-next-line @typescript-eslint/naming-convention
+                    Authorization: `Bearer ${currentConnection.currentAccessToken}`,
+                    // "x-ms-client-request-id": uuid(),
+                    // eslint-disable-next-line @typescript-eslint/naming-convention
+                    "Content-Type": "application/json",
+                },
+                body: data,
+                redirect: "follow",
+            });
+
+            if (response.ok) {
                 return response.headers.get("OData-EntityId") !== null ? response.headers.get("OData-EntityId")?.toString() : undefined;
             }
         } catch (err) {

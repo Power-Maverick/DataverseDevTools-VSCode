@@ -79,6 +79,12 @@ class WebResourcesDataProvider {
         });
     }
     sortWebResources(w1, w2) {
+        if (!w1.displayname) {
+            return -1;
+        }
+        if (!w2.displayname) {
+            return 1;
+        }
         if (w1.displayname > w2.displayname) {
             return 1;
         }

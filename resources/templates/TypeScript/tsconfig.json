@@ -4,12 +4,15 @@
         "target": "es6",
         "module": "commonjs",
         "outDir": "./WebResources/js",
+        "sourceMap": true,
         "strict": true,
         "moduleResolution": "node",
-        "sourceMap": true,
         "removeComments": false,
         "allowJs": true,
         "resolveJsonModule": true
     },
-    "include": ["**/*.ts"]
+    "include": [
+        "./typings/**/*",
+        "./src/**/*"
+    ]
 }

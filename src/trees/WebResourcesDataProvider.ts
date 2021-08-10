@@ -49,7 +49,7 @@ export class WebResourcesDataProvider implements vscode.TreeDataProvider<WebReso
                             }
                         }
 
-                        return new WebResourcesTreeItem(e.displayname, e.name, vscode.TreeItemCollapsibleState.None, 2, showCheckmark);
+                        return new WebResourcesTreeItem(e.displayname!, e.name, vscode.TreeItemCollapsibleState.None, 2, showCheckmark);
                     }),
                 );
             }
@@ -69,6 +69,12 @@ export class WebResourcesDataProvider implements vscode.TreeDataProvider<WebReso
     }
 
     private sortWebResources(w1: IWebResource, w2: IWebResource) {
+        if (!w1.displayname) {
+            return -1;
+        }
+        if (!w2.displayname) {
+            return 1;
+        }
         if (w1.displayname > w2.displayname) {
             return 1;
         }

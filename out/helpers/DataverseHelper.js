@@ -175,6 +175,11 @@ class DataverseHelper {
             return yield this.request.createData("webresourceset?$select=webresourceid", JSON.stringify(wr));
         });
     }
+    updateWebResourceContent(id, wr) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield this.request.updateData(`webresourceset(${id})`, JSON.stringify(wr));
+        });
+    }
     addWRToSolution(solName, wrId) {
         return __awaiter(this, void 0, void 0, function* () {
             const solComp = {

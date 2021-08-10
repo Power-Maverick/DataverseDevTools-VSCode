@@ -151,10 +151,10 @@ export interface IWebResources {
 
 export interface IWebResource {
     webresourceid?: string;
-    displayname: string;
-    name: string;
+    displayname?: string;
+    name?: string;
     content: string;
-    webresourcetype: WebResourceType;
+    webresourcetype?: WebResourceType;
     description?: null | string;
     solutionid?: string;
     ismanaged?: boolean;

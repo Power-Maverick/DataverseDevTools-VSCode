@@ -179,6 +179,10 @@ export class DataverseHelper {
         return await this.request.createData("webresourceset?$select=webresourceid", JSON.stringify(wr));
     }
 
+    public async updateWebResourceContent(id: string, wr: IWebResource): Promise<string | undefined> {
+        return await this.request.updateData(`webresourceset(${id})`, JSON.stringify(wr));
+    }
+
     public async addWRToSolution(solName: string, wrId: string) {
         const solComp: ISolutionComponent = {
             // eslint-disable-next-line @typescript-eslint/naming-convention
