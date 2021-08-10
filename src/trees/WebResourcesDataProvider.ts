@@ -6,14 +6,14 @@ import { ILinkerRes, IStore, IWebResource, IWebResources } from "../utils/Interf
 import { observable } from "mobx";
 import { TreeItemBase } from "./TreeItemBase";
 import { toArray } from "../utils/ExtensionMethods";
-import { CommonHelper } from "../helpers/CommonHelper";
+import { UploadHelper } from "../helpers/UploadHelper";
 
 export class WebResourcesDataProvider implements vscode.TreeDataProvider<WebResourcesTreeItem> {
     private refreshTreeData: vscode.EventEmitter<WebResourcesTreeItem | undefined | void> = new vscode.EventEmitter<WebResourcesTreeItem | undefined | void>();
     private webResource: IWebResource[] = [];
-    private linkedResources: ILinkerRes[] | undefined = [];
+    private linkedResources: string[] | undefined = [];
 
-    constructor(private vscontext: vscode.ExtensionContext, private commonHelper: CommonHelper) {}
+    constructor(private vscontext: vscode.ExtensionContext, private uploadHelper: UploadHelper) {}
 
     async refresh(): Promise<void> {
         await this.populateWebResources();
@@ -43,7 +43,7 @@ export class WebResourcesDataProvider implements vscode.TreeDataProvider<WebReso
                     checkType.sort(this.sortWebResources).map((e) => {
                         let showCheckmark = false;
                         if (this.linkedResources) {
-                            let foundLinkedResc = this.linkedResources.find((lr) => lr["@_dvFilePath"] === e.name);
+                            let foundLinkedResc = this.linkedResources.find((lr) => lr === e.name);
                             if (foundLinkedResc) {
                                 showCheckmark = true;
                             }
@@ -62,7 +62,7 @@ export class WebResourcesDataProvider implements vscode.TreeDataProvider<WebReso
         const jsonConn: IWebResources = vsstate.getFromWorkspace(wrDefinitionsStoreKey);
         if (jsonConn) {
             this.webResource = jsonConn.value;
-            this.linkedResources = await this.commonHelper.getLinkedResources();
+            this.linkedResources = await this.uploadHelper.getLinkedResourceStrings("@_dvFilePath");
         } else {
             this.webResource = [];
         }

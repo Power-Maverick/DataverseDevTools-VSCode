@@ -75,3 +75,4 @@ Ensure that you've read through the extensions guidelines and follow the best pr
 -   Matt Barbour (login)
 -   Magnus (TypeScript definitions)
 -   Temmy (pac plugin)
+-   Scott Durow (???)

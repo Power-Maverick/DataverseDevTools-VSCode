@@ -1,7 +1,7 @@
 import common = require("mocha/lib/interfaces/common");
 import * as vscode from "vscode";
 import { CLIHelper } from "../helpers/CLIHelper";
-import { CommonHelper } from "../helpers/CommonHelper";
+import { UploadHelper } from "../helpers/UploadHelper";
 import { DataverseHelper } from "../helpers/DataverseHelper";
 import { TemplateHelper } from "../helpers/TemplateHelper";
 import { TypingsHelper } from "../helpers/TypingsHelper";
@@ -19,7 +19,7 @@ export async function registerCommands(vscontext: vscode.ExtensionContext): Prom
     const views = new ViewBase(vscontext);
     const cliHelper = new CLIHelper(vscontext);
     const templateHelper = new TemplateHelper(vscontext);
-    const commonHelper = new CommonHelper(vscontext, dvHelper);
+    const uploadHelper = new UploadHelper(vscontext, dvHelper);
     const typingHelper = new TypingsHelper(vscontext, dvHelper);
 
     dvStatusBarItem = vscode.window.createStatusBarItem(connectionStatusBarUniqueId, vscode.StatusBarAlignment.Left);
@@ -53,17 +53,17 @@ export async function registerCommands(vscontext: vscode.ExtensionContext): Prom
             command: "dvdt.explorer.entities.showEntityDetails",
             callback: async (enItem: EntitiesTreeItem) => await dvHelper.showEntityDetails(enItem, views),
         },
-        {
-            command: "dvdt.commands.initPlugin",
-            callback: (uri: vscode.Uri) => cliHelper.initiatePluginProject(uri.fsPath),
-        },
+        // {
+        //     command: "dvdt.commands.initPlugin",
+        //     callback: (uri: vscode.Uri) => cliHelper.initiatePluginProject(uri.fsPath),
+        // },
         {
             command: "dvdt.commands.initTS",
             callback: async (uri: vscode.Uri) => await templateHelper.initiateTypeScriptProject(uri.fsPath),
         },
         {
-            command: "dvdt.explorer.webresources.linkExistingWebResource",
-            callback: async (uri: vscode.Uri) => await commonHelper.linkWebResource(uri.fsPath),
+            command: "dvdt.explorer.webresources.uploadWebResource",
+            callback: async (uri: vscode.Uri) => await uploadHelper.uploadWebResource(uri.fsPath),
         },
         {
             command: "dvdt.explorer.entities.generateTyping",
@@ -76,7 +76,7 @@ export async function registerCommands(vscontext: vscode.ExtensionContext): Prom
 
     updateConnectionStatusBar(await dvHelper.reloadWorkspaceConnection());
     vscode.commands.executeCommand("setContext", `${extensionPrefix}.resourcesExtn`, fileExtensions);
-    vscode.commands.executeCommand("setContext", `${extensionPrefix}.linkedResources`, await commonHelper.getLinkedResourceStrings());
+    vscode.commands.executeCommand("setContext", `${extensionPrefix}.linkedResources`, await uploadHelper.getLinkedResourceStrings("@_localFileName"));
 }
 
 export function updateConnectionStatusBar(conn: IConnection | undefined): void {

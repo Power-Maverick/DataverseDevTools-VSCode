@@ -1,5 +1,6 @@
 import * as vscode from "vscode";
 import { CancellationToken, Progress } from "vscode";
+import { WebResourceType } from "./Constants";
 
 /* eslint-disable @typescript-eslint/naming-convention */
 export interface IConnection {
@@ -149,24 +150,17 @@ export interface IWebResources {
 }
 
 export interface IWebResource {
+    webresourceid?: string;
     displayname: string;
-    solutionid: string;
-    content: string;
-    ismanaged: boolean;
-    description: null | string;
-    webresourcetype: number;
-    componentstate: number;
-    webresourceid: string;
     name: string;
-    webresourceidunique: string;
-    contentfileref: null;
-    contentjson: null;
-    contentjsonfileref_name: null;
-    contentfileref_name: null;
-    contentjsonfileref: null;
-    dependencyxml: null | string;
-    iscustomizable: IIs;
-    canbedeleted: IIs;
+    content: string;
+    webresourcetype: WebResourceType;
+    description?: null | string;
+    solutionid?: string;
+    ismanaged?: boolean;
+    componentstate?: number;
+    iscustomizable?: IIs;
+    canbedeleted?: IIs;
 }
 
 export interface ILinkerFile {
@@ -174,15 +168,17 @@ export interface ILinkerFile {
 }
 
 export interface ILinkerRoot {
-    WebResources: ILinkerWR;
+    WebResources: ILinkerResources;
     Settings: any[];
 }
-export interface ILinkerWR {
-    Resource: ILinkerRes[];
+
+export interface ILinkerResources {
+    Resource: Array<ILinkerRes>;
 }
 
 export interface ILinkerRes {
     "@_localFileName": string;
+    "@_localFilePath": string;
     "@_dvDisplayName": string;
     "@_dvFilePath": string;
     "@_Id": string;
@@ -211,4 +207,31 @@ export interface IOption {
 export interface IOptionValue {
     name: string;
     value: number;
+}
+
+export interface ISolutions {
+    value: ISolution[];
+}
+
+export interface ISolution {
+    description: null | string;
+    friendlyname: string;
+    ismanaged: boolean;
+    isvisible: boolean;
+    solutionid: string;
+    uniquename: string;
+    version: string;
+    publisherid: IPublisher;
+}
+
+export interface IPublisher {
+    customizationprefix: string;
+    publisherid: string;
+}
+
+export interface ISolutionComponent {
+    ComponentId: string;
+    ComponentType: number;
+    SolutionUniqueName: string;
+    AddRequiredComponents: boolean;
 }

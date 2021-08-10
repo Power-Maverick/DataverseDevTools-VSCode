@@ -131,6 +131,13 @@ class DataverseHelper {
             }
         });
     }
+    getSolutions() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const respData = yield this.request.requestData("solutions?$select=description,friendlyname,ismanaged,isvisible,_publisherid_value,solutionid,uniquename,version&$expand=publisherid($select=customizationprefix)&$filter=ismanaged eq false and  isvisible eq true");
+            this.vsstate.saveInWorkspace(Constants_1.solDefinitionsStoreKey, respData);
+            return respData;
+        });
+    }
     openEnvironment(connItem) {
         const conn = this.getConnectionByName(connItem.label);
         if (conn) {
@@ -161,6 +168,26 @@ class DataverseHelper {
             const respData = yield this.request.requestData("webresourceset?$filter=(Microsoft.Dynamics.CRM.In(PropertyName=%27webresourcetype%27,PropertyValues=[%271%27,%272%27,%273%27])%20and%20ismanaged%20eq%20false%20and%20iscustomizable/Value%20eq%20true%20)");
             this.vsstate.saveInWorkspace(Constants_1.wrDefinitionsStoreKey, respData);
             vscode.commands.executeCommand("dvdt.explorer.webresources.loadWebResources");
+        });
+    }
+    createWebResource(wr) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield this.request.createData("webresourceset?$select=webresourceid", JSON.stringify(wr));
+        });
+    }
+    addWRToSolution(solName, wrId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const solComp = {
+                // eslint-disable-next-line @typescript-eslint/naming-convention
+                ComponentId: wrId,
+                // eslint-disable-next-line @typescript-eslint/naming-convention
+                SolutionUniqueName: solName,
+                // eslint-disable-next-line @typescript-eslint/naming-convention
+                AddRequiredComponents: false,
+                // eslint-disable-next-line @typescript-eslint/naming-convention
+                ComponentType: 61, // Web Resources (https://docs.microsoft.com/en-us/dynamics365/customer-engagement/web-api/solutioncomponent?view=dynamics-ce-odata-9)
+            };
+            yield this.request.createData("AddSolutionComponent", JSON.stringify(solComp));
         });
     }
     //#endregion Public

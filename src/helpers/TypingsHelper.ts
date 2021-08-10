@@ -1,6 +1,5 @@
 import * as vscode from "vscode";
 import * as dom from "dts-dom";
-import { reduce } from "conditional-reduce";
 import { DataverseHelper } from "./DataverseHelper";
 import { camelize, pascalize, sanitize } from "../utils/ExtensionMethods";
 import { IAttributeDefinition, IOptionValue } from "../utils/Interfaces";

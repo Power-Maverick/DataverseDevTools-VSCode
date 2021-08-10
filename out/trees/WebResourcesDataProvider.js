@@ -18,9 +18,9 @@ const mobx_1 = require("mobx");
 const TreeItemBase_1 = require("./TreeItemBase");
 const ExtensionMethods_1 = require("../utils/ExtensionMethods");
 class WebResourcesDataProvider {
-    constructor(vscontext, commonHelper) {
+    constructor(vscontext, uploadHelper) {
         this.vscontext = vscontext;
-        this.commonHelper = commonHelper;
+        this.uploadHelper = uploadHelper;
         this.refreshTreeData = new vscode.EventEmitter();
         this.webResource = [];
         this.linkedResources = [];
@@ -53,7 +53,7 @@ class WebResourcesDataProvider {
                     return Promise.resolve(checkType.sort(this.sortWebResources).map((e) => {
                         let showCheckmark = false;
                         if (this.linkedResources) {
-                            let foundLinkedResc = this.linkedResources.find((lr) => lr["@_dvFilePath"] === e.name);
+                            let foundLinkedResc = this.linkedResources.find((lr) => lr === e.name);
                             if (foundLinkedResc) {
                                 showCheckmark = true;
                             }
@@ -71,7 +71,7 @@ class WebResourcesDataProvider {
             const jsonConn = vsstate.getFromWorkspace(Constants_1.wrDefinitionsStoreKey);
             if (jsonConn) {
                 this.webResource = jsonConn.value;
-                this.linkedResources = yield this.commonHelper.getLinkedResources();
+                this.linkedResources = yield this.uploadHelper.getLinkedResourceStrings("@_dvFilePath");
             }
             else {
                 this.webResource = [];

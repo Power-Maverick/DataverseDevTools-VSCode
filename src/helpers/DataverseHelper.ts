@@ -3,8 +3,21 @@ import { loginWithUsernamePassword } from "../login/Login";
 import { Placeholders } from "../utils/Placeholders";
 import { ErrorMessages } from "../utils/ErrorMessages";
 import { State } from "../utils/State";
-import { IAttributeDefinition, IAttributeMetadata, IConnection, IEntityDefinition, IEntityMetadata, IOptionSet, IOptionSetMetadata, IProgressOptions } from "../utils/Interfaces";
-import { connectionCurrentStoreKey, connectionStoreKey, entityDefinitionsStoreKey, environmentTypes, wrDefinitionsStoreKey } from "../utils/Constants";
+import {
+    IAttributeDefinition,
+    IAttributeMetadata,
+    IConnection,
+    IEntityDefinition,
+    IEntityMetadata,
+    ILinkerRes,
+    IOptionSet,
+    IOptionSetMetadata,
+    IProgressOptions,
+    ISolutionComponent,
+    ISolutions,
+    IWebResource,
+} from "../utils/Interfaces";
+import { connectionCurrentStoreKey, connectionStoreKey, entityDefinitionsStoreKey, environmentTypes, solDefinitionsStoreKey, wrDefinitionsStoreKey } from "../utils/Constants";
 import { DataverseConnectionTreeItem } from "../trees/DataverseConnectionDataProvider";
 import { RequestHelper } from "./RequestHelper";
 import { ProgressLocation } from "vscode";
@@ -122,6 +135,14 @@ export class DataverseHelper {
         }
     }
 
+    public async getSolutions(): Promise<ISolutions | undefined> {
+        const respData = await this.request.requestData<ISolutions>(
+            "solutions?$select=description,friendlyname,ismanaged,isvisible,_publisherid_value,solutionid,uniquename,version&$expand=publisherid($select=customizationprefix)&$filter=ismanaged eq false and  isvisible eq true",
+        );
+        this.vsstate.saveInWorkspace(solDefinitionsStoreKey, respData);
+        return respData;
+    }
+
     public openEnvironment(connItem: DataverseConnectionTreeItem) {
         const conn: IConnection | undefined = this.getConnectionByName(connItem.label);
         if (conn) {
@@ -152,6 +173,24 @@ export class DataverseHelper {
         );
         this.vsstate.saveInWorkspace(wrDefinitionsStoreKey, respData);
         vscode.commands.executeCommand("dvdt.explorer.webresources.loadWebResources");
+    }
+
+    public async createWebResource(wr: IWebResource): Promise<string | undefined> {
+        return await this.request.createData("webresourceset?$select=webresourceid", JSON.stringify(wr));
+    }
+
+    public async addWRToSolution(solName: string, wrId: string) {
+        const solComp: ISolutionComponent = {
+            // eslint-disable-next-line @typescript-eslint/naming-convention
+            ComponentId: wrId,
+            // eslint-disable-next-line @typescript-eslint/naming-convention
+            SolutionUniqueName: solName,
+            // eslint-disable-next-line @typescript-eslint/naming-convention
+            AddRequiredComponents: false,
+            // eslint-disable-next-line @typescript-eslint/naming-convention
+            ComponentType: 61, // Web Resources (https://docs.microsoft.com/en-us/dynamics365/customer-engagement/web-api/solutioncomponent?view=dynamics-ce-odata-9)
+        };
+        await this.request.createData("AddSolutionComponent", JSON.stringify(solComp));
     }
 
     //#endregion Public

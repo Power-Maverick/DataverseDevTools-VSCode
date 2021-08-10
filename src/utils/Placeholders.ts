@@ -35,6 +35,18 @@ export class Placeholders {
                     prompt: this.ipConnectionName.prompt,
                 };
                 break;
+            case this.wrDisplayName:
+                inbOptions = {
+                    placeHolder: this.ipWRDisplayName.placeHolderText,
+                    prompt: this.ipWRDisplayName.prompt,
+                };
+                break;
+            case this.wrUniqueName:
+                inbOptions = {
+                    placeHolder: this.ipWRUniqueName.placeHolderText,
+                    prompt: this.ipWRUniqueName.prompt,
+                };
+                break;
             default:
                 inbOptions = { placeHolder: "", prompt: "" };
                 break;
@@ -46,7 +58,7 @@ export class Placeholders {
 
     public static getQuickPickOptions(placeholder: string, ignoreFocus: boolean = true) {
         let qpOptions: vscode.QuickPickOptions;
-
+        ``;
         switch (placeholder) {
             case this.connectionType:
                 qpOptions = { placeHolder: this.ipConnectionType.placeHolderText, title: this.ipConnectionType.prompt, ignoreFocusOut: ignoreFocus };
@@ -56,6 +68,12 @@ export class Placeholders {
                 break;
             case this.typingDirSelection:
                 qpOptions = { placeHolder: this.ipTypingDirSelection.placeHolderText, title: this.ipTypingDirSelection.prompt, ignoreFocusOut: ignoreFocus };
+                break;
+            case this.webResourceLinkSelection:
+                qpOptions = { placeHolder: this.ipWebResourceLinkSelection.placeHolderText, title: this.ipWebResourceLinkSelection.prompt, ignoreFocusOut: ignoreFocus };
+                break;
+            case this.solutionSelection:
+                qpOptions = { placeHolder: this.ipsolutionSelection.placeHolderText, title: this.ipsolutionSelection.prompt, ignoreFocusOut: ignoreFocus };
                 break;
             default:
                 qpOptions = { placeHolder: "", ignoreFocusOut: ignoreFocus };
@@ -72,6 +90,10 @@ export class Placeholders {
     public static connectionType: string = "ConnectionType";
     public static webResourceSelection: string = "WebResourceSelection";
     public static typingDirSelection: string = "TypingDirSelection";
+    public static webResourceLinkSelection: string = "WebResourceLinkSelection";
+    public static solutionSelection: string = "SolutionSelection";
+    public static wrDisplayName: string = "WR-DisplayName";
+    public static wrUniqueName: string = "WR-UniqueName";
 
     public static required: string = "[Required]";
     public static optional: string = "[Optional]";
@@ -103,5 +125,21 @@ export class Placeholders {
     private static ipTypingDirSelection: IPlaceholder = {
         placeHolderText: `Select the directory`,
         prompt: `Pick your directory to add the type definition file`,
+    };
+    private static ipWebResourceLinkSelection: IPlaceholder = {
+        placeHolderText: `Select your option`,
+        prompt: `Do you want to upload a new webresource or link to an existing?`,
+    };
+    private static ipsolutionSelection: IPlaceholder = {
+        placeHolderText: `Select the solution`,
+        prompt: `Pick the solution where you want to deploy the web resource`,
+    };
+    private static ipWRDisplayName: IPlaceholder = {
+        placeHolderText: `${Placeholders.required} Display Name (e.g. My Awesome Script)`,
+        prompt: `Enter your Web Resource display name`,
+    };
+    private static ipWRUniqueName: IPlaceholder = {
+        placeHolderText: `${Placeholders.required} Unique Name [DO NOT INCLUDE prefix] (e.g. /scripts/forms/myawesomescript.js)`,
+        prompt: `Enter your Web Resource unique name without the prefix`,
     };
 }

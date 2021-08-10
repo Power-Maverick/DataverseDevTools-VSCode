@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateConnectionStatusBar = exports.registerCommands = void 0;
 const vscode = require("vscode");
 const CLIHelper_1 = require("../helpers/CLIHelper");
-const CommonHelper_1 = require("../helpers/CommonHelper");
+const UploadHelper_1 = require("../helpers/UploadHelper");
 const DataverseHelper_1 = require("../helpers/DataverseHelper");
 const TemplateHelper_1 = require("../helpers/TemplateHelper");
 const TypingsHelper_1 = require("../helpers/TypingsHelper");
@@ -26,7 +26,7 @@ function registerCommands(vscontext) {
         const views = new ViewBase_1.ViewBase(vscontext);
         const cliHelper = new CLIHelper_1.CLIHelper(vscontext);
         const templateHelper = new TemplateHelper_1.TemplateHelper(vscontext);
-        const commonHelper = new CommonHelper_1.CommonHelper(vscontext, dvHelper);
+        const uploadHelper = new UploadHelper_1.UploadHelper(vscontext, dvHelper);
         const typingHelper = new TypingsHelper_1.TypingsHelper(vscontext, dvHelper);
         dvStatusBarItem = vscode.window.createStatusBarItem(Constants_1.connectionStatusBarUniqueId, vscode.StatusBarAlignment.Left);
         vscontext.subscriptions.push(dvStatusBarItem);
@@ -51,15 +51,17 @@ function registerCommands(vscontext) {
         }, {
             command: "dvdt.explorer.entities.showEntityDetails",
             callback: (enItem) => __awaiter(this, void 0, void 0, function* () { return yield dvHelper.showEntityDetails(enItem, views); }),
-        }, {
-            command: "dvdt.commands.initPlugin",
-            callback: (uri) => cliHelper.initiatePluginProject(uri.fsPath),
-        }, {
+        }, 
+        // {
+        //     command: "dvdt.commands.initPlugin",
+        //     callback: (uri: vscode.Uri) => cliHelper.initiatePluginProject(uri.fsPath),
+        // },
+        {
             command: "dvdt.commands.initTS",
             callback: (uri) => __awaiter(this, void 0, void 0, function* () { return yield templateHelper.initiateTypeScriptProject(uri.fsPath); }),
         }, {
-            command: "dvdt.explorer.webresources.linkExistingWebResource",
-            callback: (uri) => __awaiter(this, void 0, void 0, function* () { return yield commonHelper.linkWebResource(uri.fsPath); }),
+            command: "dvdt.explorer.webresources.uploadWebResource",
+            callback: (uri) => __awaiter(this, void 0, void 0, function* () { return yield uploadHelper.uploadWebResource(uri.fsPath); }),
         }, {
             command: "dvdt.explorer.entities.generateTyping",
             callback: (enItem) => __awaiter(this, void 0, void 0, function* () { return yield typingHelper.generateTyping(enItem.desc); }),
@@ -69,7 +71,7 @@ function registerCommands(vscontext) {
         });
         updateConnectionStatusBar(yield dvHelper.reloadWorkspaceConnection());
         vscode.commands.executeCommand("setContext", `${Constants_1.extensionPrefix}.resourcesExtn`, Constants_1.fileExtensions);
-        vscode.commands.executeCommand("setContext", `${Constants_1.extensionPrefix}.linkedResources`, yield commonHelper.getLinkedResourceStrings());
+        vscode.commands.executeCommand("setContext", `${Constants_1.extensionPrefix}.linkedResources`, yield uploadHelper.getLinkedResourceStrings("@_localFileName"));
     });
 }
 exports.registerCommands = registerCommands;

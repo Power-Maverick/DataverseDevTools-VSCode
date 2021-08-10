@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sanitize = exports.pascalize = exports.camelize = exports.toArray = exports.groupBy = void 0;
+exports.encodeToBase64 = exports.decodeFromBase64 = exports.extractGuid = exports.sanitize = exports.pascalize = exports.camelize = exports.toArray = exports.groupBy = void 0;
 const stringIsNumber = (value) => isNaN(Number(value)) === false;
 const groupBy = (list, getKey) => list.reduce((previous, currentItem) => {
     const group = getKey(currentItem);
@@ -42,4 +42,15 @@ const sanitize = (str) => {
     return str.replace(/\s+/g, "").replace(/[^0-9a-zA-Z_]+/g, "");
 };
 exports.sanitize = sanitize;
+const extractGuid = (str) => {
+    const matches = str.match(/(\{){0,1}[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}(\}){0,1}/g);
+    if (matches) {
+        return matches[0];
+    }
+};
+exports.extractGuid = extractGuid;
+const decodeFromBase64 = (str) => Buffer.from(str, "base64").toString("binary");
+exports.decodeFromBase64 = decodeFromBase64;
+const encodeToBase64 = (str) => Buffer.from(str, "binary").toString("base64");
+exports.encodeToBase64 = encodeToBase64;
 //# sourceMappingURL=ExtensionMethods.js.map

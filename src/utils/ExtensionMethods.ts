@@ -40,3 +40,14 @@ export const sanitize = (str: string) => {
     }
     return str.replace(/\s+/g, "").replace(/[^0-9a-zA-Z_]+/g, "");
 };
+
+export const extractGuid = (str: string): string | undefined => {
+    const matches = str.match(/(\{){0,1}[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}(\}){0,1}/g);
+    if (matches) {
+        return matches[0];
+    }
+};
+
+export const decodeFromBase64 = (str: string): string => Buffer.from(str, "base64").toString("binary");
+
+export const encodeToBase64 = (str: string): string => Buffer.from(str, "binary").toString("base64");

@@ -44,45 +44,63 @@ class CommonHelper {
                 if (linkerFile && wrQPResponse) {
                     const linkerFileData = FileSystem_1.readFileSync(linkerFile.fsPath).toString();
                     const linkerFileDataJson = Parsers_1.xmlToJSON(linkerFileData);
-                    let foundLink = linkerFileDataJson.DVDT.WebResources.Resource.find((r) => r["@_dvDisplayName"] === (wrQPResponse === null || wrQPResponse === void 0 ? void 0 : wrQPResponse.data.displayname));
+                    const linkedStrings = yield this.getLinkedResourceStrings("@_localFileName");
+                    let foundLink = linkedStrings ? linkedStrings.find((r) => r === (wrQPResponse === null || wrQPResponse === void 0 ? void 0 : wrQPResponse.label)) : false;
                     if (!foundLink) {
-                        linkerFileDataJson.DVDT.WebResources.Resource.push({
+                        if (!linkerFileDataJson.DVDT.WebResources) {
+                            linkerFileDataJson.DVDT.WebResources = {
+                                Resource: [],
+                            };
+                        }
+                        const resc = {
                             "@_Id": uuid_1.v4(),
                             "@_dvDisplayName": wrQPResponse.data.displayname,
                             "@_dvFilePath": wrQPResponse.data.name,
                             "@_localFileName": FileSystem_1.getFileName(fullPath),
-                        });
+                        };
+                        if (Array.isArray(linkerFileDataJson.DVDT.WebResources.Resource)) {
+                            linkerFileDataJson.DVDT.WebResources.Resource.push(resc);
+                        }
+                        else {
+                            const tResc = linkerFileDataJson.DVDT.WebResources.Resource;
+                            linkerFileDataJson.DVDT.WebResources.Resource = [];
+                            linkerFileDataJson.DVDT.WebResources.Resource.push(tResc);
+                            linkerFileDataJson.DVDT.WebResources.Resource.push(resc);
+                        }
                         FileSystem_1.writeFileSync(linkerFile.fsPath, Parsers_1.jsonToXML(linkerFileDataJson));
                     }
                 }
             }
         });
     }
-    getLinkedResourceStrings() {
+    getLinkedResourceStrings(attrName) {
         return __awaiter(this, void 0, void 0, function* () {
             const linkerFile = yield this.getLinkerFile();
             if (linkerFile) {
                 const linkerFileData = FileSystem_1.readFileSync(linkerFile.fsPath).toString();
                 const linkerFileDataJson = Parsers_1.xmlToJSON(linkerFileData);
-                if (linkerFileDataJson.DVDT.WebResources && linkerFileDataJson.DVDT.WebResources.Resource) {
-                    return linkerFileDataJson.DVDT.WebResources.Resource.map((r) => r["@_localFileName"]);
+                if (Array.isArray(linkerFileDataJson.DVDT.WebResources.Resource)) {
+                    return linkerFileDataJson.DVDT.WebResources.Resource.map((r) => r[attrName]);
+                }
+                else {
+                    return [linkerFileDataJson.DVDT.WebResources.Resource[attrName]];
                 }
             }
         });
     }
-    getLinkedResources() {
-        return __awaiter(this, void 0, void 0, function* () {
-            const linkerFile = yield this.createLinkerFile();
-            if (linkerFile) {
-                const linkerFileData = FileSystem_1.readFileSync(linkerFile.fsPath).toString();
-                const linkerFileDataJson = Parsers_1.xmlToJSON(linkerFileData);
-                if (linkerFileDataJson.DVDT.WebResources && linkerFileDataJson.DVDT.WebResources.Resource) {
-                    return linkerFileDataJson.DVDT.WebResources.Resource;
-                }
-            }
-            return undefined;
-        });
-    }
+    // public async getLinkedResources(): Promise<ILinkerRes[] | undefined> {
+    //     const linkerFile = await this.createLinkerFile();
+    //     if (linkerFile) {
+    //         const linkerFileData = readFileSync(linkerFile.fsPath).toString();
+    //         const linkerFileDataJson = xmlToJSON<ILinkerFile>(linkerFileData);
+    //         if (Array.isArray(linkerFileDataJson.DVDT.WebResources.Resource)) {
+    //             return linkerFileDataJson.DVDT.WebResources.Resource;
+    //         } else {
+    //             return [linkerFileDataJson.DVDT.WebResources.Resource];
+    //         }
+    //     }
+    //     return undefined;
+    // }
     createLinkerFile() {
         return __awaiter(this, void 0, void 0, function* () {
             if (vscode.workspace.workspaceFolders) {

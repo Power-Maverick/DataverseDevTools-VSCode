@@ -1,8 +1,9 @@
 {
     "name": "dataverse-devtools",
     "displayName": "Dataverse DevTools",
-    "description": "The all-in-one tool to develop code for Dataverse/Dynamics 365. Helps you connect to a Dataverse environment, generate TypeScript definations for entities, create different type of Dataverse-specific projects and much more.",
+    "description": "The all-in-one tool to develop code for Dataverse/Dynamics 365. Helps you connect to a Dataverse environment, generate TypeScript definitions for entities, create different type of Dataverse-specific projects and much more.",
     "publisher": "danish-naglekar",
+    "preview": true,
     "version": "0.0.1",
     "engines": {
         "vscode": "^1.58.0"
@@ -43,20 +44,16 @@
             "explorer/context": [
                 {
                     "command": "dvdt.commands.initPlugin",
-                    "group": "%dvdt.menus.group%"
+                    "group": "%dvdt.menus.group%",
+                    "when": "false"
                 },
                 {
                     "command": "dvdt.commands.initTS",
                     "group": "%dvdt.menus.group%"
                 },
                 {
-                    "command": "dvdt.explorer.webresources.linkExistingWebResource",
-                    "when": "resourceExtname in devtools.resourcesExtn",
-                    "group": "%dvdt.menus.group%"
-                },
-                {
                     "command": "dvdt.explorer.webresources.uploadWebResource",
-                    "when": "resourceFilename in devtools.linkedResources",
+                    "when": "resourceExtname in devtools.resourcesExtn",
                     "group": "%dvdt.menus.group%"
                 }
             ],
@@ -74,6 +71,11 @@
                 {
                     "command": "dvdt.explorer.entities.loadEntities",
                     "when": "view == dvEntities",
+                    "group": "navigation@1"
+                },
+                {
+                    "command": "dvdt.explorer.webresources.loadWebResources",
+                    "when": "view == dvWebResources",
                     "group": "navigation@1"
                 }
             ],
@@ -200,7 +202,8 @@
             {
                 "command": "dvdt.commands.initPlugin",
                 "title": "Create Plugin Project",
-                "category": "%dvdt.commands.category%"
+                "category": "%dvdt.commands.category%",
+                "when": "false"
             },
             {
                 "command": "dvdt.explorer.webresources.loadWebResources",

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.WebResourceType = exports.fileExtensions = exports.terminalName = exports.maxRetries = exports.connectionStatusBarUniqueId = exports.environmentTypes = exports.wrDefinitionsStoreKey = exports.entityDefinitionsStoreKey = exports.connectionCurrentStoreKey = exports.connectionStoreKey = exports.apiPartUrl = exports.environmentVersion = exports.defaultDataverseClientId = exports.tokenEndpointUrl = exports.extensionPrefix = exports.extensionName = void 0;
+exports.WebResourceType = exports.fileExtensions = exports.terminalName = exports.maxRetries = exports.connectionStatusBarUniqueId = exports.environmentTypes = exports.solDefinitionsStoreKey = exports.wrDefinitionsStoreKey = exports.entityDefinitionsStoreKey = exports.connectionCurrentStoreKey = exports.connectionStoreKey = exports.apiPartUrl = exports.environmentVersion = exports.defaultDataverseClientId = exports.tokenEndpointUrl = exports.extensionPrefix = exports.extensionName = void 0;
 exports.extensionName = "Dataverse DevTools";
 exports.extensionPrefix = "devtools";
 exports.tokenEndpointUrl = `https://login.microsoftonline.com/organizations/oauth2/v2.0/token`;
@@ -11,6 +11,7 @@ exports.connectionStoreKey = `DataverseConnections`;
 exports.connectionCurrentStoreKey = `LiveDVConnection`;
 exports.entityDefinitionsStoreKey = `CurrentEntityDefinitions`;
 exports.wrDefinitionsStoreKey = `CurrentWRs`;
+exports.solDefinitionsStoreKey = `CurrentSolutions`;
 exports.environmentTypes = ["Dev", "QA", "UAT", "Prod"];
 exports.connectionStatusBarUniqueId = `${exports.extensionPrefix}.StatusBarConnectStatus`;
 exports.maxRetries = 3;

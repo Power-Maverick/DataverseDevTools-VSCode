@@ -8,4 +8,5 @@ ErrorMessages.dataverseEnvironmentUrlRequired = "Dataverse environment URL is re
 ErrorMessages.usernameRequired = "Username is required.";
 ErrorMessages.passwordRequired = "Password is required.";
 ErrorMessages.connNameRequired = "Connection Name is required.";
+ErrorMessages.wrDisplayNameRequired = "Web Resource Display Name is required.";
 //# sourceMappingURL=ErrorMessages.js.map

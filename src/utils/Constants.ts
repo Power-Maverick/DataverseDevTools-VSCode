@@ -8,6 +8,7 @@ export const connectionStoreKey: string = `DataverseConnections`;
 export const connectionCurrentStoreKey: string = `LiveDVConnection`;
 export const entityDefinitionsStoreKey: string = `CurrentEntityDefinitions`;
 export const wrDefinitionsStoreKey: string = `CurrentWRs`;
+export const solDefinitionsStoreKey: string = `CurrentSolutions`;
 export const environmentTypes: string[] = ["Dev", "QA", "UAT", "Prod"];
 export const connectionStatusBarUniqueId: string = `${extensionPrefix}.StatusBarConnectStatus`;
 export const maxRetries: number = 3;
