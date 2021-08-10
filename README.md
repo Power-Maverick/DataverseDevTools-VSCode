@@ -94,5 +94,3 @@ This software is released under [MIT License](http://www.opensource.org/licenses
 
 [Temmy Raharjo](https://www.linkedin.com/in/temmy-wahyu-raharjo/) for encouraging me to start using `pac cli command` to generate Plugin project.
 
-
-Test Build WF
