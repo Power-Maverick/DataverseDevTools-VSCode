@@ -1,5 +1,7 @@
 [![Build](https://github.com/Power-Maverick/DataverseDevTools-VSCode/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/Power-Maverick/DataverseDevTools-VSCode/actions/workflows/build.yml)
 [![Release](https://github.com/Power-Maverick/DataverseDevTools-VSCode/actions/workflows/release.yml/badge.svg?branch=main)](https://github.com/Power-Maverick/DataverseDevTools-VSCode/actions/workflows/release.yml)
+[![Visual Studio Marketplace Downloads](https://img.shields.io/visual-studio-marketplace/d/danish-naglekar.dataverse-devtools)](https://marketplace.visualstudio.com/items?itemName=danish-naglekar.dataverse-devtools)
+[![Visual Studio Marketplace Version](https://img.shields.io/visual-studio-marketplace/v/danish-naglekar.dataverse-devtools?label=vscode%20marketplace)](https://marketplace.visualstudio.com/items?itemName=danish-naglekar.dataverse-devtools)
 [![GitHub stars](https://img.shields.io/github/stars/Power-Maverick/DataverseDevTools-VSCode?label=github%20stars)](https://github.com/Power-Maverick/DataverseDevTools-VSCode)
 [![License](https://img.shields.io/github/license/Power-Maverick/DataverseDevTools-VSCode)](https://github.com/Power-Maverick/DataverseDevTools-VSCode/blob/master/LICENSE)
 

@@ -10,8 +10,8 @@ import { extensionName } from "../utils/Constants";
 const typingNamespace: string = "Xrm";
 const typingInterface: string = "EventContext";
 const typingMethod: string = "getFormContext";
-const typingOmitAttribute = "Omit<FormContext, 'getAttribute(attributeName: string)'>";
-const typingOmitControl = "Omit<FormContext, 'getControl(controlName: string)'>";
+const typingOmitAttribute = "Omit<FormContext, 'getAttribute'>";
+const typingOmitControl = "Omit<FormContext, 'getControl'>";
 const xrmAttribute = "Attributes.Attribute";
 const xrmControl = "Controls.StandardControl";
 export class TypingsHelper {
