@@ -8,8 +8,16 @@
     "engines": {
         "vscode": "^1.58.0"
     },
+    "homepage": "https://github.com/Power-Maverick/DataverseDevTools-VSCode",
+    "bugs": {
+        "url": "https://github.com/Power-Maverick/DataverseDevTools-VSCode/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Power-Maverick/DataverseDevTools-VSCode.git"
+    },
     "categories": [
-        "Extension Packs"
+        "Other"
     ],
     "keywords": [
         "Dataverse",
@@ -23,6 +31,7 @@
         "*"
     ],
     "main": "./out/extension.js",
+    "icon": "assets/DVDT-Icon.png",
     "contributes": {
         "views": {
             "dvd-explorer": [
