@@ -18,4 +18,4 @@ class TreeItemBase extends vscode.TreeItem {
     }
 }
 exports.TreeItemBase = TreeItemBase;
-//# sourceMappingURL=TreeItemBase.js.map
+//# sourceMappingURL=treeItemBase.js.map

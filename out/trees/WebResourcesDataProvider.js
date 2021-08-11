@@ -15,7 +15,7 @@ const path = require("path");
 const State_1 = require("../utils/State");
 const Constants_1 = require("../utils/Constants");
 const mobx_1 = require("mobx");
-const TreeItemBase_1 = require("./TreeItemBase");
+const treeItemBase_1 = require("./treeItemBase");
 const ExtensionMethods_1 = require("../utils/ExtensionMethods");
 class WebResourcesDataProvider {
     constructor(vscontext, uploadHelper) {
@@ -95,7 +95,7 @@ class WebResourcesDataProvider {
     }
 }
 exports.WebResourcesDataProvider = WebResourcesDataProvider;
-class WebResourcesTreeItem extends TreeItemBase_1.TreeItemBase {
+class WebResourcesTreeItem extends treeItemBase_1.TreeItemBase {
     constructor(label, desc, collapsibleState, level, showCheck) {
         super(label, desc, collapsibleState);
         this.label = label;
@@ -112,4 +112,4 @@ class WebResourcesTreeItem extends TreeItemBase_1.TreeItemBase {
 }
 exports.WebResourcesTreeItem = WebResourcesTreeItem;
 exports.store = mobx_1.observable({});
-//# sourceMappingURL=WebResourcesDataProvider.js.map
+//# sourceMappingURL=webResourcesDataProvider.js.map

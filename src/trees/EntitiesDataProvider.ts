@@ -4,8 +4,8 @@ import { State } from "../utils/State";
 import { entityDefinitionsStoreKey } from "../utils/Constants";
 import { IStore, IEntityDefinition, IEntityMetadata } from "../utils/Interfaces";
 import { observable } from "mobx";
-import { TreeItemBase } from "./TreeItemBase";
-import { DataverseHelper } from "../helpers/DataverseHelper";
+import { TreeItemBase } from "./treeItemBase";
+import { DataverseHelper } from "../helpers/dataverseHelper";
 
 export class EntitiesDataProvider implements vscode.TreeDataProvider<EntitiesTreeItem> {
     private refreshTreeData: vscode.EventEmitter<EntitiesTreeItem | undefined | void> = new vscode.EventEmitter<EntitiesTreeItem | undefined | void>();

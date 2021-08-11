@@ -29,4 +29,4 @@ class Console {
 }
 exports.Console = Console;
 Console.isTerminalCreated = false;
-//# sourceMappingURL=Console.js.map
+//# sourceMappingURL=console.js.map

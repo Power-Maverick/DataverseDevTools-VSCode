@@ -11,23 +11,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateConnectionStatusBar = exports.registerCommands = void 0;
 const vscode = require("vscode");
-const CLIHelper_1 = require("../helpers/CLIHelper");
-const UploadHelper_1 = require("../helpers/UploadHelper");
-const DataverseHelper_1 = require("../helpers/DataverseHelper");
-const TemplateHelper_1 = require("../helpers/TemplateHelper");
-const TypingsHelper_1 = require("../helpers/TypingsHelper");
+const cliHelper_1 = require("../helpers/cliHelper");
+const uploadHelper_1 = require("../helpers/uploadHelper");
+const dataverseHelper_1 = require("../helpers/dataverseHelper");
+const templateHelper_1 = require("../helpers/templateHelper");
+const typingsHelper_1 = require("../helpers/typingsHelper");
 const Constants_1 = require("../utils/Constants");
 const ViewBase_1 = require("../views/ViewBase");
 const connections_1 = require("./connections");
 let dvStatusBarItem;
 function registerCommands(vscontext) {
     return __awaiter(this, void 0, void 0, function* () {
-        const dvHelper = new DataverseHelper_1.DataverseHelper(vscontext);
+        const dvHelper = new dataverseHelper_1.DataverseHelper(vscontext);
         const views = new ViewBase_1.ViewBase(vscontext);
-        const cliHelper = new CLIHelper_1.CLIHelper(vscontext);
-        const templateHelper = new TemplateHelper_1.TemplateHelper(vscontext);
-        const uploadHelper = new UploadHelper_1.UploadHelper(vscontext, dvHelper);
-        const typingHelper = new TypingsHelper_1.TypingsHelper(vscontext, dvHelper);
+        const cliHelper = new cliHelper_1.CLIHelper(vscontext);
+        const templateHelper = new templateHelper_1.TemplateHelper(vscontext);
+        const uploadHelper = new uploadHelper_1.UploadHelper(vscontext, dvHelper);
+        const typingHelper = new typingsHelper_1.TypingsHelper(vscontext, dvHelper);
         dvStatusBarItem = vscode.window.createStatusBarItem(Constants_1.connectionStatusBarUniqueId, vscode.StatusBarAlignment.Left);
         vscontext.subscriptions.push(dvStatusBarItem);
         const cmds = new Array({

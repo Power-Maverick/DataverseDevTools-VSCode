@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import * as dom from "dts-dom";
-import { DataverseHelper } from "./DataverseHelper";
+import { DataverseHelper } from "./dataverseHelper";
 import { camelize, pascalize, sanitize } from "../utils/ExtensionMethods";
 import { IAttributeDefinition, IOptionValue } from "../utils/Interfaces";
 import { getWorkspaceFolder, writeFileSync } from "../utils/FileSystem";

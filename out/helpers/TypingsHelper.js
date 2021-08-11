@@ -127,4 +127,4 @@ class TypingsHelper {
     }
 }
 exports.TypingsHelper = TypingsHelper;
-//# sourceMappingURL=TypingsHelper.js.map
+//# sourceMappingURL=typingsHelper.js.map

@@ -225,7 +225,7 @@
             },
             {
                 "command": "dvdt.commands.initTS",
-                "title": "Create TypeScript Project",
+                "title": "Create Dataverse TS Project",
                 "category": "%dvdt.commands.category%"
             },
             {

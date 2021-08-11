@@ -14,7 +14,7 @@ const node_fetch_1 = require("node-fetch");
 const uuid_1 = require("uuid");
 const Constants_1 = require("../utils/Constants");
 const State_1 = require("../utils/State");
-const Login_1 = require("../login/Login");
+const login_1 = require("../login/login");
 class RequestHelper {
     /**
      * Initialization constructor for VS Code Context
@@ -46,7 +46,7 @@ class RequestHelper {
                         if (retries && retries > Constants_1.maxRetries) {
                             return undefined;
                         }
-                        const tokenResponse = yield Login_1.loginWithUsernamePassword(currentConnection.environmentUrl, currentConnection.userName, currentConnection.password);
+                        const tokenResponse = yield login_1.loginWithUsernamePassword(currentConnection.environmentUrl, currentConnection.userName, currentConnection.password);
                         currentConnection.currentAccessToken = tokenResponse.access_token;
                         this.vsstate.saveInWorkspace(Constants_1.connectionCurrentStoreKey, currentConnection);
                         return this.requestData(query, retries ? retries + 1 : 1);
@@ -120,4 +120,4 @@ class RequestHelper {
     }
 }
 exports.RequestHelper = RequestHelper;
-//# sourceMappingURL=RequestHelper.js.map
+//# sourceMappingURL=requestHelper.js.map

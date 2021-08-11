@@ -13,13 +13,13 @@ The all-in-one tool to develop code for Dataverse/Dynamics 365. Helps you connec
 
 - [Dataverse DevTools](#dataverse-devtools)
   - [⚙ Features](#-features)
-      - [Connect to your Dataverse environment](#connect-to-your-dataverse-environment)
-      - [Remembers the connected environment per workspace](#remembers-the-connected-environment-per-workspace)
-      - [See connection and entity details (with copy feature)](#see-connection-and-entity-details-with-copy-feature)
-      - [Initialize TypeScript project](#initialize-typescript-project)
-      - [Generate Typings](#generate-typings)
-      - [Intellisense for type generated](#intellisense-for-type-generated)
-      - [Upload Web Resources](#upload-web-resources)
+    - [Connect to your Dataverse environment](#connect-to-your-dataverse-environment)
+    - [Remembers the connected environment per workspace](#remembers-the-connected-environment-per-workspace)
+    - [See connection and entity details (with copy feature)](#see-connection-and-entity-details-with-copy-feature)
+    - [Initialize TypeScript project](#initialize-typescript-project)
+    - [Generate Typings](#generate-typings)
+    - [Intellisense for type generated](#intellisense-for-type-generated)
+    - [Upload Web Resources](#upload-web-resources)
   - [⌨ Keyboard Shortcuts](#-keyboard-shortcuts)
   - [💭 Planned Features](#-planned-features)
   - [🔌 Contributing](#-contributing)
@@ -73,6 +73,8 @@ The all-in-one tool to develop code for Dataverse/Dynamics 365. Helps you connec
 -   Integrate with [Dataverse-ify](https://github.com/scottdurow/dataverse-ify/).
 -   Smart matching web resource with local files.
 -   Bulk deploy web resources.
+-   Filter entities & web-resources by solution.
+-   Initiate plugin project
 
 ## 🔌 Contributing
 
@@ -93,4 +95,3 @@ This software is released under [MIT License](http://www.opensource.org/licenses
 [Magnus Gether Sørensen](https://www.linkedin.com/in/xrmwizard/) for helping in providing insights for XrmDefinitelyTyped.
 
 [Temmy Raharjo](https://www.linkedin.com/in/temmy-wahyu-raharjo/) for encouraging me to start using `pac cli command` to generate Plugin project.
-

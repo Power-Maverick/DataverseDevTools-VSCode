@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { loginWithUsernamePassword } from "../login/Login";
+import { loginWithUsernamePassword } from "../login/login";
 import { Placeholders } from "../utils/Placeholders";
 import { ErrorMessages } from "../utils/ErrorMessages";
 import { State } from "../utils/State";
@@ -18,10 +18,10 @@ import {
     IWebResource,
 } from "../utils/Interfaces";
 import { connectionCurrentStoreKey, connectionStoreKey, entityDefinitionsStoreKey, environmentTypes, solDefinitionsStoreKey, wrDefinitionsStoreKey } from "../utils/Constants";
-import { DataverseConnectionTreeItem } from "../trees/DataverseConnectionDataProvider";
-import { RequestHelper } from "./RequestHelper";
+import { DataverseConnectionTreeItem } from "../trees/dataverseConnectionDataProvider";
+import { RequestHelper } from "./requestHelper";
 import { ProgressLocation } from "vscode";
-import { EntitiesDataProvider } from "../trees/EntitiesDataProvider";
+import { EntitiesDataProvider } from "../trees/entitiesDataProvider";
 import { openUri } from "../utils/OpenUri";
 import { ViewBase } from "../views/ViewBase";
 import { ConnectionDetailsView } from "../views/ConnectionDetailsView";

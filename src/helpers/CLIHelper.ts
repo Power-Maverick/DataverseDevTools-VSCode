@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
-import { Commands } from "../terminals/Commands";
-import { Console } from "../terminals/Console";
+import { Commands } from "../terminals/commands";
+import { Console } from "../terminals/console";
 
 export class CLIHelper {
     /**

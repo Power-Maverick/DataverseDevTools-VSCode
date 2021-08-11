@@ -15,7 +15,7 @@ const path = require("path");
 const State_1 = require("../utils/State");
 const Constants_1 = require("../utils/Constants");
 const mobx_1 = require("mobx");
-const TreeItemBase_1 = require("./TreeItemBase");
+const treeItemBase_1 = require("./treeItemBase");
 class EntitiesDataProvider {
     constructor(vscontext, dvHelper) {
         this.vscontext = vscontext;
@@ -79,7 +79,7 @@ class EntitiesDataProvider {
     }
 }
 exports.EntitiesDataProvider = EntitiesDataProvider;
-class EntitiesTreeItem extends TreeItemBase_1.TreeItemBase {
+class EntitiesTreeItem extends treeItemBase_1.TreeItemBase {
     constructor(label, desc, collapsibleState, level, command) {
         super(label, desc, collapsibleState);
         this.label = label;
@@ -96,4 +96,4 @@ class EntitiesTreeItem extends TreeItemBase_1.TreeItemBase {
 }
 exports.EntitiesTreeItem = EntitiesTreeItem;
 exports.store = mobx_1.observable({});
-//# sourceMappingURL=EntitiesDataProvider.js.map
+//# sourceMappingURL=entitiesDataProvider.js.map

@@ -308,4 +308,4 @@ exports.UploadHelper = UploadHelper;
         );
     }
  */
-//# sourceMappingURL=UploadHelper.js.map
+//# sourceMappingURL=uploadHelper.js.map

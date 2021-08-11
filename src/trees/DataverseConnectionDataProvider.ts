@@ -5,7 +5,7 @@ import { connectionStoreKey, environmentTypes, extensionPrefix } from "../utils/
 import { IConnection, IStore } from "../utils/Interfaces";
 import { observable } from "mobx";
 import { groupBy } from "../utils/ExtensionMethods";
-import { TreeItemBase } from "./TreeItemBase";
+import { TreeItemBase } from "./treeItemBase";
 
 export class DataverseConnectionDataProvider implements vscode.TreeDataProvider<DataverseConnectionTreeItem> {
     private refreshTreeData: vscode.EventEmitter<DataverseConnectionTreeItem | undefined | void> = new vscode.EventEmitter<DataverseConnectionTreeItem | undefined | void>();

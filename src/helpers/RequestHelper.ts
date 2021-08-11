@@ -4,8 +4,8 @@ import { v4 as uuid } from "uuid";
 import { apiPartUrl, connectionCurrentStoreKey, maxRetries } from "../utils/Constants";
 import { IConnection } from "../utils/Interfaces";
 import { State } from "../utils/State";
-import { DataverseHelper } from "./DataverseHelper";
-import { loginWithUsernamePassword } from "../login/Login";
+import { DataverseHelper } from "./dataverseHelper";
+import { loginWithUsernamePassword } from "../login/login";
 
 export class RequestHelper {
     private vsstate: State;

@@ -11,12 +11,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DataverseHelper = void 0;
 const vscode = require("vscode");
-const Login_1 = require("../login/Login");
+const login_1 = require("../login/login");
 const Placeholders_1 = require("../utils/Placeholders");
 const ErrorMessages_1 = require("../utils/ErrorMessages");
 const State_1 = require("../utils/State");
 const Constants_1 = require("../utils/Constants");
-const RequestHelper_1 = require("./RequestHelper");
+const requestHelper_1 = require("./requestHelper");
 const vscode_1 = require("vscode");
 const OpenUri_1 = require("../utils/OpenUri");
 const ConnectionDetailsView_1 = require("../views/ConnectionDetailsView");
@@ -28,7 +28,7 @@ class DataverseHelper {
     constructor(vscontext) {
         this.vscontext = vscontext;
         this.vsstate = new State_1.State(vscontext);
-        this.request = new RequestHelper_1.RequestHelper(vscontext, this);
+        this.request = new requestHelper_1.RequestHelper(vscontext, this);
     }
     //#region Public
     addConnection() {
@@ -37,7 +37,7 @@ class DataverseHelper {
             const conn = yield this.connectionWizard();
             try {
                 if (conn) {
-                    const tokenResponse = yield Login_1.loginWithUsernamePassword(conn.environmentUrl, conn.userName, conn.password);
+                    const tokenResponse = yield login_1.loginWithUsernamePassword(conn.environmentUrl, conn.userName, conn.password);
                     conn.currentAccessToken = tokenResponse.access_token;
                     this.vsstate.saveInWorkspace(Constants_1.connectionCurrentStoreKey, conn);
                 }
@@ -70,7 +70,7 @@ class DataverseHelper {
                             return;
                         });
                         progress.report({ increment: 0, message: "Connecting to environment..." });
-                        const tokenResponse = yield Login_1.loginWithUsernamePassword(conn.environmentUrl, conn.userName, conn.password);
+                        const tokenResponse = yield login_1.loginWithUsernamePassword(conn.environmentUrl, conn.userName, conn.password);
                         conn.currentAccessToken = tokenResponse.access_token;
                         progress.report({ increment: 10 });
                         this.vsstate.saveInWorkspace(Constants_1.connectionCurrentStoreKey, conn);
@@ -297,4 +297,4 @@ class DataverseHelper {
     }
 }
 exports.DataverseHelper = DataverseHelper;
-//# sourceMappingURL=DataverseHelper.js.map
+//# sourceMappingURL=dataverseHelper.js.map

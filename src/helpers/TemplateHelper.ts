@@ -1,8 +1,8 @@
 import * as vscode from "vscode";
 import * as path from "path";
 import { copyFolderOrFile, createFolder } from "../utils/FileSystem";
-import { Commands } from "../terminals/Commands";
-import { Console } from "../terminals/Console";
+import { Commands } from "../terminals/commands";
+import { Console } from "../terminals/console";
 import { extensionName } from "../utils/Constants";
 
 export class TemplateHelper {

@@ -4,7 +4,7 @@ import * as path from "path";
 import { copyFolderOrFile, getFileExtension, getFileName, getRelativeFilePath, getWorkspaceFolder, readFileSync, writeFileSync } from "../utils/FileSystem";
 import { jsonToXML, xmlToJSON } from "../utils/Parsers";
 import { ILinkerFile, ILinkerRes, IWebResource, IWebResources } from "../utils/Interfaces";
-import { DataverseHelper } from "./DataverseHelper";
+import { DataverseHelper } from "./dataverseHelper";
 import { State } from "../utils/State";
 import { WebResourceType, wrDefinitionsStoreKey } from "../utils/Constants";
 import { Placeholders } from "../utils/Placeholders";

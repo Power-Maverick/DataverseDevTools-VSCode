@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { DataverseHelper } from "../helpers/DataverseHelper";
+import { DataverseHelper } from "../helpers/dataverseHelper";
 import { IConnection } from "../utils/Interfaces";
 import { updateConnectionStatusBar } from "./registerCommands";
 

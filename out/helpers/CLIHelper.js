@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CLIHelper = void 0;
-const Commands_1 = require("../terminals/Commands");
-const Console_1 = require("../terminals/Console");
+const commands_1 = require("../terminals/commands");
+const console_1 = require("../terminals/console");
 class CLIHelper {
     /**
      * Initialization constructor for VS Code Context
@@ -12,10 +12,10 @@ class CLIHelper {
     }
     initiatePluginProject(path) {
         let commands = Array();
-        commands.push(Commands_1.Commands.ChangeDirectory(path));
-        commands.push(Commands_1.Commands.InitPlugin());
-        Console_1.Console.runCommand(commands);
+        commands.push(commands_1.Commands.ChangeDirectory(path));
+        commands.push(commands_1.Commands.InitPlugin());
+        console_1.Console.runCommand(commands);
     }
 }
 exports.CLIHelper = CLIHelper;
-//# sourceMappingURL=CLIHelper.js.map
+//# sourceMappingURL=cliHelper.js.map

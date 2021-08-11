@@ -17,4 +17,4 @@ class Commands {
     }
 }
 exports.Commands = Commands;
-//# sourceMappingURL=Commands.js.map
+//# sourceMappingURL=commands.js.map

@@ -13,8 +13,8 @@ exports.TemplateHelper = void 0;
 const vscode = require("vscode");
 const path = require("path");
 const FileSystem_1 = require("../utils/FileSystem");
-const Commands_1 = require("../terminals/Commands");
-const Console_1 = require("../terminals/Console");
+const commands_1 = require("../terminals/commands");
+const console_1 = require("../terminals/console");
 const Constants_1 = require("../utils/Constants");
 class TemplateHelper {
     /**
@@ -31,12 +31,12 @@ class TemplateHelper {
                 yield FileSystem_1.copyFolderOrFile(tsFolderUri, wsPath);
             }
             let commands = Array();
-            commands.push(Commands_1.Commands.LoadNpmPackages());
-            commands.push(Commands_1.Commands.LinkGlobalTypeScript());
-            Console_1.Console.runCommand(commands);
+            commands.push(commands_1.Commands.LoadNpmPackages());
+            commands.push(commands_1.Commands.LinkGlobalTypeScript());
+            console_1.Console.runCommand(commands);
             vscode.window.showInformationMessage(`${Constants_1.extensionName}: TypeScript project initialized.`);
         });
     }
 }
 exports.TemplateHelper = TemplateHelper;
-//# sourceMappingURL=TemplateHelper.js.map
+//# sourceMappingURL=templateHelper.js.map

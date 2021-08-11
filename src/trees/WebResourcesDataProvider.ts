@@ -4,9 +4,9 @@ import { State } from "../utils/State";
 import { WebResourceType, wrDefinitionsStoreKey } from "../utils/Constants";
 import { ILinkerRes, IStore, IWebResource, IWebResources } from "../utils/Interfaces";
 import { observable } from "mobx";
-import { TreeItemBase } from "./TreeItemBase";
+import { TreeItemBase } from "./treeItemBase";
 import { toArray } from "../utils/ExtensionMethods";
-import { UploadHelper } from "../helpers/UploadHelper";
+import { UploadHelper } from "../helpers/uploadHelper";
 
 export class WebResourcesDataProvider implements vscode.TreeDataProvider<WebResourcesTreeItem> {
     private refreshTreeData: vscode.EventEmitter<WebResourcesTreeItem | undefined | void> = new vscode.EventEmitter<WebResourcesTreeItem | undefined | void>();

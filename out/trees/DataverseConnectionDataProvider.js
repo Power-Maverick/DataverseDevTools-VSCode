@@ -7,7 +7,7 @@ const State_1 = require("../utils/State");
 const Constants_1 = require("../utils/Constants");
 const mobx_1 = require("mobx");
 const ExtensionMethods_1 = require("../utils/ExtensionMethods");
-const TreeItemBase_1 = require("./TreeItemBase");
+const treeItemBase_1 = require("./treeItemBase");
 class DataverseConnectionDataProvider {
     constructor(vscontext) {
         this.vscontext = vscontext;
@@ -91,7 +91,7 @@ class DataverseConnectionDataProvider {
     }
 }
 exports.DataverseConnectionDataProvider = DataverseConnectionDataProvider;
-class DataverseConnectionTreeItem extends TreeItemBase_1.TreeItemBase {
+class DataverseConnectionTreeItem extends treeItemBase_1.TreeItemBase {
     constructor(label, desc, collapsibleState, level) {
         super(label, desc, collapsibleState);
         this.label = label;
@@ -107,4 +107,4 @@ class DataverseConnectionTreeItem extends TreeItemBase_1.TreeItemBase {
 }
 exports.DataverseConnectionTreeItem = DataverseConnectionTreeItem;
 exports.store = mobx_1.observable({});
-//# sourceMappingURL=DataverseConnectionDataProvider.js.map
+//# sourceMappingURL=dataverseConnectionDataProvider.js.map

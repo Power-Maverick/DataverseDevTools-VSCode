@@ -1,9 +1,9 @@
 import * as vscode from "vscode";
-import { UploadHelper } from "../helpers/UploadHelper";
-import { DataverseHelper } from "../helpers/DataverseHelper";
-import { DataverseConnectionDataProvider } from "../trees/DataverseConnectionDataProvider";
-import { EntitiesDataProvider } from "../trees/EntitiesDataProvider";
-import { WebResourcesDataProvider } from "../trees/WebResourcesDataProvider";
+import { UploadHelper } from "../helpers/uploadHelper";
+import { DataverseHelper } from "../helpers/dataverseHelper";
+import { DataverseConnectionDataProvider } from "../trees/dataverseConnectionDataProvider";
+import { EntitiesDataProvider } from "../trees/entitiesDataProvider";
+import { WebResourcesDataProvider } from "../trees/webResourcesDataProvider";
 import { ICommand } from "../utils/Interfaces";
 
 export function registerTreeDataProviders(vscontext: vscode.ExtensionContext): void {

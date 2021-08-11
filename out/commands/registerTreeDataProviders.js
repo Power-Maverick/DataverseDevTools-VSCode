@@ -2,19 +2,19 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.registerTreeDataProviders = void 0;
 const vscode = require("vscode");
-const UploadHelper_1 = require("../helpers/UploadHelper");
-const DataverseHelper_1 = require("../helpers/DataverseHelper");
-const DataverseConnectionDataProvider_1 = require("../trees/DataverseConnectionDataProvider");
-const EntitiesDataProvider_1 = require("../trees/EntitiesDataProvider");
-const WebResourcesDataProvider_1 = require("../trees/WebResourcesDataProvider");
+const uploadHelper_1 = require("../helpers/uploadHelper");
+const dataverseHelper_1 = require("../helpers/dataverseHelper");
+const dataverseConnectionDataProvider_1 = require("../trees/dataverseConnectionDataProvider");
+const entitiesDataProvider_1 = require("../trees/entitiesDataProvider");
+const webResourcesDataProvider_1 = require("../trees/webResourcesDataProvider");
 function registerTreeDataProviders(vscontext) {
-    const dvHelper = new DataverseHelper_1.DataverseHelper(vscontext);
-    const uploadHelper = new UploadHelper_1.UploadHelper(vscontext, dvHelper);
-    const dataverseConnProvider = new DataverseConnectionDataProvider_1.DataverseConnectionDataProvider(vscontext);
+    const dvHelper = new dataverseHelper_1.DataverseHelper(vscontext);
+    const uploadHelper = new uploadHelper_1.UploadHelper(vscontext, dvHelper);
+    const dataverseConnProvider = new dataverseConnectionDataProvider_1.DataverseConnectionDataProvider(vscontext);
     vscode.window.registerTreeDataProvider("dvConnections", dataverseConnProvider);
-    const entityMetadataProvider = new EntitiesDataProvider_1.EntitiesDataProvider(vscontext, dvHelper);
+    const entityMetadataProvider = new entitiesDataProvider_1.EntitiesDataProvider(vscontext, dvHelper);
     vscode.window.registerTreeDataProvider("dvEntities", entityMetadataProvider);
-    const wrProvider = new WebResourcesDataProvider_1.WebResourcesDataProvider(vscontext, uploadHelper);
+    const wrProvider = new webResourcesDataProvider_1.WebResourcesDataProvider(vscontext, uploadHelper);
     vscode.window.registerTreeDataProvider("dvWebResources", wrProvider);
     const cmds = new Array({
         command: "dvdt.explorer.connections.refreshConnection",
