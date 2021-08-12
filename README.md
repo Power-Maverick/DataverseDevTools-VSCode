@@ -82,11 +82,13 @@ The all-in-one tool to develop code for Dataverse/Dynamics 365. Helps you connec
 -   Smart matching web resource with local files.
 -   Bulk deploy web resources.
 -   Filter entities & web-resources by solution.
--   Initiate plugin project
+-   Initiate plugin project.
 
 ## 🔌 Contributing
 
 Before creating the pull request for contributing, please read the [Contributing Guidelines](CONTRIBUTING.md).
+
+We encourage you to pitch in, join the team and showcase your name on this repo. If you are unsure how you can contribute, please reach out to [Power Maverick](https://twitter.com/DanzMaverick).
 
 ## 🔉 Discussions
 
