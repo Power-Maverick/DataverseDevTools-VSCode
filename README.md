@@ -90,6 +90,12 @@ Before creating the pull request for contributing, please read the [Contributing
 
 We encourage you to pitch in, join the team and showcase your name on this repo. If you are unsure how you can contribute, please reach out to [Power Maverick](https://twitter.com/DanzMaverick).
 
+Thanks to our contributors. JOIN THE TEAM.
+
+<a href="https://github.com/Power-Maverick/DataverseDevTools-VSCode/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=Power-Maverick/DataverseDevTools-VSCode" />
+</a>
+
 ## 🔉 Discussions
 
 If you want to have any discussions on any feature, please use the [Discussion Board](https://github.com/Power-Maverick/DataverseDevTools-VSCode/discussions).
