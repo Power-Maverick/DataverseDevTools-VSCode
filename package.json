@@ -52,11 +52,6 @@
         "menus": {
             "explorer/context": [
                 {
-                    "command": "dvdt.commands.initPlugin",
-                    "group": "%dvdt.menus.group%",
-                    "when": "false"
-                },
-                {
                     "command": "dvdt.commands.initTS",
                     "group": "%dvdt.menus.group%"
                 },
@@ -207,12 +202,6 @@
                 "title": "Show Entity Details",
                 "when": "false",
                 "category": "%dvdt.explorer.category%"
-            },
-            {
-                "command": "dvdt.commands.initPlugin",
-                "title": "Create Plugin Project",
-                "category": "%dvdt.commands.category%",
-                "when": "false"
             },
             {
                 "command": "dvdt.explorer.webresources.loadWebResources",
