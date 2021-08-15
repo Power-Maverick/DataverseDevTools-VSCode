@@ -211,8 +211,8 @@
             {
                 "command": "dvdt.commands.initPlugin",
                 "title": "Create Plugin Project",
-                "category": "%dvdt.commands.category%",
-                "when": "false"
+                "when": "false",
+                "category": "%dvdt.explorer.category%"
             },
             {
                 "command": "dvdt.explorer.webresources.loadWebResources",
