@@ -11,6 +11,7 @@ export class ConnectionDetailsView extends Panel {
     constructor(connDetails: IConnection, webview: vscode.WebviewPanel, vscontext: vscode.ExtensionContext) {
         super({ panel: webview, extensionUri: vscontext.extensionUri, webViewFileName: "connectiondetail.html" });
         this.conn = connDetails;
+        super.update();
     }
 
     getHtmlForWebview(webviewFileName: string): string {
