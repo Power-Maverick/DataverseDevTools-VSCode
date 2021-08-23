@@ -8,7 +8,6 @@ interface IPlaceholder {
 export class Placeholders {
     public static getInputBoxOptions(placeholder: string) {
         let inbOptions: vscode.InputBoxOptions;
-
         switch (placeholder) {
             case this.dataverseEnvironmentURL:
                 inbOptions = {
@@ -58,8 +57,10 @@ export class Placeholders {
 
     public static getQuickPickOptions(placeholder: string, ignoreFocus: boolean = true) {
         let qpOptions: vscode.QuickPickOptions;
-        ``;
         switch (placeholder) {
+            case this.logintype:
+                qpOptions = { placeHolder: this.ipLoginType.placeHolderText, title: this.ipLoginType.prompt, ignoreFocusOut: ignoreFocus };
+                break;
             case this.connectionType:
                 qpOptions = { placeHolder: this.ipConnectionType.placeHolderText, title: this.ipConnectionType.prompt, ignoreFocusOut: ignoreFocus };
                 break;
@@ -84,6 +85,7 @@ export class Placeholders {
     }
 
     public static dataverseEnvironmentURL: string = "DataverseEnvironmentURL";
+    public static logintype: string = "LoginType";
     public static userName: string = "UserName";
     public static password: string = "Password";
     public static connectionName: string = "ConnectionName";
@@ -101,6 +103,10 @@ export class Placeholders {
     private static ipEnvironmentURL: IPlaceholder = {
         placeHolderText: `${Placeholders.required} URL (e.g.: https://demo.crm.dynamics.com)`,
         prompt: `Enter your Dataverse environment URL`,
+    };
+    private static ipLoginType: IPlaceholder = {
+        placeHolderText: `${Placeholders.required} Select your option for login`,
+        prompt: `Login using username/password or MSFT login prompt`,
     };
     private static ipUsername: IPlaceholder = {
         placeHolderText: `${Placeholders.required} Username (e.g.: admin@demo.onmicrosoft.com)`,

@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { loginWithUsernamePassword } from "../login/login";
+import { loginWithPrompt, loginWithUsernamePassword } from "../login/login";
 import { Placeholders } from "../utils/Placeholders";
 import { ErrorMessages } from "../utils/ErrorMessages";
 import { State } from "../utils/State";
@@ -17,7 +17,7 @@ import {
     ISolutions,
     IWebResource,
 } from "../utils/Interfaces";
-import { connectionCurrentStoreKey, connectionStoreKey, entityDefinitionsStoreKey, environmentTypes, solDefinitionsStoreKey, wrDefinitionsStoreKey } from "../utils/Constants";
+import { connectionCurrentStoreKey, connectionStoreKey, entityDefinitionsStoreKey, environmentTypes, loginTypes, solDefinitionsStoreKey, wrDefinitionsStoreKey } from "../utils/Constants";
 import { DataverseConnectionTreeItem } from "../trees/dataverseConnectionDataProvider";
 import { RequestHelper } from "./requestHelper";
 import { ProgressLocation } from "vscode";
@@ -25,6 +25,7 @@ import { openUri } from "../utils/OpenUri";
 import { ViewBase } from "../views/ViewBase";
 import { ConnectionDetailsView } from "../views/ConnectionDetailsView";
 import { EntityDetailsView } from "../views/EntityDetailsView";
+import { Environment } from "../login/environment";
 
 export class DataverseHelper {
     private vsstate: State;
@@ -77,7 +78,8 @@ export class DataverseHelper {
                             return;
                         });
                         progress.report({ increment: 0, message: "Connecting to environment..." });
-                        const tokenResponse = await loginWithUsernamePassword(conn.environmentUrl, conn.userName, conn.password);
+                        //const tokenResponse = await loginWithUsernamePassword(conn.environmentUrl, conn.userName, conn.password);
+                        const tokenResponse = await loginWithPrompt("aebc6443-996d-45c2-90f0-388ff96faa56", Environment.azureCloud, false, "31c20a23-2ed2-468d-baab-42edf998128b", openUri, redirectTimeout);
                         conn.currentAccessToken = tokenResponse.access_token!;
                         progress.report({ increment: 10 });
                         this.vsstate.saveInWorkspace(connectionCurrentStoreKey, conn);
@@ -199,22 +201,38 @@ export class DataverseHelper {
     //#endregion Public
 
     async connectionWizard(): Promise<IConnection | undefined> {
+        let usernameUserResponse: string | undefined;
+        let passwordUserResponse: string | undefined;
         let envUrlUserResponse: string | undefined = await vscode.window.showInputBox(Placeholders.getInputBoxOptions(Placeholders.dataverseEnvironmentURL));
         if (!envUrlUserResponse) {
             vscode.window.showErrorMessage(ErrorMessages.dataverseEnvironmentUrlRequired);
             return undefined;
         }
 
-        let usernameUserResponse: string | undefined = await vscode.window.showInputBox(Placeholders.getInputBoxOptions(Placeholders.userName));
-        if (!usernameUserResponse) {
-            vscode.window.showErrorMessage(ErrorMessages.usernameRequired);
-            return undefined;
+        let logintypeOptions: string[] = loginTypes;
+        let logintypeOptionsQuickPick: vscode.QuickPickOptions = Placeholders.getQuickPickOptions(Placeholders.logintype);
+        let logintypeResponse: string | undefined = await vscode.window.showQuickPick(logintypeOptions, logintypeOptionsQuickPick);
+
+        if (logintypeResponse === loginTypes[0]) {
+            // Username/Password
+            usernameUserResponse = await vscode.window.showInputBox(Placeholders.getInputBoxOptions(Placeholders.userName));
+            if (!usernameUserResponse) {
+                vscode.window.showErrorMessage(ErrorMessages.usernameRequired);
+                return undefined;
+            }
+
+            passwordUserResponse = await vscode.window.showInputBox(Placeholders.getInputBoxOptions(Placeholders.password));
+            if (!passwordUserResponse) {
+                vscode.window.showErrorMessage(ErrorMessages.passwordRequired);
+                return undefined;
+            }
         }
 
-        let passwordUserResponse: string | undefined = await vscode.window.showInputBox(Placeholders.getInputBoxOptions(Placeholders.password));
-        if (!passwordUserResponse) {
-            vscode.window.showErrorMessage(ErrorMessages.passwordRequired);
-            return undefined;
+        if (logintypeResponse === loginTypes[1]) {
+            // Login Prompt
+            // azure - aebc6443-996d-45c2-90f0-388ff96faa56
+            // my - 12c47861-4bb0-48dd-8949-83df0a3fecc5
+            await loginWithPrompt("aebc6443-996d-45c2-90f0-388ff96faa56", Environment.azureCloud, false, "31c20a23-2ed2-468d-baab-42edf998128b", openUri, redirectTimeout).catch(console.error);
         }
 
         let connNameUserResponse: string | undefined = await vscode.window.showInputBox(Placeholders.getInputBoxOptions(Placeholders.connectionName));
@@ -229,8 +247,8 @@ export class DataverseHelper {
 
         let conn: IConnection = {
             environmentUrl: envUrlUserResponse,
-            userName: usernameUserResponse,
-            password: passwordUserResponse,
+            userName: usernameUserResponse!,
+            password: passwordUserResponse!,
             connectionName: connNameUserResponse,
         };
 
@@ -304,3 +322,5 @@ export class DataverseHelper {
         return undefined;
     }
 }
+
+async function redirectTimeout(): Promise<void> {}
