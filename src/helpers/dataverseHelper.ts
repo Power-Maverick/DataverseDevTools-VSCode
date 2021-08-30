@@ -60,7 +60,7 @@ export class DataverseHelper {
     }
 
     public async deleteConnection(connItem: DataverseConnectionTreeItem) {
-        this.removeConnection(connItem.label);
+        await this.removeConnection(connItem.label);
         vscode.commands.executeCommand("dvdt.explorer.connections.refreshConnection");
     }
 
