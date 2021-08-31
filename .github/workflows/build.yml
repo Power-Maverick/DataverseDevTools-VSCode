@@ -18,10 +18,9 @@ jobs:
               uses: actions/setup-node@v1
               with:
                   node-version: 12.x
+                  
             - name: Run Build
               run: |
                   npm install
                   npm ci
                   npm run compile
-            - name: Update CHANGELOG
-              run: npm run version
