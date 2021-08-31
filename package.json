@@ -93,9 +93,19 @@
                     "group": "navigation@2"
                 },
                 {
+                    "command": "dvdt.explorer.webresources.filteron",
+                    "when": "view == dvWebResources && !devtools.wrFiltered",
+                    "group": "navigation@1"
+                },
+                {
+                    "command": "dvdt.explorer.webresources.filteroff",
+                    "when": "view == dvWebResources && devtools.wrFiltered",
+                    "group": "navigation@1"
+                },
+                {
                     "command": "dvdt.explorer.webresources.loadWebResources",
                     "when": "view == dvWebResources",
-                    "group": "navigation@1"
+                    "group": "navigation@2"
                 }
             ],
             "view/item/context": [
@@ -267,6 +277,24 @@
             },
             {
                 "command": "dvdt.explorer.entities.filteroff",
+                "title": "Remove Filter",
+                "category": "%dvdt.explorer.category%",
+                "icon": {
+                    "light": "resources/light/filter-off.svg",
+                    "dark": "resources/dark/filter-off.svg"
+                }
+            },
+            {
+                "command": "dvdt.explorer.webresources.filteron",
+                "title": "Filter",
+                "category": "%dvdt.explorer.category%",
+                "icon": {
+                    "light": "resources/light/filter-on.svg",
+                    "dark": "resources/dark/filter-on.svg"
+                }
+            },
+            {
+                "command": "dvdt.explorer.webresources.filteroff",
                 "title": "Remove Filter",
                 "category": "%dvdt.explorer.category%",
                 "icon": {

@@ -56,6 +56,7 @@ export class EntitiesDataProvider implements vscode.TreeDataProvider<EntitiesTre
 
         if (this.areEntitiesFiltered) {
             this.entities = jsonConn.value;
+            this.areEntitiesFiltered = false;
         } else {
             await this.filterWizard(jsonConn.value);
             this.areEntitiesFiltered = true;

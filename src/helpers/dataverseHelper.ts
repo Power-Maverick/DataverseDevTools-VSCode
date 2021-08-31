@@ -203,6 +203,10 @@ export class DataverseHelper {
         return await this.request.requestData<ISolutionComponents>(`solutioncomponents?$filter=(componenttype%20eq%201%20and%20_solutionid_value%20eq%20${solutionId})`);
     }
 
+    public async fetchWRsInSolution(solutionId: string) {
+        return await this.request.requestData<ISolutionComponents>(`solutioncomponents?$filter=(componenttype%20eq%2061%20and%20_solutionid_value%20eq%20${solutionId})`);
+    }
+
     //#endregion Public
 
     async connectionWizard(): Promise<IConnection | undefined> {

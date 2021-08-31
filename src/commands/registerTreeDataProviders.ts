@@ -16,7 +16,7 @@ export function registerTreeDataProviders(vscontext: vscode.ExtensionContext): v
     const entityMetadataProvider = new EntitiesDataProvider(vscontext, dvHelper);
     vscode.window.registerTreeDataProvider("dvEntities", entityMetadataProvider);
 
-    const wrProvider = new WebResourcesDataProvider(vscontext, uploadHelper);
+    const wrProvider = new WebResourcesDataProvider(vscontext, dvHelper, uploadHelper);
     vscode.window.registerTreeDataProvider("dvWebResources", wrProvider);
 
     const cmds: Array<ICommand> = new Array(
@@ -39,6 +39,14 @@ export function registerTreeDataProviders(vscontext: vscode.ExtensionContext): v
         {
             command: "dvdt.explorer.webresources.loadWebResources",
             callback: () => wrProvider.refresh(),
+        },
+        {
+            command: "dvdt.explorer.webresources.filteron",
+            callback: () => wrProvider.filter(),
+        },
+        {
+            command: "dvdt.explorer.webresources.filteroff",
+            callback: () => wrProvider.filter(),
         },
     );
     cmds.forEach((c) => {
