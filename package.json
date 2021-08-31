@@ -78,9 +78,19 @@
                     "group": "navigation@2"
                 },
                 {
+                    "command": "dvdt.explorer.entities.filteron",
+                    "when": "view == dvEntities && !devtools.entitiesFiltered",
+                    "group": "navigation@1"
+                },
+                {
+                    "command": "dvdt.explorer.entities.filteroff",
+                    "when": "view == dvEntities && devtools.entitiesFiltered",
+                    "group": "navigation@1"
+                },
+                {
                     "command": "dvdt.explorer.entities.loadEntities",
                     "when": "view == dvEntities",
-                    "group": "navigation@1"
+                    "group": "navigation@2"
                 },
                 {
                     "command": "dvdt.explorer.webresources.loadWebResources",
@@ -245,6 +255,24 @@
                 "title": "Upload Web Resource",
                 "when": "false",
                 "category": "%dvdt.explorer.category%"
+            },
+            {
+                "command": "dvdt.explorer.entities.filteron",
+                "title": "Filter",
+                "category": "%dvdt.explorer.category%",
+                "icon": {
+                    "light": "resources/light/filter-on.svg",
+                    "dark": "resources/dark/filter-on.svg"
+                }
+            },
+            {
+                "command": "dvdt.explorer.entities.filteroff",
+                "title": "Remove Filter",
+                "category": "%dvdt.explorer.category%",
+                "icon": {
+                    "light": "resources/light/filter-off.svg",
+                    "dark": "resources/dark/filter-off.svg"
+                }
             }
         ],
         "keybindings": [

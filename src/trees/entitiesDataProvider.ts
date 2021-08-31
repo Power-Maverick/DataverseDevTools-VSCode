@@ -1,15 +1,17 @@
 import * as vscode from "vscode";
 import * as path from "path";
 import { State } from "../utils/State";
-import { entityDefinitionsStoreKey } from "../utils/Constants";
-import { IStore, IEntityDefinition, IEntityMetadata } from "../utils/Interfaces";
+import { entityDefinitionsStoreKey, extensionName, extensionPrefix } from "../utils/Constants";
+import { IStore, IEntityDefinition, IEntityMetadata, ISolutionComponents, ISolutionComponent } from "../utils/Interfaces";
 import { observable } from "mobx";
 import { TreeItemBase } from "./treeItemBase";
 import { DataverseHelper } from "../helpers/dataverseHelper";
+import { Placeholders } from "../utils/Placeholders";
 
 export class EntitiesDataProvider implements vscode.TreeDataProvider<EntitiesTreeItem> {
     private refreshTreeData: vscode.EventEmitter<EntitiesTreeItem | undefined | void> = new vscode.EventEmitter<EntitiesTreeItem | undefined | void>();
     private entities: IEntityDefinition[] = [];
+    private areEntitiesFiltered: boolean = false;
 
     constructor(private vscontext: vscode.ExtensionContext, private dvHelper: DataverseHelper) {}
 
@@ -43,6 +45,25 @@ export class EntitiesDataProvider implements vscode.TreeDataProvider<EntitiesTre
         return Promise.resolve([]);
     }
 
+    async filter(): Promise<void> {
+        const vsstate = new State(this.vscontext);
+        const jsonConn: IEntityMetadata = vsstate.getFromWorkspace(entityDefinitionsStoreKey);
+
+        if (!jsonConn) {
+            vscode.window.showErrorMessage(`${extensionName}: No entities found.`);
+            return;
+        }
+
+        if (this.areEntitiesFiltered) {
+            this.entities = jsonConn.value;
+        } else {
+            await this.filterWizard(jsonConn.value);
+            this.areEntitiesFiltered = true;
+        }
+        this.refreshTreeData.fire();
+        vscode.commands.executeCommand("setContext", `${extensionPrefix}.entitiesFiltered`, this.areEntitiesFiltered);
+    }
+
     private populateEntities() {
         const vsstate = new State(this.vscontext);
         const jsonConn: IEntityMetadata = vsstate.getFromWorkspace(entityDefinitionsStoreKey);
@@ -67,6 +88,34 @@ export class EntitiesDataProvider implements vscode.TreeDataProvider<EntitiesTre
             return -1;
         }
         return 0;
+    }
+
+    private async filterWizard(entityArray: IEntityDefinition[]) {
+        const solutions = await this.dvHelper.getSolutions();
+        if (solutions) {
+            let solQPOptions = solutions.value.map((s) => {
+                return { label: s.friendlyname, data: s };
+            });
+            let solOptionsQP: vscode.QuickPickOptions = Placeholders.getQuickPickOptions(Placeholders.solutionSelection);
+            let solQPResponse = await vscode.window.showQuickPick(solQPOptions, solOptionsQP);
+
+            if (solQPResponse) {
+                const resp = await this.dvHelper.fetchEntitiesInSolution(solQPResponse.data.solutionid);
+                if (entityArray && resp) {
+                    this.entities = this.filterArrayBySolution(entityArray, resp.value);
+                }
+            }
+        }
+    }
+
+    private filterArrayBySolution(a1: IEntityDefinition[], a2: ISolutionComponent[]) {
+        let res = [];
+        res = a1.filter((el) => {
+            return a2.find((element) => {
+                return element.objectid === el.MetadataId;
+            });
+        });
+        return res;
     }
 
     readonly onDidChangeTreeData: vscode.Event<EntitiesTreeItem | undefined | void> = this.refreshTreeData.event;

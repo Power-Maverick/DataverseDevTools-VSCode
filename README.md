@@ -28,12 +28,14 @@ The all-in-one tool to develop code for Dataverse/Dynamics 365. Helps you connec
     - [Generate Typings](#generate-typings)
     - [Intellisense for type generated](#intellisense-for-type-generated)
     - [Upload Web Resources](#upload-web-resources)
+  - [🔥 Using Typings](#-using-typings)
   - [⌨ Keyboard Shortcuts](#-keyboard-shortcuts)
   - [💭 Planned Features](#-planned-features)
   - [🔌 Contributing](#-contributing)
   - [🔉 Discussions](#-discussions)
   - [📃 License](#-license)
   - [💙 Big Thanks](#-big-thanks)
+  - [✍ Credits](#-credits)
 
 ## ⚙ Features
 
@@ -68,6 +70,10 @@ The all-in-one tool to develop code for Dataverse/Dynamics 365. Helps you connec
 ### Upload Web Resources
 
 ![WebResourceUpload](https://github.com/Power-Maverick/DataverseDevTools-VSCode/blob/main/assets/WebResourceUpload.gif?raw=true)
+
+## 🔥 Using Typings
+
+TBD
 
 ## ⌨ Keyboard Shortcuts
 
@@ -111,3 +117,9 @@ This software is released under [MIT License](http://www.opensource.org/licenses
 [Magnus Gether Sørensen](https://www.linkedin.com/in/xrmwizard/) for helping in providing insights for XrmDefinitelyTyped.
 
 [Temmy Raharjo](https://www.linkedin.com/in/temmy-wahyu-raharjo/) for encouraging me to start using `pac cli command` to generate Plugin project.
+
+## ✍ Credits
+
+Icons sourced from - [https://icon-sets.iconify.design](https://icon-sets.iconify.design/)
+
+JSON to TypeScript conversions - [https://quicktype.io/typescript](https://quicktype.io/typescript)

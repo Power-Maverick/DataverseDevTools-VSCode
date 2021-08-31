@@ -229,9 +229,21 @@ export interface IPublisher {
     publisherid: string;
 }
 
-export interface ISolutionComponent {
+export interface IComponentUpdate {
     ComponentId: string;
     ComponentType: number;
     SolutionUniqueName: string;
     AddRequiredComponents: boolean;
+}
+
+export interface ISolutionComponents {
+    value: ISolutionComponent[];
+}
+
+export interface ISolutionComponent {
+    objectid: string;
+    solutioncomponentid: string;
+    componenttype: number;
+    ismetadata: boolean;
+    _solutionid_value: string;
 }

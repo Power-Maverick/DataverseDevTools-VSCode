@@ -29,6 +29,14 @@ export function registerTreeDataProviders(vscontext: vscode.ExtensionContext): v
             callback: () => entityMetadataProvider.refresh(),
         },
         {
+            command: "dvdt.explorer.entities.filteron",
+            callback: () => entityMetadataProvider.filter(),
+        },
+        {
+            command: "dvdt.explorer.entities.filteroff",
+            callback: () => entityMetadataProvider.filter(),
+        },
+        {
             command: "dvdt.explorer.webresources.loadWebResources",
             callback: () => wrProvider.refresh(),
         },

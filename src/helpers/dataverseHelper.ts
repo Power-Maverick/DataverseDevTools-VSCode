@@ -13,9 +13,10 @@ import {
     IOptionSet,
     IOptionSetMetadata,
     IProgressOptions,
-    ISolutionComponent,
+    IComponentUpdate,
     ISolutions,
     IWebResource,
+    ISolutionComponents,
 } from "../utils/Interfaces";
 import { connectionCurrentStoreKey, connectionStoreKey, entityDefinitionsStoreKey, environmentTypes, loginTypes, solDefinitionsStoreKey, wrDefinitionsStoreKey } from "../utils/Constants";
 import { DataverseConnectionTreeItem } from "../trees/dataverseConnectionDataProvider";
@@ -185,7 +186,7 @@ export class DataverseHelper {
     }
 
     public async addWRToSolution(solName: string, wrId: string) {
-        const solComp: ISolutionComponent = {
+        const solComp: IComponentUpdate = {
             // eslint-disable-next-line @typescript-eslint/naming-convention
             ComponentId: wrId,
             // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -196,6 +197,10 @@ export class DataverseHelper {
             ComponentType: 61, // Web Resources (https://docs.microsoft.com/en-us/dynamics365/customer-engagement/web-api/solutioncomponent?view=dynamics-ce-odata-9)
         };
         await this.request.createData("AddSolutionComponent", JSON.stringify(solComp));
+    }
+
+    public async fetchEntitiesInSolution(solutionId: string) {
+        return await this.request.requestData<ISolutionComponents>(`solutioncomponents?$filter=(componenttype%20eq%201%20and%20_solutionid_value%20eq%20${solutionId})`);
     }
 
     //#endregion Public
