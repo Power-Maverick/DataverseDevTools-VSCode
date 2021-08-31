@@ -28,6 +28,9 @@ The all-in-one tool to develop code for Dataverse/Dynamics 365. Helps you connec
     - [Generate Typings](#generate-typings)
     - [Intellisense for type generated](#intellisense-for-type-generated)
     - [Upload Web Resources](#upload-web-resources)
+    - [Filter by solution](#filter-by-solution)
+      - [Entities](#entities)
+      - [Web Resources](#web-resources)
   - [🔥 Using Typings](#-using-typings)
   - [⌨ Keyboard Shortcuts](#-keyboard-shortcuts)
   - [💭 Planned Features](#-planned-features)
@@ -71,9 +74,19 @@ The all-in-one tool to develop code for Dataverse/Dynamics 365. Helps you connec
 
 ![WebResourceUpload](https://github.com/Power-Maverick/DataverseDevTools-VSCode/blob/main/assets/WebResourceUpload.gif?raw=true)
 
+### Filter by solution
+
+#### Entities
+
+![FilterEntities](https://github.com/Power-Maverick/DataverseDevTools-VSCode/blob/main/assets/FilterEntitiesBySolution.gif?raw=true)
+
+#### Web Resources
+
+![FilterWRs](https://github.com/Power-Maverick/DataverseDevTools-VSCode/blob/main/assets/FilterWRBySolution.gif?raw=true)
+
 ## 🔥 Using Typings
 
-TBD
+_Will be added soon_
 
 ## ⌨ Keyboard Shortcuts
 
