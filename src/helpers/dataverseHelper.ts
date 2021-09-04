@@ -217,31 +217,31 @@ export class DataverseHelper {
             return undefined;
         }
 
-        // let logintypeOptions: string[] = loginTypes;
-        // let logintypeOptionsQuickPick: vscode.QuickPickOptions = Placeholders.getQuickPickOptions(Placeholders.logintype);
-        // let logintypeResponse: string | undefined = await vscode.window.showQuickPick(logintypeOptions, logintypeOptionsQuickPick);
+        let logintypeOptions: string[] = loginTypes;
+        let logintypeOptionsQuickPick: vscode.QuickPickOptions = Placeholders.getQuickPickOptions(Placeholders.logintype);
+        let logintypeResponse: string | undefined = await vscode.window.showQuickPick(logintypeOptions, logintypeOptionsQuickPick);
 
-        //if (logintypeResponse === loginTypes[0]) {
-        // Username/Password
-        usernameUserResponse = await vscode.window.showInputBox(Placeholders.getInputBoxOptions(Placeholders.userName));
-        if (!usernameUserResponse) {
-            vscode.window.showErrorMessage(ErrorMessages.usernameRequired);
-            return undefined;
+        if (logintypeResponse === loginTypes[0]) {
+            // Username/Password
+            usernameUserResponse = await vscode.window.showInputBox(Placeholders.getInputBoxOptions(Placeholders.userName));
+            if (!usernameUserResponse) {
+                vscode.window.showErrorMessage(ErrorMessages.usernameRequired);
+                return undefined;
+            }
+
+            passwordUserResponse = await vscode.window.showInputBox(Placeholders.getInputBoxOptions(Placeholders.password));
+            if (!passwordUserResponse) {
+                vscode.window.showErrorMessage(ErrorMessages.passwordRequired);
+                return undefined;
+            }
         }
 
-        passwordUserResponse = await vscode.window.showInputBox(Placeholders.getInputBoxOptions(Placeholders.password));
-        if (!passwordUserResponse) {
-            vscode.window.showErrorMessage(ErrorMessages.passwordRequired);
-            return undefined;
+        if (logintypeResponse === loginTypes[1]) {
+            // Login Prompt
+            // azure - aebc6443-996d-45c2-90f0-388ff96faa56
+            // my - 12c47861-4bb0-48dd-8949-83df0a3fecc5
+            await loginWithPrompt("12c47861-4bb0-48dd-8949-83df0a3fecc5", Environment.azureCloud, false, "31c20a23-2ed2-468d-baab-42edf998128b", openUri, redirectTimeout).catch(console.error);
         }
-        // }
-
-        // if (logintypeResponse === loginTypes[1]) {
-        //     // Login Prompt
-        //     // azure - aebc6443-996d-45c2-90f0-388ff96faa56
-        //     // my - 12c47861-4bb0-48dd-8949-83df0a3fecc5
-        //     await loginWithPrompt("aebc6443-996d-45c2-90f0-388ff96faa56", Environment.azureCloud, false, "31c20a23-2ed2-468d-baab-42edf998128b", openUri, redirectTimeout).catch(console.error);
-        // }
 
         let connNameUserResponse: string | undefined = await vscode.window.showInputBox(Placeholders.getInputBoxOptions(Placeholders.connectionName));
         if (!connNameUserResponse) {
