@@ -84,7 +84,7 @@ function parseQuery(uri: vscode.Uri): any {
         });
 }*/
 
-function getCallbackEnvironment(callbackUri: vscode.Uri): string {
+/*function getCallbackEnvironment(callbackUri: vscode.Uri): string {
     if (callbackUri.authority.endsWith(".workspaces.github.com") || callbackUri.authority.endsWith(".github.dev")) {
         return `${callbackUri.authority},`;
     }
@@ -101,6 +101,7 @@ function getCallbackEnvironment(callbackUri: vscode.Uri): string {
             return "";
     }
 }
+*/
 
 /*async function loginWithoutLocalServer(clientId: string, environment: Environment, adfs: boolean, tenantId: string): Promise<TokenResponse> {
     const callbackUri: vscode.Uri = await vscode.env.asExternalUri(vscode.Uri.parse(`${vscode.env.uriScheme}://ms-vscode.azure-account`));
@@ -161,7 +162,6 @@ export async function loginWithPrompt(clientId: string, adfs: boolean, dataverse
 
         const authCodeUrlParameters: msal.AuthorizationUrlRequest = {
             scopes: [`${dataverseUrl}/user_impersonation`],
-            //scopes: ["https://globaldisco.crm.dynamics.com/user_impersonation"],
             redirectUri: redirectUrl,
             codeChallenge: pkceCodes.challenge, // PKCE Code Challenge
             codeChallengeMethod: pkceCodes.challengeMethod, // PKCE Code Challenge Method
