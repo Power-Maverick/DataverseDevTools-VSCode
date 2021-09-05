@@ -9,16 +9,15 @@ import {
     IConnection,
     IEntityDefinition,
     IEntityMetadata,
-    ILinkerRes,
     IOptionSet,
     IOptionSetMetadata,
-    IProgressOptions,
     IComponentUpdate,
     ISolutions,
     IWebResource,
     ISolutionComponents,
+    Token,
 } from "../utils/Interfaces";
-import { connectionCurrentStoreKey, connectionStoreKey, entityDefinitionsStoreKey, environmentTypes, loginTypes, solDefinitionsStoreKey, wrDefinitionsStoreKey } from "../utils/Constants";
+import { connectionCurrentStoreKey, connectionStoreKey, defaultDataverseClientId, entityDefinitionsStoreKey, environmentTypes, loginTypes, solDefinitionsStoreKey, wrDefinitionsStoreKey } from "../utils/Constants";
 import { DataverseConnectionTreeItem } from "../trees/dataverseConnectionDataProvider";
 import { RequestHelper } from "./requestHelper";
 import { ProgressLocation } from "vscode";
@@ -26,7 +25,6 @@ import { openUri } from "../utils/OpenUri";
 import { ViewBase } from "../views/ViewBase";
 import { ConnectionDetailsView } from "../views/ConnectionDetailsView";
 import { EntityDetailsView } from "../views/EntityDetailsView";
-import { Environment } from "../login/environment";
 
 export class DataverseHelper {
     private vsstate: State;
@@ -47,7 +45,7 @@ export class DataverseHelper {
         const conn = await this.connectionWizard();
         try {
             if (conn) {
-                const tokenResponse = await loginWithUsernamePassword(conn.environmentUrl, conn.userName, conn.password);
+                const tokenResponse = await this.connectInternal(conn.loginType, conn);
                 conn.currentAccessToken = tokenResponse.access_token!;
                 this.vsstate.saveInWorkspace(connectionCurrentStoreKey, conn);
             }
@@ -55,6 +53,7 @@ export class DataverseHelper {
             throw err;
         } finally {
             vscode.commands.executeCommand("dvdt.explorer.connections.refreshConnection");
+            await this.reloadWorkspaceConnection();
         }
 
         return conn;
@@ -79,10 +78,7 @@ export class DataverseHelper {
                             return;
                         });
                         progress.report({ increment: 0, message: "Connecting to environment..." });
-                        const tokenResponse =
-                            conn.loginType === loginTypes[0]
-                                ? await loginWithUsernamePassword(conn.environmentUrl, conn.userName, conn.password)
-                                : await loginWithPrompt("12c47861-4bb0-48dd-8949-83df0a3fecc5", Environment.azureCloud, false, "31c20a23-2ed2-468d-baab-42edf998128b", openUri, redirectTimeout);
+                        const tokenResponse = await this.connectInternal(conn.loginType, conn);
                         conn.currentAccessToken = tokenResponse.access_token!;
                         progress.report({ increment: 10 });
                         this.vsstate.saveInWorkspace(connectionCurrentStoreKey, conn);
@@ -211,6 +207,7 @@ export class DataverseHelper {
 
     //#endregion Public
 
+    //#region Private
     async connectionWizard(): Promise<IConnection | undefined> {
         let usernameUserResponse: string | undefined;
         let passwordUserResponse: string | undefined;
@@ -241,10 +238,7 @@ export class DataverseHelper {
         // default
         else {
             logintypeResponse = loginTypes[1];
-            // Login Prompt
-            // azure - aebc6443-996d-45c2-90f0-388ff96faa56
-            // my - 12c47861-4bb0-48dd-8949-83df0a3fecc5
-            await loginWithPrompt("12c47861-4bb0-48dd-8949-83df0a3fecc5", Environment.azureCloud, false, "31c20a23-2ed2-468d-baab-42edf998128b", openUri, redirectTimeout).catch(console.error);
+            //await loginWithPrompt(defaultDataverseClientId, false, openUri, redirectTimeout);
         }
 
         let connNameUserResponse: string | undefined = await vscode.window.showInputBox(Placeholders.getInputBoxOptions(Placeholders.connectionName));
@@ -271,6 +265,12 @@ export class DataverseHelper {
 
         this.saveConnection(conn);
         return conn;
+    }
+
+    async connectInternal(loginType: string, conn: IConnection): Promise<Token> {
+        return loginType === loginTypes[0]
+            ? await loginWithUsernamePassword(conn.environmentUrl, conn.userName, conn.password)
+            : await loginWithPrompt(defaultDataverseClientId, false, conn.environmentUrl, openUri, redirectTimeout);
     }
 
     saveConnection(connDetail: IConnection) {
@@ -334,6 +334,7 @@ export class DataverseHelper {
 
         return undefined;
     }
+    //#endregion Private
 }
 
 async function redirectTimeout(): Promise<void> {}

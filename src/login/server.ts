@@ -1,12 +1,10 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import * as fs from "fs";
 import * as http from "http";
-import * as https from "https";
 import * as net from "net";
 import * as path from "path";
-import { parse, ParsedUrlQuery } from "querystring";
 import * as url from "url";
-import { portADFS, redirectUrlAAD } from "../utils/Constants";
+import { parse, ParsedUrlQuery } from "querystring";
 
 interface Deferred<T> {
     resolve: (result: T | Promise<T>) => void;
@@ -90,11 +88,9 @@ export function createServer(nonce: string): {
                 }
                 break;
             case "/":
-                //sendFile(res, path.join(__dirname, "../../codeFlowResult/index.html"), "text/html; charset=utf-8");
                 sendFile(res, path.join(__filename, "..", "..", "..", "CodeFlowResult", "index.html"), "text/html; charset=utf-8");
                 break;
             case "/main.css":
-                //sendFile(res, path.join(__dirname, "../../codeFlowResult/main.css"), "text/css; charset=utf-8");
                 sendFile(res, path.join(__filename, "..", "..", "..", "CodeFlowResult", "main.css"), "text/css; charset=utf-8");
                 break;
             case "/callback/":
