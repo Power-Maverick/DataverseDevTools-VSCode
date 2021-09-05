@@ -5,7 +5,8 @@ import { WebResourceType } from "./Constants";
 /* eslint-disable @typescript-eslint/naming-convention */
 export interface IConnection {
     connectionName: string;
-    connectionType?: string;
+    loginType: string;
+    environmentType?: string;
     environmentUrl: string;
     userName: string;
     password: string;

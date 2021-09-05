@@ -44,7 +44,7 @@ export class DataverseConnectionDataProvider implements vscode.TreeDataProvider<
             }
         } else {
             // Parent
-            const results = groupBy(this.connections, (c) => c.connectionType!);
+            const results = groupBy(this.connections, (c) => c.environmentType!);
             let parentTree: DataverseConnectionTreeItem[] = [];
             environmentTypes.map((t) => {
                 if (results[t]) {
@@ -68,7 +68,7 @@ export class DataverseConnectionDataProvider implements vscode.TreeDataProvider<
         // prettier-ignore
         const filteredConnections = conns
             ? conns.filter((c) => {
-                if (c.connectionType === connType) {
+                if (c.environmentType === connType) {
                     return c;
                 }
             })

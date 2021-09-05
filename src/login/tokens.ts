@@ -8,6 +8,7 @@ export interface Token {
     expires_in: number;
     ext_expires_in: number;
     access_token: string;
+    refresh_token?: string;
 }
 
 export async function getTokenWithAuthorizationCode(clientId: string, environment: Environment, redirectUrl: string, tenantId: string, code: string): Promise<TokenResponse> {

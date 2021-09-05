@@ -79,7 +79,10 @@ export class DataverseHelper {
                             return;
                         });
                         progress.report({ increment: 0, message: "Connecting to environment..." });
-                        const tokenResponse = await loginWithUsernamePassword(conn.environmentUrl, conn.userName, conn.password);
+                        const tokenResponse =
+                            conn.loginType === loginTypes[0]
+                                ? await loginWithUsernamePassword(conn.environmentUrl, conn.userName, conn.password)
+                                : await loginWithPrompt("12c47861-4bb0-48dd-8949-83df0a3fecc5", Environment.azureCloud, false, "31c20a23-2ed2-468d-baab-42edf998128b", openUri, redirectTimeout);
                         conn.currentAccessToken = tokenResponse.access_token!;
                         progress.report({ increment: 10 });
                         this.vsstate.saveInWorkspace(connectionCurrentStoreKey, conn);
@@ -235,8 +238,9 @@ export class DataverseHelper {
                 return undefined;
             }
         }
-
-        if (logintypeResponse === loginTypes[1]) {
+        // default
+        else {
+            logintypeResponse = loginTypes[1];
             // Login Prompt
             // azure - aebc6443-996d-45c2-90f0-388ff96faa56
             // my - 12c47861-4bb0-48dd-8949-83df0a3fecc5
@@ -255,13 +259,14 @@ export class DataverseHelper {
 
         let conn: IConnection = {
             environmentUrl: envUrlUserResponse,
+            loginType: logintypeResponse,
             userName: usernameUserResponse!,
             password: passwordUserResponse!,
             connectionName: connNameUserResponse,
         };
 
         if (typeResponse) {
-            conn.connectionType = typeResponse;
+            conn.environmentType = typeResponse;
         }
 
         this.saveConnection(conn);
