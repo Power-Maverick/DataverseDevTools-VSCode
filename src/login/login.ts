@@ -225,7 +225,7 @@ export async function loginWithPrompt(clientId: string, adfs: boolean, dataverse
             } else {
                 throw error("Unable to fetch token");
             }
-        } catch (err) {
+        } catch (err: any) {
             // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
             serverResponse.writeHead(302, {
                 Location: `/?error=${encodeURIComponent((err && err.message) || "Unknown error")}`,
