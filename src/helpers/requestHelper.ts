@@ -44,13 +44,14 @@ export class RequestHelper {
                         ? await loginWithRefreshToken(defaultDataverseClientId, currentConnection.environmentUrl, currentConnection.refreshToken)
                         : await loginWithUsernamePassword(currentConnection.environmentUrl, currentConnection.userName!, currentConnection.password!);
 
-                    if (currentConnection.loginType === loginTypes[1]) {
+                    if (!tokenResponse && currentConnection.loginType === loginTypes[1]) {
                         // Try again with no refresh token
                         tokenResponse = await loginWithPrompt(defaultDataverseClientId, false, currentConnection.environmentUrl, openUri, redirectTimeout);
                     }
 
                     if (tokenResponse) {
-                        currentConnection.currentAccessToken = typeof tokenResponse === "string" ? tokenResponse : tokenResponse.access_token;
+                        currentConnection.currentAccessToken = tokenResponse.access_token;
+                        currentConnection.refreshToken = tokenResponse.refresh_token;
                     } else {
                         return undefined;
                     }

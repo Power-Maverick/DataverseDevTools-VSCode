@@ -56,74 +56,6 @@ function parseQuery(uri: vscode.Uri): any {
     }, {});
 }
 
-/* eslint-enable @typescript-eslint/no-unsafe-return, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access */
-/*async function exchangeCodeForToken(clientId: string, environment: Environment, tenantId: string, callbackUri: string, state: string): Promise<TokenResponse> {
-    let uriEventListener: vscode.Disposable;
-    return new Promise((resolve: (value: TokenResponse) => void, reject) => {
-        uriEventListener = handler.event(async (uri: vscode.Uri) => {
-            try {
-                const query = parseQuery(uri);
-                const code = query.code;
-                // Workaround double encoding issues of state
-                if (query.state !== state && decodeURIComponent(query.state) !== state) {
-                    throw new Error("State does not match.");
-                }
-                resolve(await getTokenWithAuthorizationCode(clientId, environment, callbackUri, tenantId, code));
-            } catch (err) {
-                reject(err);
-            }
-        });
-    })
-        .then((result) => {
-            uriEventListener.dispose();
-            return result;
-        })
-        .catch((err) => {
-            uriEventListener.dispose();
-            throw err;
-        });
-}*/
-
-/*function getCallbackEnvironment(callbackUri: vscode.Uri): string {
-    if (callbackUri.authority.endsWith(".workspaces.github.com") || callbackUri.authority.endsWith(".github.dev")) {
-        return `${callbackUri.authority},`;
-    }
-    switch (callbackUri.authority) {
-        case "online.visualstudio.com":
-            return "vso,";
-        case "online-ppe.core.vsengsaas.visualstudio.com":
-            return "vsoppe,";
-        case "online.dev.core.vsengsaas.visualstudio.com":
-            return "vsodev,";
-        case "canary.online.visualstudio.com":
-            return "vsocanary,";
-        default:
-            return "";
-    }
-}
-*/
-
-/*async function loginWithoutLocalServer(clientId: string, environment: Environment, adfs: boolean, tenantId: string): Promise<TokenResponse> {
-    const callbackUri: vscode.Uri = await vscode.env.asExternalUri(vscode.Uri.parse(`${vscode.env.uriScheme}://ms-vscode.azure-account`));
-    const nonce: string = crypto.randomBytes(16).toString("base64");
-    const port: string | number = (callbackUri.authority.match(/:([0-9]*)$/) || [])[1] || (callbackUri.scheme === "https" ? 443 : 80);
-    const callbackEnvironment: string = getCallbackEnvironment(callbackUri);
-    const state: string = `${callbackEnvironment}${port},${encodeURIComponent(nonce)},${encodeURIComponent(callbackUri.query)}`;
-    const signInUrl: string = `${environment.activeDirectoryEndpointUrl}${adfs ? "" : `${tenantId}/`}oauth2/authorize`;
-    let uri: vscode.Uri = vscode.Uri.parse(signInUrl);
-    uri = uri.with({
-        query: `response_type=code&client_id=${encodeURIComponent(clientId)}&redirect_uri=${redirectUrlAAD}&state=${state}&resource=${environment.activeDirectoryResourceId}&prompt=select_account`,
-    });
-    void vscode.env.openExternal(uri);
-    const timeoutPromise = new Promise((_resolve: (value: TokenResponse) => void, reject) => {
-        const wait = setTimeout(() => {
-            clearTimeout(wait);
-            reject("Login timed out.");
-        }, 1000 * 60 * 5);
-    });
-    return Promise.race([exchangeCodeForToken(clientId, environment, tenantId, redirectUrlAAD, state), timeoutPromise]);
-}*/
-
 export async function loginWithPrompt(clientId: string, adfs: boolean, dataverseUrl: string, openUri: (url: string) => Promise<void>, redirectTimeout: () => Promise<void>): Promise<Token> {
     const nonce: string = crypto.randomBytes(16).toString("base64");
     const { server, redirectPromise, codePromise } = createServer(nonce);
@@ -240,23 +172,29 @@ export async function loginWithPrompt(clientId: string, adfs: boolean, dataverse
     }
 }
 
-export async function loginWithRefreshToken(clientId: string, dataverseUrl: string, refreshToken: string): Promise<string | undefined> {
-    const clientConfig: msal.Configuration = {
-        auth: {
-            clientId: clientId,
-            authority: `${activeDirectoryEndpointUrl}${genericTenant}/`,
+export async function loginWithRefreshToken(clientId: string, dataverseUrl: string, refreshToken: string): Promise<Token | undefined> {
+    const requestUrl = tokenEndpointUrl;
+
+    axios.default.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
+    const params = new url.URLSearchParams({
+        grant_type: "refresh_token",
+        client_id: clientId,
+        refresh_token: refreshToken,
+    });
+    const config = {
+        headers: {
+            Origin: "http://localhost",
         },
     };
-    const pca = new msal.PublicClientApplication(clientConfig);
-    const refreshTokenRequest = {
-        refreshToken: refreshToken,
-        scopes: [`${dataverseUrl}/user_impersonation`],
-    };
 
-    const resp = await pca.acquireTokenByRefreshToken(refreshTokenRequest);
+    let resp = await axios.default.post(requestUrl, params.toString(), config).catch((error) => {
+        console.log(`ERROR: ${JSON.stringify(error.response.data)}`);
+        throw error;
+    });
     if (resp) {
-        return resp.accessToken;
+        console.log(resp.data.access_token);
+        return resp.data;
     } else {
-        return undefined;
+        throw error("Unable to fetch token");
     }
 }

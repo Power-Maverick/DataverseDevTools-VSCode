@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## 1.0.0
+
+### Merged
+
+-   Removed adal from packages [`#13`](https://github.com/Power-Maverick/DataverseDevTools-VSCode/pull/13)
+
+### Commits
+
+-   Added login using Microsoft login prompt
+-   Implemented prettier and linting in TypeScript project template
+
 ## 0.0.6
 
 ### Commits
