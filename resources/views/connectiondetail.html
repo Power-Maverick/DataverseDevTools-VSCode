@@ -7,6 +7,11 @@
         <i class="material-icons trailing" onclick="copyToClipboard('envurl')">content_copy</i>
     </div>
     <div>
+        <label>Login Type:</label>
+        <input id="type" type="text" value="!!{loginType}" readonly />
+        <i class="material-icons trailing" onclick="copyToClipboard('type')">content_copy</i>
+    </div>
+    <div>
         <label>Username:</label>
         <input id="uname" type="text" value="!!{userName}" readonly />
         <i class="material-icons trailing" onclick="copyToClipboard('uname')">content_copy</i>
@@ -15,5 +20,10 @@
         <label>Access Token:</label>
         <input id="pass" type="text" value="!!{token}" readonly />
         <i class="material-icons trailing" onclick="copyToClipboard('pass')">content_copy</i>
+    </div>
+    <div>
+        <label>Refresh Token:</label>
+        <input id="refresh" type="text" value="!!{refreshToken}" readonly />
+        <i class="material-icons trailing" onclick="copyToClipboard('refresh')">content_copy</i>
     </div>
 </form>

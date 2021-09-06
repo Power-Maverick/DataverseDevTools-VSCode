@@ -3,10 +3,17 @@
     "version": "1.0.0",
     "description": "",
     "scripts": {
+        "build": "tsc",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "author": "Dataverse DevTools",
     "devDependencies": {
+        "eslint": "^7.32.0",
+        "prettier": "2.3.2",
+        "@typescript-eslint/eslint-plugin": "^4.30.0",
+        "@typescript-eslint/parser": "^4.30.0",
+        "eslint-config-prettier": "^8.3.0",
+        "eslint-plugin-prettier": "^4.0.0",
         "@types/node": "^16.4.11",
         "@types/xrm": "^9.0.41"
     }

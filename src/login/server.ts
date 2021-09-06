@@ -1,12 +1,10 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import * as fs from "fs";
 import * as http from "http";
-import * as https from "https";
 import * as net from "net";
 import * as path from "path";
-import { parse, ParsedUrlQuery } from "querystring";
 import * as url from "url";
-import { portADFS, redirectUrlAAD } from "../utils/Constants";
+import { parse, ParsedUrlQuery } from "querystring";
 
 interface Deferred<T> {
     resolve: (result: T | Promise<T>) => void;
@@ -90,14 +88,12 @@ export function createServer(nonce: string): {
                 }
                 break;
             case "/":
-                //sendFile(res, path.join(__dirname, "../../codeFlowResult/index.html"), "text/html; charset=utf-8");
                 sendFile(res, path.join(__filename, "..", "..", "..", "CodeFlowResult", "index.html"), "text/html; charset=utf-8");
                 break;
             case "/main.css":
-                //sendFile(res, path.join(__dirname, "../../codeFlowResult/main.css"), "text/css; charset=utf-8");
                 sendFile(res, path.join(__filename, "..", "..", "..", "CodeFlowResult", "main.css"), "text/css; charset=utf-8");
                 break;
-            case "/callback":
+            case "/callback/":
                 deferredCode.resolve(
                     callback(nonce, reqUrl)
                         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -161,7 +157,8 @@ export async function startServer(server: http.Server, adfs: boolean): Promise<n
         server.on("close", () => {
             reject(new Error("Closed"));
         });
-        server.listen(adfs ? portADFS : 0, "127.0.0.1");
+        // server.listen(adfs ? portADFS : 0, "127.0.0.1");
+        server.listen(19472, "127.0.0.1");
     });
     portPromise.then(cancelPortTimer, cancelPortTimer);
     return portPromise;
@@ -195,9 +192,9 @@ async function callback(nonce: string, reqUrl: url.Url): Promise<string> {
             const state: string = getQueryProp(query, "state");
             const receivedNonce: string = (state?.split(",")[1] || "").replace(/ /g, "+");
 
-            if (receivedNonce !== nonce) {
-                error = "Nonce does not match.";
-            }
+            // if (receivedNonce !== nonce) {
+            //     error = "Nonce does not match.";
+            // }
         }
     }
 

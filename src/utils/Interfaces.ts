@@ -5,11 +5,22 @@ import { WebResourceType } from "./Constants";
 /* eslint-disable @typescript-eslint/naming-convention */
 export interface IConnection {
     connectionName: string;
-    connectionType?: string;
+    loginType: string;
+    environmentType?: string;
     environmentUrl: string;
-    userName: string;
-    password: string;
+    userName?: string;
+    password?: string;
     currentAccessToken?: string;
+    refreshToken?: string;
+}
+
+export interface Token {
+    token_type: string;
+    scope: string;
+    expires_in: number;
+    ext_expires_in: number;
+    access_token: string;
+    refresh_token?: string;
 }
 
 export interface IStore {

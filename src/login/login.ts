@@ -1,15 +1,15 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import * as vscode from "vscode";
 import * as url from "url";
-import { activeDirectoryEndpointUrl, activeDirectoryResourceId, commonTenantId, defaultDataverseClientId, redirectUrlAAD, redirectUrlADFS, tokenEndpointUrl } from "../utils/Constants";
-import { getTokenWithAuthorizationCode, Token } from "./tokens";
-import fetch from "node-fetch";
+import * as msal from "@azure/msal-node";
+import * as axios from "axios";
 import * as crypto from "crypto";
-import { CodeResult, createServer, RedirectResult, startServer } from "./server";
-import { openUri } from "../utils/OpenUri";
-import { AuthenticationContext, TokenResponse } from "adal-node";
+import fetch from "node-fetch";
+import { error } from "console";
 import { ServerResponse } from "http";
-import { Environment } from "./environment";
+import { activeDirectoryEndpointUrl, defaultDataverseClientId, genericTenant, tokenEndpointUrl } from "../utils/Constants";
+import { CodeResult, createServer, RedirectResult, startServer } from "./server";
+import { Token } from "../utils/Interfaces";
 
 export async function loginWithUsernamePassword(envUrl: string, un: string, p: string): Promise<Token> {
     const requestUrl = tokenEndpointUrl;
@@ -43,6 +43,7 @@ class UriEventHandler extends vscode.EventEmitter<vscode.Uri> implements vscode.
         this.fire(uri);
     }
 }
+
 const handler: UriEventHandler = new UriEventHandler();
 vscode.window.registerUriHandler(handler);
 let terminateServer: () => Promise<void>;
@@ -54,101 +55,50 @@ function parseQuery(uri: vscode.Uri): any {
         return prev;
     }, {});
 }
-/* eslint-enable @typescript-eslint/no-unsafe-return, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access */
-async function exchangeCodeForToken(clientId: string, environment: Environment, tenantId: string, callbackUri: string, state: string): Promise<TokenResponse> {
-    let uriEventListener: vscode.Disposable;
-    return new Promise((resolve: (value: TokenResponse) => void, reject) => {
-        uriEventListener = handler.event(async (uri: vscode.Uri) => {
-            try {
-                /* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access */
-                const query = parseQuery(uri);
-                const code = query.code;
-                // Workaround double encoding issues of state
-                if (query.state !== state && decodeURIComponent(query.state) !== state) {
-                    throw new Error("State does not match.");
-                }
-                /* eslint-enable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access */
-                resolve(await getTokenWithAuthorizationCode(clientId, environment, callbackUri, tenantId, code));
-            } catch (err) {
-                reject(err);
-            }
-        });
-    })
-        .then((result) => {
-            uriEventListener.dispose();
-            return result;
-        })
-        .catch((err) => {
-            uriEventListener.dispose();
-            throw err;
-        });
-}
-function getCallbackEnvironment(callbackUri: vscode.Uri): string {
-    if (callbackUri.authority.endsWith(".workspaces.github.com") || callbackUri.authority.endsWith(".github.dev")) {
-        return `${callbackUri.authority},`;
-    }
-    switch (callbackUri.authority) {
-        case "online.visualstudio.com":
-            return "vso,";
-        case "online-ppe.core.vsengsaas.visualstudio.com":
-            return "vsoppe,";
-        case "online.dev.core.vsengsaas.visualstudio.com":
-            return "vsodev,";
-        case "canary.online.visualstudio.com":
-            return "vsocanary,";
-        default:
-            return "";
-    }
-}
 
-async function loginWithoutLocalServer(clientId: string, environment: Environment, adfs: boolean, tenantId: string): Promise<TokenResponse> {
-    const callbackUri: vscode.Uri = await vscode.env.asExternalUri(vscode.Uri.parse(`${vscode.env.uriScheme}://ms-vscode.azure-account`));
+export async function loginWithPrompt(clientId: string, adfs: boolean, dataverseUrl: string, openUri: (url: string) => Promise<void>, redirectTimeout: () => Promise<void>): Promise<Token> {
     const nonce: string = crypto.randomBytes(16).toString("base64");
-    const port: string | number = (callbackUri.authority.match(/:([0-9]*)$/) || [])[1] || (callbackUri.scheme === "https" ? 443 : 80);
-    const callbackEnvironment: string = getCallbackEnvironment(callbackUri);
-    const state: string = `${callbackEnvironment}${port},${encodeURIComponent(nonce)},${encodeURIComponent(callbackUri.query)}`;
-    const signInUrl: string = `${environment.activeDirectoryEndpointUrl}${adfs ? "" : `${tenantId}/`}oauth2/authorize`;
-    let uri: vscode.Uri = vscode.Uri.parse(signInUrl);
-    uri = uri.with({
-        query: `response_type=code&client_id=${encodeURIComponent(clientId)}&redirect_uri=${redirectUrlAAD}&state=${state}&resource=${environment.activeDirectoryResourceId}&prompt=select_account`,
-    });
-    void vscode.env.openExternal(uri);
-    const timeoutPromise = new Promise((_resolve: (value: TokenResponse) => void, reject) => {
-        const wait = setTimeout(() => {
-            clearTimeout(wait);
-            reject("Login timed out.");
-        }, 1000 * 60 * 5);
-    });
-    return Promise.race([exchangeCodeForToken(clientId, environment, tenantId, redirectUrlAAD, state), timeoutPromise]);
-}
-export async function loginWithPrompt(clientId: string, environment: Environment, adfs: boolean, tenantId: string, openUri: (url: string) => Promise<void>, redirectTimeout: () => Promise<void>): Promise<TokenResponse> {
+    const { server, redirectPromise, codePromise } = createServer(nonce);
+    const port: number = await startServer(server, adfs);
+    const requestUrl = tokenEndpointUrl;
+    const redirectUrl: string = `http://localhost:${port}/callback/`;
+
     if (vscode.env.uiKind === vscode.UIKind.Web) {
-        return loginWithoutLocalServer(clientId, environment, adfs, tenantId);
+        //return loginWithoutLocalServer(clientId, environment, adfs, tenantId);
     }
     if (adfs && terminateServer) {
         await terminateServer();
     }
-    const nonce: string = crypto.randomBytes(16).toString("base64");
-    const { server, redirectPromise, codePromise } = createServer(nonce);
+
     if (adfs) {
         //terminateServer = createTerminateServer(server);
     }
     try {
-        const port: number = await startServer(server, adfs);
-        /*
         const clientConfig: msal.Configuration = {
             auth: {
                 clientId: clientId,
-                //authority: `${activeDirEndpointURL}/31c20a23-2ed2-468d-baab-42edf998128b`,
+                authority: `${activeDirectoryEndpointUrl}${genericTenant}/`,
             },
         };
         const pca = new msal.PublicClientApplication(clientConfig);
-        const redirectUrl: string = `https://vscode-redirect.azurewebsites.net/`; //`http://localhost:${port}/callback?nonce=${encodeURIComponent(nonce)}`;
-        //const redirectUrl: string = adfs ? redirectUrlADFS : redirectUrlAAD;
-        const authCodeUrlParameters: msal.AuthorizationUrlRequest = {
-            scopes: [`${environment.dataverseUrl}/user_impersonation`],
-            redirectUri: redirectUrl,
+        const pkceCodes = {
+            challengeMethod: "S256", // Use SHA256 Algorithm
+            verifier: "", // Generate a code verifier for the Auth Code Request first
+            challenge: "", // Generate a code challenge from the previously generated code verifier
         };
+        const cryptoProvider = new msal.CryptoProvider();
+        const generatedCodes = await cryptoProvider.generatePkceCodes();
+        // Set generated PKCE Codes as app variables
+        pkceCodes.verifier = generatedCodes.verifier;
+        pkceCodes.challenge = generatedCodes.challenge;
+
+        const authCodeUrlParameters: msal.AuthorizationUrlRequest = {
+            scopes: [`${dataverseUrl}/user_impersonation`],
+            redirectUri: redirectUrl,
+            codeChallenge: pkceCodes.challenge, // PKCE Code Challenge
+            codeChallengeMethod: pkceCodes.challengeMethod, // PKCE Code Challenge Method
+        };
+
         await openUri(`http://localhost:${port}/signin?nonce=${encodeURIComponent(nonce)}`);
         pca.getAuthCodeUrl(authCodeUrlParameters)
             .then(async (response) => {
@@ -169,51 +119,45 @@ export async function loginWithPrompt(clientId: string, environment: Environment
                 redirectResult.res.writeHead(302, { Location: signInUrl });
                 redirectResult.res.end();
             })
-            .catch((error) => console.log(JSON.stringify(error)));
-*/
-        await openUri(`http://localhost:${port}/signin?nonce=${encodeURIComponent(nonce)}`);
-        // eslint-disable-next-line @typescript-eslint/no-misused-promises
-        const redirectTimer = setTimeout(() => redirectTimeout().catch(console.error), 10 * 1000);
-        const redirectResult: RedirectResult = await redirectPromise;
-        if ("err" in redirectResult) {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            const { err, res } = redirectResult;
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-            res.writeHead(302, { Location: `/?error=${encodeURIComponent((err && err.message) || "Unknown error")}` });
-            res.end();
-            throw err;
-        }
-        clearTimeout(redirectTimer);
-        const host: string = redirectResult.req.headers.host || "";
-        const updatedPortStr: string = (/^[^:]+:(\d+)$/.exec(Array.isArray(host) ? host[0] : host) || [])[1];
-        const updatedPort: number = updatedPortStr ? parseInt(updatedPortStr, 10) : port;
-        const state: string = `${updatedPort},${encodeURIComponent(nonce)}`;
-        const redirectUrl: string = adfs ? redirectUrlADFS : redirectUrlAAD;
-        // const signInUrl: string = `${environment.activeDirectoryEndpointUrl}${adfs ? "" : `${tenantId}/`}oauth2/authorize?response_type=code&client_id=${encodeURIComponent(clientId)}&redirect_uri=${encodeURIComponent(
-        //     redirectUrl,
-        // )}&state=${state}&resource=${encodeURIComponent(environment.dataverseUrl)}&prompt=select_account`;
-        const signInUrl: string = `${environment.activeDirectoryEndpointUrl}${adfs ? "" : `${tenantId}/`}oauth2/authorize?response_type=code&client_id=${encodeURIComponent(clientId)}&redirect_uri=${encodeURIComponent(
-            redirectUrl,
-        )}&state=${state}&scope=${encodeURIComponent(environment.dataverseUrl + "/user_impersonation")}&prompt=select_account`;
-        // const signInUrl: string = `${environment.activeDirectoryEndpointUrl}${adfs ? "" : `${tenantId}/`}oauth2/authorize?response_type=code&client_id=${encodeURIComponent(clientId)}&resource=${encodeURIComponent(
-        //     environment.dataverseUrl,
-        // )}&state=${state}&redirect_uri=${encodeURIComponent(redirectUrl)}&prompt=select_account`;
-        // const signInUrl: string = `https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=${encodeURIComponent(clientId)}&response_type=code&redirect_uri=${encodeURIComponent(
-        //     redirectUrl,
-        // )}&response_mode=query&scope=${encodeURIComponent(environment.dataverseUrl + "/user_impersonation")}&state=${state}&prompt=select_account`;
-        redirectResult.res.writeHead(302, { Location: signInUrl });
-        redirectResult.res.end();
+            .catch((error) => {
+                console.log(JSON.stringify(error));
+                throw error;
+            });
+
         const codeResult: CodeResult = await codePromise;
         const serverResponse: ServerResponse = codeResult.res;
         try {
             if ("err" in codeResult) {
                 throw codeResult.err;
             }
-            const tokenResponse: TokenResponse = await getTokenWithAuthorizationCode(clientId, environment, redirectUrl, tenantId, codeResult.code);
-            serverResponse.writeHead(302, { Location: "/" });
-            serverResponse.end();
-            return tokenResponse;
-        } catch (err) {
+
+            axios.default.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
+            const params = new url.URLSearchParams({
+                grant_type: "authorization_code",
+                code: codeResult.code,
+                redirect_uri: redirectUrl,
+                client_id: clientId,
+                code_verifier: pkceCodes.verifier,
+            });
+            const config = {
+                headers: {
+                    Origin: "http://localhost",
+                },
+            };
+
+            let resp = await axios.default.post(requestUrl, params.toString(), config).catch((error) => {
+                console.log(`ERROR: ${JSON.stringify(error.response.data)}`);
+                throw error;
+            });
+            if (resp) {
+                console.log(resp.data.access_token);
+                serverResponse.writeHead(302, { Location: "/" });
+                serverResponse.end();
+                return resp.data;
+            } else {
+                throw error("Unable to fetch token");
+            }
+        } catch (err: any) {
             // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
             serverResponse.writeHead(302, {
                 Location: `/?error=${encodeURIComponent((err && err.message) || "Unknown error")}`,
@@ -225,5 +169,32 @@ export async function loginWithPrompt(clientId: string, environment: Environment
         setTimeout(() => {
             server.close();
         }, 5000);
+    }
+}
+
+export async function loginWithRefreshToken(clientId: string, dataverseUrl: string, refreshToken: string): Promise<Token | undefined> {
+    const requestUrl = tokenEndpointUrl;
+
+    axios.default.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
+    const params = new url.URLSearchParams({
+        grant_type: "refresh_token",
+        client_id: clientId,
+        refresh_token: refreshToken,
+    });
+    const config = {
+        headers: {
+            Origin: "http://localhost",
+        },
+    };
+
+    let resp = await axios.default.post(requestUrl, params.toString(), config).catch((error) => {
+        console.log(`ERROR: ${JSON.stringify(error.response.data)}`);
+        throw error;
+    });
+    if (resp) {
+        console.log(resp.data.access_token);
+        return resp.data;
+    } else {
+        throw error("Unable to fetch token");
     }
 }

@@ -31,7 +31,7 @@ export class DataverseConnectionDataProvider implements vscode.TreeDataProvider<
             if (check1) {
                 let childTree: DataverseConnectionTreeItem[] = [];
                 childTree.push(new DataverseConnectionTreeItem(check1.environmentUrl, undefined, vscode.TreeItemCollapsibleState.None, 3));
-                childTree.push(new DataverseConnectionTreeItem(check1.userName, undefined, vscode.TreeItemCollapsibleState.None, 3));
+                childTree.push(new DataverseConnectionTreeItem(check1.userName!, undefined, vscode.TreeItemCollapsibleState.None, 3));
                 return Promise.resolve(childTree);
             } else {
                 const check2 = this.connections.find((c) => c.environmentUrl === element.label || c.userName === element.label);
@@ -44,7 +44,7 @@ export class DataverseConnectionDataProvider implements vscode.TreeDataProvider<
             }
         } else {
             // Parent
-            const results = groupBy(this.connections, (c) => c.connectionType!);
+            const results = groupBy(this.connections, (c) => c.environmentType!);
             let parentTree: DataverseConnectionTreeItem[] = [];
             environmentTypes.map((t) => {
                 if (results[t]) {
@@ -68,13 +68,13 @@ export class DataverseConnectionDataProvider implements vscode.TreeDataProvider<
         // prettier-ignore
         const filteredConnections = conns
             ? conns.filter((c) => {
-                if (c.connectionType === connType) {
+                if (c.environmentType === connType) {
                     return c;
                 }
             })
             : [];
 
-        const finalConnections = filteredConnections.map((fc) => toConnections(fc.connectionName, fc.userName));
+        const finalConnections = filteredConnections.map((fc) => toConnections(fc.connectionName, fc.userName!));
         return finalConnections;
     }
 

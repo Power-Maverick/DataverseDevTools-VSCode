@@ -21,10 +21,12 @@ export class ConnectionDetailsView extends Panel {
         const compiled = _.template(fileHtml);
         const viewModel = {
             connName: this.conn?.connectionName ?? "--",
-            connType: this.conn?.connectionType ?? "--",
+            connType: this.conn?.environmentType ?? "--",
             envUrl: this.conn?.environmentUrl ?? "--",
+            loginType: this.conn?.loginType ?? "--",
             userName: this.conn?.userName ?? "--",
             token: this.conn?.currentAccessToken ?? "--",
+            refreshToken: this.conn?.refreshToken ?? "--",
         };
 
         // if (this._images && this._images.length > 0) {
