@@ -31,7 +31,7 @@ export class DataverseConnectionDataProvider implements vscode.TreeDataProvider<
             if (check1) {
                 let childTree: DataverseConnectionTreeItem[] = [];
                 childTree.push(new DataverseConnectionTreeItem(check1.environmentUrl, undefined, vscode.TreeItemCollapsibleState.None, 3));
-                childTree.push(new DataverseConnectionTreeItem(check1.userName, undefined, vscode.TreeItemCollapsibleState.None, 3));
+                childTree.push(new DataverseConnectionTreeItem(check1.userName!, undefined, vscode.TreeItemCollapsibleState.None, 3));
                 return Promise.resolve(childTree);
             } else {
                 const check2 = this.connections.find((c) => c.environmentUrl === element.label || c.userName === element.label);
@@ -74,7 +74,7 @@ export class DataverseConnectionDataProvider implements vscode.TreeDataProvider<
             })
             : [];
 
-        const finalConnections = filteredConnections.map((fc) => toConnections(fc.connectionName, fc.userName));
+        const finalConnections = filteredConnections.map((fc) => toConnections(fc.connectionName, fc.userName!));
         return finalConnections;
     }
 

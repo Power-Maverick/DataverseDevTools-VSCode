@@ -8,9 +8,10 @@ export interface IConnection {
     loginType: string;
     environmentType?: string;
     environmentUrl: string;
-    userName: string;
-    password: string;
+    userName?: string;
+    password?: string;
     currentAccessToken?: string;
+    refreshToken?: string;
 }
 
 export interface Token {

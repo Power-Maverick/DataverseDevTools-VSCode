@@ -1,11 +1,12 @@
 import * as vscode from "vscode";
 import fetch from "node-fetch";
 import { v4 as uuid } from "uuid";
-import { apiPartUrl, connectionCurrentStoreKey, maxRetries } from "../utils/Constants";
+import { apiPartUrl, connectionCurrentStoreKey, defaultDataverseClientId, loginTypes, maxRetries } from "../utils/Constants";
 import { IConnection } from "../utils/Interfaces";
 import { State } from "../utils/State";
 import { DataverseHelper } from "./dataverseHelper";
-import { loginWithUsernamePassword } from "../login/login";
+import { loginWithPrompt, loginWithRefreshToken, loginWithUsernamePassword } from "../login/login";
+import { openUri } from "../utils/OpenUri";
 
 export class RequestHelper {
     private vsstate: State;
@@ -39,8 +40,21 @@ export class RequestHelper {
                     if (retries && retries > maxRetries) {
                         return undefined;
                     }
-                    const tokenResponse = await loginWithUsernamePassword(currentConnection.environmentUrl, currentConnection.userName, currentConnection.password);
-                    currentConnection.currentAccessToken = tokenResponse.access_token;
+                    let tokenResponse = currentConnection.refreshToken
+                        ? await loginWithRefreshToken(defaultDataverseClientId, currentConnection.environmentUrl, currentConnection.refreshToken)
+                        : await loginWithUsernamePassword(currentConnection.environmentUrl, currentConnection.userName!, currentConnection.password!);
+
+                    if (currentConnection.loginType === loginTypes[1]) {
+                        // Try again with no refresh token
+                        tokenResponse = await loginWithPrompt(defaultDataverseClientId, false, currentConnection.environmentUrl, openUri, redirectTimeout);
+                    }
+
+                    if (tokenResponse) {
+                        currentConnection.currentAccessToken = typeof tokenResponse === "string" ? tokenResponse : tokenResponse.access_token;
+                    } else {
+                        return undefined;
+                    }
+
                     this.vsstate.saveInWorkspace(connectionCurrentStoreKey, currentConnection);
                     return this.requestData(query, retries ? retries + 1 : 1);
                 } else {
@@ -105,3 +119,5 @@ export class RequestHelper {
         }
     }
 }
+
+async function redirectTimeout(): Promise<void> {}

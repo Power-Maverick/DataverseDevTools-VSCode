@@ -47,6 +47,7 @@ export class DataverseHelper {
             if (conn) {
                 const tokenResponse = await this.connectInternal(conn.loginType, conn);
                 conn.currentAccessToken = tokenResponse.access_token!;
+                conn.refreshToken = tokenResponse.refresh_token!;
                 this.vsstate.saveInWorkspace(connectionCurrentStoreKey, conn);
             }
         } catch (err) {
@@ -80,6 +81,7 @@ export class DataverseHelper {
                         progress.report({ increment: 0, message: "Connecting to environment..." });
                         const tokenResponse = await this.connectInternal(conn.loginType, conn);
                         conn.currentAccessToken = tokenResponse.access_token!;
+                        conn.refreshToken = tokenResponse.refresh_token!;
                         progress.report({ increment: 10 });
                         this.vsstate.saveInWorkspace(connectionCurrentStoreKey, conn);
                         progress.report({ increment: 30, message: "Getting entity metadata..." });
@@ -254,8 +256,8 @@ export class DataverseHelper {
         let conn: IConnection = {
             environmentUrl: envUrlUserResponse,
             loginType: logintypeResponse,
-            userName: usernameUserResponse!,
-            password: passwordUserResponse!,
+            userName: usernameUserResponse,
+            password: passwordUserResponse,
             connectionName: connNameUserResponse,
         };
 
@@ -269,7 +271,7 @@ export class DataverseHelper {
 
     async connectInternal(loginType: string, conn: IConnection): Promise<Token> {
         return loginType === loginTypes[0]
-            ? await loginWithUsernamePassword(conn.environmentUrl, conn.userName, conn.password)
+            ? await loginWithUsernamePassword(conn.environmentUrl, conn.userName!, conn.password!)
             : await loginWithPrompt(defaultDataverseClientId, false, conn.environmentUrl, openUri, redirectTimeout);
     }
 

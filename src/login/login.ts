@@ -239,3 +239,24 @@ export async function loginWithPrompt(clientId: string, adfs: boolean, dataverse
         }, 5000);
     }
 }
+
+export async function loginWithRefreshToken(clientId: string, dataverseUrl: string, refreshToken: string): Promise<string | undefined> {
+    const clientConfig: msal.Configuration = {
+        auth: {
+            clientId: clientId,
+            authority: `${activeDirectoryEndpointUrl}${genericTenant}/`,
+        },
+    };
+    const pca = new msal.PublicClientApplication(clientConfig);
+    const refreshTokenRequest = {
+        refreshToken: refreshToken,
+        scopes: [`${dataverseUrl}/user_impersonation`],
+    };
+
+    const resp = await pca.acquireTokenByRefreshToken(refreshTokenRequest);
+    if (resp) {
+        return resp.accessToken;
+    } else {
+        return undefined;
+    }
+}
