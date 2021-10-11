@@ -92,19 +92,24 @@
                     "group": "navigation@2"
                 },
                 {
+                    "command": "dvdt.explorer.webresources.smartMatch",
+                    "when": "view == dvWebResources",
+                    "group": "navigation@1"
+                },
+                {
                     "command": "dvdt.explorer.webresources.filteron",
                     "when": "view == dvWebResources && !devtools.wrFiltered",
-                    "group": "navigation@1"
+                    "group": "navigation@2"
                 },
                 {
                     "command": "dvdt.explorer.webresources.filteroff",
                     "when": "view == dvWebResources && devtools.wrFiltered",
-                    "group": "navigation@1"
+                    "group": "navigation@2"
                 },
                 {
                     "command": "dvdt.explorer.webresources.loadWebResources",
                     "when": "view == dvWebResources",
-                    "group": "navigation@2"
+                    "group": "navigation@3"
                 }
             ],
             "view/item/context": [
@@ -303,6 +308,15 @@
                 "icon": {
                     "light": "resources/light/filter-off.svg",
                     "dark": "resources/dark/filter-off.svg"
+                }
+            },
+            {
+                "command": "dvdt.explorer.webresources.smartMatch",
+                "title": "Smart Match",
+                "category": "%dvdt.explorer.category%",
+                "icon": {
+                    "light": "resources/light/light-bulb.svg",
+                    "dark": "resources/dark/light-bulb.svg"
                 }
             }
         ],
