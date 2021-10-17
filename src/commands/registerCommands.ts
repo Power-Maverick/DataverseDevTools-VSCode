@@ -124,6 +124,16 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
                 }
             },
         },
+        {
+            command: "dvdt.commands.createTSFile",
+            callback: async (uri: vscode.Uri) => {
+                try {
+                    await templateHelper.addTypeScriptFile(uri.fsPath);
+                } catch (error) {
+                    handleErrors(error, "initTS");
+                }
+            },
+        },
     );
     cmds.forEach((c) => {
         vscontext.subscriptions.push(vscode.commands.registerCommand(c.command, c.callback));

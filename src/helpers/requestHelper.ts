@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import fetch from "node-fetch";
 import { v4 as uuid } from "uuid";
-import { apiPartUrl, connectionCurrentStoreKey, defaultDataverseClientId, loginTypes, maxRetries } from "../utils/Constants";
+import { apiPartUrl, connectionCurrentStoreKey, customDataverseClientId, loginTypes, maxRetries } from "../utils/Constants";
 import { IConnection } from "../utils/Interfaces";
 import { State } from "../utils/State";
 import { DataverseHelper } from "./dataverseHelper";
@@ -41,12 +41,12 @@ export class RequestHelper {
                         return undefined;
                     }
                     let tokenResponse = currentConnection.refreshToken
-                        ? await loginWithRefreshToken(defaultDataverseClientId, currentConnection.environmentUrl, currentConnection.refreshToken)
+                        ? await loginWithRefreshToken(customDataverseClientId, currentConnection.environmentUrl, currentConnection.refreshToken)
                         : await loginWithUsernamePassword(currentConnection.environmentUrl, currentConnection.userName!, currentConnection.password!);
 
                     if (!tokenResponse && currentConnection.loginType === loginTypes[1]) {
                         // Try again with no refresh token
-                        tokenResponse = await loginWithPrompt(defaultDataverseClientId, false, currentConnection.environmentUrl, openUri, redirectTimeout);
+                        tokenResponse = await loginWithPrompt(customDataverseClientId, false, currentConnection.environmentUrl, openUri, redirectTimeout);
                     }
 
                     if (tokenResponse) {
