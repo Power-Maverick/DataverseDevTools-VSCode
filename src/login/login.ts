@@ -7,7 +7,7 @@ import * as crypto from "crypto";
 import fetch from "node-fetch";
 import { error } from "console";
 import { ServerResponse } from "http";
-import { activeDirectoryEndpointUrl, defaultDataverseClientId, genericTenant, tokenEndpointUrl } from "../utils/Constants";
+import { activeDirectoryEndpointUrl, customDataverseClientId, defaultDataverseClientId, genericTenant, tokenEndpointUrl } from "../utils/Constants";
 import { CodeResult, createServer, RedirectResult, startServer } from "./server";
 import { Token } from "../utils/Interfaces";
 

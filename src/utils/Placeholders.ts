@@ -46,6 +46,18 @@ export class Placeholders {
                     prompt: this.ipWRUniqueName.prompt,
                 };
                 break;
+            case this.tsNamespace:
+                inbOptions = {
+                    placeHolder: this.ipTSNamespace.placeHolderText,
+                    prompt: this.ipTSNamespace.prompt,
+                };
+                break;
+            case this.tsFileName:
+                inbOptions = {
+                    placeHolder: this.ipTSFileName.placeHolderText,
+                    prompt: this.ipTSFileName.prompt,
+                };
+                break;
             default:
                 inbOptions = { placeHolder: "", prompt: "" };
                 break;
@@ -96,6 +108,8 @@ export class Placeholders {
     public static solutionSelection: string = "SolutionSelection";
     public static wrDisplayName: string = "WR-DisplayName";
     public static wrUniqueName: string = "WR-UniqueName";
+    public static tsNamespace: string = "TS-Namespace";
+    public static tsFileName: string = "TS-FileName";
 
     public static required: string = "[Required]";
     public static optional: string = "[Optional]";
@@ -147,5 +161,13 @@ export class Placeholders {
     private static ipWRUniqueName: IPlaceholder = {
         placeHolderText: `${Placeholders.required} Unique Name [DO NOT INCLUDE prefix] (e.g. /scripts/forms/myawesomescript.js)`,
         prompt: `Enter your Web Resource unique name without the prefix`,
+    };
+    private static ipTSNamespace: IPlaceholder = {
+        placeHolderText: `${Placeholders.optional} Namespace (e.g. DV)`,
+        prompt: `Enter the namespace for your TypeScript project`,
+    };
+    private static ipTSFileName: IPlaceholder = {
+        placeHolderText: `${Placeholders.required} test [DO NOT INCLUDE .ts]`,
+        prompt: `Enter the name of the TypeScript file`,
     };
 }
