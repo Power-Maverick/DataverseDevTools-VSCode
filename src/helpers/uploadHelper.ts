@@ -3,14 +3,16 @@ import * as vscode from "vscode";
 import * as path from "path";
 import { copyFolderOrFile, getFileExtension, getFileName, getRelativeFilePath, getWorkspaceFolder, readFileSync, writeFileSync } from "../utils/FileSystem";
 import { jsonToXML, xmlToJSON } from "../utils/Parsers";
-import { ILinkerFile, ILinkerRes, IWebResource, IWebResources } from "../utils/Interfaces";
+import { ILinkerFile, ILinkerRes, ISmartMatchRecord, IWebResource, IWebResources } from "../utils/Interfaces";
 import { DataverseHelper } from "./dataverseHelper";
 import { State } from "../utils/State";
-import { WebResourceType, wrDefinitionsStoreKey } from "../utils/Constants";
+import { smartMatchStoreKey, WebResourceType, wrDefinitionsStoreKey } from "../utils/Constants";
 import { Placeholders } from "../utils/Placeholders";
 import { ErrorMessages } from "../utils/ErrorMessages";
 import { reduce } from "conditional-reduce";
 import { encodeToBase64, extractGuid } from "../utils/ExtensionMethods";
+import { ViewBase } from "../views/ViewBase";
+import { SmartMatchView } from "../views/SmartMatchView";
 
 export class UploadHelper {
     private vsstate: State;
@@ -66,6 +68,50 @@ export class UploadHelper {
                     return [linkerFileDataJson.DVDT.WebResources.Resource[attrName as keyof ILinkerRes]];
                 }
             }
+        }
+    }
+
+    public async smartMatchWebResources(view: ViewBase): Promise<void> {
+        const jsonWRs: IWebResources = this.vsstate.getFromWorkspace(wrDefinitionsStoreKey);
+        let smartMatches: ISmartMatchRecord[] = [];
+
+        if (jsonWRs) {
+            const jsFiles = await vscode.workspace.findFiles("**/*.js", "/node_modules/");
+
+            jsFiles.forEach((jsFile) => {
+                const localFileName = getFileName(jsFile.fsPath);
+                const localRelativePath = getRelativeFilePath(jsFile.fsPath, getWorkspaceFolder()?.fsPath!);
+                console.log(localRelativePath);
+
+                // Match with Display Name exact match
+                let wrFoundByName = jsonWRs.value.find((wr) => wr.displayname?.toLowerCase() === localFileName.toLowerCase());
+                if (wrFoundByName) {
+                    smartMatches.push({
+                        wrId: wrFoundByName.webresourceid!,
+                        wrDisplayName: wrFoundByName.displayname!,
+                        wrPath: wrFoundByName.name!,
+                        localFileName: localFileName,
+                        localFilePath: localRelativePath,
+                        confidenceLevel: 100,
+                    });
+                } else {
+                    // Match with File Name search in Server Path
+                    let wrFoundByNameSearch = jsonWRs.value.find((wr) => wr.name?.toLowerCase()?.search(localFileName.toLowerCase())! > 0);
+                    if (wrFoundByNameSearch) {
+                        smartMatches.push({
+                            wrId: wrFoundByNameSearch.webresourceid!,
+                            wrDisplayName: wrFoundByNameSearch.displayname!,
+                            wrPath: wrFoundByNameSearch.name!,
+                            localFileName: localFileName,
+                            localFilePath: localRelativePath,
+                            confidenceLevel: 60,
+                        });
+                    }
+                }
+            });
+
+            const webview = await view.getWebView({ type: "showSmartMatch", title: "Smart Match" });
+            new SmartMatchView(smartMatches, webview, this.vscontext);
         }
     }
 

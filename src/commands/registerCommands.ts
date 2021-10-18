@@ -126,8 +126,9 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
         },
         {
             command: "dvdt.explorer.webresources.smartMatch",
-            callback: () => {
+            callback: async () => {
                 try {
+                    await uploadHelper.smartMatchWebResources(views);
                 } catch (error) {
                     errorHandler.log(error, "smartMatch");
                 }

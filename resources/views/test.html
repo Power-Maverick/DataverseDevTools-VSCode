@@ -1,17 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="utf-8" />
-        <!-- <link rel="shortcut icon" href="/favicon.ico" /> -->
-        <meta name="viewport" content="width=device-width,initial-scale=1" />
-        <meta name="theme-color" content="#000000" />
-        <!-- <link rel="manifest" href="/manifest.json" /> -->
-        <title>React App</title>
-        <link href="css/main.css" rel="stylesheet" />
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" type="text/css" href="./css/base.css" />
+        <!--Import Google Icon Font-->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     </head>
     <body>
-        <noscript>You need to enable JavaScript to run this app.</noscript>
-        <div id="root"></div>
-        <script src="js/main.js"></script>
+        <div class="main-container">
+            <!-- Insert you test HTML -->
+            <div id="header">
+                <button class="btn" id="btnLink100Only">Link 100% Confident Match</button>
+                <button class="btn" id="btnLinkAll">Link All</button>
+            </div>
+            <div id="wrs" class="col s12">
+                <table>
+                    <thead>
+                        <th>Web Resource Id</th>
+                        <th>Display Name</th>
+                        <th>Local File Name</th>
+                        <th>Server Path</th>
+                        <th>Local Path</th>
+                        <th>Confidence Level</th>
+                        <th>Linked Status</th>
+                    </thead>
+                    <tr>
+                        <td>Test</td>
+                        <td>Test</td>
+                        <td>Test</td>
+                        <td>Test</td>
+                        <td>Test</td>
+                        <td>100</td>
+                        <td>
+                            <i class="material-icons">check_circle</i>
+                            <i class="material-icons">cancel</i>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <script src="./js/base.js"></script>
     </body>
 </html>
