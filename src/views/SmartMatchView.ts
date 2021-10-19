@@ -4,14 +4,55 @@ import { ISmartMatchRecord } from "../utils/Interfaces";
 import { Panel } from "./PanelBase";
 import { readFileSync } from "../utils/FileSystem";
 import _ = require("lodash");
+import { UploadHelper } from "../helpers/uploadHelper";
 
 export class SmartMatchView extends Panel {
-    smartMatches?: ISmartMatchRecord[];
+    smartMatches: ISmartMatchRecord[] = [];
 
-    constructor(matches: ISmartMatchRecord[], webview: vscode.WebviewPanel, vscontext: vscode.ExtensionContext) {
+    constructor(matches: ISmartMatchRecord[], webview: vscode.WebviewPanel, vscontext: vscode.ExtensionContext, private uploadHelper: UploadHelper) {
         super({ panel: webview, extensionUri: vscontext.extensionUri, webViewFileName: "smartmatch.html" });
         this.smartMatches = matches;
         // Set the webview's initial html content
+        super.update();
+
+        // Handle messages from the webview
+        this.webViewPanel.webview.onDidReceiveMessage(({ command, value }) => {
+            switch (command) {
+                case "alert":
+                    if (value) {
+                        vscode.window.showInformationMessage(value);
+                    }
+                    break;
+                case "link":
+                    if (value === "100only") {
+                        this.linkFiles(
+                            this.smartMatches?.filter((sm) => {
+                                if (sm.confidenceLevel === 100 && !sm.linked) {
+                                    return sm;
+                                }
+                            }),
+                        );
+                    } else if (value === "all") {
+                        this.linkFiles(
+                            this.smartMatches?.filter((sm) => {
+                                if (!sm.linked) {
+                                    return sm;
+                                }
+                            }),
+                        );
+                    }
+            }
+        });
+    }
+
+    linkFiles(sm: ISmartMatchRecord[] | undefined) {
+        if (sm) {
+            sm.forEach((r) => {
+                this.uploadHelper.linkWebResourceById(r.localFullPath, r.wrId);
+                this.smartMatches[this.smartMatches.findIndex((obj) => obj.wrId === r.wrId)].linked = true;
+            });
+        }
+        vscode.window.showInformationMessage(`Smart Match linked ${sm ? sm.length : 0} records`);
         super.update();
     }
 
@@ -33,7 +74,7 @@ export class SmartMatchView extends Panel {
                 viewModel.matches += `<td>${a.wrPath}</td>`;
                 viewModel.matches += `<td>${a.localFilePath}</td>`;
                 viewModel.matches += `<td>${a.confidenceLevel}</td>`;
-                viewModel.matches += `<td><i class="material-icons">cancel</i></td>`;
+                viewModel.matches += `<td><i class="material-icons">${a.linked ? "check_circle" : "cancel"}</i></td>`;
                 viewModel.matches += `</tr>`;
             });
         }

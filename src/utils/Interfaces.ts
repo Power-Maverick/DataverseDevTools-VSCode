@@ -265,5 +265,7 @@ export interface ISmartMatchRecord {
     wrPath: string;
     localFileName: string;
     localFilePath: string;
+    localFullPath: string;
     confidenceLevel: number;
+    linked: boolean;
 }

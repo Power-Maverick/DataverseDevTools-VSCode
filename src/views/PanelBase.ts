@@ -27,17 +27,6 @@ export class Panel {
             null,
             this.disposables,
         );
-
-        // Handle messages from the webview
-        this.webViewPanel.webview.onDidReceiveMessage(({ command, value }) => {
-            switch (command) {
-                case "alert":
-                    if (value) {
-                        vscode.window.showInformationMessage(value);
-                    }
-                    break;
-            }
-        });
     }
 
     public dispose() {
