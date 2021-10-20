@@ -41,6 +41,17 @@ export class SmartMatchView extends Panel {
                             }),
                         );
                     }
+                    break;
+                case "upload":
+                    vscode.window.showInformationMessage("Uploading");
+                    this.uploadFiles(
+                        this.smartMatches?.filter((sm) => {
+                            if (sm.linked) {
+                                return sm;
+                            }
+                        }),
+                    );
+                    break;
             }
         });
     }
@@ -54,6 +65,17 @@ export class SmartMatchView extends Panel {
         }
         vscode.window.showInformationMessage(`Smart Match linked ${sm ? sm.length : 0} records`);
         super.update();
+    }
+
+    async uploadFiles(sm: ISmartMatchRecord[] | undefined) {
+        if (sm) {
+            await Promise.all(
+                sm.map(async (rec) => {
+                    await this.uploadHelper.uploadWebResource(rec.localFullPath);
+                }),
+            );
+        }
+        vscode.window.showInformationMessage(`Uploaded ${sm ? sm.length : 0} records`);
     }
 
     getHtmlForWebview(webviewFileName: string): string {

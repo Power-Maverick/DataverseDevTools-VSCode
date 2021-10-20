@@ -363,8 +363,9 @@ button.btn-floating {
 .fixed-action-btn {
     position: fixed;
     right: 23px;
-    bottom: 23px;
-    padding-top: 15px;
+    top: 34px;
+    /* bottom: 23px; */
+    /* padding-top: 15px; */
     margin-bottom: 0;
     z-index: 997;
 }
@@ -1901,6 +1902,10 @@ th {
     float: right !important;
 }
 
+.pad-left-8 {
+    padding-left: 8px;
+}
+
 .trailing {
     position: absolute;
     right: 15px;
@@ -1995,4 +2000,26 @@ th {
         width: 100%;
         border-radius: 0;
     }
+}
+
+/*******************
+  Highlighter
+*******************/
+
+.realistic-marker-highlight {
+    position: relative;
+    color: black;
+}
+.realistic-marker-highlight:before {
+    content: "";
+    /* background-color: #ff6db7; */
+    background-color: #eeff41;
+    width: 100%;
+    height: 1.4em;
+    position: absolute;
+    z-index: -1;
+    filter: url(#marker-shape);
+    left: -0.25em;
+    top: 0.1em;
+    padding: 0 0.25em;
 }

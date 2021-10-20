@@ -4,6 +4,7 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" type="text/css" href="./css/base.css" />
+
         <!--Import Google Icon Font-->
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -12,9 +13,25 @@
     <body>
         <div class="main-container">
             <!-- Insert you test HTML -->
+            <br />
+            <br />
             <div id="header">
                 <button class="btn" id="btnLink100Only">Link 100% Confident Match</button>
                 <button class="btn" id="btnLinkAll">Link All</button>
+                <div class="fixed-action-btn">
+                    <button class="btn" id="btnUpload"><i class="material-icons right pad-left-8">cloud_upload</i>Upload All</button>
+                </div>
+            </div>
+            <div>
+                <p>The above button will only link the files locally but &nbsp;<span class="realistic-marker-highlight">won't upload anything to Dataverse.</span></p>
+                <svg xmlns="//www.w3.org/2000/svg" version="1.1" class="svg-filters" style="display: none">
+                    <defs>
+                        <filter id="marker-shape">
+                            <feTurbulence type="fractalNoise" baseFrequency="0 0.15" numOctaves="1" result="warp" />
+                            <feDisplacementMap xChannelSelector="R" yChannelSelector="G" scale="30" in="SourceGraphic" in2="warp" />
+                        </filter>
+                    </defs>
+                </svg>
             </div>
             <div id="wrs" class="col s12">
                 <table>
