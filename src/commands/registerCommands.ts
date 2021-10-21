@@ -12,18 +12,18 @@ import { ICommand, IConnection } from "../utils/Interfaces";
 import { ViewBase } from "../views/ViewBase";
 import { addConnection } from "./connections";
 import { openUri } from "../utils/OpenUri";
+import { ErrorHandler } from "../helpers/errorHandler";
 
 let dvStatusBarItem: vscode.StatusBarItem;
-let reporter: TelemetryReporter;
 
 export async function registerCommands(vscontext: vscode.ExtensionContext, tr: TelemetryReporter): Promise<void> {
-    reporter = tr;
     const dvHelper = new DataverseHelper(vscontext);
     const views = new ViewBase(vscontext);
     const cliHelper = new CLIHelper(vscontext);
     const templateHelper = new TemplateHelper(vscontext);
     const uploadHelper = new UploadHelper(vscontext, dvHelper);
     const typingHelper = new TypingsHelper(vscontext, dvHelper);
+    const errorHandler = new ErrorHandler(tr);
 
     dvStatusBarItem = vscode.window.createStatusBarItem(connectionStatusBarUniqueId, vscode.StatusBarAlignment.Left);
     vscontext.subscriptions.push(dvStatusBarItem);
@@ -35,7 +35,7 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
                 try {
                     await addConnection(dvHelper);
                 } catch (error) {
-                    handleErrors(error, "addConnection");
+                    errorHandler.log(error, "addConnection");
                 }
             },
         },
@@ -45,7 +45,7 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
                 try {
                     await dvHelper.deleteConnection(connItem);
                 } catch (error) {
-                    handleErrors(error, "deleteConnection");
+                    errorHandler.log(error, "deleteConnection");
                 }
             },
         },
@@ -55,7 +55,7 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
                 try {
                     dvHelper.openEnvironment(connItem);
                 } catch (error) {
-                    handleErrors(error, "openConnection");
+                    errorHandler.log(error, "openConnection");
                 }
             },
         },
@@ -66,7 +66,7 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
                     const conn = await dvHelper.connectToDataverse(connItem);
                     updateConnectionStatusBar(conn);
                 } catch (error) {
-                    handleErrors(error, "connectDataverse");
+                    errorHandler.log(error, "connectDataverse");
                 }
             },
         },
@@ -76,7 +76,7 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
                 try {
                     await dvHelper.showEnvironmentDetails(connItem, views);
                 } catch (error) {
-                    handleErrors(error, "showConnectionDetails");
+                    errorHandler.log(error, "showConnectionDetails");
                 }
             },
         },
@@ -86,7 +86,7 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
                 try {
                     await dvHelper.showEntityDetails(enItem, views);
                 } catch (error) {
-                    handleErrors(error, "showEntityDetails");
+                    errorHandler.log(error, "showEntityDetails");
                 }
             },
         },
@@ -100,7 +100,7 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
                 try {
                     await templateHelper.initiateTypeScriptProject(uri.fsPath);
                 } catch (error) {
-                    handleErrors(error, "initTS");
+                    errorHandler.log(error, "initTS");
                 }
             },
         },
@@ -110,7 +110,7 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
                 try {
                     await uploadHelper.uploadWebResource(uri.fsPath);
                 } catch (error) {
-                    handleErrors(error, "uploadWebResource");
+                    errorHandler.log(error, "uploadWebResource");
                 }
             },
         },
@@ -120,7 +120,17 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
                 try {
                     await typingHelper.generateTyping(enItem.desc!);
                 } catch (error) {
-                    handleErrors(error, "generateTyping");
+                    errorHandler.log(error, "generateTyping");
+                }
+            },
+        },
+        {
+            command: "dvdt.explorer.webresources.smartMatch",
+            callback: async () => {
+                try {
+                    await uploadHelper.smartMatchWebResources(views);
+                } catch (error) {
+                    errorHandler.log(error, "smartMatch");
                 }
             },
         },
@@ -151,16 +161,4 @@ export function updateConnectionStatusBar(conn: IConnection | undefined): void {
     } else {
         dvStatusBarItem.hide();
     }
-}
-
-export function handleErrors(err: any, cmd: string) {
-    const btnLogError: vscode.MessageItem = { title: "Log error on GitHub" };
-    vscode.window
-        .showErrorMessage(`${extensionName}: Error occured. Please report it on GitHub with the activity you tried to perform along with Date & Time.`, btnLogError)
-        .then(async (result: vscode.MessageItem | undefined) => {
-            if (result === btnLogError) {
-                await openUri("https://github.com/Power-Maverick/DataverseDevTools-VSCode/issues/new/choose");
-            }
-        });
-    reporter.sendTelemetryException(err, { command: cmd });
 }

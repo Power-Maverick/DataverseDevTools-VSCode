@@ -27,17 +27,6 @@ export class Panel {
             null,
             this.disposables,
         );
-
-        // Handle messages from the webview
-        this.webViewPanel.webview.onDidReceiveMessage(({ command, value }) => {
-            switch (command) {
-                case "alert":
-                    if (value) {
-                        vscode.window.showInformationMessage(value);
-                    }
-                    break;
-            }
-        });
     }
 
     public dispose() {
@@ -59,43 +48,6 @@ export class Panel {
     }
 
     render(htmlPartial: string) {
-        /* // add some default scripts
-		this.insertScriptAt(0, 'main.js');
-    
-        // these are framework scripts hosted out of node_modules
-		this.insertFrameworkScript('lodash/lodash.min.js');
-		this.insertScriptAt(0, 'iconify.min.js');
-		this.insertFrameworkScript('mustache/mustache.min.js');
-		this.insertFrameworkScript('jquery/dist/jquery.min.js');
-    
-        let cssHtml: string = '';
-		let scriptHtml: string = '';
-	
-		if (this._styleSheets.values && this._styleSheets.values.length > 0) {
-			this._styleSheets.values.forEach(uri => {
-				cssHtml += `<link rel="stylesheet" type="text/css" href="${uri}" />`;
-			});
-		}
-
-		if (this._scripts.values && this._scripts.values.length > 0) {
-			this._scripts.values.forEach(uri => {
-				scriptHtml += `<script src="${uri}"></script>`;
-			});
-		}
-
-		useCsp = typeof useCsp !== "undefined" ? useCsp : typeof this.view.options.useCsp !== "undefined" ? this.view.options.useCsp : true;
-
-		if (!useCsp) {
-			Quickly.warn("This web view does not use a content security policy.  Be careful when entering sensitive information into this form.", undefined, "Learn More", () => opn('https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP'));
-		}
-
-		const cspDeclaration = useCsp ? `<meta http-equiv="Content-Security-Policy" 
-		content="default-src 'none'; 
-		img-src ${this.view.cspSource} https:; 
-		style-src 'self' 'unsafe-inline' ${this.view.cspSource}; 
-		script-src 'unsafe-inline' 'unsafe-eval' ${this.view.cspSource} https://api.iconify.design;">` : "";
-        */
-
         const baseCss = this.getFileUri("resources", "views", "css", "base.css");
         const baseJs = this.getFileUri("resources", "views", "js", "base.js");
 
@@ -104,9 +56,11 @@ export class Panel {
                 <head>
                     <meta charset="UTF-8">
                     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" />
                     <link rel="stylesheet" type="text/css" href="${baseCss}" />
-                    <!--Import Google Icon Font-->
-                    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+                    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+                    <link rel="stylesheet" href="https://static2.sharepointonline.com/files/fabric/office-ui-fabric-core/11.0.0/css/fabric.min.css" />
+
                     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
                     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
                 </head>
@@ -122,7 +76,7 @@ export class Panel {
     getHtmlForWebview(webviewFileName: string): string {
         const pathOnDisk = path.join(this.panelOptions.extensionUri.fsPath, "resources", "views", webviewFileName);
         const fileHtml = readFileSync(pathOnDisk).toString();
-        _.templateSettings.interpolate = /!!{([\s\S]+?)}/g;
+        _.templateSettings.interpolate = /!!@([\s\S]+?)/g;
         const compiled = _.template(fileHtml);
         const viewModel = {};
 

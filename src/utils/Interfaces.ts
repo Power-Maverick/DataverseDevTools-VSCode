@@ -258,3 +258,19 @@ export interface ISolutionComponent {
     ismetadata: boolean;
     _solutionid_value: string;
 }
+
+export interface ISmartMatchRecord {
+    wrId: string;
+    wrDisplayName: string;
+    wrPath: string;
+    localFileName: string;
+    localFilePath: string;
+    localFullPath: string;
+    confidenceLevel: number;
+    linked: boolean;
+}
+
+export interface ILinkView {
+    fp: string;
+    id: string;
+}

@@ -14,6 +14,7 @@ export const connectionCurrentStoreKey: string = `LiveDVConnection`;
 export const entityDefinitionsStoreKey: string = `CurrentEntityDefinitions`;
 export const wrDefinitionsStoreKey: string = `CurrentWRs`;
 export const solDefinitionsStoreKey: string = `CurrentSolutions`;
+export const smartMatchStoreKey: string = `CurrentSmartMatch`;
 export const environmentTypes: string[] = ["Dev", "QA", "UAT", "Prod"];
 export const loginTypes: string[] = ["Username/Password", "Microsoft Login Prompt"];
 export const connectionStatusBarUniqueId: string = `${extensionPrefix}.StatusBarConnectStatus`;
