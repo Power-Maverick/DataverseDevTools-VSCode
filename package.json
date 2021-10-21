@@ -60,6 +60,10 @@
                     "group": "%dvdt.menus.group%"
                 },
                 {
+                    "command": "dvdt.commands.createTSFile",
+                    "group": "%dvdt.menus.group%"
+                },
+                {
                     "command": "dvdt.explorer.webresources.uploadWebResource",
                     "when": "resourceExtname in devtools.resourcesExtn",
                     "group": "%dvdt.menus.group%"
@@ -318,6 +322,11 @@
                     "light": "resources/light/light-bulb.svg",
                     "dark": "resources/dark/light-bulb.svg"
                 }
+            },
+            {
+                "command": "dvdt.commands.createTSFile",
+                "title": "Add Dataverse TS File",
+                "category": "%dvdt.commands.category%"
             }
         ],
         "keybindings": [

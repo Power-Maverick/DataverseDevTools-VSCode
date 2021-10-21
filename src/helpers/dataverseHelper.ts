@@ -17,7 +17,7 @@ import {
     ISolutionComponents,
     Token,
 } from "../utils/Interfaces";
-import { connectionCurrentStoreKey, connectionStoreKey, defaultDataverseClientId, entityDefinitionsStoreKey, environmentTypes, loginTypes, solDefinitionsStoreKey, wrDefinitionsStoreKey } from "../utils/Constants";
+import { connectionCurrentStoreKey, connectionStoreKey, customDataverseClientId, entityDefinitionsStoreKey, environmentTypes, loginTypes, solDefinitionsStoreKey, wrDefinitionsStoreKey } from "../utils/Constants";
 import { DataverseConnectionTreeItem } from "../trees/dataverseConnectionDataProvider";
 import { RequestHelper } from "./requestHelper";
 import { ProgressLocation } from "vscode";
@@ -272,7 +272,7 @@ export class DataverseHelper {
     async connectInternal(loginType: string, conn: IConnection): Promise<Token> {
         return loginType === loginTypes[0]
             ? await loginWithUsernamePassword(conn.environmentUrl, conn.userName!, conn.password!)
-            : await loginWithPrompt(defaultDataverseClientId, false, conn.environmentUrl, openUri, redirectTimeout);
+            : await loginWithPrompt(customDataverseClientId, false, conn.environmentUrl, openUri, redirectTimeout);
     }
 
     saveConnection(connDetail: IConnection) {

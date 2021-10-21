@@ -1,0 +1,9 @@
+export class FILENAME {
+    /* Use typings to create entity specific formContext. Like shown below is for 'Account' */
+    //private static formContext: Xrm.Account;
+
+    static onLoad(executionContext: Xrm.Events.EventContext) {
+        //FILENAME.formContext = executionContext.getFormContext();
+        //FILENAME.formContext.getAttribute("accountnumber").getValue();
+    }
+}
