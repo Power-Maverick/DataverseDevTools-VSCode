@@ -1,14 +1,25 @@
 <br />
 <br />
-<div id="header">
+<nav>
+    <div class="nav-wrapper">
+        <ul id="nav-mobile" class="left hide-on-med-and-down">
+            <li>
+                <button class="btn" id="btnUpload" onclick="uploadAll()"><i class="material-icons right ln32">cloud_upload</i>Upload All Linked</button>
+            </li>
+            <li><button class="btn" id="btnLink100Only" onclick="link100Only()">Link 100% Confidence</button></li>
+            <li><button class="btn" id="btnLinkAll" onclick="linkAll()">Link All</button></li>
+        </ul>
+    </div>
+</nav>
+<!-- <div id="header">
     <button class="btn" id="btnLink100Only" onclick="link100Only()">Link 100% Confidence</button>
     <button class="btn" id="btnLinkAll" onclick="linkAll()">Link All</button>
     <div class="fixed-action-btn">
         <button class="btn" id="btnUpload" onclick="uploadAll()"><i class="material-icons right pad-left-8">cloud_upload</i>Upload All Linked</button>
     </div>
-</div>
+</div> -->
 <div>
-    <p>The <b>LINK</b> buttons will only link the files locally but &nbsp;<span class="realistic-marker-highlight">won't upload anything to Dataverse.</span></p>
+    <p>The <b>LINK</b> buttons will only link the files locally but <span class="realistic-marker-highlight">won't upload anything to Dataverse.</span></p>
     <svg xmlns="//www.w3.org/2000/svg" version="1.1" class="svg-filters" style="display: none">
         <defs>
             <filter id="marker-shape">
@@ -28,6 +39,7 @@
             <th>Local Path</th>
             <th>Confidence Level</th>
             <th>Linked Status</th>
+            <th>Action</th>
         </thead>
         !!{matches}
     </table>

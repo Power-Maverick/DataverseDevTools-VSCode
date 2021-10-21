@@ -269,3 +269,8 @@ export interface ISmartMatchRecord {
     confidenceLevel: number;
     linked: boolean;
 }
+
+export interface ILinkView {
+    fp: string;
+    id: string;
+}

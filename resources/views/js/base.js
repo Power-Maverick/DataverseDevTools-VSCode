@@ -39,3 +39,17 @@ function uploadAll() {
         value: "all",
     });
 }
+
+function upload(wrId) {
+    vscode.postMessage({
+        command: "upload",
+        value: wrId,
+    });
+}
+
+function link(fullPath, wrId) {
+    vscode.postMessage({
+        command: "link",
+        value: `{ "fp": "${fullPath}", "id": "${wrId}" }`,
+    });
+}

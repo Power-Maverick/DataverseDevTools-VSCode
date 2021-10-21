@@ -3,7 +3,8 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" type="text/css" href="./css/base.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" />
+        <link rel="stylesheet" href="./css/base.css" />
 
         <!--Import Google Icon Font-->
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
@@ -13,17 +14,19 @@
     <body>
         <div class="main-container">
             <!-- Insert you test HTML -->
-            <br />
-            <br />
-            <div id="header">
-                <button class="btn" id="btnLink100Only">Link 100% Confident Match</button>
-                <button class="btn" id="btnLinkAll">Link All</button>
-                <div class="fixed-action-btn">
-                    <button class="btn" id="btnUpload"><i class="material-icons right pad-left-8">cloud_upload</i>Upload All</button>
+            <nav>
+                <div class="nav-wrapper">
+                    <ul id="nav-mobile" class="left hide-on-med-and-down">
+                        <li>
+                            <button class="btn" id="btnUpload"><i class="material-icons right ln32">cloud_upload</i>Upload All Linked</button>
+                        </li>
+                        <li><button class="btn" id="btnLink100Only">Link 100% Confidence</button></li>
+                        <li><button class="btn" id="btnLinkAll">Link All</button></li>
+                    </ul>
                 </div>
-            </div>
+            </nav>
             <div>
-                <p>The above button will only link the files locally but &nbsp;<span class="realistic-marker-highlight">won't upload anything to Dataverse.</span></p>
+                <p>The above button will only link the files locally but <span class="realistic-marker-highlight">won't upload anything to Dataverse.</span></p>
                 <svg xmlns="//www.w3.org/2000/svg" version="1.1" class="svg-filters" style="display: none">
                     <defs>
                         <filter id="marker-shape">
@@ -43,6 +46,7 @@
                         <th>Local Path</th>
                         <th>Confidence Level</th>
                         <th>Linked Status</th>
+                        <th>Action</th>
                     </thead>
                     <tr>
                         <td>Test</td>
@@ -53,7 +57,10 @@
                         <td>100</td>
                         <td>
                             <i class="material-icons">check_circle</i>
-                            <i class="material-icons">cancel</i>
+                        </td>
+                        <td>
+                            <button class="btn-floating btn-small waves-effect waves-light red"><i class="material-icons right ln32">file_upload</i></button>
+                            <span>Upload</span>
                         </td>
                     </tr>
                 </table>

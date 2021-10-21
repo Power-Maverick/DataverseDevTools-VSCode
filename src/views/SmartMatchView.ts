@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import * as path from "path";
-import { ISmartMatchRecord } from "../utils/Interfaces";
+import { ILinkView, ISmartMatchRecord } from "../utils/Interfaces";
 import { Panel } from "./PanelBase";
 import { readFileSync } from "../utils/FileSystem";
 import _ = require("lodash");
@@ -12,11 +12,9 @@ export class SmartMatchView extends Panel {
     constructor(matches: ISmartMatchRecord[], webview: vscode.WebviewPanel, vscontext: vscode.ExtensionContext, private uploadHelper: UploadHelper) {
         super({ panel: webview, extensionUri: vscontext.extensionUri, webViewFileName: "smartmatch.html" });
         this.smartMatches = matches;
-        // Set the webview's initial html content
-        super.update();
 
         // Handle messages from the webview
-        this.webViewPanel.webview.onDidReceiveMessage(({ command, value }) => {
+        this.webViewPanel.webview.onDidReceiveMessage(async ({ command, value }) => {
             switch (command) {
                 case "alert":
                     if (value) {
@@ -24,36 +22,65 @@ export class SmartMatchView extends Panel {
                     }
                     break;
                 case "link":
-                    if (value === "100only") {
-                        this.linkFiles(
-                            this.smartMatches?.filter((sm) => {
-                                if (sm.confidenceLevel === 100 && !sm.linked) {
-                                    return sm;
+                    switch (value) {
+                        case "100only":
+                            this.linkFiles(
+                                this.smartMatches?.filter((sm) => {
+                                    if (sm.confidenceLevel === 100 && !sm.linked) {
+                                        return sm;
+                                    }
+                                }),
+                            );
+                            break;
+                        case "all":
+                            this.linkFiles(
+                                this.smartMatches?.filter((sm) => {
+                                    if (!sm.linked) {
+                                        return sm;
+                                    }
+                                }),
+                            );
+                            break;
+                        default:
+                            if (value) {
+                                const parsed: ILinkView = JSON.parse(value);
+                                const sm: ISmartMatchRecord[] = this.smartMatches.filter((sm) => {
+                                    if (sm.wrId === parsed.id) {
+                                        return sm;
+                                    }
+                                });
+                                if (sm && sm.length > 0) {
+                                    this.linkFiles([sm[0]]);
                                 }
-                            }),
-                        );
-                    } else if (value === "all") {
-                        this.linkFiles(
-                            this.smartMatches?.filter((sm) => {
-                                if (!sm.linked) {
-                                    return sm;
-                                }
-                            }),
-                        );
+                            }
+                            break;
                     }
                     break;
                 case "upload":
                     vscode.window.showInformationMessage("Uploading");
-                    this.uploadFiles(
-                        this.smartMatches?.filter((sm) => {
-                            if (sm.linked) {
-                                return sm;
+                    switch (value) {
+                        case "all":
+                            this.uploadFiles(
+                                this.smartMatches?.filter((sm) => {
+                                    if (sm.linked) {
+                                        return sm;
+                                    }
+                                }),
+                            );
+                            break;
+                        default:
+                            if (value) {
+                                await this.uploadHelper.uploadWebResource(decodeURI(value));
+                                vscode.window.showInformationMessage(`Uploaded the records`);
                             }
-                        }),
-                    );
+                            break;
+                    }
                     break;
             }
         });
+
+        // Set the webview's initial html content
+        super.update();
     }
 
     linkFiles(sm: ISmartMatchRecord[] | undefined) {
@@ -97,6 +124,17 @@ export class SmartMatchView extends Panel {
                 viewModel.matches += `<td>${a.localFilePath}</td>`;
                 viewModel.matches += `<td>${a.confidenceLevel}</td>`;
                 viewModel.matches += `<td><i class="material-icons">${a.linked ? "check_circle" : "cancel"}</i></td>`;
+                if (a.linked) {
+                    viewModel.matches += `<td><button class="btn-floating btn-small waves-effect waves-light red" onclick="upload('${encodeURI(
+                        a.localFullPath,
+                    )}')"><i class="material-icons right ln32">file_upload</i></button>`;
+                    viewModel.matches += `<span class="pl5">Upload</span></td>`;
+                } else {
+                    viewModel.matches += `<td><button class="btn-floating btn-small waves-effect waves-light red" onclick="link('${encodeURI(a.localFullPath)}','${
+                        a.wrId
+                    }')"><i class="material-icons right ln32">link</i></button>`;
+                    viewModel.matches += `<span class="pl5">Link</span></td>`;
+                }
                 viewModel.matches += `</tr>`;
             });
         }
