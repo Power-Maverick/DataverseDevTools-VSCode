@@ -140,17 +140,7 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
                 try {
                     await templateHelper.addTypeScriptFile(uri.fsPath);
                 } catch (error) {
-                    handleErrors(error, "initTS");
-                }
-            },
-        },
-        {
-            command: "dvdt.commands.createTSFile",
-            callback: async (uri: vscode.Uri) => {
-                try {
-                    await templateHelper.addTypeScriptFile(uri.fsPath);
-                } catch (error) {
-                    handleErrors(error, "initTS");
+                    errorHandler.log(error, "initTS");
                 }
             },
         },
