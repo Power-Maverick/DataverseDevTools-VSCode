@@ -3,14 +3,16 @@ import * as vscode from "vscode";
 import * as path from "path";
 import { copyFolderOrFile, getFileExtension, getFileName, getRelativeFilePath, getWorkspaceFolder, readFileSync, writeFileSync } from "../utils/FileSystem";
 import { jsonToXML, xmlToJSON } from "../utils/Parsers";
-import { ILinkerFile, ILinkerRes, IWebResource, IWebResources } from "../utils/Interfaces";
+import { ILinkerFile, ILinkerRes, ISmartMatchRecord, IWebResource, IWebResources } from "../utils/Interfaces";
 import { DataverseHelper } from "./dataverseHelper";
 import { State } from "../utils/State";
-import { WebResourceType, wrDefinitionsStoreKey } from "../utils/Constants";
+import { smartMatchStoreKey, WebResourceType, wrDefinitionsStoreKey } from "../utils/Constants";
 import { Placeholders } from "../utils/Placeholders";
 import { ErrorMessages } from "../utils/ErrorMessages";
 import { reduce } from "conditional-reduce";
 import { encodeToBase64, extractGuid } from "../utils/ExtensionMethods";
+import { ViewBase } from "../views/ViewBase";
+import { SmartMatchView } from "../views/SmartMatchView";
 
 export class UploadHelper {
     private vsstate: State;
@@ -65,6 +67,77 @@ export class UploadHelper {
                 } else {
                     return [linkerFileDataJson.DVDT.WebResources.Resource[attrName as keyof ILinkerRes]];
                 }
+            }
+        }
+    }
+
+    public async smartMatchWebResources(view: ViewBase): Promise<void> {
+        const jsonWRs: IWebResources = this.vsstate.getFromWorkspace(wrDefinitionsStoreKey);
+        let smartMatches: ISmartMatchRecord[] = [];
+
+        if (jsonWRs) {
+            const jsFiles = await vscode.workspace.findFiles("**/*.js", "/node_modules/");
+
+            await Promise.all(
+                jsFiles.map(async (jsFile) => {
+                    const localFileName = getFileName(jsFile.fsPath);
+                    const localRelativePath = getRelativeFilePath(jsFile.fsPath, getWorkspaceFolder()?.fsPath!);
+
+                    let linkedResource: ILinkerRes | undefined = await this.getLinkedResourceByLocalFileName(jsFile.fsPath);
+
+                    // Match with Display Name exact match
+                    let wrFoundByName = jsonWRs.value.find((wr) => wr.displayname?.toLowerCase() === localFileName.toLowerCase());
+                    if (wrFoundByName) {
+                        smartMatches.push({
+                            wrId: wrFoundByName.webresourceid!,
+                            wrDisplayName: wrFoundByName.displayname!,
+                            wrPath: wrFoundByName.name!,
+                            localFileName: localFileName,
+                            localFilePath: localRelativePath,
+                            localFullPath: jsFile.fsPath,
+                            confidenceLevel: 100,
+                            linked: linkedResource?.["@_dvFilePath"] === wrFoundByName.name!,
+                        });
+                    } else {
+                        // Match with File Name search in Server Path
+                        let wrFoundByNameSearch = jsonWRs.value.find((wr) => wr.name?.toLowerCase()?.search(localFileName.toLowerCase())! > 0);
+                        if (wrFoundByNameSearch) {
+                            smartMatches.push({
+                                wrId: wrFoundByNameSearch.webresourceid!,
+                                wrDisplayName: wrFoundByNameSearch.displayname!,
+                                wrPath: wrFoundByNameSearch.name!,
+                                localFileName: localFileName,
+                                localFilePath: localRelativePath,
+                                localFullPath: jsFile.fsPath,
+                                confidenceLevel: 60,
+                                linked: linkedResource?.["@_dvFilePath"] === wrFoundByNameSearch.name!,
+                            });
+                        }
+                    }
+                }),
+            );
+
+            const webview = await view.getWebView({ type: "showSmartMatch", title: "Smart Match" });
+            new SmartMatchView(smartMatches, webview, this.vscontext, this);
+        }
+    }
+
+    public async linkWebResourceById(localFullPath: string, wrId: string): Promise<ILinkerRes | undefined> {
+        const localFileName = getFileName(localFullPath);
+        const localRelativePath = getRelativeFilePath(localFullPath, getWorkspaceFolder()?.fsPath!);
+        const jsonWRs: IWebResources = this.vsstate.getFromWorkspace(wrDefinitionsStoreKey);
+
+        if (jsonWRs) {
+            let filteredWR = jsonWRs.value.filter((w) => w.webresourceid === wrId);
+            if (filteredWR) {
+                const resc: ILinkerRes = {
+                    "@_Id": filteredWR[0].webresourceid!,
+                    "@_dvDisplayName": filteredWR[0].displayname!,
+                    "@_dvFilePath": filteredWR[0].name!,
+                    "@_localFileName": localFileName,
+                    "@_localFilePath": localRelativePath,
+                };
+                return this.addInLinkerFile(resc);
             }
         }
     }
