@@ -25,16 +25,19 @@ export class TemplateHelper {
             await copyFolderOrFile(tsFolderUri, wsPath);
         }
 
+        // Update webpack.config - remove library
+        const webpackConfigFile = path.join(wsPath, "webpack.config.js");
+        let webpackconfigContent: string = readFileSync(webpackConfigFile).toString();
         if (!namespaceUR) {
-            // Update webpack.config - remove library
-            const webpackConfigFile = path.join(wsPath, "webpack.config.js");
-            let webpackconfigContent: string = readFileSync(webpackConfigFile).toString();
             let line: string[] = webpackconfigContent.split("\n");
             let ind = line.indexOf('        library: ["NAMESPACE"],\r');
             if (ind > 0) {
                 line.splice(ind, 2);
             }
             let modifiedWebpackconfigContent = line.join("\n");
+            writeFileSync(webpackConfigFile, modifiedWebpackconfigContent);
+        } else {
+            let modifiedWebpackconfigContent = webpackconfigContent.replace("NAMESPACE", namespaceUR);
             writeFileSync(webpackConfigFile, modifiedWebpackconfigContent);
         }
 
