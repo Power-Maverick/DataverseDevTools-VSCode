@@ -11,8 +11,4 @@ export class Commands {
     public static LoadNpmPackages() {
         return `npm install`;
     }
-
-    public static LinkGlobalTypeScript() {
-        return `npm link typescript`;
-    }
 }

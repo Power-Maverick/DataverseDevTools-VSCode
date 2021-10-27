@@ -43,7 +43,6 @@ export class TemplateHelper {
 
         let commands: string[] = Array();
         commands.push(Commands.LoadNpmPackages());
-        commands.push(Commands.LinkGlobalTypeScript());
         Console.runCommand(commands);
 
         vscode.window.showInformationMessage(`${extensionName}: TypeScript project initialized.`);
