@@ -26,6 +26,7 @@
         "Xrm",
         "Dev Tools"
     ],
+    "qna": "https://github.com/Power-Maverick/DataverseDevTools-VSCode/discussions",
     "activationEvents": [
         "*"
     ],

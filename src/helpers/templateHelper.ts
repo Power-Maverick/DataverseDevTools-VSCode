@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import * as path from "path";
-import { copyFolderOrFile, readFileSync, writeFileSync } from "../utils/FileSystem";
+import { copyFolderOrFile, createFolder, readFileSync, writeFileSync } from "../utils/FileSystem";
 import { Commands } from "../terminals/commands";
 import { Console } from "../terminals/console";
 import { extensionName } from "../utils/Constants";
@@ -23,6 +23,11 @@ export class TemplateHelper {
 
         if (wsPath) {
             await copyFolderOrFile(tsFolderUri, wsPath);
+            await createFolder(path.join(wsPath, "src"));
+            await createFolder(path.join(wsPath, "typings"));
+            await createFolder(path.join(wsPath, "WebResources"));
+            await createFolder(path.join(wsPath, "WebResources", "html"));
+            await createFolder(path.join(wsPath, "WebResources", "js"));
         }
 
         // Update webpack.config - remove library
