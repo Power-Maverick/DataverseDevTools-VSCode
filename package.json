@@ -31,7 +31,7 @@
         "*"
     ],
     "main": "./out/extension.js",
-    "icon": "assets/DVDT-Icon.png",
+    "icon": "resources/DVDT-Icon.png",
     "contributes": {
         "views": {
             "dvd-explorer": [
