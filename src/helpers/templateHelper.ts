@@ -75,9 +75,14 @@ export class TemplateHelper {
             // Update webpack.config
             let webpackconfigContent: string = readFileSync(webpackConfigFile).toString();
             let line: string[] = webpackconfigContent.split("\n");
-            let ind = line.indexOf("    entry: {\r");
+            let ind = line.indexOf("    entry: {");
             if (ind > 0) {
                 line.splice(ind + 1, 0, `        ${filenameUR}: \"./src/${filenameUR}\",`);
+            } else {
+                ind = line.indexOf("    entry: {\r");
+                if (ind > 0) {
+                    line.splice(ind + 1, 0, `        ${filenameUR}: \"./src/${filenameUR}\",`);
+                }
             }
 
             let modifiedWebpackconfigContent = line.join("\n");
