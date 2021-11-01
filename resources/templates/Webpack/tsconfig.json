@@ -1,7 +1,7 @@
 {
     "compileOnSave": true,
     "compilerOptions": {
-        "target": "ES5",
+        "target": "ES6",
         "module": "CommonJS",
         "outDir": "./WebResources/js",
         "sourceMap": true,
