@@ -88,6 +88,9 @@ export class Placeholders {
             case this.solutionSelection:
                 qpOptions = { placeHolder: this.ipsolutionSelection.placeHolderText, title: this.ipsolutionSelection.prompt, ignoreFocusOut: ignoreFocus };
                 break;
+            case this.tsTemplateType:
+                qpOptions = { placeHolder: this.ipTSTemplateType.placeHolderText, title: this.ipTSTemplateType.prompt, ignoreFocusOut: ignoreFocus };
+                break;
             default:
                 qpOptions = { placeHolder: "", ignoreFocusOut: ignoreFocus };
                 break;
@@ -110,6 +113,7 @@ export class Placeholders {
     public static wrUniqueName: string = "WR-UniqueName";
     public static tsNamespace: string = "TS-Namespace";
     public static tsFileName: string = "TS-FileName";
+    public static tsTemplateType: string = "TS-TemplateType";
 
     public static required: string = "[Required]";
     public static optional: string = "[Optional]";
@@ -163,11 +167,15 @@ export class Placeholders {
         prompt: `Enter your Web Resource unique name without the prefix`,
     };
     private static ipTSNamespace: IPlaceholder = {
-        placeHolderText: `${Placeholders.optional} Namespace (e.g. DV)`,
+        placeHolderText: `${Placeholders.required} Namespace (e.g. DV)`,
         prompt: `Enter the namespace for your TypeScript project`,
     };
     private static ipTSFileName: IPlaceholder = {
         placeHolderText: `${Placeholders.required} test [DO NOT INCLUDE .ts]`,
         prompt: `Enter the name of the TypeScript file`,
+    };
+    private static ipTSTemplateType: IPlaceholder = {
+        placeHolderText: `${Placeholders.required} Template (e.g.: TypeScript Only, Webpack)`,
+        prompt: `Pick your desired bundling template`,
     };
 }

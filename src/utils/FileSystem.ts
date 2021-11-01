@@ -10,7 +10,7 @@ export function writeFileSync(source: string, data: string): any {
 }
 
 export async function copyFolderOrFile(source: string, target: string) {
-    await fs.copy(source, target);
+    await fs.copy(source, target, { overwrite: true });
 }
 
 export async function createFolder(folderDirPath: string) {
@@ -30,6 +30,10 @@ export function getWorkspaceFolder(): vscode.Uri | undefined {
         return vscode.workspace.workspaceFolders[0].uri;
         //let f = vscode.workspace.workspaceFolders[0].uri.fsPath;
     }
+}
+
+export function pathExists(fspath: string) {
+    return fs.pathExistsSync(fspath);
 }
 
 export function getFileExtension(fullPath: string): string | undefined {

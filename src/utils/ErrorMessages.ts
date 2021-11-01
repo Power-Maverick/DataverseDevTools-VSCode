@@ -5,4 +5,5 @@ export class ErrorMessages {
     public static connNameRequired: string = "Connection Name is required.";
     public static wrDisplayNameRequired: string = "Web Resource Display Name is required.";
     public static tsFileNameRequired: string = "TypeScript filename is required.";
+    public static tsNamespaceRequired: string = "Namespace for Webpack is required.";
 }

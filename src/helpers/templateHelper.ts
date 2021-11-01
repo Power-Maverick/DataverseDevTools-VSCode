@@ -1,9 +1,9 @@
 import * as vscode from "vscode";
 import * as path from "path";
-import { copyFolderOrFile, createFolder, readFileSync, writeFileSync } from "../utils/FileSystem";
+import { copyFolderOrFile, createFolder, pathExists, readFileSync, writeFileSync } from "../utils/FileSystem";
 import { Commands } from "../terminals/commands";
 import { Console } from "../terminals/console";
-import { extensionName } from "../utils/Constants";
+import { extensionName, tsTemplateType } from "../utils/Constants";
 import { Placeholders } from "../utils/Placeholders";
 import { ErrorMessages } from "../utils/ErrorMessages";
 import fetch from "node-fetch";
@@ -16,34 +16,39 @@ export class TemplateHelper {
     constructor(private vscontext: vscode.ExtensionContext) {}
 
     public async initiateTypeScriptProject(wsPath: string) {
-        let namespaceUR: string | undefined = await vscode.window.showInputBox(Placeholders.getInputBoxOptions(Placeholders.tsNamespace));
+        let tsTemplateTypeOptions: string[] = tsTemplateType;
+        let tsTemplateTypeOptionsQuickPick: vscode.QuickPickOptions = Placeholders.getQuickPickOptions(Placeholders.tsTemplateType);
+        let tsTemplateTypeResponse: string | undefined = await vscode.window.showQuickPick(tsTemplateTypeOptions, tsTemplateTypeOptionsQuickPick);
 
         const extPath = this.vscontext.extensionUri.fsPath;
         const tsFolderUri = path.join(extPath, "resources", "templates", "TypeScript");
+        const wpFolderUri = path.join(extPath, "resources", "templates", "Webpack");
 
+        // TypeScript Only is default
         if (wsPath) {
             await copyFolderOrFile(tsFolderUri, wsPath);
+
+            if (tsTemplateTypeResponse === tsTemplateType[1]) {
+                // Webpack
+                await copyFolderOrFile(wpFolderUri, wsPath);
+                let namespaceUR: string | undefined = await vscode.window.showInputBox(Placeholders.getInputBoxOptions(Placeholders.tsNamespace));
+                if (!namespaceUR) {
+                    vscode.window.showErrorMessage(ErrorMessages.tsNamespaceRequired);
+                    return undefined;
+                }
+
+                // Update webpack.config - remove library
+                const webpackConfigFile = path.join(wsPath, "webpack.config.js");
+                let webpackconfigContent: string = readFileSync(webpackConfigFile).toString();
+                let modifiedWebpackconfigContent = webpackconfigContent.replace("NAMESPACE", namespaceUR);
+                writeFileSync(webpackConfigFile, modifiedWebpackconfigContent);
+            }
+
             await createFolder(path.join(wsPath, "src"));
             await createFolder(path.join(wsPath, "typings"));
             await createFolder(path.join(wsPath, "WebResources"));
             await createFolder(path.join(wsPath, "WebResources", "html"));
             await createFolder(path.join(wsPath, "WebResources", "js"));
-        }
-
-        // Update webpack.config - remove library
-        const webpackConfigFile = path.join(wsPath, "webpack.config.js");
-        let webpackconfigContent: string = readFileSync(webpackConfigFile).toString();
-        if (!namespaceUR) {
-            let line: string[] = webpackconfigContent.split("\n");
-            let ind = line.indexOf('        library: ["NAMESPACE"],\r');
-            if (ind > 0) {
-                line.splice(ind, 2);
-            }
-            let modifiedWebpackconfigContent = line.join("\n");
-            writeFileSync(webpackConfigFile, modifiedWebpackconfigContent);
-        } else {
-            let modifiedWebpackconfigContent = webpackconfigContent.replace("NAMESPACE", namespaceUR);
-            writeFileSync(webpackConfigFile, modifiedWebpackconfigContent);
         }
 
         let commands: string[] = Array();
@@ -61,32 +66,37 @@ export class TemplateHelper {
         }
 
         const extPath = this.vscontext.extensionUri.fsPath;
-        const filesUri = path.join(extPath, "resources", "templates", "Files", "dvts.txt");
         const fileToCopyUri = path.join(wsPath, `${filenameUR}.ts`);
         const webpackConfigFile = path.join(wsPath, "..", "webpack.config.js");
 
         if (wsPath) {
-            await copyFolderOrFile(filesUri, fileToCopyUri);
+            if (pathExists(webpackConfigFile)) {
+                const filesUri = path.join(extPath, "resources", "templates", "Files", "dvts-wp.txt");
+                await copyFolderOrFile(filesUri, fileToCopyUri);
+
+                // Update webpack.config
+                let webpackconfigContent: string = readFileSync(webpackConfigFile).toString();
+                let line: string[] = webpackconfigContent.split("\n");
+                let ind = line.indexOf("    entry: {");
+                if (ind > 0) {
+                    line.splice(ind + 1, 0, `        ${filenameUR}: \"./src/${filenameUR}\",`);
+                } else {
+                    ind = line.indexOf("    entry: {\r");
+                    if (ind > 0) {
+                        line.splice(ind + 1, 0, `        ${filenameUR}: \"./src/${filenameUR}\",`);
+                    }
+                }
+
+                let modifiedWebpackconfigContent = line.join("\n");
+                writeFileSync(webpackConfigFile, modifiedWebpackconfigContent);
+            } else {
+                const filesUri = path.join(extPath, "resources", "templates", "Files", "dvts-ts.txt");
+                await copyFolderOrFile(filesUri, fileToCopyUri);
+            }
 
             // Update newly created file
             let fileContent: string = readFileSync(fileToCopyUri).toString();
             writeFileSync(fileToCopyUri, fileContent.replace(/FILENAME/gi, pascalize(filenameUR)));
-
-            // Update webpack.config
-            let webpackconfigContent: string = readFileSync(webpackConfigFile).toString();
-            let line: string[] = webpackconfigContent.split("\n");
-            let ind = line.indexOf("    entry: {");
-            if (ind > 0) {
-                line.splice(ind + 1, 0, `        ${filenameUR}: \"./src/${filenameUR}\",`);
-            } else {
-                ind = line.indexOf("    entry: {\r");
-                if (ind > 0) {
-                    line.splice(ind + 1, 0, `        ${filenameUR}: \"./src/${filenameUR}\",`);
-                }
-            }
-
-            let modifiedWebpackconfigContent = line.join("\n");
-            writeFileSync(webpackConfigFile, modifiedWebpackconfigContent);
         }
 
         vscode.window.showInformationMessage(`${extensionName}: TypeScript file added.`);
