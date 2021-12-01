@@ -138,6 +138,7 @@ export async function loginWithPrompt(clientId: string, adfs: boolean, dataverse
                 redirect_uri: redirectUrl,
                 client_id: clientId,
                 code_verifier: pkceCodes.verifier,
+                prompt: "login"
             });
             const config = {
                 headers: {
