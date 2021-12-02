@@ -65,6 +65,16 @@
         "research",
         "userTesting"
       ]
+    },
+    {
+      "login": "BenediktBergmann",
+      "name": "Benedikt Bergmann",
+      "avatar_url": "https://avatars.githubusercontent.com/u/9703748?v=4",
+      "profile": "https://benediktbergmann.eu/",
+      "contributions": [
+        "example",
+        "ideas"
+      ]
     }
   ],
   "contributorsPerLine": 7
