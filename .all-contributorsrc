@@ -49,6 +49,22 @@
         "maintenance",
         "userTesting"
       ]
+    },
+    {
+      "login": "mohsinonxrm",
+      "name": "mohsinonxrm",
+      "avatar_url": "https://avatars.githubusercontent.com/u/21046804?v=4",
+      "profile": "https://github.com/mohsinonxrm",
+      "contributions": [
+        "question",
+        "bug",
+        "code",
+        "example",
+        "ideas",
+        "plugin",
+        "research",
+        "userTesting"
+      ]
     }
   ],
   "contributorsPerLine": 7
