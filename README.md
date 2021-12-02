@@ -1,22 +1,55 @@
-[![Build](https://github.com/Power-Maverick/DataverseDevTools-VSCode/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/Power-Maverick/DataverseDevTools-VSCode/actions/workflows/build.yml)
+<p align="center">
+    <h1 align="center">
+        Dataverse DevTools
+    </h1>
+    <h3 align="center">
+        The all-in-one tool to develop code for Dataverse/Dynamics 365!
+    </h3>
+    <p align="center">
+        This repo is an open-source project that provides a code for a Dataverse DevTools VS Code Extension that helps you connect to a Dataverse environment, generate TypeScript definitions for entities, create different type of Dataverse-specific projects, upload web-resources right from VS Code and much more.
+    </p>
+</p>
 
-<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-5-orange.svg?style=flat-square)](#contributors-)
-<!-- ALL-CONTRIBUTORS-BADGE:END -->
+<p align="center">
+    <a href="https://github.com/Power-Maverick/DataverseDevTools-VSCode/actions/workflows/build.yml" alt="Build">
+      <img src="https://github.com/Power-Maverick/DataverseDevTools-VSCode/actions/workflows/build.yml/badge.svg?branch=main"/>
+    </a>
+    <a href="https://github.com/Power-Maverick/DataverseDevTools-VSCode/actions/workflows/release.yml" alt="Release">
+      <img src="https://github.com/Power-Maverick/DataverseDevTools-VSCode/actions/workflows/release.yml/badge.svg?branch=main"/>
+    </a>
+    <a href="https://github.com/Power-Maverick/DataverseDevTools-VSCode/blob/master/LICENSE" alt="License">
+      <img src="https://img.shields.io/github/license/Power-Maverick/DataverseDevTools-VSCode"/>
+    </a>
+</p>
 
-[![Release](https://github.com/Power-Maverick/DataverseDevTools-VSCode/actions/workflows/release.yml/badge.svg?branch=main)](https://github.com/Power-Maverick/DataverseDevTools-VSCode/actions/workflows/release.yml)
-[![Visual Studio Marketplace Downloads](https://img.shields.io/visual-studio-marketplace/d/danish-naglekar.dataverse-devtools)](https://marketplace.visualstudio.com/items?itemName=danish-naglekar.dataverse-devtools)
-[![Visual Studio Marketplace Version](https://img.shields.io/visual-studio-marketplace/v/danish-naglekar.dataverse-devtools?label=vscode%20marketplace)](https://marketplace.visualstudio.com/items?itemName=danish-naglekar.dataverse-devtools)
-[![GitHub stars](https://img.shields.io/github/stars/Power-Maverick/DataverseDevTools-VSCode?label=github%20stars)](https://github.com/Power-Maverick/DataverseDevTools-VSCode)
-[![License](https://img.shields.io/github/license/Power-Maverick/DataverseDevTools-VSCode)](https://github.com/Power-Maverick/DataverseDevTools-VSCode/blob/master/LICENSE)
+<p align="center">
+    <a href="https://img.shields.io/visual-studio-marketplace/d/danish-naglekar.dataverse-devtools" alt="Visual Studio Marketplace Downloads">
+      <img src="https://img.shields.io/visual-studio-marketplace/d/danish-naglekar.dataverse-devtools" />
+    </a>
+    <a href="https://marketplace.visualstudio.com/items?itemName=danish-naglekar.dataverse-devtools" alt="Visual Studio Marketplace Version">
+      <img src="https://img.shields.io/visual-studio-marketplace/v/danish-naglekar.dataverse-devtools?label=vscode%20marketplace" />
+    </a>
+    <a href="https://github.com/Power-Maverick/DataverseDevTools-VSCode" alt="GitHub Stars">
+      <img src="https://img.shields.io/github/stars/Power-Maverick/DataverseDevTools-VSCode?label=github%20stars" />
+    </a>
+</p>
 
-[![Sponsor](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub)](https://github.com/sponsors/Power-Maverick)
+<p align="center">
+    <a href="https://github.com/sponsors/Power-Maverick" alt="Sponsor">
+      <img src="https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub" />
+    </a>
+    <a href="https://twitter.com/DanzMaverick" alt="Twitter Follow">
+      <img src="https://img.shields.io/twitter/follow/DanzMaverick?style=social" />
+    </a>
+</p>
 
-[![Twitter Follow](https://img.shields.io/twitter/follow/DanzMaverick?style=social)](https://twitter.com/Danzmaverick)
-
-# Dataverse DevTools
-
-The all-in-one tool to develop code for Dataverse/Dynamics 365. Helps you connect to a Dataverse environment, generate TypeScript definitions for entities, create different type of Dataverse-specific projects, upload web-resources right from VS Code and much more.
+<h3 align="center">
+  <a href="https://github.com/Power-Maverick/DataverseDevTools-VSCode/issues/new?assignees=Power-Maverick&labels=enhancement%2Ctriage&template=issues-form-feature-request.yaml&title=%5BFeature%5D%3A+">Feature request</a>
+  <span> · </span>
+  <a href="https://github.com/Power-Maverick/DataverseDevTools-VSCode/issues/new?assignees=Power-Maverick&labels=bug%2Ctriage&template=issue-form-bug.yaml&title=%5BBug%5D%3A+">Report a bug</a>
+  <span> · </span>
+  <a href="https://github.com/Power-Maverick/DataverseDevTools-VSCode/discussions/categories/q-a">Support</a>
+</h3>
 
 > Do check-out the [planned features](#-planned-features) list.
 
@@ -24,27 +57,26 @@ The all-in-one tool to develop code for Dataverse/Dynamics 365. Helps you connec
 
 **Table of contents**
 
-- [Dataverse DevTools](#dataverse-devtools)
-  - [⚙ Features](#-features)
-    - [Connect to your Dataverse environment](#connect-to-your-dataverse-environment)
-    - [Remembers the connected environment per workspace](#remembers-the-connected-environment-per-workspace)
-    - [See connection and entity details (with copy feature)](#see-connection-and-entity-details-with-copy-feature)
-    - [Initialize TypeScript project & add TS File](#initialize-typescript-project--add-ts-file)
-    - [Generate Typings](#generate-typings)
-    - [Intellisense for type generated](#intellisense-for-type-generated)
-    - [Upload Web Resources](#upload-web-resources)
-    - [Filter by solution](#filter-by-solution)
-      - [Entities](#entities)
-      - [Web Resources](#web-resources)
-    - [Smart Match Web Resources](#smart-match-web-resources)
-  - [🔥 Using Typings](#-using-typings)
-  - [⌨ Keyboard Shortcuts](#-keyboard-shortcuts)
-  - [💭 Planned Features](#-planned-features)
-  - [✨ Contributing](#-contributing)
-  - [🔉 Discussions](#-discussions)
-  - [📃 License](#-license)
-  - [💙 Big Thanks](#-big-thanks)
-  - [✍ Credits](#-credits)
+- [⚙ Features](#-features)
+  - [Connect to your Dataverse environment](#connect-to-your-dataverse-environment)
+  - [Remembers the connected environment per workspace](#remembers-the-connected-environment-per-workspace)
+  - [See connection and entity details (with copy feature)](#see-connection-and-entity-details-with-copy-feature)
+  - [Initialize TypeScript project & add TS File](#initialize-typescript-project--add-ts-file)
+  - [Generate Typings](#generate-typings)
+  - [Intellisense for type generated](#intellisense-for-type-generated)
+  - [Upload Web Resources](#upload-web-resources)
+  - [Filter by solution](#filter-by-solution)
+    - [Entities](#entities)
+    - [Web Resources](#web-resources)
+  - [Smart Match Web Resources](#smart-match-web-resources)
+- [🔥 Using Typings](#-using-typings)
+- [⌨ Keyboard Shortcuts](#-keyboard-shortcuts)
+- [💭 Planned Features](#-planned-features)
+- [✨ Contributing](#-contributing)
+- [🔉 Discussions](#-discussions)
+- [📃 License](#-license)
+- [💙 Big Thanks](#-big-thanks)
+- [✍ Credits](#-credits)
 
 ## ⚙ Features
 
@@ -145,9 +177,9 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <table>
   <tr>
     <td align="center"><a href="https://powermaverick.dev/"><img src="https://avatars.githubusercontent.com/u/36135520?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Danish Naglekar</b></sub></a><br /><a href="#question-Power-Maverick" title="Answering Questions">💬</a> <a href="https://github.com/Power-Maverick/DataverseDevTools-VSCode/commits?author=Power-Maverick" title="Code">💻</a> <a href="#content-Power-Maverick" title="Content">🖋</a> <a href="#design-Power-Maverick" title="Design">🎨</a> <a href="https://github.com/Power-Maverick/DataverseDevTools-VSCode/commits?author=Power-Maverick" title="Documentation">📖</a> <a href="#infra-Power-Maverick" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="#security-Power-Maverick" title="Security">🛡️</a> <a href="https://github.com/Power-Maverick/DataverseDevTools-VSCode/commits?author=Power-Maverick" title="Tests">⚠️</a> <a href="#tool-Power-Maverick" title="Tools">🔧</a> <a href="#tutorial-Power-Maverick" title="Tutorials">✅</a></td>
+    <td align="center"><a href="https://github.com/mohsinonxrm"><img src="https://avatars.githubusercontent.com/u/21046804?v=4?s=100" width="100px;" alt=""/><br /><sub><b>mohsinonxrm</b></sub></a><br /><a href="#question-mohsinonxrm" title="Answering Questions">💬</a> <a href="https://github.com/Power-Maverick/DataverseDevTools-VSCode/issues?q=author%3Amohsinonxrm" title="Bug reports">🐛</a> <a href="https://github.com/Power-Maverick/DataverseDevTools-VSCode/commits?author=mohsinonxrm" title="Code">💻</a> <a href="#example-mohsinonxrm" title="Examples">💡</a> <a href="#ideas-mohsinonxrm" title="Ideas, Planning, & Feedback">🤔</a> <a href="#plugin-mohsinonxrm" title="Plugin/utility libraries">🔌</a> <a href="#research-mohsinonxrm" title="Research">🔬</a> <a href="#userTesting-mohsinonxrm" title="User Testing">📓</a></td>
     <td align="center"><a href="https://github.com/JoshSmithXRM"><img src="https://avatars.githubusercontent.com/u/6895577?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Josh Smith</b></sub></a><br /><a href="https://github.com/Power-Maverick/DataverseDevTools-VSCode/issues?q=author%3AJoshSmithXRM" title="Bug reports">🐛</a> <a href="#maintenance-JoshSmithXRM" title="Maintenance">🚧</a> <a href="#userTesting-JoshSmithXRM" title="User Testing">📓</a></td>
     <td align="center"><a href="https://github.com/P-focT"><img src="https://avatars.githubusercontent.com/u/81171713?v=4?s=100" width="100px;" alt=""/><br /><sub><b>P-focT</b></sub></a><br /><a href="https://github.com/Power-Maverick/DataverseDevTools-VSCode/issues?q=author%3AP-focT" title="Bug reports">🐛</a> <a href="#maintenance-P-focT" title="Maintenance">🚧</a> <a href="#userTesting-P-focT" title="User Testing">📓</a></td>
-    <td align="center"><a href="https://github.com/mohsinonxrm"><img src="https://avatars.githubusercontent.com/u/21046804?v=4?s=100" width="100px;" alt=""/><br /><sub><b>mohsinonxrm</b></sub></a><br /><a href="#question-mohsinonxrm" title="Answering Questions">💬</a> <a href="https://github.com/Power-Maverick/DataverseDevTools-VSCode/issues?q=author%3Amohsinonxrm" title="Bug reports">🐛</a> <a href="https://github.com/Power-Maverick/DataverseDevTools-VSCode/commits?author=mohsinonxrm" title="Code">💻</a> <a href="#example-mohsinonxrm" title="Examples">💡</a> <a href="#ideas-mohsinonxrm" title="Ideas, Planning, & Feedback">🤔</a> <a href="#plugin-mohsinonxrm" title="Plugin/utility libraries">🔌</a> <a href="#research-mohsinonxrm" title="Research">🔬</a> <a href="#userTesting-mohsinonxrm" title="User Testing">📓</a></td>
     <td align="center"><a href="https://benediktbergmann.eu/"><img src="https://avatars.githubusercontent.com/u/9703748?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Benedikt Bergmann</b></sub></a><br /><a href="#example-BenediktBergmann" title="Examples">💡</a> <a href="#ideas-BenediktBergmann" title="Ideas, Planning, & Feedback">🤔</a></td>
   </tr>
 </table>
@@ -171,13 +203,9 @@ This software is released under [MIT License](http://www.opensource.org/licenses
 
 **Matt Barbour** for explaining the authentication using MSAL/ADAL in Dataverse.
 
-[Mohsin Mirza](https://www.linkedin.com/in/mohsin-mirza-94210615/) for helping in creating POC & testing the final authentication using MSFT Login Prompt.
-
 [Magnus Gether Sørensen](https://www.linkedin.com/in/xrmwizard/) for helping in providing insights for XrmDefinitelyTyped.
 
 [Temmy Raharjo](https://www.linkedin.com/in/temmy-wahyu-raharjo/) for encouraging me to start using `pac cli command` to generate Plugin project.
-
-[Benedikt Bergmann](https://www.linkedin.com/in/benedikt-bergmann/) for helping with TypeScript project structure.
 
 ## ✍ Credits
 
