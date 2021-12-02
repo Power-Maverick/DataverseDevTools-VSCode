@@ -1,0 +1,33 @@
+{
+  "projectName": "DataverseDevTools-VSCode",
+  "projectOwner": "Power-Maverick",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": true,
+  "commitConvention": "eslint",
+  "contributors": [
+    {
+      "login": "Power-Maverick",
+      "name": "Danish Naglekar",
+      "avatar_url": "https://avatars.githubusercontent.com/u/36135520?v=4",
+      "profile": "https://powermaverick.dev/",
+      "contributions": [
+        "question",
+        "code",
+        "content",
+        "design",
+        "doc",
+        "infra",
+        "security",
+        "test",
+        "tool",
+        "tutorial"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7
+}
