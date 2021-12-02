@@ -1,81 +1,91 @@
 {
-    "projectName": "DataverseDevTools-VSCode",
-    "projectOwner": "Power-Maverick",
-    "repoType": "github",
-    "repoHost": "https://github.com",
-    "files": [
-        "README.md"
-    ],
-    "imageSize": 100,
-    "commit": true,
-    "commitConvention": "eslint",
-    "contributors": [
-        {
-            "login": "Power-Maverick",
-            "name": "Danish Naglekar",
-            "avatar_url": "https://avatars.githubusercontent.com/u/36135520?v=4",
-            "profile": "https://powermaverick.dev/",
-            "contributions": [
-                "question",
-                "code",
-                "content",
-                "design",
-                "doc",
-                "infra",
-                "security",
-                "test",
-                "tool",
-                "tutorial"
-            ]
-        },
-        {
-            "login": "mohsinonxrm",
-            "name": "mohsinonxrm",
-            "avatar_url": "https://avatars.githubusercontent.com/u/21046804?v=4",
-            "profile": "https://github.com/mohsinonxrm",
-            "contributions": [
-                "question",
-                "bug",
-                "code",
-                "example",
-                "ideas",
-                "plugin",
-                "research",
-                "userTesting"
-            ]
-        },
-        {
-            "login": "JoshSmithXRM",
-            "name": "Josh Smith",
-            "avatar_url": "https://avatars.githubusercontent.com/u/6895577?v=4",
-            "profile": "https://github.com/JoshSmithXRM",
-            "contributions": [
-                "bug",
-                "maintenance",
-                "userTesting"
-            ]
-        },
-        {
-            "login": "P-focT",
-            "name": "P-focT",
-            "avatar_url": "https://avatars.githubusercontent.com/u/81171713?v=4",
-            "profile": "https://github.com/P-focT",
-            "contributions": [
-                "bug",
-                "maintenance",
-                "userTesting"
-            ]
-        },
-        {
-            "login": "BenediktBergmann",
-            "name": "Benedikt Bergmann",
-            "avatar_url": "https://avatars.githubusercontent.com/u/9703748?v=4",
-            "profile": "https://benediktbergmann.eu/",
-            "contributions": [
-                "example",
-                "ideas"
-            ]
-        }
-    ],
-    "contributorsPerLine": 7
+  "projectName": "DataverseDevTools-VSCode",
+  "projectOwner": "Power-Maverick",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": true,
+  "commitConvention": "eslint",
+  "contributors": [
+    {
+      "login": "Power-Maverick",
+      "name": "Danish Naglekar",
+      "avatar_url": "https://avatars.githubusercontent.com/u/36135520?v=4",
+      "profile": "https://powermaverick.dev/",
+      "contributions": [
+        "question",
+        "code",
+        "content",
+        "design",
+        "doc",
+        "infra",
+        "security",
+        "test",
+        "tool",
+        "tutorial"
+      ]
+    },
+    {
+      "login": "mohsinonxrm",
+      "name": "mohsinonxrm",
+      "avatar_url": "https://avatars.githubusercontent.com/u/21046804?v=4",
+      "profile": "https://github.com/mohsinonxrm",
+      "contributions": [
+        "question",
+        "bug",
+        "code",
+        "example",
+        "ideas",
+        "plugin",
+        "research",
+        "userTesting"
+      ]
+    },
+    {
+      "login": "JoshSmithXRM",
+      "name": "Josh Smith",
+      "avatar_url": "https://avatars.githubusercontent.com/u/6895577?v=4",
+      "profile": "https://github.com/JoshSmithXRM",
+      "contributions": [
+        "bug",
+        "maintenance",
+        "userTesting"
+      ]
+    },
+    {
+      "login": "P-focT",
+      "name": "P-focT",
+      "avatar_url": "https://avatars.githubusercontent.com/u/81171713?v=4",
+      "profile": "https://github.com/P-focT",
+      "contributions": [
+        "bug",
+        "maintenance",
+        "userTesting"
+      ]
+    },
+    {
+      "login": "BenediktBergmann",
+      "name": "Benedikt Bergmann",
+      "avatar_url": "https://avatars.githubusercontent.com/u/9703748?v=4",
+      "profile": "https://benediktbergmann.eu/",
+      "contributions": [
+        "example",
+        "ideas"
+      ]
+    },
+    {
+      "login": "filcole",
+      "name": "Phil Cole",
+      "avatar_url": "https://avatars.githubusercontent.com/u/6078398?v=4",
+      "profile": "https://github.com/filcole",
+      "contributions": [
+        "bug",
+        "ideas"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7
 }
