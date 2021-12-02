@@ -1,4 +1,5 @@
 const { merge } = require("webpack-merge");
+const TerserPlugin = require("terser-webpack-plugin");
 const sharedConfig = require("./webpack.config");
 module.exports = merge(sharedConfig, {
     mode: "production",
