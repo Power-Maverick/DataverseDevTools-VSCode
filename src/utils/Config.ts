@@ -1,5 +1,5 @@
 import { workspace } from "vscode";
-import { configSectionName } from "./constants";
+import { configSectionName } from "./Constants";
 
 export function get(key: "enableEarlyAccessPreview"): boolean;
 
