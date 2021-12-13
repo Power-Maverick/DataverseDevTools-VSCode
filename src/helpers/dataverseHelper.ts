@@ -25,6 +25,7 @@ import { openUri } from "../utils/OpenUri";
 import { ViewBase } from "../views/ViewBase";
 import { ConnectionDetailsView } from "../views/ConnectionDetailsView";
 import { EntityDetailsView } from "../views/EntityDetailsView";
+import * as config from "../utils/Config";
 
 export class DataverseHelper {
     private vsstate: State;
@@ -220,27 +221,45 @@ export class DataverseHelper {
         }
 
         let logintypeOptions: string[] = loginTypes;
+        if (config.get("enableEarlyAccessPreview") && !logintypeOptions.includes("Client Id and Secret")) {
+            logintypeOptions.push("Client Id and Secret");
+        }
         let logintypeOptionsQuickPick: vscode.QuickPickOptions = Placeholders.getQuickPickOptions(Placeholders.logintype);
         let logintypeResponse: string | undefined = await vscode.window.showQuickPick(logintypeOptions, logintypeOptionsQuickPick);
 
-        if (logintypeResponse === loginTypes[0]) {
-            // Username/Password
-            usernameUserResponse = await vscode.window.showInputBox(Placeholders.getInputBoxOptions(Placeholders.userName));
-            if (!usernameUserResponse) {
-                vscode.window.showErrorMessage(ErrorMessages.usernameRequired);
-                return undefined;
-            }
+        switch (logintypeResponse) {
+            case loginTypes[0]:
+                // Username/Password
+                usernameUserResponse = await vscode.window.showInputBox(Placeholders.getInputBoxOptions(Placeholders.userName));
+                if (!usernameUserResponse) {
+                    vscode.window.showErrorMessage(ErrorMessages.usernameRequired);
+                    return undefined;
+                }
 
-            passwordUserResponse = await vscode.window.showInputBox(Placeholders.getInputBoxOptions(Placeholders.password));
-            if (!passwordUserResponse) {
-                vscode.window.showErrorMessage(ErrorMessages.passwordRequired);
-                return undefined;
-            }
-        }
-        // default
-        else {
-            logintypeResponse = loginTypes[1];
-            //await loginWithPrompt(defaultDataverseClientId, false, openUri, redirectTimeout);
+                passwordUserResponse = await vscode.window.showInputBox(Placeholders.getInputBoxOptions(Placeholders.password));
+                if (!passwordUserResponse) {
+                    vscode.window.showErrorMessage(ErrorMessages.passwordRequired);
+                    return undefined;
+                }
+                break;
+            case "Client Id and Secret":
+                // Client Id / Secret
+                usernameUserResponse = await vscode.window.showInputBox(Placeholders.getInputBoxOptions(Placeholders.clientId));
+                if (!usernameUserResponse) {
+                    vscode.window.showErrorMessage(ErrorMessages.clientIdRequired);
+                    return undefined;
+                }
+
+                passwordUserResponse = await vscode.window.showInputBox(Placeholders.getInputBoxOptions(Placeholders.clientSecret));
+                if (!passwordUserResponse) {
+                    vscode.window.showErrorMessage(ErrorMessages.clientSecretRequired);
+                    return undefined;
+                }
+                break;
+            case loginTypes[1]:
+            default:
+                logintypeResponse = loginTypes[1];
+                break;
         }
 
         let connNameUserResponse: string | undefined = await vscode.window.showInputBox(Placeholders.getInputBoxOptions(Placeholders.connectionName));
@@ -270,9 +289,15 @@ export class DataverseHelper {
     }
 
     async connectInternal(loginType: string, conn: IConnection): Promise<Token> {
-        return loginType === loginTypes[0]
-            ? await loginWithUsernamePassword(conn.environmentUrl, conn.userName!, conn.password!)
-            : await loginWithPrompt(customDataverseClientId, false, conn.environmentUrl, openUri, redirectTimeout);
+        switch (loginType) {
+            case loginTypes[0]:
+                return await loginWithUsernamePassword(conn.environmentUrl, conn.userName!, conn.password!);
+            case "Client Id and Secret":
+                return await loginWithPrompt(conn.userName!, false, conn.environmentUrl, openUri, redirectTimeout);
+            case loginTypes[1]:
+            default:
+                return await loginWithPrompt(customDataverseClientId, false, conn.environmentUrl, openUri, redirectTimeout);
+        }
     }
 
     saveConnection(connDetail: IConnection) {

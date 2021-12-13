@@ -28,6 +28,19 @@ export class Placeholders {
                     password: true,
                 };
                 break;
+            case this.clientId:
+                inbOptions = {
+                    placeHolder: this.ipClientId.placeHolderText,
+                    prompt: this.ipClientId.prompt,
+                };
+                break;
+            case this.clientSecret:
+                inbOptions = {
+                    placeHolder: this.ipClientSecret.placeHolderText,
+                    prompt: this.ipClientSecret.prompt,
+                    password: true,
+                };
+                break;
             case this.connectionName:
                 inbOptions = {
                     placeHolder: this.ipConnectionName.placeHolderText,
@@ -103,6 +116,8 @@ export class Placeholders {
     public static logintype: string = "LoginType";
     public static userName: string = "UserName";
     public static password: string = "Password";
+    public static clientId: string = "ClientId";
+    public static clientSecret: string = "ClientSecret";
     public static connectionName: string = "ConnectionName";
     public static connectionType: string = "ConnectionType";
     public static webResourceSelection: string = "WebResourceSelection";
@@ -133,6 +148,14 @@ export class Placeholders {
     private static ipPassword: IPlaceholder = {
         placeHolderText: `${Placeholders.required} Password (e.g.: P@ssw0rd1)`,
         prompt: `Enter your password to authenticate with Dataverse`,
+    };
+    private static ipClientId: IPlaceholder = {
+        placeHolderText: `${Placeholders.required} Client Id (e.g.: EAB0D415-3221-44E2-9791-1A20C6BC4786)`,
+        prompt: `Enter your client id to authenticate with Dataverse`,
+    };
+    private static ipClientSecret: IPlaceholder = {
+        placeHolderText: `${Placeholders.required} Client Secret (e.g.: UPcKJK_aZ45JkA!13k6NAq8-rj9Z-856Ye)`,
+        prompt: `Enter your client secret to authenticate with Dataverse`,
     };
     private static ipConnectionName: IPlaceholder = {
         placeHolderText: `${Placeholders.required} Name (e.g.: Awesome Dev)`,

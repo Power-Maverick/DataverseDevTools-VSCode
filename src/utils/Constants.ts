@@ -16,7 +16,7 @@ export const wrDefinitionsStoreKey: string = `CurrentWRs`;
 export const solDefinitionsStoreKey: string = `CurrentSolutions`;
 export const smartMatchStoreKey: string = `CurrentSmartMatch`;
 export const environmentTypes: string[] = ["Dev", "QA", "UAT", "Prod"];
-export const loginTypes: string[] = ["Username/Password", "Microsoft Login Prompt"];
+export const loginTypes: string[] = ["Username/Password", "Dataverse DevTools Microsoft Login Prompt"];
 export const tsTemplateType: string[] = ["TypeScript Only", "Webpack"];
 export const connectionStatusBarUniqueId: string = `${extensionPrefix}.StatusBarConnectStatus`;
 export const maxRetries: number = 3;
@@ -24,6 +24,7 @@ export const terminalName: string = "Dataverse DevTools";
 export const fileExtensions: string[] = [".js", ".html", ".css"];
 export const portADFS: number = 29827;
 export const redirectUrl: string = `http://localhost:${portADFS}/callback/`;
+export const configSectionName: string = "dataverse-devtools";
 
 export enum WebResourceType {
     html = 1,
