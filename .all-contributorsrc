@@ -85,6 +85,15 @@
         "bug",
         "ideas"
       ]
+    },
+    {
+      "login": "improving-jeffd",
+      "name": "Jeff Dodds",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1213947?v=4",
+      "profile": "https://github.com/improving-jeffd",
+      "contributions": [
+        "mentoring"
+      ]
     }
   ],
   "contributorsPerLine": 7
