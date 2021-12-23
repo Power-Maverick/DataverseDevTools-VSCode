@@ -193,6 +193,9 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/filcole"><img src="https://avatars.githubusercontent.com/u/6078398?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Phil Cole</b></sub></a><br /><a href="https://github.com/Power-Maverick/DataverseDevTools-VSCode/issues?q=author%3Afilcole" title="Bug reports">🐛</a> <a href="#ideas-filcole" title="Ideas, Planning, & Feedback">🤔</a></td>
     <td align="center"><a href="https://github.com/improving-jeffd"><img src="https://avatars.githubusercontent.com/u/1213947?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Jeff Dodds</b></sub></a><br /><a href="#mentoring-improving-jeffd" title="Mentoring">🧑‍🏫</a></td>
   </tr>
+  <tr>
+    <td align="center"><a href="http://www.powerapps.com/"><img src="https://avatars.githubusercontent.com/u/10568244?v=4?s=100" width="100px;" alt=""/><br /><sub><b>MattB</b></sub></a><br /><a href="#mentoring-MattB-msft" title="Mentoring">🧑‍🏫</a></td>
+  </tr>
 </table>
 
 <!-- markdownlint-restore -->

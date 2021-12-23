@@ -94,6 +94,15 @@
       "contributions": [
         "mentoring"
       ]
+    },
+    {
+      "login": "MattB-msft",
+      "name": "MattB",
+      "avatar_url": "https://avatars.githubusercontent.com/u/10568244?v=4",
+      "profile": "http://www.powerapps.com/",
+      "contributions": [
+        "mentoring"
+      ]
     }
   ],
   "contributorsPerLine": 7
