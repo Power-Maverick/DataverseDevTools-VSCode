@@ -215,8 +215,6 @@ This software is released under [MIT License](http://www.opensource.org/licenses
 
 ## 💙 Big Thanks
 
-**Matt Barbour** for explaining the authentication using MSAL/ADAL in Dataverse.
-
 [Magnus Gether Sørensen](https://www.linkedin.com/in/xrmwizard/) for helping in providing insights for XrmDefinitelyTyped.
 
 [Temmy Raharjo](https://www.linkedin.com/in/temmy-wahyu-raharjo/) for encouraging me to start using `pac cli command` to generate Plugin project.

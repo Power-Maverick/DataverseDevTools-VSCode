@@ -10,6 +10,25 @@ import { ServerResponse } from "http";
 import { activeDirectoryEndpointUrl, customDataverseClientId, defaultDataverseClientId, genericTenant, tokenEndpointUrl } from "../utils/Constants";
 import { CodeResult, createServer, RedirectResult, startServer } from "./server";
 import { Token } from "../utils/Interfaces";
+import { AuthenticationScheme } from "@azure/msal-common";
+
+class UriEventHandler extends vscode.EventEmitter<vscode.Uri> implements vscode.UriHandler {
+    public handleUri(uri: vscode.Uri) {
+        this.fire(uri);
+    }
+}
+
+const handler: UriEventHandler = new UriEventHandler();
+vscode.window.registerUriHandler(handler);
+let terminateServer: () => Promise<void>;
+/* eslint-disable @typescript-eslint/no-unsafe-return, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access */
+function parseQuery(uri: vscode.Uri): any {
+    return uri.query.split("&").reduce((prev: any, current) => {
+        const queryString: string[] = current.split("=");
+        prev[queryString[0]] = queryString[1];
+        return prev;
+    }, {});
+}
 
 export async function loginWithUsernamePassword(envUrl: string, un: string, p: string): Promise<Token> {
     const requestUrl = tokenEndpointUrl;
@@ -36,24 +55,6 @@ export async function loginWithUsernamePassword(envUrl: string, un: string, p: s
         console.log(response.statusText);
         throw response.statusText;
     }
-}
-
-class UriEventHandler extends vscode.EventEmitter<vscode.Uri> implements vscode.UriHandler {
-    public handleUri(uri: vscode.Uri) {
-        this.fire(uri);
-    }
-}
-
-const handler: UriEventHandler = new UriEventHandler();
-vscode.window.registerUriHandler(handler);
-let terminateServer: () => Promise<void>;
-/* eslint-disable @typescript-eslint/no-unsafe-return, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access */
-function parseQuery(uri: vscode.Uri): any {
-    return uri.query.split("&").reduce((prev: any, current) => {
-        const queryString: string[] = current.split("=");
-        prev[queryString[0]] = queryString[1];
-        return prev;
-    }, {});
 }
 
 export async function loginWithPrompt(clientId: string, adfs: boolean, dataverseUrl: string, openUri: (url: string) => Promise<void>, redirectTimeout: () => Promise<void>): Promise<Token> {
@@ -138,7 +139,7 @@ export async function loginWithPrompt(clientId: string, adfs: boolean, dataverse
                 redirect_uri: redirectUrl,
                 client_id: clientId,
                 code_verifier: pkceCodes.verifier,
-                prompt: "login"
+                prompt: "login",
             });
             const config = {
                 headers: {
@@ -171,6 +172,44 @@ export async function loginWithPrompt(clientId: string, adfs: boolean, dataverse
             server.close();
         }, 5000);
     }
+}
+
+export async function loginWithClientIdSecret(dataverseUrl: string, clientId: string, clientSecret: string, tenantId: string): Promise<Token> {
+    const clientConfig: msal.Configuration = {
+        auth: {
+            clientId: clientId,
+            authority: `${activeDirectoryEndpointUrl}${tenantId}`,
+            clientSecret: clientSecret,
+        },
+    };
+    const cca = new msal.ConfidentialClientApplication(clientConfig);
+    const clientCredentialRequest: msal.ClientCredentialRequest = {
+        scopes: [`${dataverseUrl}/.default`],
+    };
+
+    const tokenRequest = {
+        scopes: ["https://graph.microsoft.com/.default"],
+    };
+
+    const tokenResponse = await cca.acquireTokenByClientCredential(clientCredentialRequest);
+    console.log(tokenResponse?.accessToken);
+
+    // let resp = await pca.acquireTokenByClientCredential(clientCredentialRequest);
+    // console.log(resp);
+
+    if (tokenResponse !== null) {
+        let token: Token = {
+            access_token: tokenResponse.accessToken,
+            token_type: tokenResponse.tokenType,
+            scope: tokenResponse.scopes[0],
+            expires_in: tokenResponse.expiresOn !== null ? (tokenResponse.expiresOn.getTime() - tokenResponse.expiresOn.getMilliseconds()) / 1000 : 0,
+        };
+        return token;
+    } else {
+        throw error("Unable to fetch token");
+    }
+
+    //throw error("Unable to fetch token");
 }
 
 export async function loginWithRefreshToken(clientId: string, dataverseUrl: string, refreshToken: string): Promise<Token | undefined> {

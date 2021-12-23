@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { loginWithPrompt, loginWithUsernamePassword } from "../login/login";
+import { loginWithClientIdSecret, loginWithPrompt, loginWithUsernamePassword } from "../login/login";
 import { Placeholders } from "../utils/Placeholders";
 import { ErrorMessages } from "../utils/ErrorMessages";
 import { State } from "../utils/State";
@@ -111,6 +111,11 @@ export class DataverseHelper {
         return undefined;
     }
 
+    public getTokenFromCurrentConnection(): string | undefined {
+        const connFromWS: IConnection = this.vsstate.getFromWorkspace(connectionCurrentStoreKey);
+        return connFromWS.currentAccessToken;
+    }
+
     public async getEntityDefinitions() {
         const respData = await this.request.requestData<IEntityMetadata>("EntityDefinitions");
         this.vsstate.saveInWorkspace(entityDefinitionsStoreKey, respData);
@@ -214,6 +219,7 @@ export class DataverseHelper {
     async connectionWizard(): Promise<IConnection | undefined> {
         let usernameUserResponse: string | undefined;
         let passwordUserResponse: string | undefined;
+        let tenantIdResponse: string | undefined;
         let envUrlUserResponse: string | undefined = await vscode.window.showInputBox(Placeholders.getInputBoxOptions(Placeholders.dataverseEnvironmentURL));
         if (!envUrlUserResponse) {
             vscode.window.showErrorMessage(ErrorMessages.dataverseEnvironmentUrlRequired);
@@ -255,6 +261,12 @@ export class DataverseHelper {
                     vscode.window.showErrorMessage(ErrorMessages.clientSecretRequired);
                     return undefined;
                 }
+
+                tenantIdResponse = await vscode.window.showInputBox(Placeholders.getInputBoxOptions(Placeholders.tenantId));
+                if (!tenantIdResponse) {
+                    vscode.window.showErrorMessage(ErrorMessages.tenantIdRequired);
+                    return undefined;
+                }
                 break;
             case loginTypes[1]:
             default:
@@ -277,6 +289,7 @@ export class DataverseHelper {
             loginType: logintypeResponse,
             userName: usernameUserResponse,
             password: passwordUserResponse,
+            tenantId: tenantIdResponse,
             connectionName: connNameUserResponse,
         };
 
@@ -293,7 +306,7 @@ export class DataverseHelper {
             case loginTypes[0]:
                 return await loginWithUsernamePassword(conn.environmentUrl, conn.userName!, conn.password!);
             case "Client Id and Secret":
-                return await loginWithPrompt(conn.userName!, false, conn.environmentUrl, openUri, redirectTimeout);
+                return await loginWithClientIdSecret(conn.environmentUrl, conn.userName!, conn.password!, conn.tenantId!);
             case loginTypes[1]:
             default:
                 return await loginWithPrompt(customDataverseClientId, false, conn.environmentUrl, openUri, redirectTimeout);

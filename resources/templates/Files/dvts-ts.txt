@@ -3,7 +3,7 @@ class FILENAME {
     //private static formContext: Xrm.Account;
 
     static onLoad(executionContext: Xrm.Events.EventContext) {
-        //FILENAME.formContext = executionContext.getFormContext();
-        //FILENAME.formContext.getAttribute("accountnumber").getValue();
+        //this.formContext = executionContext.getFormContext();
+        //this.formContext.getAttribute("accountnumber").getValue();
     }
 }

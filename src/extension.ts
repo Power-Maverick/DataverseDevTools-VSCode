@@ -4,6 +4,7 @@ import * as vscode from "vscode";
 import TelemetryReporter from "vscode-extension-telemetry";
 import { registerCommands } from "./commands/registerCommands";
 import { registerTreeDataProviders } from "./commands/registerTreeDataProviders";
+import { DataverseHelper } from "./helpers/dataverseHelper";
 import { aiKey } from "./utils/Constants";
 
 const extensionId = "danish-naglekar.dataverse-devtools";
@@ -23,6 +24,22 @@ export function activate(context: vscode.ExtensionContext) {
 
     registerTreeDataProviders(context);
     registerCommands(context, reporter);
+
+    // Testing only - will be removed in future releases
+    let dataverseToolsPublicApi = {
+        sum(a: number, b: number) {
+            return a + b;
+        },
+        mul(a: number, b: number) {
+            return a * b;
+        },
+        currentConnectionToken() {
+            const dvHelper = new DataverseHelper(context);
+            return dvHelper.getTokenFromCurrentConnection();
+        },
+    };
+    // 'export' public api-surface
+    return dataverseToolsPublicApi;
 }
 
 // this method is called when your extension is deactivated

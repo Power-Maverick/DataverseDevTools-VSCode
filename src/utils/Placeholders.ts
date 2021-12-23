@@ -41,6 +41,12 @@ export class Placeholders {
                     password: true,
                 };
                 break;
+            case this.tenantId:
+                inbOptions = {
+                    placeHolder: this.ipTenantId.placeHolderText,
+                    prompt: this.ipTenantId.prompt,
+                };
+                break;
             case this.connectionName:
                 inbOptions = {
                     placeHolder: this.ipConnectionName.placeHolderText,
@@ -118,6 +124,7 @@ export class Placeholders {
     public static password: string = "Password";
     public static clientId: string = "ClientId";
     public static clientSecret: string = "ClientSecret";
+    public static tenantId: string = "TenantId";
     public static connectionName: string = "ConnectionName";
     public static connectionType: string = "ConnectionType";
     public static webResourceSelection: string = "WebResourceSelection";
@@ -156,6 +163,10 @@ export class Placeholders {
     private static ipClientSecret: IPlaceholder = {
         placeHolderText: `${Placeholders.required} Client Secret (e.g.: UPcKJK_aZ45JkA!13k6NAq8-rj9Z-856Ye)`,
         prompt: `Enter your client secret to authenticate with Dataverse`,
+    };
+    private static ipTenantId: IPlaceholder = {
+        placeHolderText: `${Placeholders.required} Tenant Id (e.g.: FAB0D415-3221-FFE2-AB91-1A20C6BC4687)`,
+        prompt: `Enter your tenant id to authenticate with Dataverse`,
     };
     private static ipConnectionName: IPlaceholder = {
         placeHolderText: `${Placeholders.required} Name (e.g.: Awesome Dev)`,
