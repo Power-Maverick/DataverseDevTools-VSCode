@@ -225,8 +225,10 @@ export class UploadHelper {
             {
                 location: vscode.ProgressLocation.Notification,
                 title: "Uploading Web Resources",
+                cancellable: true,
             },
             async (progress, token) => {
+                let id: string = "";
                 token.onCancellationRequested(() => {
                     console.log("User canceled the long running operation");
                     return;
@@ -237,6 +239,7 @@ export class UploadHelper {
                         content: encodeToBase64(readFileSync(fullPath)),
                     };
                     await this.dvHelper.updateWebResourceContent(resc["@_Id"], wr);
+                    id = resc["@_Id"];
                 } else {
                     const wr = await this.webResourceCreateWizard(fullPath);
                     if (wr) {
@@ -247,10 +250,13 @@ export class UploadHelper {
                             wrId = extractGuid(wrId)!;
                             this.dvHelper.addWRToSolution(solutionUniqueName, wrId);
                             wr.webresourceid = wrId;
+                            id = wrId;
                             return wr;
                         }
                     }
                 }
+                progress.report({ increment: 50, message: "Publishing..." });
+                await this.dvHelper.publishWebResource(id);
                 progress.report({ increment: 100 });
                 vscode.window.showInformationMessage(`Web Resource uploaded.`);
             },

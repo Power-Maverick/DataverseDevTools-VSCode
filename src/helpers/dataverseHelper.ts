@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { loginWithClientIdSecret, loginWithPrompt, loginWithUsernamePassword } from "../login/login";
+import { loginWithClientIdSecret, loginWithPrompt, loginWithRefreshToken, loginWithUsernamePassword } from "../login/login";
 import { Placeholders } from "../utils/Placeholders";
 import { ErrorMessages } from "../utils/ErrorMessages";
 import { State } from "../utils/State";
@@ -184,11 +184,18 @@ export class DataverseHelper {
     }
 
     public async createWebResource(wr: IWebResource): Promise<string | undefined> {
-        return await this.request.createData("webresourceset?$select=webresourceid", JSON.stringify(wr));
+        return await this.request.postData("webresourceset?$select=webresourceid", JSON.stringify(wr));
     }
 
     public async updateWebResourceContent(id: string, wr: IWebResource): Promise<string | undefined> {
-        return await this.request.updateData(`webresourceset(${id})`, JSON.stringify(wr));
+        return await this.request.patchData(`webresourceset(${id})`, JSON.stringify(wr));
+    }
+
+    public async publishWebResource(id: string) {
+        var parameters: any = {};
+        parameters.ParameterXml = `<importexportxml><webresources><webresource>${id}</webresource></webresources></importexportxml>`;
+        let json = JSON.stringify(parameters);
+        await this.request.postData("PublishXml", json);
     }
 
     public async addWRToSolution(solName: string, wrId: string) {
@@ -202,7 +209,7 @@ export class DataverseHelper {
             // eslint-disable-next-line @typescript-eslint/naming-convention
             ComponentType: 61, // Web Resources (https://docs.microsoft.com/en-us/dynamics365/customer-engagement/web-api/solutioncomponent?view=dynamics-ce-odata-9)
         };
-        await this.request.createData("AddSolutionComponent", JSON.stringify(solComp));
+        await this.request.postData("AddSolutionComponent", JSON.stringify(solComp));
     }
 
     public async fetchEntitiesInSolution(solutionId: string) {
@@ -211,6 +218,29 @@ export class DataverseHelper {
 
     public async fetchWRsInSolution(solutionId: string) {
         return await this.request.requestData<ISolutionComponents>(`solutioncomponents?$filter=(componenttype%20eq%2061%20and%20_solutionid_value%20eq%20${solutionId})`);
+    }
+
+    public async reAuthenticate(currentConnection: IConnection): Promise<Token | undefined> {
+        let tokenResponse: Token | undefined;
+
+        switch (currentConnection.loginType) {
+            case loginTypes[0]:
+                tokenResponse = await loginWithUsernamePassword(currentConnection.environmentUrl, currentConnection.userName!, currentConnection.password!);
+            case "Client Id and Secret":
+                tokenResponse = await loginWithClientIdSecret(currentConnection.environmentUrl, currentConnection.userName!, currentConnection.password!, currentConnection.tenantId!);
+            case loginTypes[1]:
+                tokenResponse = currentConnection.refreshToken
+                    ? await loginWithRefreshToken(customDataverseClientId, currentConnection.environmentUrl, currentConnection.refreshToken)
+                    : await loginWithPrompt(customDataverseClientId, false, currentConnection.environmentUrl, openUri, redirectTimeout);
+        }
+
+        if (tokenResponse) {
+            currentConnection.currentAccessToken = tokenResponse.access_token;
+            currentConnection.refreshToken = tokenResponse.refresh_token;
+        }
+
+        this.vsstate.saveInWorkspace(connectionCurrentStoreKey, currentConnection);
+        return tokenResponse;
     }
 
     //#endregion Public

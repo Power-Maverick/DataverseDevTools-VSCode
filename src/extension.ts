@@ -25,14 +25,7 @@ export function activate(context: vscode.ExtensionContext) {
     registerTreeDataProviders(context);
     registerCommands(context, reporter);
 
-    // Testing only - will be removed in future releases
     let dataverseToolsPublicApi = {
-        sum(a: number, b: number) {
-            return a + b;
-        },
-        mul(a: number, b: number) {
-            return a * b;
-        },
         currentConnectionToken() {
             const dvHelper = new DataverseHelper(context);
             return dvHelper.getTokenFromCurrentConnection();

@@ -57,7 +57,6 @@ export class SmartMatchView extends Panel {
                     }
                     break;
                 case "upload":
-                    vscode.window.showInformationMessage("Uploading");
                     switch (value) {
                         case "all":
                             this.uploadFiles(

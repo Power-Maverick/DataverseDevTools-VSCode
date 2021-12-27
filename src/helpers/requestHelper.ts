@@ -5,11 +5,10 @@ import { apiPartUrl, connectionCurrentStoreKey, customDataverseClientId, loginTy
 import { IConnection } from "../utils/Interfaces";
 import { State } from "../utils/State";
 import { DataverseHelper } from "./dataverseHelper";
-import { loginWithPrompt, loginWithRefreshToken, loginWithUsernamePassword } from "../login/login";
-import { openUri } from "../utils/OpenUri";
 
 export class RequestHelper {
     private vsstate: State;
+
     /**
      * Initialization constructor for VS Code Context
      */
@@ -40,24 +39,12 @@ export class RequestHelper {
                     if (retries && retries > maxRetries) {
                         return undefined;
                     }
-                    let tokenResponse = currentConnection.refreshToken
-                        ? await loginWithRefreshToken(customDataverseClientId, currentConnection.environmentUrl, currentConnection.refreshToken)
-                        : await loginWithUsernamePassword(currentConnection.environmentUrl, currentConnection.userName!, currentConnection.password!);
-
-                    if (!tokenResponse && currentConnection.loginType === loginTypes[1]) {
-                        // Try again with no refresh token
-                        tokenResponse = await loginWithPrompt(customDataverseClientId, false, currentConnection.environmentUrl, openUri, redirectTimeout);
-                    }
-
+                    let tokenResponse = await this.dvHelper.reAuthenticate(currentConnection);
                     if (tokenResponse) {
-                        currentConnection.currentAccessToken = tokenResponse.access_token;
-                        currentConnection.refreshToken = tokenResponse.refresh_token;
+                        return this.requestData(query, retries ? retries + 1 : 1);
                     } else {
-                        return undefined;
+                        throw new Error("Unable to finish the requested query");
                     }
-
-                    this.vsstate.saveInWorkspace(connectionCurrentStoreKey, currentConnection);
-                    return this.requestData(query, retries ? retries + 1 : 1);
                 } else {
                     return undefined;
                 }
@@ -68,9 +55,10 @@ export class RequestHelper {
         }
     }
 
-    async createData(query: string, data: string): Promise<string | undefined> {
+    async postData(query: string, data: string, retries?: number): Promise<string | undefined> {
+        const currentConnection: IConnection = this.vsstate.getFromWorkspace(connectionCurrentStoreKey);
+
         try {
-            const currentConnection: IConnection = this.vsstate.getFromWorkspace(connectionCurrentStoreKey);
             const requestUrl = `${currentConnection.environmentUrl}${apiPartUrl}${query}`;
             const response = await fetch(requestUrl, {
                 method: "POST",
@@ -88,13 +76,27 @@ export class RequestHelper {
 
             if (response.ok) {
                 return response.headers.get("OData-EntityId") !== null ? response.headers.get("OData-EntityId")?.toString() : undefined;
+            } else {
+                if (response.statusText === "Unauthorized" && this.dvHelper) {
+                    if (retries && retries > maxRetries) {
+                        return undefined;
+                    }
+                    let tokenResponse = await this.dvHelper.reAuthenticate(currentConnection);
+                    if (tokenResponse) {
+                        return this.postData(query, data, retries ? retries + 1 : 1);
+                    } else {
+                        throw new Error("Unable to finish the requested query");
+                    }
+                } else {
+                    return undefined;
+                }
             }
         } catch (err) {
             console.log(err);
         }
     }
 
-    async updateData(query: string, data: string): Promise<string | undefined> {
+    async patchData(query: string, data: string, retries?: number): Promise<string | undefined> {
         try {
             const currentConnection: IConnection = this.vsstate.getFromWorkspace(connectionCurrentStoreKey);
             const requestUrl = `${currentConnection.environmentUrl}${apiPartUrl}${query}`;
@@ -114,6 +116,20 @@ export class RequestHelper {
 
             if (response.ok) {
                 return response.headers.get("OData-EntityId") !== null ? response.headers.get("OData-EntityId")?.toString() : undefined;
+            } else {
+                if (response.statusText === "Unauthorized" && this.dvHelper) {
+                    if (retries && retries > maxRetries) {
+                        return undefined;
+                    }
+                    let tokenResponse = await this.dvHelper.reAuthenticate(currentConnection);
+                    if (tokenResponse) {
+                        return this.patchData(query, data, retries ? retries + 1 : 1);
+                    } else {
+                        throw new Error("Unable to finish the requested query");
+                    }
+                } else {
+                    return undefined;
+                }
             }
         } catch (err) {
             console.log(err);
