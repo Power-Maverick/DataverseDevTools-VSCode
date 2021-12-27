@@ -83,24 +83,38 @@
 
 ### Connect to your Dataverse environment
 
+There are 3 ways you can connect to your Dataverse Environment.
+
+-   Username & Password: This works with environments without MFA and needs to extra configuration.
+-   Dataverse DevTools Microsoft Login Prompt: Uses DVDT's Public App registered in Azure AD. This will need approval from Azure Admin before you can use it for authentication.
+-   Client Id & Secret: This works with MFA but needs extra configuration of Azure AD App Registration. To know more on app registration process [read here](https://docs.microsoft.com/en-us/powerapps/developer/data-platform/walkthrough-register-app-azure-active-directory?WT.mc_id=BA-MVP-5003877).
+
+Below is one of the way you can create the connection.
+
 ![Create & Connect](https://github.com/Power-Maverick/DataverseDevTools-VSCode/blob/main/assets/Create&Connect.gif?raw=true)
 
 ### Remembers the connected environment per workspace
+
+Once you connect to your preferred Dataverse Environment; the tool will rememeber the connection for that workspace/folder.
 
 ![Silent Connection Reload](https://github.com/Power-Maverick/DataverseDevTools-VSCode/blob/main/assets/RememberConnection.gif?raw=true)
 
 ### See connection and entity details (with copy feature)
 
+This provides an ability for you to quikly check the details of the connection and also copy certain important information.
+
 ![See Details](https://github.com/Power-Maverick/DataverseDevTools-VSCode/blob/main/assets/Connection&EntityDetails.gif?raw=true)
 
 ### Initialize TypeScript project & add TS File
 
-Instantiates with following setup:
+You can instantiate a TypeScript project for Dataverse that automatically installs all the prerequisites needed:
 
 -   [`@types/xrm`](https://www.npmjs.com/package/@types/xrm)
 -   [`WebPack`](https://www.npmjs.com/package/webpack)
 -   [`ESLint`](https://www.npmjs.com/package/eslint)
 -   [`Prettier`](https://www.npmjs.com/package/prettier)
+
+Below procecss shows how you can create a TypeScript project for Dataverse with one of the available options and also how you can add a TypeScript file that loads the code-snippet.
 
 ![TypeScript Project](https://github.com/Power-Maverick/DataverseDevTools-VSCode/blob/main/assets/TypeScriptInitialization.gif?raw=true)
 
@@ -108,15 +122,21 @@ Instantiates with following setup:
 
 ### Generate Typings
 
+Typings help you write early-bound code. And with the help of `@types/xrm` you can provide types to all of your variables/methods.
+
 **Typings are also integrated with [`@types/xrm`](https://www.npmjs.com/package/@types/xrm)**
 
 ![Typings](https://github.com/Power-Maverick/DataverseDevTools-VSCode/blob/main/assets/GenerateTypings.gif?raw=true)
 
 ### Intellisense for type generated
 
+When you generate typings for entities you are provided with an intellisense; provided you have casted the `FormContext` into proper `Entity` type.
+
 ![IntellisenseTypeScript](https://github.com/Power-Maverick/DataverseDevTools-VSCode/blob/main/assets/IntellisenseForTypeScript.gif?raw=true)
 
 ### Upload Web Resources
+
+Once you build your project you can upload your script directly from the VS Code with the help of Dataverse DevTools.
 
 ![WebResourceUpload](https://github.com/Power-Maverick/DataverseDevTools-VSCode/blob/main/assets/WebResourceUpload.gif?raw=true)
 
@@ -195,6 +215,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   </tr>
   <tr>
     <td align="center"><a href="http://www.powerapps.com/"><img src="https://avatars.githubusercontent.com/u/10568244?v=4?s=100" width="100px;" alt=""/><br /><sub><b>MattB</b></sub></a><br /><a href="#mentoring-MattB-msft" title="Mentoring">🧑‍🏫</a></td>
+    <td align="center"><a href="http://www.crmkeeper.com/"><img src="https://avatars.githubusercontent.com/u/33664322?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Thomas Sandsør</b></sub></a><br /><a href="https://github.com/Power-Maverick/DataverseDevTools-VSCode/issues?q=author%3Athomassandsor" title="Bug reports">🐛</a> <a href="#ideas-thomassandsor" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/Power-Maverick/DataverseDevTools-VSCode/commits?author=thomassandsor" title="Tests">⚠️</a> <a href="#userTesting-thomassandsor" title="User Testing">📓</a></td>
   </tr>
 </table>
 

@@ -103,6 +103,18 @@
       "contributions": [
         "mentoring"
       ]
+    },
+    {
+      "login": "thomassandsor",
+      "name": "Thomas Sandsør",
+      "avatar_url": "https://avatars.githubusercontent.com/u/33664322?v=4",
+      "profile": "http://www.crmkeeper.com/",
+      "contributions": [
+        "bug",
+        "ideas",
+        "test",
+        "userTesting"
+      ]
     }
   ],
   "contributorsPerLine": 7
