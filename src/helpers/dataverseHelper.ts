@@ -226,7 +226,7 @@ export class DataverseHelper {
         switch (currentConnection.loginType) {
             case loginTypes[0]:
                 tokenResponse = await loginWithUsernamePassword(currentConnection.environmentUrl, currentConnection.userName!, currentConnection.password!);
-            case "Client Id and Secret":
+            case loginTypes[2]:
                 tokenResponse = await loginWithClientIdSecret(currentConnection.environmentUrl, currentConnection.userName!, currentConnection.password!, currentConnection.tenantId!);
             case loginTypes[1]:
                 tokenResponse = currentConnection.refreshToken
@@ -257,9 +257,6 @@ export class DataverseHelper {
         }
 
         let logintypeOptions: string[] = loginTypes;
-        if (config.get("enableEarlyAccessPreview") && !logintypeOptions.includes("Client Id and Secret")) {
-            logintypeOptions.push("Client Id and Secret");
-        }
         let logintypeOptionsQuickPick: vscode.QuickPickOptions = Placeholders.getQuickPickOptions(Placeholders.logintype);
         let logintypeResponse: string | undefined = await vscode.window.showQuickPick(logintypeOptions, logintypeOptionsQuickPick);
 
@@ -278,7 +275,7 @@ export class DataverseHelper {
                     return undefined;
                 }
                 break;
-            case "Client Id and Secret":
+            case loginTypes[2]:
                 // Client Id / Secret
                 usernameUserResponse = await vscode.window.showInputBox(Placeholders.getInputBoxOptions(Placeholders.clientId));
                 if (!usernameUserResponse) {
@@ -335,7 +332,7 @@ export class DataverseHelper {
         switch (loginType) {
             case loginTypes[0]:
                 return await loginWithUsernamePassword(conn.environmentUrl, conn.userName!, conn.password!);
-            case "Client Id and Secret":
+            case loginTypes[2]:
                 return await loginWithClientIdSecret(conn.environmentUrl, conn.userName!, conn.password!, conn.tenantId!);
             case loginTypes[1]:
             default:

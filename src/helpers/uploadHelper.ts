@@ -225,7 +225,6 @@ export class UploadHelper {
             {
                 location: vscode.ProgressLocation.Notification,
                 title: "Uploading Web Resources",
-                cancellable: true,
             },
             async (progress, token) => {
                 let id: string = "";
