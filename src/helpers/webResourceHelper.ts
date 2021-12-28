@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import * as vscode from "vscode";
 import * as path from "path";
-import { copyFolderOrFile, getFileExtension, getFileName, getRelativeFilePath, getWorkspaceFolder, readFileSync, writeFileSync } from "../utils/FileSystem";
+import { copyFolderOrFile, createTempDirectory, getFileExtension, getFileName, getRelativeFilePath, getWorkspaceFolder, readFileSync, writeFileSync } from "../utils/FileSystem";
 import { jsonToXML, xmlToJSON } from "../utils/Parsers";
 import { ILinkerFile, ILinkerRes, ISmartMatchRecord, IWebResource, IWebResources } from "../utils/Interfaces";
 import { DataverseHelper } from "./dataverseHelper";
@@ -10,11 +10,11 @@ import { smartMatchStoreKey, WebResourceType, wrDefinitionsStoreKey } from "../u
 import { Placeholders } from "../utils/Placeholders";
 import { ErrorMessages } from "../utils/ErrorMessages";
 import { reduce } from "conditional-reduce";
-import { encodeToBase64, extractGuid } from "../utils/ExtensionMethods";
+import { decodeFromBase64, encodeToBase64, extractGuid } from "../utils/ExtensionMethods";
 import { ViewBase } from "../views/ViewBase";
 import { SmartMatchView } from "../views/SmartMatchView";
 
-export class UploadHelper {
+export class WebResourceHelper {
     private vsstate: State;
 
     /**
@@ -24,6 +24,7 @@ export class UploadHelper {
         this.vsstate = new State(vscontext);
     }
 
+    //#region Public
     public async uploadWebResource(fullPath: string) {
         let resourceToUpload: ILinkerRes | undefined = await this.getLinkedResourceByLocalFileName(fullPath);
         if (!resourceToUpload) {
@@ -53,6 +54,23 @@ export class UploadHelper {
             }
         } else {
             await this.uploadWebResourceInternal(fullPath, resourceToUpload);
+        }
+    }
+
+    public async compareWebResources(fullPath: string) {
+        let resourceToCompare: ILinkerRes | undefined = await this.getLinkedResourceByLocalFileName(fullPath);
+        if (resourceToCompare) {
+            const base64Content = await this.dvHelper.getWebResourceContent(resourceToCompare["@_Id"]);
+            if (base64Content) {
+                const parsedContent = decodeFromBase64(base64Content);
+                const tempDirUri = await createTempDirectory();
+                const tempFilePath = vscode.Uri.joinPath(tempDirUri, `temp-${resourceToCompare["@_localFileName"]}`);
+                writeFileSync(tempFilePath.fsPath, parsedContent);
+
+                await vscode.commands.executeCommand("vscode.diff", vscode.Uri.file(fullPath), tempFilePath, `Local <--> Server : ${resourceToCompare["@_dvDisplayName"]}`);
+            }
+        } else {
+            vscode.window.showErrorMessage(ErrorMessages.wrCompareError);
         }
     }
 
@@ -141,7 +159,9 @@ export class UploadHelper {
             }
         }
     }
+    //#endregion Public
 
+    //#region Private
     async linkWebResource(fullPath: string): Promise<ILinkerRes | undefined> {
         const localFileName = getFileName(fullPath);
         const localRelativePath = getRelativeFilePath(fullPath, getWorkspaceFolder()?.fsPath!);
@@ -345,6 +365,8 @@ export class UploadHelper {
                 return { displayname: wrDisplayNameUR, name: `${prefix}_${wrNameUR}`, webresourcetype: wrType, content: wrContent, solutionid: solId, description: solName };
             }
         }
+
+        //#endregion Private
 
         // Ask for
         //  Display Name

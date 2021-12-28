@@ -6,7 +6,7 @@ import { ISolutionComponent, IStore, IWebResource, IWebResources } from "../util
 import { observable } from "mobx";
 import { TreeItemBase } from "./treeItemBase";
 import { toArray } from "../utils/ExtensionMethods";
-import { UploadHelper } from "../helpers/uploadHelper";
+import { WebResourceHelper } from "../helpers/webResourceHelper";
 import { DataverseHelper } from "../helpers/dataverseHelper";
 import { Placeholders } from "../utils/Placeholders";
 
@@ -16,7 +16,7 @@ export class WebResourcesDataProvider implements vscode.TreeDataProvider<WebReso
     private linkedResources: string[] | undefined = [];
     private areWRFiltered: boolean = false;
 
-    constructor(private vscontext: vscode.ExtensionContext, private dvHelper: DataverseHelper, private uploadHelper: UploadHelper) {}
+    constructor(private vscontext: vscode.ExtensionContext, private dvHelper: DataverseHelper, private uploadHelper: WebResourceHelper) {}
 
     async refresh(): Promise<void> {
         await this.populateWebResources();

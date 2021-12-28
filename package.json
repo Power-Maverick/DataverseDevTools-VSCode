@@ -58,16 +58,21 @@
                 },
                 {
                     "command": "dvdt.commands.initTS",
-                    "group": "%dvdt.menus.group%"
+                    "group": "%dvdt.menus.group%@1"
                 },
                 {
                     "command": "dvdt.commands.createTSFile",
-                    "group": "%dvdt.menus.group%"
+                    "group": "%dvdt.menus.group%@2"
                 },
                 {
                     "command": "dvdt.explorer.webresources.uploadWebResource",
                     "when": "resourceExtname in devtools.resourcesExtn",
-                    "group": "%dvdt.menus.group%"
+                    "group": "%dvdt.menus.group%@3"
+                },
+                {
+                    "command": "dvdt.explorer.webresources.compareWebResource",
+                    "when": "resourceExtname in devtools.resourcesExtn && devtools.showPreviewOptions",
+                    "group": "%dvdt.menus.group%@4"
                 }
             ],
             "view/title": [
@@ -280,6 +285,12 @@
                 "category": "%dvdt.explorer.category%"
             },
             {
+                "command": "dvdt.explorer.webresources.compareWebResource",
+                "title": "Compare Web Resource",
+                "when": "false",
+                "category": "%dvdt.explorer.category%"
+            },
+            {
                 "command": "dvdt.explorer.entities.filteron",
                 "title": "Filter",
                 "category": "%dvdt.explorer.category%",
@@ -382,6 +393,7 @@
         "@types/fs-extra": "^9.0.12",
         "@types/lodash": "^4.14.171",
         "conditional-reduce": "^1.2.0",
+        "dayjs": "^1.10.7",
         "dts-dom": "^3.6.0",
         "fast-xml-parser": "^3.19.0",
         "fs-extra": "^10.0.0",
