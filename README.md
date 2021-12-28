@@ -85,9 +85,11 @@
 
 There are 3 ways you can connect to your Dataverse Environment.
 
--   Username & Password: This works with environments without MFA and needs to extra configuration.
--   Dataverse DevTools Microsoft Login Prompt: Uses DVDT's Public App registered in Azure AD. This will need approval from Azure Admin before you can use it for authentication.
--   Client Id & Secret: This works with MFA but needs extra configuration of Azure AD App Registration. To know more on app registration process [read here](https://docs.microsoft.com/en-us/powerapps/developer/data-platform/walkthrough-register-app-azure-active-directory?WT.mc_id=BA-MVP-5003877).
+| Connection Type        | Description                                                                                                                                                                                                                                                                                                                    |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Username & Password    | This works with environments without MFA-enabled and needs no extra configuration.                                                                                                                                                                                                                                             |
+| Microsoft Login Prompt | Uses DVDT's Public App registered in Azure AD. This will need approval from Azure Admin before you can use it for authentication. This connection other than approving the public Azure AD app (which is a one-time activity) needs no extra configuration. This connection will work with MFA-enabled authentication as well. |
+| Client Id & Secret     | This works with MFA-enabled authentication but needs extra configuration of Azure AD App Registration. To know more on app registration process [read here](https://docs.microsoft.com/en-us/powerapps/developer/data-platform/walkthrough-register-app-azure-active-directory?WT.mc_id=BA-MVP-5003877).                       |
 
 Below is one of the way you can create the connection.
 
