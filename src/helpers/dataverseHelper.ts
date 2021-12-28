@@ -223,15 +223,22 @@ export class DataverseHelper {
     public async reAuthenticate(currentConnection: IConnection): Promise<Token | undefined> {
         let tokenResponse: Token | undefined;
 
-        switch (currentConnection.loginType) {
-            case loginTypes[0]:
-                tokenResponse = await loginWithUsernamePassword(currentConnection.environmentUrl, currentConnection.userName!, currentConnection.password!);
-            case loginTypes[2]:
-                tokenResponse = await loginWithClientIdSecret(currentConnection.environmentUrl, currentConnection.userName!, currentConnection.password!, currentConnection.tenantId!);
-            case loginTypes[1]:
-                tokenResponse = currentConnection.refreshToken
-                    ? await loginWithRefreshToken(customDataverseClientId, currentConnection.environmentUrl, currentConnection.refreshToken)
-                    : await loginWithPrompt(customDataverseClientId, false, currentConnection.environmentUrl, openUri, redirectTimeout);
+        if (currentConnection.refreshToken) {
+            tokenResponse = await loginWithRefreshToken(customDataverseClientId, currentConnection.environmentUrl, currentConnection.refreshToken);
+        }
+
+        if (!tokenResponse) {
+            switch (currentConnection.loginType) {
+                case loginTypes[0]:
+                    tokenResponse = await loginWithUsernamePassword(currentConnection.environmentUrl, currentConnection.userName!, currentConnection.password!);
+                    break;
+                case loginTypes[2]:
+                    tokenResponse = await loginWithClientIdSecret(currentConnection.environmentUrl, currentConnection.userName!, currentConnection.password!, currentConnection.tenantId!);
+                    break;
+                case loginTypes[1]:
+                    tokenResponse = await loginWithPrompt(customDataverseClientId, false, currentConnection.environmentUrl, openUri, redirectTimeout);
+                    break;
+            }
         }
 
         if (tokenResponse) {

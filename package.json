@@ -275,7 +275,7 @@
             },
             {
                 "command": "dvdt.explorer.webresources.uploadWebResource",
-                "title": "Upload Web Resource",
+                "title": "Upload & Publish Web Resource",
                 "when": "false",
                 "category": "%dvdt.explorer.category%"
             },
