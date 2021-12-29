@@ -1,5 +1,6 @@
 export const extensionName: string = "Dataverse DevTools";
 export const extensionPrefix: string = "devtools";
+export const extensionCodeName: string = "dataverse-devtools";
 export const extensionUniqueName: string = "danish-naglekar.dataverse-devtools";
 export const aiKey: string = "490f2bf6-8f2a-4cc1-873b-c2a62d0a2ec8";
 export const activeDirectoryEndpointUrl: string = "https://login.microsoftonline.com/";

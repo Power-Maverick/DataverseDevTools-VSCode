@@ -4,12 +4,12 @@ import { ILinkView, ISmartMatchRecord } from "../utils/Interfaces";
 import { Panel } from "./PanelBase";
 import { readFileSync } from "../utils/FileSystem";
 import _ = require("lodash");
-import { UploadHelper } from "../helpers/uploadHelper";
+import { WebResourceHelper } from "../helpers/webResourceHelper";
 
 export class SmartMatchView extends Panel {
     smartMatches: ISmartMatchRecord[] = [];
 
-    constructor(matches: ISmartMatchRecord[], webview: vscode.WebviewPanel, vscontext: vscode.ExtensionContext, private uploadHelper: UploadHelper) {
+    constructor(matches: ISmartMatchRecord[], webview: vscode.WebviewPanel, vscontext: vscode.ExtensionContext, private uploadHelper: WebResourceHelper) {
         super({ panel: webview, extensionUri: vscontext.extensionUri, webViewFileName: "smartmatch.html" });
         this.smartMatches = matches;
 

@@ -16,6 +16,7 @@ import {
     IWebResource,
     ISolutionComponents,
     Token,
+    IWebResources,
 } from "../utils/Interfaces";
 import { connectionCurrentStoreKey, connectionStoreKey, customDataverseClientId, entityDefinitionsStoreKey, environmentTypes, loginTypes, solDefinitionsStoreKey, wrDefinitionsStoreKey } from "../utils/Constants";
 import { DataverseConnectionTreeItem } from "../trees/dataverseConnectionDataProvider";
@@ -25,7 +26,6 @@ import { openUri } from "../utils/OpenUri";
 import { ViewBase } from "../views/ViewBase";
 import { ConnectionDetailsView } from "../views/ConnectionDetailsView";
 import { EntityDetailsView } from "../views/EntityDetailsView";
-import * as config from "../utils/Config";
 
 export class DataverseHelper {
     private vsstate: State;
@@ -176,11 +176,18 @@ export class DataverseHelper {
     }
 
     public async getWebResources() {
-        const respData = await this.request.requestData<IEntityMetadata>(
+        const respData = await this.request.requestData<IWebResources>(
             "webresourceset?$filter=(Microsoft.Dynamics.CRM.In(PropertyName=%27webresourcetype%27,PropertyValues=[%271%27,%272%27,%273%27])%20and%20ismanaged%20eq%20false%20and%20iscustomizable/Value%20eq%20true%20)",
         );
         this.vsstate.saveInWorkspace(wrDefinitionsStoreKey, respData);
         vscode.commands.executeCommand("dvdt.explorer.webresources.loadWebResources");
+    }
+
+    public async getWebResourceContent(wrId: string): Promise<string | undefined> {
+        const selectedWR = await this.request.requestData<IWebResource>(`webresourceset(${wrId})?$select=content`);
+        if (selectedWR) {
+            return selectedWR.content;
+        }
     }
 
     public async createWebResource(wr: IWebResource): Promise<string | undefined> {
