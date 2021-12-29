@@ -24,7 +24,7 @@ export class UploadHelper {
         this.vsstate = new State(vscontext);
     }
 
-    public async uploadWebResource(fullPath: string) {
+    public async uploadWebResource(fullPath: string): Promise<IWebResource | undefined> {
         let resourceToUpload: ILinkerRes | undefined = await this.getLinkedResourceByLocalFileName(fullPath);
         if (!resourceToUpload) {
             let wrLinkQPOptions = ["Link to existing web resource & upload", "Upload as new web resource"];
@@ -34,7 +34,7 @@ export class UploadHelper {
             if (wrLinkQPResponse) {
                 if (wrLinkQPResponse === wrLinkQPOptions[0]) {
                     resourceToUpload = await this.linkWebResource(fullPath);
-                    await this.uploadWebResourceInternal(fullPath, resourceToUpload);
+                    return await this.uploadWebResourceInternal(fullPath, resourceToUpload);
                 } else if (wrLinkQPResponse === wrLinkQPOptions[1]) {
                     const wr = await this.uploadWebResourceInternal(fullPath);
                     if (wr) {
@@ -48,11 +48,12 @@ export class UploadHelper {
                             "@_localFilePath": localRelativePath,
                         };
                         this.addInLinkerFile(resc);
+                        return wr;
                     }
                 }
             }
         } else {
-            await this.uploadWebResourceInternal(fullPath, resourceToUpload);
+            return await this.uploadWebResourceInternal(fullPath, resourceToUpload);
         }
     }
 
@@ -111,6 +112,15 @@ export class UploadHelper {
                                 localFullPath: jsFile.fsPath,
                                 confidenceLevel: 60,
                                 linked: linkedResource?.["@_dvFilePath"] === wrFoundByNameSearch.name!,
+                            });
+                        }
+                        // Default - No Match
+                        else {
+                            smartMatches.push({
+                                localFileName: localFileName,
+                                localFilePath: localRelativePath,
+                                localFullPath: jsFile.fsPath,
+                                linked: false,
                             });
                         }
                     }
@@ -228,17 +238,22 @@ export class UploadHelper {
             },
             async (progress, token) => {
                 let id: string = "";
+                let wrReturn: IWebResource | undefined;
                 token.onCancellationRequested(() => {
                     console.log("User canceled the long running operation");
                     return;
                 });
                 progress.report({ increment: 0, message: "Uploading..." });
-                if (resc) {
+                if (resc && resc["@_Id"]) {
                     const wr: IWebResource = {
                         content: encodeToBase64(readFileSync(fullPath)),
                     };
                     await this.dvHelper.updateWebResourceContent(resc["@_Id"], wr);
                     id = resc["@_Id"];
+                    wrReturn = wr;
+                    wrReturn.name = resc["@_dvFilePath"];
+                    wrReturn.displayname = resc["@_dvDisplayName"];
+                    wrReturn.webresourceid = resc["@_Id"];
                 } else {
                     const wr = await this.webResourceCreateWizard(fullPath);
                     if (wr) {
@@ -250,7 +265,7 @@ export class UploadHelper {
                             this.dvHelper.addWRToSolution(solutionUniqueName, wrId);
                             wr.webresourceid = wrId;
                             id = wrId;
-                            return wr;
+                            wrReturn = wr;
                         }
                     }
                 }
@@ -258,6 +273,7 @@ export class UploadHelper {
                 await this.dvHelper.publishWebResource(id);
                 progress.report({ increment: 100 });
                 vscode.window.showInformationMessage(`Web Resource uploaded.`);
+                return wrReturn;
             },
         );
     }
