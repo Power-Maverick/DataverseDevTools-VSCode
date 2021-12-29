@@ -3,5 +3,6 @@
     "dvdt.explorer.category": "Explorer",
     "dvdt.menus.group": "dvdevtools",
     "dvdt.config.title": "Dataverse DevTools",
-    "dvdt.config.enablePreview": "Enable a preview features for Dataverse DevTools. See [documentation for all available preview features](https://github.com/Power-Maverick/DataverseDevTools-VSCode#-early-access-preview).\n\n> _Note: these features are not fully tested; so if you encounter any bugs please report them on GitHub (your name will appear on the contributors list)._"
+    "dvdt.config.enablePreview": "Enable a preview features for Dataverse DevTools. See [documentation for all available preview features](https://github.com/Power-Maverick/DataverseDevTools-VSCode#-early-access-preview).\n\n> _Note: these features are not fully tested; so if you encounter any bugs please report them on GitHub (your name will appear on the contributors list)._",
+    "dvdt.config.defaultTSTemplate": "Specifies how Dataverse DevTools should behave when you initiate a TypeScript project. This will skip the extra question during TS project initialization when you either select `Plain TypeScript` or `Webpack`"
 }

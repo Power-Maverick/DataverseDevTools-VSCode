@@ -354,8 +354,16 @@
                 "dataverse-devtools.enableEarlyAccessPreview": {
                     "type": "boolean",
                     "default": false,
-                    "markdownDescription": "%dvdt.config.enablePreview%",
-                    "scope": "window"
+                    "markdownDescription": "%dvdt.config.enablePreview%"
+                },
+                "dataverse-devtools.defaultTypeScriptTemplate": {
+                    "default": "none",
+                    "enum": [
+                        "None",
+                        "Plain TypeScript",
+                        "Webpack"
+                    ],
+                    "markdownDescription": "%dvdt.config.defaultTSTemplate%"
                 }
             }
         }
