@@ -51,9 +51,7 @@
   <a href="https://github.com/Power-Maverick/DataverseDevTools-VSCode/discussions/categories/q-a">Support</a>
 </h3>
 
-> Do check-out the [planned features](#-planned-features) list.
-
-> **Dataverse DevTools Microsoft Login Prompt for connection is not fully functioning and it is been worked upon.**
+> Do check-out the [planned features](#-planned-features) list. We need your help to complete these planned features.
 
 **Table of contents**
 
@@ -72,11 +70,12 @@
 - [🔥 Using Typings](#-using-typings)
 - [⌨ Keyboard Shortcuts](#-keyboard-shortcuts)
 - [🎁 Early-Access Preview](#-early-access-preview)
+- [🧪 Alpha-Testing](#-alpha-testing)
+    - [⌚ Features available for alpha-test](#-features-available-for-alpha-test)
 - [💭 Planned Features](#-planned-features)
 - [✨ Contributing](#-contributing)
 - [🔉 Discussions](#-discussions)
 - [📃 License](#-license)
-- [💙 Big Thanks](#-big-thanks)
 - [✍ Credits](#-credits)
 
 ## ⚙ Features
@@ -189,6 +188,25 @@ This list showcases the features that are build and ready but not fully tested t
 | ------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Compare local vs server Web Resource | You can compare your local JavaScript web-resource with a server JavaScript file. All you have to do is; right-click the JavaScript file and select `Compare Web Resource`. |
 
+## 🧪 Alpha-Testing
+
+There are different ways in which you can contribute to this open-source project. One of the way is to be part of alpha-testing. In order to perform alpha-testing follow the below steps:
+
+-   Fork this project and clone it on your local machine
+-   Identify the changes in alpha-test mode (list is mentioned below)
+-   Open the project in VS Code
+-   Navigate to `Run and Debug` from **Activity Bar**
+-   Make sure `Run Extension` is selected; click on ▶️ icon.
+-   This will open another VS Code instance, this instance will have _Extention Development Host_ on it's title
+-   You are ready to perform your tests
+
+#### ⌚ Features available for alpha-test
+
+1. **Ability for users to select their default TS template**: From the settings option you can now select your default TS Project Template. Selecting the default template will skip the question when you initiate a TS Project.
+2. **Improvement to Smart Match**: Smart Match has got a new look-and-feel. It is more robust, shows all the available local files with a status of linked, recommended link or not linked. Recommended link will have a confidence score that will help you link the local files with server files.
+
+> Report any issues or feedback on GitHub.
+
 ## 💭 Planned Features
 
 -   Integrate with [Dataverse-ify](https://github.com/scottdurow/dataverse-ify/).
@@ -196,9 +214,18 @@ This list showcases the features that are build and ready but not fully tested t
 
 ## ✨ Contributing
 
-Before creating the pull request for contributing, please read the [Contributing Guidelines](CONTRIBUTING.md).
-
 We encourage you to pitch in, join the team and showcase your name on this repo. If you are unsure how you can contribute, please reach out to [Power Maverick](https://twitter.com/DanzMaverick).
+
+**Different ways to contribute**:
+
+-   Improve the code or fix a bug by creating a Pull Request.
+-   Get involved in Alpha & Beta tests.
+-   Provide suggestions, feedback or feature request on GitHub.
+-   Report issues & bugs on GitHub.
+-   Answer any open questions on the [Discussion Board](https://github.com/Power-Maverick/DataverseDevTools-VSCode/discussions).
+-   Join [Power Platform LevelUP](https://discord.gg/MwdEqfeZXD) community on Discord to answer any of the questions that may rise w.r.t. this tool.
+
+Before creating the pull request for contributing, please read the [Contributing Guidelines](CONTRIBUTING.md).
 
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
@@ -235,12 +262,6 @@ If you want to have any discussions on any feature, please use the [Discussion B
 ## 📃 License
 
 This software is released under [MIT License](http://www.opensource.org/licenses/mit-license.php)
-
-## 💙 Big Thanks
-
-[Magnus Gether Sørensen](https://www.linkedin.com/in/xrmwizard/) for helping in providing insights for XrmDefinitelyTyped.
-
-[Temmy Raharjo](https://www.linkedin.com/in/temmy-wahyu-raharjo/) for encouraging me to start using `pac cli command` to generate Plugin project.
 
 ## ✍ Credits
 
