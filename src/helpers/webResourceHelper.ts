@@ -103,12 +103,11 @@ export class WebResourceHelper {
                     const localRelativePath = getRelativeFilePath(jsFile.fsPath, getWorkspaceFolder()?.fsPath!);
 
                     let linkedResource: ILinkerRes | undefined = await this.getLinkedResourceByLocalFileName(jsFile.fsPath);
+                    let localContent = readFileAsBase64Sync(jsFile.fsPath);
 
                     // Find in Linker first
                     if (linkedResource && linkedResource["@_Id"]) {
                         let wr = jsonWRs.value.find((wr) => wr.webresourceid === linkedResource?.["@_Id"]);
-                        let localContent = readFileAsBase64Sync(jsFile.fsPath);
-                        let serverContent = wr?.content;
 
                         smartMatches.push({
                             wrId: linkedResource["@_Id"],
@@ -119,46 +118,53 @@ export class WebResourceHelper {
                             localFullPath: jsFile.fsPath,
                             confidenceLevel: 100,
                             linked: true,
-                            base64ContentMatch: localContent === serverContent,
+                            base64ContentMatch: localContent === wr?.content,
                         });
                     } else {
-                        // Match with Display Name exact match
-                        let wrFoundByName = jsonWRs.value.find((wr) => wr.displayname?.toLowerCase() === localFileName.toLowerCase());
-                        if (wrFoundByName) {
+                        let confidence: number = 0;
+                        let wrMatch: IWebResource | undefined;
+                        // Match with Content & Display Name - 90
+                        const wrFoundByContentAndName = jsonWRs.value.find((wr) => wr.content === localContent && wr.displayname?.toLowerCase() === localFileName.toLowerCase());
+                        // Match with Content & Display Name - 80
+                        const wrFoundByContentAndNameSearch = jsonWRs.value.find((wr) => wr.content === localContent && wr.name?.toLowerCase()?.search(localFileName.toLowerCase())! > 0);
+                        // Match with Display Name exact match - 75
+                        const wrFoundByName = jsonWRs.value.find((wr) => wr.displayname?.toLowerCase() === localFileName.toLowerCase());
+                        // Match with File Name search in Server Path - 60
+                        const wrFoundByNameSearch = jsonWRs.value.find((wr) => wr.name?.toLowerCase()?.search(localFileName.toLowerCase())! > 0);
+
+                        if (wrFoundByContentAndName) {
+                            confidence = 90;
+                            wrMatch = wrFoundByContentAndName;
+                        } else if (wrFoundByContentAndNameSearch) {
+                            confidence = 80;
+                            wrMatch = wrFoundByContentAndNameSearch;
+                        } else if (wrFoundByName) {
+                            confidence = 75;
+                            wrMatch = wrFoundByName;
+                        } else if (wrFoundByNameSearch) {
+                            confidence = 60;
+                            wrMatch = wrFoundByNameSearch;
+                        }
+
+                        if (wrMatch) {
                             smartMatches.push({
-                                wrId: wrFoundByName.webresourceid!,
-                                wrDisplayName: wrFoundByName.displayname!,
-                                wrPath: wrFoundByName.name!,
+                                wrId: wrMatch.webresourceid!,
+                                wrDisplayName: wrMatch.displayname!,
+                                wrPath: wrMatch.name!,
                                 localFileName: localFileName,
                                 localFilePath: localRelativePath,
                                 localFullPath: jsFile.fsPath,
-                                confidenceLevel: 100,
-                                linked: linkedResource?.["@_dvFilePath"] === wrFoundByName.name!,
+                                confidenceLevel: confidence,
+                                linked: linkedResource?.["@_dvFilePath"] === wrMatch.name!,
                             });
                         } else {
-                            // Match with File Name search in Server Path
-                            let wrFoundByNameSearch = jsonWRs.value.find((wr) => wr.name?.toLowerCase()?.search(localFileName.toLowerCase())! > 0);
-                            if (wrFoundByNameSearch) {
-                                smartMatches.push({
-                                    wrId: wrFoundByNameSearch.webresourceid!,
-                                    wrDisplayName: wrFoundByNameSearch.displayname!,
-                                    wrPath: wrFoundByNameSearch.name!,
-                                    localFileName: localFileName,
-                                    localFilePath: localRelativePath,
-                                    localFullPath: jsFile.fsPath,
-                                    confidenceLevel: 60,
-                                    linked: linkedResource?.["@_dvFilePath"] === wrFoundByNameSearch.name!,
-                                });
-                            }
                             // Default - No Match
-                            else {
-                                smartMatches.push({
-                                    localFileName: localFileName,
-                                    localFilePath: localRelativePath,
-                                    localFullPath: jsFile.fsPath,
-                                    linked: false,
-                                });
-                            }
+                            smartMatches.push({
+                                localFileName: localFileName,
+                                localFilePath: localRelativePath,
+                                localFullPath: jsFile.fsPath,
+                                linked: false,
+                            });
                         }
                     }
                 }),

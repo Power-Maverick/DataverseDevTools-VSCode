@@ -7,8 +7,9 @@
 
 <div id="toolbar">
     <button class="btn btn-primary" id="btnUpload" onclick="uploadAll()"><i class="bi bi-cloud-arrow-up"></i>&nbsp;Upload All Linked</button>
-    <button class="btn btn-primary" id="btnLink100Only" onclick="link100Only()"><i class="bi bi-code-square"></i>&nbsp;Link 100% Confidence</button>
-    <button class="btn btn-primary" id="btnLinkAll" onclick="linkAll()"><i class="bi bi-link"></i>&nbsp;Link All</button>
+    <button class="btn btn-primary" id="btnLink100Only" onclick="link100Only()"><i class="bi bi-code-square"></i>&nbsp;Link 100% Confidence Smart Match</button>
+    <button class="btn btn-primary" id="btnLinkAll" onclick="linkAll()"><i class="bi bi-link"></i>&nbsp;Link All Smart Match</button>
+    <button class="btn btn-primary" data-bs-toggle="offcanvas" data-bs-target="#ocConfidenceLevel" aria-controls="ocConfidenceLevel"><i class="bi bi-eyeglasses"></i>&nbsp;Understand Confidence Levels</button>
 </div>
 <div id="wrs" class="col s12">
     <table
@@ -47,20 +48,39 @@
         </tbody>
     </table>
 </div>
-<!-- Modal -->
-<div class="modal fade" id="smartMatchSuggestionModal" tabindex="-1" aria-labelledby="smartMatchSuggestionModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="smartMatchSuggestionModalLabel">Smart Match Suggestion</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body"></div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
-        </div>
+<!-- Offcanvas -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="ocConfidenceLevel" aria-labelledby="ocConfidenceLevelLabel">
+    <div class="offcanvas-header">
+        <h5 id="ocConfidenceLevelLabel">Confidence Levels</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <ol class="list-group list-group-numbered">
+            <li class="list-group-item d-flex justify-content-between align-items-start">
+                <div class="ms-2 me-auto">
+                    <div class="fw-bold">Confidence Level - 90</div>
+                    Matched on exact Local File Name & Server Display Name, plus matched on the content of the files.
+                </div>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-start">
+                <div class="ms-2 me-auto">
+                    <div class="fw-bold">Confidence Level - 80</div>
+                    Matched on Local File Name in Server Unique Name, plus matched on the content of the files.
+                </div>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-start">
+                <div class="ms-2 me-auto">
+                    <div class="fw-bold">Confidence Level - 75</div>
+                    Matched on exact Local File Name & Server Display Name.
+                </div>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-start">
+                <div class="ms-2 me-auto">
+                    <div class="fw-bold">Confidence Level - 60</div>
+                    Matched on Local File Name in Server Unique Name.
+                </div>
+            </li>
+        </ol>
     </div>
 </div>
 
