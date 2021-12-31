@@ -82,6 +82,12 @@ export class Panel {
                             <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
                         </div>
                     </div>
+                    <div id="experimentalPreviewToast" class="toast align-items-center text-white bg-secondary bg-gradient border-0 w-56" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="d-flex">
+                            <div class="toast-body">Smart Match is in experimental preview. Please report all errors or feature requests on GitHub so we can improve the experience.</div>
+                            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                    </div>
                     <script src="${baseJs}"></script>
                 </body>
                 </html>`;

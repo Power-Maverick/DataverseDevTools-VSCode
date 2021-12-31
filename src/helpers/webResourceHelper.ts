@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import * as vscode from "vscode";
 import * as path from "path";
-import { copyFolderOrFile, createTempDirectory, getFileExtension, getFileName, getRelativeFilePath, getWorkspaceFolder, readFileSync, writeFileSync } from "../utils/FileSystem";
+import { copyFolderOrFile, createTempDirectory, getFileExtension, getFileName, getRelativeFilePath, getWorkspaceFolder, readFileAsBase64Sync, readFileSync, writeFileSync } from "../utils/FileSystem";
 import { jsonToXML, xmlToJSON } from "../utils/Parsers";
 import { ILinkerFile, ILinkerRes, ISmartMatchRecord, IWebResource, IWebResources } from "../utils/Interfaces";
 import { DataverseHelper } from "./dataverseHelper";
@@ -105,7 +105,11 @@ export class WebResourceHelper {
                     let linkedResource: ILinkerRes | undefined = await this.getLinkedResourceByLocalFileName(jsFile.fsPath);
 
                     // Find in Linker first
-                    if (linkedResource?.["@_Id"]) {
+                    if (linkedResource && linkedResource["@_Id"]) {
+                        let wr = jsonWRs.value.find((wr) => wr.webresourceid === linkedResource?.["@_Id"]);
+                        let localContent = readFileAsBase64Sync(jsFile.fsPath);
+                        let serverContent = wr?.content;
+
                         smartMatches.push({
                             wrId: linkedResource["@_Id"],
                             wrDisplayName: linkedResource["@_dvDisplayName"],
@@ -115,6 +119,7 @@ export class WebResourceHelper {
                             localFullPath: jsFile.fsPath,
                             confidenceLevel: 100,
                             linked: true,
+                            base64ContentMatch: localContent === serverContent,
                         });
                     } else {
                         // Match with Display Name exact match

@@ -269,6 +269,7 @@ export interface ISmartMatchRecord {
     localFullPath: string;
     confidenceLevel?: number;
     linked: boolean;
+    base64ContentMatch?: boolean;
 }
 
 export interface ILinkView {

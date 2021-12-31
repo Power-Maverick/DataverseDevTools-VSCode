@@ -11,6 +11,10 @@ body {
     width: 15% !important;
 }
 
+.w-56 {
+    width: 56% !important;
+}
+
 .btn-circle {
     height: 40px;
     width: 40px;
@@ -46,6 +50,11 @@ body {
 
 .red {
     background-color: red !important;
+}
+
+.yellow {
+    background-color: yellow !important;
+    color: black;
 }
 
 .orange {

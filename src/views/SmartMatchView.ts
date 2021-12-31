@@ -73,8 +73,17 @@ export class SmartMatchView extends Panel {
                             break;
                         default:
                             if (value) {
-                                await this.uploadHelper.uploadWebResource(decodeURI(value));
-                                vscode.window.showInformationMessage(`Uploaded the records`);
+                                this.uploadFiles(
+                                    this.smartMatches?.filter((sm) => {
+                                        if (sm.localFullPath === decodeURI(value)) {
+                                            return sm;
+                                        }
+                                    }),
+                                );
+                                // await this.uploadHelper.uploadWebResource(decodeURI(value));
+                                // let smIndex = this.smartMatches.findIndex((obj) => obj.localFullPath === decodeURI(value));
+                                // this.smartMatches[smIndex].base64ContentMatch = true;
+                                // vscode.window.showInformationMessage(`Uploaded the records`);
                             }
                             break;
                     }
@@ -119,10 +128,13 @@ export class SmartMatchView extends Panel {
             await Promise.all(
                 sm.map(async (rec) => {
                     await this.uploadHelper.uploadWebResource(rec.localFullPath);
+                    let smIndex = this.smartMatches.findIndex((obj) => obj.localFullPath === rec.localFullPath);
+                    this.smartMatches[smIndex].base64ContentMatch = true;
                 }),
             );
         }
         vscode.window.showInformationMessage(`Uploaded ${sm ? sm.length : 0} records`);
+        super.update();
     }
 
     getHtmlForWebview(webviewFileName: string): string {
@@ -134,8 +146,30 @@ export class SmartMatchView extends Panel {
             matches: "",
         };
 
-        if (this.smartMatches && this.smartMatches.length > 0) {
-            this.smartMatches.forEach((a) => {
+        const sortedMatches = this.smartMatches.sort((n1, n2) => {
+            if (!n1.linked && !n2.linked) {
+                if (n1.confidenceLevel && n2.confidenceLevel) {
+                    return n2.confidenceLevel - n1.confidenceLevel;
+                } else {
+                    if (n1.confidenceLevel) {
+                        return -1;
+                    }
+                    if (n2.confidenceLevel) {
+                        return 1;
+                    }
+                }
+            }
+            if (n1.linked) {
+                return -1;
+            }
+            if (n2.linked) {
+                return 1;
+            }
+            return 0;
+        });
+
+        if (sortedMatches && sortedMatches.length > 0) {
+            sortedMatches.forEach((a) => {
                 viewModel.matches += `<tr>`;
                 // Local
                 viewModel.matches += `<td>${a.localFileName}</td>`;
@@ -148,14 +182,20 @@ export class SmartMatchView extends Panel {
                 viewModel.matches += `<td>${a.confidenceLevel || "0"}</td>`;
 
                 if (a.linked) {
-                    viewModel.matches += `<td class="fs2 status green"><i class="bi bi-check-square-fill"></i></td>`;
+                    // Content Mis-match check
+                    if (a.base64ContentMatch) {
+                        viewModel.matches += `<td class="status green"><i class="bi bi-check-square-fill"></i><div class="f-x-small">Up to date</div></td>`;
+                    } else {
+                        viewModel.matches += `<td class="status yellow"><i class="bi bi-flag-fill"></i><div class="f-x-small">Not Up to date</div></td>`;
+                    }
+
                     viewModel.matches += `<td class="action-items"><button class="btn btn-primary btn-sm btn-circle" onclick="upload('${encodeURI(a.localFullPath)}')"><i class="bi bi-cloud-upload"></i></button>`;
                     viewModel.matches += `<div>Upload</div></td>`;
                 } else {
                     if (a.confidenceLevel) {
                         viewModel.matches += `<td class="status orange"><i class="bi bi-info-square-fill"></i><div class="f-x-small">Smart Match</div></td>`;
                     } else {
-                        viewModel.matches += `<td class="status red"><i class="bi bi-x-square-fill"></i></td>`;
+                        viewModel.matches += `<td class="status red"><i class="bi bi-x-square-fill"></i><div class="f-x-small">Not Linked</div></td>`;
                     }
                     viewModel.matches += `<td class="action-items"><button class="btn btn-primary btn-sm btn-circle" onclick="link('${encodeURI(a.localFullPath)}','${a.wrId}')"><i class="bi bi-link-45deg"></i></button>`;
                     viewModel.matches += `<div>Link</div></td>`;

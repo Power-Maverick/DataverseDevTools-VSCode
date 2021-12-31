@@ -13,12 +13,6 @@ $(document).ready(function () {
     $table.bootstrapTable("refreshOptions", {
         classes: "table table-bordered",
     });
-
-    $("#smartMatchSuggestionModal").on("show.bs.modal", function (event) {
-        console.log(event.relatedTarget);
-
-        //$("#modal_body").html(value);
-    });
 });
 
 document.addEventListener("DOMContentLoaded", function () {
