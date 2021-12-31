@@ -261,17 +261,18 @@ export interface ISolutionComponent {
 }
 
 export interface ISmartMatchRecord {
-    wrId: string;
-    wrDisplayName: string;
-    wrPath: string;
+    wrId?: string;
+    wrDisplayName?: string;
+    wrPath?: string;
     localFileName: string;
     localFilePath: string;
     localFullPath: string;
-    confidenceLevel: number;
+    confidenceLevel?: number;
     linked: boolean;
+    base64ContentMatch?: boolean;
 }
 
 export interface ILinkView {
     fp: string;
-    id: string;
+    id?: string;
 }

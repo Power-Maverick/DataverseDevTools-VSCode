@@ -8,6 +8,10 @@ export function readFileSync(source: string): any {
     return fs.readFileSync(source);
 }
 
+export function readFileAsBase64Sync(source: string): any {
+    return fs.readFileSync(source, "base64");
+}
+
 export function writeFileSync(source: string, data: string): any {
     return fs.writeFileSync(source, data);
 }
