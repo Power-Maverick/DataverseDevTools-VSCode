@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { UploadHelper } from "../helpers/uploadHelper";
+import { WebResourceHelper } from "../helpers/webResourceHelper";
 import { DataverseHelper } from "../helpers/dataverseHelper";
 import { DataverseConnectionDataProvider } from "../trees/dataverseConnectionDataProvider";
 import { EntitiesDataProvider } from "../trees/entitiesDataProvider";
@@ -8,7 +8,7 @@ import { ICommand } from "../utils/Interfaces";
 
 export function registerTreeDataProviders(vscontext: vscode.ExtensionContext): void {
     const dvHelper = new DataverseHelper(vscontext);
-    const uploadHelper = new UploadHelper(vscontext, dvHelper);
+    const uploadHelper = new WebResourceHelper(vscontext, dvHelper);
 
     const dataverseConnProvider = new DataverseConnectionDataProvider(vscontext);
     vscode.window.registerTreeDataProvider("dvConnections", dataverseConnProvider);

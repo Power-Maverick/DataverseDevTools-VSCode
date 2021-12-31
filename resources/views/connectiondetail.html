@@ -1,29 +1,38 @@
 <h3>!!{connName}</h3>
 <h5>!!{connType}</h5>
 <form>
-    <div>
-        <label>Environment URL:</label>
-        <input id="envurl" type="text" value="!!{envUrl}" readonly />
-        <i class="material-icons trailing" onclick="copyToClipboard('envurl')">content_copy</i>
+    <div class="mb-3 row">
+        <label for="envurl" class="col-sm-2 col-form-label">Environment URL:</label>
+        <div class="col-sm-9">
+            <input type="text" readonly class="form-control-plaintext text-truncate" id="envurl" value="!!{envUrl}" />
+            <button type="button" class="btn btn-primary btn-sm" onclick="copyToClipboard('envurl')">Copy <i class="bi bi-clipboard"></i></button>
+        </div>
     </div>
-    <div>
-        <label>Login Type:</label>
-        <input id="type" type="text" value="!!{loginType}" readonly />
-        <i class="material-icons trailing" onclick="copyToClipboard('type')">content_copy</i>
+    <div class="mb-3 row">
+        <label for="type" class="col-sm-2 col-form-label">Login Type:</label>
+        <div class="col-sm-9">
+            <input type="text" readonly class="form-control-plaintext text-truncate" id="type" value="!!{loginType}" />
+        </div>
     </div>
-    <div>
-        <label>Username:</label>
-        <input id="uname" type="text" value="!!{userName}" readonly />
-        <i class="material-icons trailing" onclick="copyToClipboard('uname')">content_copy</i>
+    <div class="mb-3 row">
+        <label for="uname" class="col-sm-2 col-form-label">Username:</label>
+        <div class="col-sm-9">
+            <input type="text" readonly class="form-control-plaintext text-truncate" id="uname" value="!!{userName}" />
+            <button type="button" class="btn btn-primary btn-sm" onclick="copyToClipboard('uname')">Copy <i class="bi bi-clipboard"></i></button>
+        </div>
     </div>
-    <div>
-        <label>Access Token:</label>
-        <input id="pass" type="text" value="!!{token}" readonly />
-        <i class="material-icons trailing" onclick="copyToClipboard('pass')">content_copy</i>
+    <div class="mb-3 row">
+        <label for="pass" class="col-sm-2 col-form-label">Access Token:</label>
+        <div class="col-sm-9">
+            <input type="text" readonly class="form-control-plaintext text-truncate" id="pass" value="!!{token}" />
+            <button type="button" class="btn btn-primary btn-sm" onclick="copyToClipboard('pass')">Copy <i class="bi bi-clipboard"></i></button>
+        </div>
     </div>
-    <div>
-        <label>Refresh Token:</label>
-        <input id="refresh" type="text" value="!!{refreshToken}" readonly />
-        <i class="material-icons trailing" onclick="copyToClipboard('refresh')">content_copy</i>
+    <div class="mb-3 row">
+        <label for="refresh" class="col-sm-2 col-form-label">Refresh Token:</label>
+        <div class="col-sm-9">
+            <input type="text" readonly class="form-control-plaintext text-truncate" id="refresh" value="!!{refreshToken}" />
+            <button type="button" class="btn btn-primary btn-sm" onclick="copyToClipboard('refresh')">Copy <i class="bi bi-clipboard"></i></button>
+        </div>
     </div>
 </form>

@@ -1,5 +1,8 @@
 import * as vscode from "vscode";
+import * as os from "os";
+import * as path from "path";
 import * as fs from "fs-extra";
+import { extensionCodeName } from "../utils/Constants";
 
 export function readFileSync(source: string): any {
     return fs.readFileSync(source);
@@ -38,4 +41,16 @@ export function pathExists(fspath: string) {
 
 export function getFileExtension(fullPath: string): string | undefined {
     return fullPath.split(".").pop();
+}
+
+export async function createTempDirectory() {
+    const scratchDirectory = path.join(os.tmpdir(), extensionCodeName);
+    const dayjs = require("dayjs");
+    const timestamp = dayjs().format("YYYYMMDD");
+    const tempDirectory = path.join(scratchDirectory, timestamp);
+
+    const uri = vscode.Uri.file(tempDirectory);
+    await vscode.workspace.fs.createDirectory(uri);
+
+    return uri;
 }

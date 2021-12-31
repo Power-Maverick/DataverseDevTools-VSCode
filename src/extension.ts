@@ -1,11 +1,12 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from "vscode";
+import * as config from "./utils/Config";
 import TelemetryReporter from "vscode-extension-telemetry";
 import { registerCommands } from "./commands/registerCommands";
 import { registerTreeDataProviders } from "./commands/registerTreeDataProviders";
 import { DataverseHelper } from "./helpers/dataverseHelper";
-import { aiKey } from "./utils/Constants";
+import { aiKey, extensionPrefix, fileExtensions } from "./utils/Constants";
 
 const extensionId = "danish-naglekar.dataverse-devtools";
 const extension = vscode.extensions.getExtension(extensionId)!;
@@ -21,6 +22,9 @@ export function activate(context: vscode.ExtensionContext) {
     reporter = new TelemetryReporter(extensionId, extensionVersion, aiKey);
     // ensure it gets property disposed
     context.subscriptions.push(reporter);
+
+    vscode.commands.executeCommand("setContext", `${extensionPrefix}.resourcesExtn`, fileExtensions);
+    vscode.commands.executeCommand("setContext", `${extensionPrefix}.showPreviewOptions`, config.get("enableEarlyAccessPreview"));
 
     registerTreeDataProviders(context);
     registerCommands(context, reporter);

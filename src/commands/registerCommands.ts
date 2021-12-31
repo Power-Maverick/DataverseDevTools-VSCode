@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import TelemetryReporter from "vscode-extension-telemetry";
 import { CLIHelper } from "../helpers/cliHelper";
-import { UploadHelper } from "../helpers/uploadHelper";
+import { WebResourceHelper } from "../helpers/webResourceHelper";
 import { DataverseHelper } from "../helpers/dataverseHelper";
 import { TemplateHelper } from "../helpers/templateHelper";
 import { TypingsHelper } from "../helpers/typingsHelper";
@@ -21,7 +21,7 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
     const views = new ViewBase(vscontext);
     const cliHelper = new CLIHelper(vscontext);
     const templateHelper = new TemplateHelper(vscontext);
-    const uploadHelper = new UploadHelper(vscontext, dvHelper);
+    const uploadHelper = new WebResourceHelper(vscontext, dvHelper);
     const typingHelper = new TypingsHelper(vscontext, dvHelper);
     const errorHandler = new ErrorHandler(tr);
 
@@ -144,13 +144,22 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
                 }
             },
         },
+        {
+            command: "dvdt.explorer.webresources.compareWebResource",
+            callback: async (uri: vscode.Uri) => {
+                try {
+                    await uploadHelper.compareWebResources(uri.fsPath);
+                } catch (error) {
+                    errorHandler.log(error, "compareWebResource");
+                }
+            },
+        },
     );
     cmds.forEach((c) => {
         vscontext.subscriptions.push(vscode.commands.registerCommand(c.command, c.callback));
     });
 
     updateConnectionStatusBar(await dvHelper.reloadWorkspaceConnection());
-    vscode.commands.executeCommand("setContext", `${extensionPrefix}.resourcesExtn`, fileExtensions);
     vscode.commands.executeCommand("setContext", `${extensionPrefix}.linkedResources`, await uploadHelper.getLinkedResourceStrings("@_localFileName"));
 }
 

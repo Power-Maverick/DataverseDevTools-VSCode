@@ -1,5 +1,6 @@
 export const extensionName: string = "Dataverse DevTools";
 export const extensionPrefix: string = "devtools";
+export const extensionCodeName: string = "dataverse-devtools";
 export const extensionUniqueName: string = "danish-naglekar.dataverse-devtools";
 export const aiKey: string = "490f2bf6-8f2a-4cc1-873b-c2a62d0a2ec8";
 export const activeDirectoryEndpointUrl: string = "https://login.microsoftonline.com/";
@@ -17,7 +18,7 @@ export const solDefinitionsStoreKey: string = `CurrentSolutions`;
 export const smartMatchStoreKey: string = `CurrentSmartMatch`;
 export const environmentTypes: string[] = ["Dev", "QA", "UAT", "Prod"];
 export const loginTypes: string[] = ["Username/Password", "Microsoft Login Prompt", "Client Id and Secret"];
-export const tsTemplateType: string[] = ["TypeScript Only", "Webpack"];
+export const tsTemplateType: string[] = ["Plain TypeScript", "Webpack"];
 export const connectionStatusBarUniqueId: string = `${extensionPrefix}.StatusBarConnectStatus`;
 export const maxRetries: number = 5;
 export const terminalName: string = "Dataverse DevTools";
