@@ -34,10 +34,10 @@ function copyToClipboard(id) {
     toast.show();
 }
 
-function link100Only() {
+function linkSpecific(cScore) {
     vscode.postMessage({
         command: "link",
-        value: "100only",
+        value: cScore,
     });
 }
 

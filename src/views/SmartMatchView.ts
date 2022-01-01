@@ -5,6 +5,7 @@ import { Panel } from "./PanelBase";
 import { readFileSync } from "../utils/FileSystem";
 import _ = require("lodash");
 import { WebResourceHelper } from "../helpers/webResourceHelper";
+import { ConfidenceScores } from "../utils/Constants";
 
 export class SmartMatchView extends Panel {
     smartMatches: ISmartMatchRecord[] = [];
@@ -23,10 +24,37 @@ export class SmartMatchView extends Panel {
                     break;
                 case "link":
                     switch (value) {
-                        case "100only":
+                        case ConfidenceScores._90:
                             this.linkFiles(
                                 this.smartMatches?.filter((sm) => {
-                                    if (sm.confidenceLevel === 100 && !sm.linked) {
+                                    if (sm.confidenceLevel === 90 && !sm.linked) {
+                                        return sm;
+                                    }
+                                }),
+                            );
+                            break;
+                        case ConfidenceScores._80:
+                            this.linkFiles(
+                                this.smartMatches?.filter((sm) => {
+                                    if (sm.confidenceLevel === 80 && !sm.linked) {
+                                        return sm;
+                                    }
+                                }),
+                            );
+                            break;
+                        case ConfidenceScores._75:
+                            this.linkFiles(
+                                this.smartMatches?.filter((sm) => {
+                                    if (sm.confidenceLevel === 75 && !sm.linked) {
+                                        return sm;
+                                    }
+                                }),
+                            );
+                            break;
+                        case ConfidenceScores._60:
+                            this.linkFiles(
+                                this.smartMatches?.filter((sm) => {
+                                    if (sm.confidenceLevel === 60 && !sm.linked) {
                                         return sm;
                                     }
                                 }),
@@ -35,7 +63,7 @@ export class SmartMatchView extends Panel {
                         case "all":
                             this.linkFiles(
                                 this.smartMatches?.filter((sm) => {
-                                    if (!sm.linked) {
+                                    if (!sm.linked && sm.wrId) {
                                         return sm;
                                     }
                                 }),

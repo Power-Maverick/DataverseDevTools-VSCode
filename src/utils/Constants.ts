@@ -32,3 +32,10 @@ export enum WebResourceType {
     css = 2,
     script = 3,
 }
+
+export enum ConfidenceScores {
+    _90 = 90,
+    _80 = 80,
+    _75 = 75,
+    _60 = 60,
+}

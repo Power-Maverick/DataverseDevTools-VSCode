@@ -7,8 +7,16 @@
 
 <div id="toolbar">
     <button class="btn btn-primary" id="btnUpload" onclick="uploadAll()"><i class="bi bi-cloud-arrow-up"></i>&nbsp;Upload All Linked</button>
-    <button class="btn btn-primary" id="btnLink100Only" onclick="link100Only()"><i class="bi bi-code-square"></i>&nbsp;Link 100% Confidence Smart Match</button>
-    <button class="btn btn-primary" id="btnLinkAll" onclick="linkAll()"><i class="bi bi-link"></i>&nbsp;Link All Smart Match</button>
+    <div class="btn-group" role="group">
+        <button id="btnGroupLinkSpecific" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-code-square"></i>&nbsp;Link</button>
+        <ul class="dropdown-menu" aria-labelledby="btnGroupLinkSpecific">
+            <li><a class="dropdown-item" href="#" onclick="linkAll()">All Smart Match</a></li>
+            <li><a class="dropdown-item" href="#" onclick="linkSpecific(90)">90% Confidence Match</a></li>
+            <li><a class="dropdown-item" href="#" onclick="linkSpecific(80)">80% Confidence Match</a></li>
+            <li><a class="dropdown-item" href="#" onclick="linkSpecific(75)">75% Confidence Match</a></li>
+            <li><a class="dropdown-item" href="#" onclick="linkSpecific(60)">60% Confidence Match</a></li>
+        </ul>
+    </div>
     <button class="btn btn-primary" data-bs-toggle="offcanvas" data-bs-target="#ocConfidenceLevel" aria-controls="ocConfidenceLevel"><i class="bi bi-eyeglasses"></i>&nbsp;Understand Confidence Levels</button>
 </div>
 <div id="wrs" class="col s12">
@@ -65,7 +73,7 @@
             <li class="list-group-item d-flex justify-content-between align-items-start">
                 <div class="ms-2 me-auto">
                     <div class="fw-bold">Confidence Level - 80</div>
-                    Matched on Local File Name in Server Unique Name, plus matched on the content of the files.
+                    Matched on Local File Name in Server Path, plus matched on the content of the files.
                 </div>
             </li>
             <li class="list-group-item d-flex justify-content-between align-items-start">
@@ -77,7 +85,7 @@
             <li class="list-group-item d-flex justify-content-between align-items-start">
                 <div class="ms-2 me-auto">
                     <div class="fw-bold">Confidence Level - 60</div>
-                    Matched on Local File Name in Server Unique Name.
+                    Matched on Local File Name in Server Path.
                 </div>
             </li>
         </ol>
