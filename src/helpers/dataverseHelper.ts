@@ -18,7 +18,17 @@ import {
     Token,
     IWebResources,
 } from "../utils/Interfaces";
-import { connectionCurrentStoreKey, connectionStoreKey, customDataverseClientId, entityDefinitionsStoreKey, environmentTypes, loginTypes, solDefinitionsStoreKey, wrDefinitionsStoreKey } from "../utils/Constants";
+import {
+    connectionCurrentStoreKey,
+    connectionStoreKey,
+    customDataverseClientId,
+    entityDefinitionsStoreKey,
+    environmentTypes,
+    loginTypes,
+    reservedWords,
+    solDefinitionsStoreKey,
+    wrDefinitionsStoreKey,
+} from "../utils/Constants";
 import { DataverseConnectionTreeItem } from "../trees/dataverseConnectionDataProvider";
 import { RequestHelper } from "./requestHelper";
 import { ProgressLocation } from "vscode";
@@ -321,12 +331,14 @@ export class DataverseHelper {
         }
 
         let connNameUserResponse: string | undefined = await vscode.window.showInputBox(Placeholders.getInputBoxOptions(Placeholders.connectionName));
+        if (connNameUserResponse && reservedWords.includes(connNameUserResponse)) {
+            vscode.window.showErrorMessage(ErrorMessages.connNameReservedWords);
+            return undefined;
+        }
         if (!connNameUserResponse) {
             vscode.window.showErrorMessage(ErrorMessages.connNameRequired);
             return undefined;
         }
-
-        //TODO - clean up connNameUserResponse when value is one of the reserved - Dev, Test, QA, PROD
 
         let typeOptions: string[] = environmentTypes;
         let typeOptionsQuickPick: vscode.QuickPickOptions = Placeholders.getQuickPickOptions(Placeholders.connectionType);
