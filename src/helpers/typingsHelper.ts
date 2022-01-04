@@ -14,7 +14,7 @@ const typingOmitAttribute = "Omit<FormContext, 'getAttribute'>";
 const typingOmitControl = "Omit<FormContext, 'getControl'>";
 const xrmAttribute = "Attributes.Attribute";
 const xrmControl = "Controls.StandardControl";
-export const AttributeTypeDefinitionMap = new Map<string, string>([
+export const AttributeTypeDefMap = new Map<string, string>([
     ["Boolean","Attributes.BooleanAttribute"],
     ["Customer","Attributes.LookupAttribute"],
     ["DateTime","Attributes.DateAttribute"],
@@ -38,7 +38,7 @@ export const AttributeTypeDefinitionMap = new Map<string, string>([
     ["EntityName","Attributes.Attribute"],
     ]);
 
-const ControlTypeDefinitionMap = new Map<string, string>([
+const ControlTypeDefMap = new Map<string, string>([
     ["Boolean","Controls.StandardControl"],
     ["Customer","Controls.LookupControl"],
     ["DateTime","Controls.DateControl"],
@@ -129,17 +129,17 @@ export class TypingsHelper {
     }
 
     private createAttributeMethod(attr: IAttributeDefinition): dom.MethodDeclaration {
-        let 
+        const 
         logicalNameParam = dom.create.parameter("name", dom.type.stringLiteral(camelize(attr.LogicalName))),
-        returnType = dom.create.namedTypeReference(AttributeTypeDefinitionMap.get(attr.AttributeType)||"Control.Attribute");
+        returnType = dom.create.namedTypeReference(AttributeTypeDefMap.get(attr.AttributeType)||"Control.Attribute");
 
         return dom.create.method("getAttribute",[logicalNameParam], returnType);
     }
 
     private createControlMethod(attr: IAttributeDefinition): dom.MethodDeclaration {
-        let 
+        const 
         logicalNameParam = dom.create.parameter("name", dom.type.stringLiteral(camelize(attr.LogicalName))),
-        returnType = dom.create.namedTypeReference(ControlTypeDefinitionMap.get(attr.AttributeType)||"Controls.Control");
+        returnType = dom.create.namedTypeReference(ControlTypeDefMap.get(attr.AttributeType)||"Controls.Control");
         
         return dom.create.method("getControl", [logicalNameParam], returnType);
     }
