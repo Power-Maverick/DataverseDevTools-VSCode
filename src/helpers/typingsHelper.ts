@@ -35,7 +35,7 @@ export const AttributeTypeDefinitionMap = new Map<string, string>([
     ["Virtual","Attributes.Attribute"],
     ["BigInt","Attributes.NumberAttribute"],
     ["ManagedProperty", "Attributes.Attribute"],
-    ["EntityName","Attributes.Attribute"]
+    ["EntityName","Attributes.Attribute"],
     ]);
 
 const ControlTypeDefinitionMap = new Map<string, string>([
@@ -59,7 +59,7 @@ const ControlTypeDefinitionMap = new Map<string, string>([
     ["Virtual","Controls.Control"],
     ["BigInt","Controls.NumberControl"],
     ["ManagedProperty", "Controls.Control"],
-    ["EntityName","Controls.Control"]
+    ["EntityName","Controls.Control"],
     ]);
 export class TypingsHelper {
     /**
@@ -129,16 +129,21 @@ export class TypingsHelper {
     }
 
     private createAttributeMethod(attr: IAttributeDefinition): dom.MethodDeclaration {
-        return dom.create.method("getAttribute", [dom.create.parameter("name", dom.type.stringLiteral(camelize(attr.LogicalName)))], 
-        dom.create.namedTypeReference(AttributeTypeDefinitionMap.get(attr.AttributeType)??"Control.Attribute"));
-        //return dom.create.property(camelize(attr.LogicalName), this.convertType(attr.AttributeType.toLowerCase()), dom.DeclarationFlags.Optional);
+        let 
+        logicalNameParam = dom.create.parameter("name", dom.type.stringLiteral(camelize(attr.LogicalName))),
+        returnType = dom.create.namedTypeReference(AttributeTypeDefinitionMap.get(attr.AttributeType)||"Control.Attribute");
+
+        return dom.create.method("getAttribute",[logicalNameParam], returnType);
     }
 
     private createControlMethod(attr: IAttributeDefinition): dom.MethodDeclaration {
-        return dom.create.method("getControl", [dom.create.parameter("name", dom.type.stringLiteral(camelize(attr.LogicalName)))],  
-        dom.create.namedTypeReference(ControlTypeDefinitionMap.get(attr.AttributeType)??"Controls.Control"));
-        //return dom.create.property(camelize(attr.LogicalName), this.convertType(attr.AttributeType.toLowerCase()), dom.DeclarationFlags.Optional);
+        let 
+        logicalNameParam = dom.create.parameter("name", dom.type.stringLiteral(camelize(attr.LogicalName))),
+        returnType = dom.create.namedTypeReference(ControlTypeDefinitionMap.get(attr.AttributeType)||"Controls.Control");
+        
+        return dom.create.method("getControl", [logicalNameParam], returnType);
     }
+
 
     private createAttributeEnum(attrLogicalName: string, options: IOptionValue[]): dom.EnumDeclaration | undefined {
         const e = dom.create.enum(attrLogicalName, true, dom.DeclarationFlags.ReadOnly);
