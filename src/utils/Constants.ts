@@ -26,6 +26,30 @@ export const fileExtensions: string[] = [".js", ".html", ".css"];
 export const portADFS: number = 29827;
 export const redirectUrl: string = `http://localhost:${portADFS}/callback/`;
 export const configSectionName: string = "dataverse-devtools";
+export const AttributeTypeDefinitions = new Map<string, string>([
+    ["Boolean","Xrm.Attributes.BooleanAttribute"],
+    ["Customer","Xrm.Attributes.LookupAttribute"],
+    ["DateTime","Xrm.Attributes.DateAttribute"],
+    ["Decimal","Xrm.Attributes.NumberAttribute"],
+    ["Double","Xrm.Attributes.NumberAttribute"],
+    ["Integer","Xrm.Attributes.NumberAttribute"],
+    ["Lookup","Xrm.Attributes.LookupAttribute"],
+    ["Memo","Xrm.Attributes.StringAttribute"],
+    ["Money","Xrm.Attributes.NumberAttribute"],
+    ["Owner","Xrm.Attributes.LookupAttribute"],
+    ["PartyList","Xrm.Attributes.LookupAttribute"],
+    ["Picklist", "Xrm.Attributes.OptionSetAttribute"],
+    ["State","Xrm.Attributes.OptionSetAttribute"],
+    ["Status","Xrm.Attributes.OptionSetAttribute"],
+    ["String","Xrm.Attributes.StringAttribute"],
+    ["Uniqueidentifier","Xrm.Attributes.StringAttribute"],
+    ["CalendarRules","Xrm.Attributes.Attribute"],
+    ["Virtual","Xrm.Attributes.Attribute"],
+    ["BigInt","Xrm.Attributes.NumberAttribute"],
+    ["ManagedProperty", "ManagedProperty"],
+    ["EntityName","Xrm.Attributes.Attribute"]
+    ]);
+    
 
 export enum WebResourceType {
     html = 1,
