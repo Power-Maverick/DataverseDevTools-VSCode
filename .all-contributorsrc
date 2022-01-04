@@ -115,6 +115,18 @@
         "test",
         "userTesting"
       ]
+    },
+    {
+      "login": "glemis",
+      "name": "glemis",
+      "avatar_url": "https://avatars.githubusercontent.com/u/4442368?v=4",
+      "profile": "https://github.com/glemis",
+      "contributions": [
+        "bug",
+        "code",
+        "test",
+        "userTesting"
+      ]
     }
   ],
   "contributorsPerLine": 7
