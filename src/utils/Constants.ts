@@ -27,28 +27,52 @@ export const portADFS: number = 29827;
 export const redirectUrl: string = `http://localhost:${portADFS}/callback/`;
 export const configSectionName: string = "dataverse-devtools";
 export const AttributeTypeDefinitions = new Map<string, string>([
-    ["Boolean","Xrm.Attributes.BooleanAttribute"],
-    ["Customer","Xrm.Attributes.LookupAttribute"],
-    ["DateTime","Xrm.Attributes.DateAttribute"],
-    ["Decimal","Xrm.Attributes.NumberAttribute"],
-    ["Double","Xrm.Attributes.NumberAttribute"],
-    ["Integer","Xrm.Attributes.NumberAttribute"],
-    ["Lookup","Xrm.Attributes.LookupAttribute"],
-    ["Memo","Xrm.Attributes.StringAttribute"],
-    ["Money","Xrm.Attributes.NumberAttribute"],
-    ["Owner","Xrm.Attributes.LookupAttribute"],
-    ["PartyList","Xrm.Attributes.LookupAttribute"],
-    ["Picklist", "Xrm.Attributes.OptionSetAttribute"],
-    ["State","Xrm.Attributes.OptionSetAttribute"],
-    ["Status","Xrm.Attributes.OptionSetAttribute"],
-    ["String","Xrm.Attributes.StringAttribute"],
-    ["Uniqueidentifier","Xrm.Attributes.StringAttribute"],
-    ["CalendarRules","Xrm.Attributes.Attribute"],
-    ["Virtual","Xrm.Attributes.Attribute"],
-    ["BigInt","Xrm.Attributes.NumberAttribute"],
-    ["ManagedProperty", "ManagedProperty"],
-    ["EntityName","Xrm.Attributes.Attribute"]
+    ["Boolean","Attributes.BooleanAttribute"],
+    ["Customer","Attributes.LookupAttribute"],
+    ["DateTime","Attributes.DateAttribute"],
+    ["Decimal","Attributes.NumberAttribute"],
+    ["Double","Attributes.NumberAttribute"],
+    ["Integer","Attributes.NumberAttribute"],
+    ["Lookup","Attributes.LookupAttribute"],
+    ["Memo","Attributes.StringAttribute"],
+    ["Money","Attributes.NumberAttribute"],
+    ["Owner","Attributes.LookupAttribute"],
+    ["PartyList","Attributes.LookupAttribute"],
+    ["Picklist", "Attributes.OptionSetAttribute"],
+    ["State","Attributes.OptionSetAttribute"],
+    ["Status","Attributes.OptionSetAttribute"],
+    ["String","Attributes.StringAttribute"],
+    ["Uniqueidentifier","Attributes.StringAttribute"],
+    ["CalendarRules","Attributes.Attribute"],
+    ["Virtual","Attributes.Attribute"],
+    ["BigInt","Attributes.NumberAttribute"],
+    ["ManagedProperty", "Attributes.Attribute"],
+    ["EntityName","Attributes.Attribute"]
     ]);
+
+    export const ControlTypeDefinitions = new Map<string, string>([
+        ["Boolean","Controls.StandardControl"],
+        ["Customer","Controls.LookupControl"],
+        ["DateTime","Controls.DateControl"],
+        ["Decimal","Controls.NumberControl"],
+        ["Double","Controls.NumberControl"],
+        ["Integer","Controls.NumberControl"],
+        ["Lookup","Controls.LookupControl"],
+        ["Memo","Controls.StringControl"],
+        ["Money","Controls.NumberControl"],
+        ["Owner","Controls.LookupControl"],
+        ["PartyList","Controls.LookupControl"],
+        ["Picklist", "Controls.OptionSetControl"],
+        ["State","Controls.OptionSetControl"],
+        ["Status","Controls.OptionSetControl"],
+        ["String","Controls.StringControl"],
+        ["Uniqueidentifier","Controls.StringControl"],
+        ["CalendarRules","Controls.Control"],
+        ["Virtual","Controls.Control"],
+        ["BigInt","Controls.NumberControl"],
+        ["ManagedProperty", "Controls.Control"],
+        ["EntityName","Controls.Control"]
+        ]);
     
 
 export enum WebResourceType {

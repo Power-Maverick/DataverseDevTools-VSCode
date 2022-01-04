@@ -5,7 +5,7 @@ import { camelize, pascalize, sanitize } from "../utils/ExtensionMethods";
 import { IAttributeDefinition, IOptionValue } from "../utils/Interfaces";
 import { getWorkspaceFolder, writeFileSync } from "../utils/FileSystem";
 import { Placeholders } from "../utils/Placeholders";
-import { AttributeTypeDefinitions, extensionName } from "../utils/Constants";
+import { AttributeTypeDefinitions, ControlTypeDefinitions , extensionName } from "../utils/Constants";
 
 const typingNamespace: string = "Xrm";
 const typingInterface: string = "EventContext";
@@ -83,12 +83,13 @@ export class TypingsHelper {
 
     private createAttributeMethod(attr: IAttributeDefinition): dom.MethodDeclaration {
         return dom.create.method("getAttribute", [dom.create.parameter("name", dom.type.stringLiteral(camelize(attr.LogicalName)))], 
-        dom.create.namedTypeReference(AttributeTypeDefinitions.get(attr.AttributeType)??"Xrm.Attributes.Attribute"));
+        dom.create.namedTypeReference(AttributeTypeDefinitions.get(attr.AttributeType)??"Xrm.Control.Attribute"));
         //return dom.create.property(camelize(attr.LogicalName), this.convertType(attr.AttributeType.toLowerCase()), dom.DeclarationFlags.Optional);
     }
 
     private createControlMethod(attr: IAttributeDefinition): dom.MethodDeclaration {
-        return dom.create.method("getControl", [dom.create.parameter("name", dom.type.stringLiteral(camelize(attr.LogicalName)))], dom.create.alias(xrmControl, dom.type.undefined, dom.DeclarationFlags.None));
+        return dom.create.method("getControl", [dom.create.parameter("name", dom.type.stringLiteral(camelize(attr.LogicalName)))],  
+        dom.create.namedTypeReference(ControlTypeDefinitions.get(attr.AttributeType)??"Xrm.Controls.Control"));
         //return dom.create.property(camelize(attr.LogicalName), this.convertType(attr.AttributeType.toLowerCase()), dom.DeclarationFlags.Optional);
     }
 
