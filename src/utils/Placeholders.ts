@@ -169,7 +169,7 @@ export class Placeholders {
         prompt: `Enter your tenant id to authenticate with Dataverse`,
     };
     private static ipConnectionName: IPlaceholder = {
-        placeHolderText: `${Placeholders.required} Name (e.g.: Awesome Dev)`,
+        placeHolderText: `${Placeholders.required} Name (e.g.: Awesome Dev). Cannot be Dev, Test, QA, PROD as these are reserved keywords.`,
         prompt: `Enter a friendly name to your connection`,
     };
     private static ipConnectionType: IPlaceholder = {

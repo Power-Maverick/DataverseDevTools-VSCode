@@ -218,6 +218,11 @@
                 }
             },
             {
+                "command": "dvdt.commands.deleteAllConnections",
+                "title": "Delete All Connections",
+                "category": "%dvdt.commands.category%"
+            },
+            {
                 "command": "dvdt.explorer.connections.connectDataverse",
                 "title": "Connect to Dataverse",
                 "category": "%dvdt.explorer.category%",
