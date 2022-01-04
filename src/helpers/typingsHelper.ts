@@ -5,7 +5,7 @@ import { camelize, pascalize, sanitize } from "../utils/ExtensionMethods";
 import { IAttributeDefinition, IOptionValue } from "../utils/Interfaces";
 import { getWorkspaceFolder, writeFileSync } from "../utils/FileSystem";
 import { Placeholders } from "../utils/Placeholders";
-import { AttributeTypeDefinitions, ControlTypeDefinitions , extensionName } from "../utils/Constants";
+import { extensionName } from "../utils/Constants";
 
 const typingNamespace: string = "Xrm";
 const typingInterface: string = "EventContext";
@@ -14,6 +14,53 @@ const typingOmitAttribute = "Omit<FormContext, 'getAttribute'>";
 const typingOmitControl = "Omit<FormContext, 'getControl'>";
 const xrmAttribute = "Attributes.Attribute";
 const xrmControl = "Controls.StandardControl";
+export const AttributeTypeDefinitionMap = new Map<string, string>([
+    ["Boolean","Attributes.BooleanAttribute"],
+    ["Customer","Attributes.LookupAttribute"],
+    ["DateTime","Attributes.DateAttribute"],
+    ["Decimal","Attributes.NumberAttribute"],
+    ["Double","Attributes.NumberAttribute"],
+    ["Integer","Attributes.NumberAttribute"],
+    ["Lookup","Attributes.LookupAttribute"],
+    ["Memo","Attributes.StringAttribute"],
+    ["Money","Attributes.NumberAttribute"],
+    ["Owner","Attributes.LookupAttribute"],
+    ["PartyList","Attributes.LookupAttribute"],
+    ["Picklist", "Attributes.OptionSetAttribute"],
+    ["State","Attributes.OptionSetAttribute"],
+    ["Status","Attributes.OptionSetAttribute"],
+    ["String","Attributes.StringAttribute"],
+    ["Uniqueidentifier","Attributes.StringAttribute"],
+    ["CalendarRules","Attributes.Attribute"],
+    ["Virtual","Attributes.Attribute"],
+    ["BigInt","Attributes.NumberAttribute"],
+    ["ManagedProperty", "Attributes.Attribute"],
+    ["EntityName","Attributes.Attribute"]
+    ]);
+
+const ControlTypeDefinitionMap = new Map<string, string>([
+    ["Boolean","Controls.StandardControl"],
+    ["Customer","Controls.LookupControl"],
+    ["DateTime","Controls.DateControl"],
+    ["Decimal","Controls.NumberControl"],
+    ["Double","Controls.NumberControl"],
+    ["Integer","Controls.NumberControl"],
+    ["Lookup","Controls.LookupControl"],
+    ["Memo","Controls.StringControl"],
+    ["Money","Controls.NumberControl"],
+    ["Owner","Controls.LookupControl"],
+    ["PartyList","Controls.LookupControl"],
+    ["Picklist", "Controls.OptionSetControl"],
+    ["State","Controls.OptionSetControl"],
+    ["Status","Controls.OptionSetControl"],
+    ["String","Controls.StringControl"],
+    ["Uniqueidentifier","Controls.StringControl"],
+    ["CalendarRules","Controls.Control"],
+    ["Virtual","Controls.Control"],
+    ["BigInt","Controls.NumberControl"],
+    ["ManagedProperty", "Controls.Control"],
+    ["EntityName","Controls.Control"]
+    ]);
 export class TypingsHelper {
     /**
      * Initialization constructor for VS Code Context
@@ -83,13 +130,13 @@ export class TypingsHelper {
 
     private createAttributeMethod(attr: IAttributeDefinition): dom.MethodDeclaration {
         return dom.create.method("getAttribute", [dom.create.parameter("name", dom.type.stringLiteral(camelize(attr.LogicalName)))], 
-        dom.create.namedTypeReference(AttributeTypeDefinitions.get(attr.AttributeType)??"Xrm.Control.Attribute"));
+        dom.create.namedTypeReference(AttributeTypeDefinitionMap.get(attr.AttributeType)??"Control.Attribute"));
         //return dom.create.property(camelize(attr.LogicalName), this.convertType(attr.AttributeType.toLowerCase()), dom.DeclarationFlags.Optional);
     }
 
     private createControlMethod(attr: IAttributeDefinition): dom.MethodDeclaration {
         return dom.create.method("getControl", [dom.create.parameter("name", dom.type.stringLiteral(camelize(attr.LogicalName)))],  
-        dom.create.namedTypeReference(ControlTypeDefinitions.get(attr.AttributeType)??"Xrm.Controls.Control"));
+        dom.create.namedTypeReference(ControlTypeDefinitionMap.get(attr.AttributeType)??"Controls.Control"));
         //return dom.create.property(camelize(attr.LogicalName), this.convertType(attr.AttributeType.toLowerCase()), dom.DeclarationFlags.Optional);
     }
 
