@@ -50,6 +50,16 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
             },
         },
         {
+            command: "dvdt.commands.deleteAllConnections",
+            callback: async () => {
+                try {
+                    await dvHelper.deleteAllConnections();
+                } catch (error) {
+                    errorHandler.log(error, "deleteAllConnections");
+                }
+            },
+        },
+        {
             command: "dvdt.explorer.connections.openConnection",
             callback: (connItem: DataverseConnectionTreeItem) => {
                 try {

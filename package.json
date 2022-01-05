@@ -3,7 +3,7 @@
     "displayName": "Dataverse DevTools",
     "description": "The all-in-one tool to develop code for Dataverse/Dynamics 365. Helps you connect to a Dataverse environment, generate TypeScript definitions for entities, create different type of Dataverse-specific projects and much more.",
     "publisher": "danish-naglekar",
-    "version": "1.1.10",
+    "version": "1.1.11",
     "engines": {
         "vscode": "^1.58.0"
     },
@@ -216,6 +216,11 @@
                     "light": "resources/light/delete.svg",
                     "dark": "resources/dark/delete.svg"
                 }
+            },
+            {
+                "command": "dvdt.commands.deleteAllConnections",
+                "title": "Delete All Connections",
+                "category": "%dvdt.commands.category%"
             },
             {
                 "command": "dvdt.explorer.connections.connectDataverse",

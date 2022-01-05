@@ -18,7 +18,17 @@ import {
     Token,
     IWebResources,
 } from "../utils/Interfaces";
-import { connectionCurrentStoreKey, connectionStoreKey, customDataverseClientId, entityDefinitionsStoreKey, environmentTypes, loginTypes, solDefinitionsStoreKey, wrDefinitionsStoreKey } from "../utils/Constants";
+import {
+    connectionCurrentStoreKey,
+    connectionStoreKey,
+    customDataverseClientId,
+    entityDefinitionsStoreKey,
+    environmentTypes,
+    loginTypes,
+    reservedWords,
+    solDefinitionsStoreKey,
+    wrDefinitionsStoreKey,
+} from "../utils/Constants";
 import { DataverseConnectionTreeItem } from "../trees/dataverseConnectionDataProvider";
 import { RequestHelper } from "./requestHelper";
 import { ProgressLocation } from "vscode";
@@ -63,6 +73,11 @@ export class DataverseHelper {
 
     public async deleteConnection(connItem: DataverseConnectionTreeItem) {
         await this.removeConnection(connItem.label);
+        vscode.commands.executeCommand("dvdt.explorer.connections.refreshConnection");
+    }
+
+    public async deleteAllConnections() {
+        await this.removeAllConnections();
         vscode.commands.executeCommand("dvdt.explorer.connections.refreshConnection");
     }
 
@@ -316,6 +331,10 @@ export class DataverseHelper {
         }
 
         let connNameUserResponse: string | undefined = await vscode.window.showInputBox(Placeholders.getInputBoxOptions(Placeholders.connectionName));
+        if (connNameUserResponse && reservedWords.includes(connNameUserResponse)) {
+            vscode.window.showErrorMessage(ErrorMessages.connNameReservedWords);
+            return undefined;
+        }
         if (!connNameUserResponse) {
             vscode.window.showErrorMessage(ErrorMessages.connNameRequired);
             return undefined;
@@ -374,21 +393,38 @@ export class DataverseHelper {
     async removeConnection(connName: string) {
         const respDeleteConfirm = await vscode.window.showWarningMessage("Are you sure you want to delete this connection?", { detail: "Confirm your selection", modal: true }, "Yes", "No");
         if (respDeleteConfirm === "Yes") {
+            this.removeConnectionInternal(connName);
+        }
+    }
+
+    async removeAllConnections() {
+        const respDeleteConfirm = await vscode.window.showWarningMessage("Are you sure you want to delete ALL connections?", { detail: "Confirm your selection", modal: true }, "Yes", "No");
+        if (respDeleteConfirm === "Yes") {
             const jsonConn: string = this.vsstate.getFromGlobal(connectionStoreKey);
             if (jsonConn) {
                 const conns: IConnection[] = JSON.parse(jsonConn);
-                const resultConn = conns.find((c) => c.connectionName === connName);
+                conns.forEach((c) => {
+                    this.removeConnectionInternal(c.connectionName);
+                });
+            }
+        }
+    }
 
-                const indexConnToRemove = conns.indexOf(resultConn!, 0);
-                if (indexConnToRemove > -1) {
-                    conns.splice(indexConnToRemove, 1);
-                }
+    removeConnectionInternal(connName: string) {
+        const jsonConn: string = this.vsstate.getFromGlobal(connectionStoreKey);
+        if (jsonConn) {
+            const conns: IConnection[] = JSON.parse(jsonConn);
+            const resultConn = conns.find((c) => c.connectionName === connName);
 
-                if (conns.length > 0) {
-                    this.vsstate.saveInGlobal(connectionStoreKey, JSON.stringify(conns));
-                } else {
-                    this.vsstate.unsetFromGlobal(connectionStoreKey);
-                }
+            const indexConnToRemove = conns.indexOf(resultConn!, 0);
+            if (indexConnToRemove > -1) {
+                conns.splice(indexConnToRemove, 1);
+            }
+
+            if (conns.length > 0) {
+                this.vsstate.saveInGlobal(connectionStoreKey, JSON.stringify(conns));
+            } else {
+                this.vsstate.unsetFromGlobal(connectionStoreKey);
             }
         }
     }
