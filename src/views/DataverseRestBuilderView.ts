@@ -17,7 +17,7 @@ export class DataverseRestBuilderView extends Panel {
         this.vsstate = new State(vscontext);
         const connFromWS: IConnection = this.vsstate.getFromWorkspace(connectionCurrentStoreKey);
         if (connFromWS) {
-            webviewPanel.webview.postMessage({ command: "connection", text: "this is a test", token: connFromWS.currentAccessToken, url: connFromWS.environmentUrl, version: "1.0" });
+            webviewPanel.webview.postMessage({ command: "dvdt_connection", token: connFromWS.currentAccessToken });
         }
     }
 
