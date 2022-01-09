@@ -51,7 +51,6 @@ export class WebResourcesDataProvider implements vscode.TreeDataProvider<WebReso
                                 showCheckmark = true;
                             }
                         }
-
                         return new WebResourcesTreeItem(e.displayname!, e.name, vscode.TreeItemCollapsibleState.None, 2, showCheckmark);
                     }),
                 );

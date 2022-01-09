@@ -194,13 +194,32 @@ export class WebResourceHelper {
             }
         }
     }
+
+    public async linkWebResource(fullPath: string): Promise<ILinkerRes | undefined> {
+        const localFileName = getFileName(fullPath);
+        const localRelativePath = getRelativeFilePath(fullPath, getWorkspaceFolder()?.fsPath!);
+        const linkedResourceIndex: number = await this.getLinkedResourceIndexByLocalFileName(fullPath);
+
+        if (linkedResourceIndex >= 0) {
+            const respUpdateConfirm = await vscode.window.showWarningMessage("This file is already linked. Are you sure you want to re-link this file?", { detail: "Confirm your selection", modal: true }, "Yes", "No");
+            if (respUpdateConfirm === "Yes") {
+                let linkerRescForUpdate = await this.conformLinkerResc(localFileName, localRelativePath);
+                if (linkerRescForUpdate) {
+                    return await this.updateInLinkerFile(linkedResourceIndex, linkerRescForUpdate);
+                }
+            }
+        } else {
+            let linkerRescToAdd = await this.conformLinkerResc(localFileName, localRelativePath);
+            if (linkerRescToAdd) {
+                return await this.addInLinkerFile(linkerRescToAdd);
+            }
+        }
+    }
     //#endregion Public
 
     //#region Private
-    async linkWebResource(fullPath: string): Promise<ILinkerRes | undefined> {
-        const localFileName = getFileName(fullPath);
-        const localRelativePath = getRelativeFilePath(fullPath, getWorkspaceFolder()?.fsPath!);
-        await this.dvHelper.getWebResources();
+
+    private async conformLinkerResc(localFileName: string, localRelativePath: string): Promise<ILinkerRes | undefined> {
         const jsonWRs: IWebResources = this.vsstate.getFromWorkspace(wrDefinitionsStoreKey);
 
         if (jsonWRs) {
@@ -220,12 +239,12 @@ export class WebResourceHelper {
                     "@_localFileName": localFileName,
                     "@_localFilePath": localRelativePath,
                 };
-                return this.addInLinkerFile(resc);
+                return resc;
             }
         }
     }
 
-    async addInLinkerFile(resc: ILinkerRes): Promise<ILinkerRes | undefined> {
+    private async addInLinkerFile(resc: ILinkerRes): Promise<ILinkerRes | undefined> {
         const linkerFile = await this.createLinkerFile();
         if (linkerFile) {
             const linkerFileData = readFileSync(linkerFile.fsPath).toString();
@@ -250,7 +269,26 @@ export class WebResourceHelper {
         }
     }
 
-    async createWebResourceInLinkerFile(resc: ILinkerRes) {
+    private async updateInLinkerFile(oldIndex: number, newResc: ILinkerRes): Promise<ILinkerRes | undefined> {
+        const linkerFile = await this.getLinkerFile();
+        if (linkerFile) {
+            const linkerFileData = readFileSync(linkerFile.fsPath).toString();
+            const linkerFileDataJson = xmlToJSON<ILinkerFile>(linkerFileData);
+
+            if (Array.isArray(linkerFileDataJson.DVDT.WebResources.Resource)) {
+                linkerFileDataJson.DVDT.WebResources.Resource[oldIndex] = newResc;
+            } else {
+                const tResc: ILinkerRes = linkerFileDataJson.DVDT.WebResources.Resource;
+                linkerFileDataJson.DVDT.WebResources.Resource = [];
+                linkerFileDataJson.DVDT.WebResources.Resource.push(newResc);
+            }
+            writeFileSync(linkerFile.fsPath, jsonToXML(linkerFileDataJson));
+            vscode.commands.executeCommand("dvdt.explorer.webresources.loadWebResources");
+            return newResc;
+        }
+    }
+
+    private async createWebResourceInLinkerFile(resc: ILinkerRes) {
         const linkerFile = await this.createLinkerFile();
         if (linkerFile) {
             const linkerFileData = readFileSync(linkerFile.fsPath).toString();
@@ -275,7 +313,7 @@ export class WebResourceHelper {
         }
     }
 
-    async uploadWebResourceInternal(fullPath: string, resc?: ILinkerRes): Promise<IWebResource | undefined> {
+    private async uploadWebResourceInternal(fullPath: string, resc?: ILinkerRes): Promise<IWebResource | undefined> {
         return vscode.window.withProgress(
             {
                 location: vscode.ProgressLocation.Notification,
@@ -323,7 +361,7 @@ export class WebResourceHelper {
         );
     }
 
-    async getLinkedResourceByLocalFileName(fullFilePath: string): Promise<ILinkerRes | undefined> {
+    private async getLinkedResourceByLocalFileName(fullFilePath: string): Promise<ILinkerRes | undefined> {
         const linkerFile = await this.getLinkerFile();
         if (linkerFile) {
             const localFileName = getFileName(fullFilePath);
@@ -343,7 +381,28 @@ export class WebResourceHelper {
         }
     }
 
-    async createLinkerFile(): Promise<vscode.Uri | undefined> {
+    private async getLinkedResourceIndexByLocalFileName(fullFilePath: string): Promise<number> {
+        const linkerFile = await this.getLinkerFile();
+        if (linkerFile) {
+            const localFileName = getFileName(fullFilePath);
+            const localRelativePath = getRelativeFilePath(fullFilePath, getWorkspaceFolder()?.fsPath!);
+            const linkerFileData = readFileSync(linkerFile.fsPath).toString();
+            const linkerFileDataJson = xmlToJSON<ILinkerFile>(linkerFileData);
+
+            if (Array.isArray(linkerFileDataJson.DVDT.WebResources.Resource)) {
+                return linkerFileDataJson.DVDT.WebResources.Resource.findIndex((r) => r["@_localFileName"] === localFileName && r["@_localFilePath"] === localRelativePath);
+            } else {
+                if (linkerFileDataJson.DVDT.WebResources.Resource) {
+                    const linkFileName = linkerFileDataJson.DVDT.WebResources.Resource["@_localFileName"];
+                    const linkFilePath = linkerFileDataJson.DVDT.WebResources.Resource["@_localFilePath"];
+                    return linkFileName === localFileName && linkFilePath === localRelativePath ? 0 : -1;
+                }
+            }
+        }
+        return -1;
+    }
+
+    private async createLinkerFile(): Promise<vscode.Uri | undefined> {
         if (vscode.workspace.workspaceFolders) {
             const workspaceFolder = vscode.workspace.workspaceFolders[0].uri;
             const linkerFileUri = await this.getLinkerFile();
@@ -359,7 +418,7 @@ export class WebResourceHelper {
         return undefined;
     }
 
-    async getLinkerFile(): Promise<vscode.Uri | undefined> {
+    private async getLinkerFile(): Promise<vscode.Uri | undefined> {
         const linkerFiles = await vscode.workspace.findFiles("**/dvdt.linker.xml", "**/node_modules/**");
         if (linkerFiles.length > 0) {
             //console.log(linkerFiles[0]);
@@ -369,7 +428,7 @@ export class WebResourceHelper {
         return undefined;
     }
 
-    async webResourceCreateWizard(fullPath: string): Promise<IWebResource | undefined> {
+    private async webResourceCreateWizard(fullPath: string): Promise<IWebResource | undefined> {
         // Get solutions (need prefix on that)
         const solutions = await this.dvHelper.getSolutions();
         if (solutions) {
