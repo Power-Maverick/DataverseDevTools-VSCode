@@ -8,16 +8,12 @@ import { connectionCurrentStoreKey } from "../utils/Constants";
 import { State } from "../utils/State";
 
 export class DataverseRestBuilderView extends Panel {
-    private vsstate: State;
-
-    constructor(webviewPanel: vscode.WebviewPanel, vscontext: vscode.ExtensionContext) {
+    constructor(webviewPanel: vscode.WebviewPanel, vscontext: vscode.ExtensionContext, currentAccessToken: string) {
         super({ panel: webviewPanel, extensionUri: vscontext.extensionUri, webViewFileName: "drb.html", excludeExternalCss: true, excludeExternalJs: true });
         super.update();
 
-        this.vsstate = new State(vscontext);
-        const connFromWS: IConnection = this.vsstate.getFromWorkspace(connectionCurrentStoreKey);
-        if (connFromWS) {
-            webviewPanel.webview.postMessage({ command: "dvdt_connection", token: connFromWS.currentAccessToken });
+        if (currentAccessToken) {
+            webviewPanel.webview.postMessage({ command: "dvdt_connection", token: currentAccessToken });
         }
     }
 
