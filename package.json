@@ -52,27 +52,27 @@
         "menus": {
             "explorer/context": [
                 {
-                    "command": "dvdt.commands.initPlugin",
-                    "group": "%dvdt.menus.group%",
-                    "when": "false"
-                },
-                {
                     "command": "dvdt.commands.initTS",
-                    "group": "%dvdt.menus.group%@1"
+                    "group": "%dvdt.menus.group.ts%@1"
                 },
                 {
                     "command": "dvdt.commands.createTSFile",
-                    "group": "%dvdt.menus.group%@2"
+                    "group": "%dvdt.menus.group.ts%@2"
+                },
+                {
+                    "command": "dvdt.explorer.webresources.linkExistingWebResource",
+                    "when": "resourceExtname in devtools.resourcesExtn",
+                    "group": "%dvdt.menus.group.wr%@1"
                 },
                 {
                     "command": "dvdt.explorer.webresources.uploadWebResource",
                     "when": "resourceExtname in devtools.resourcesExtn",
-                    "group": "%dvdt.menus.group%@3"
+                    "group": "%dvdt.menus.group.wr%@2"
                 },
                 {
                     "command": "dvdt.explorer.webresources.compareWebResource",
-                    "when": "resourceExtname in devtools.resourcesExtn && devtools.showPreviewOptions",
-                    "group": "%dvdt.menus.group%@4"
+                    "when": "resourceExtname in devtools.resourcesExtn && resourceFilename in devtools.linkedResources && devtools.showPreviewOptions",
+                    "group": "%dvdt.menus.group.wr%@3"
                 }
             ],
             "view/title": [

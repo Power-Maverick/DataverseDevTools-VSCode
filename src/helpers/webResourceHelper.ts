@@ -194,13 +194,12 @@ export class WebResourceHelper {
             }
         }
     }
-    //#endregion Public
 
-    //#region Private
-    async linkWebResource(fullPath: string): Promise<ILinkerRes | undefined> {
+    public async linkWebResource(fullPath: string): Promise<ILinkerRes | undefined> {
+        // TODO: Same file if linked again then handle the update to existing data or prevent update altogether
         const localFileName = getFileName(fullPath);
         const localRelativePath = getRelativeFilePath(fullPath, getWorkspaceFolder()?.fsPath!);
-        await this.dvHelper.getWebResources();
+        //await this.dvHelper.getWebResources();
         const jsonWRs: IWebResources = this.vsstate.getFromWorkspace(wrDefinitionsStoreKey);
 
         if (jsonWRs) {
@@ -224,8 +223,10 @@ export class WebResourceHelper {
             }
         }
     }
+    //#endregion Public
 
-    async addInLinkerFile(resc: ILinkerRes): Promise<ILinkerRes | undefined> {
+    //#region Private
+    private async addInLinkerFile(resc: ILinkerRes): Promise<ILinkerRes | undefined> {
         const linkerFile = await this.createLinkerFile();
         if (linkerFile) {
             const linkerFileData = readFileSync(linkerFile.fsPath).toString();
@@ -250,7 +251,7 @@ export class WebResourceHelper {
         }
     }
 
-    async createWebResourceInLinkerFile(resc: ILinkerRes) {
+    private async createWebResourceInLinkerFile(resc: ILinkerRes) {
         const linkerFile = await this.createLinkerFile();
         if (linkerFile) {
             const linkerFileData = readFileSync(linkerFile.fsPath).toString();
@@ -275,7 +276,7 @@ export class WebResourceHelper {
         }
     }
 
-    async uploadWebResourceInternal(fullPath: string, resc?: ILinkerRes): Promise<IWebResource | undefined> {
+    private async uploadWebResourceInternal(fullPath: string, resc?: ILinkerRes): Promise<IWebResource | undefined> {
         return vscode.window.withProgress(
             {
                 location: vscode.ProgressLocation.Notification,
@@ -323,7 +324,7 @@ export class WebResourceHelper {
         );
     }
 
-    async getLinkedResourceByLocalFileName(fullFilePath: string): Promise<ILinkerRes | undefined> {
+    private async getLinkedResourceByLocalFileName(fullFilePath: string): Promise<ILinkerRes | undefined> {
         const linkerFile = await this.getLinkerFile();
         if (linkerFile) {
             const localFileName = getFileName(fullFilePath);
@@ -343,7 +344,7 @@ export class WebResourceHelper {
         }
     }
 
-    async createLinkerFile(): Promise<vscode.Uri | undefined> {
+    private async createLinkerFile(): Promise<vscode.Uri | undefined> {
         if (vscode.workspace.workspaceFolders) {
             const workspaceFolder = vscode.workspace.workspaceFolders[0].uri;
             const linkerFileUri = await this.getLinkerFile();
@@ -359,7 +360,7 @@ export class WebResourceHelper {
         return undefined;
     }
 
-    async getLinkerFile(): Promise<vscode.Uri | undefined> {
+    private async getLinkerFile(): Promise<vscode.Uri | undefined> {
         const linkerFiles = await vscode.workspace.findFiles("**/dvdt.linker.xml", "**/node_modules/**");
         if (linkerFiles.length > 0) {
             //console.log(linkerFiles[0]);
@@ -369,7 +370,7 @@ export class WebResourceHelper {
         return undefined;
     }
 
-    async webResourceCreateWizard(fullPath: string): Promise<IWebResource | undefined> {
+    private async webResourceCreateWizard(fullPath: string): Promise<IWebResource | undefined> {
         // Get solutions (need prefix on that)
         const solutions = await this.dvHelper.getSolutions();
         if (solutions) {

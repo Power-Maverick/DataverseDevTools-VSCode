@@ -10,7 +10,7 @@ import { ConfidenceScores } from "../utils/Constants";
 export class SmartMatchView extends Panel {
     smartMatches: ISmartMatchRecord[] = [];
 
-    constructor(matches: ISmartMatchRecord[], webview: vscode.WebviewPanel, vscontext: vscode.ExtensionContext, private uploadHelper: WebResourceHelper) {
+    constructor(matches: ISmartMatchRecord[], webview: vscode.WebviewPanel, vscontext: vscode.ExtensionContext, private wrHelper: WebResourceHelper) {
         super({ panel: webview, extensionUri: vscontext.extensionUri, webViewFileName: "smartmatch.html" });
         this.smartMatches = matches;
 
@@ -126,7 +126,7 @@ export class SmartMatchView extends Panel {
     linkFiles(sm: ISmartMatchRecord[] | undefined) {
         if (sm) {
             sm.forEach((r) => {
-                this.uploadHelper.linkWebResourceById(r.localFullPath, r.wrId!);
+                this.wrHelper.linkWebResourceById(r.localFullPath, r.wrId!);
                 let smIndex = this.smartMatches.findIndex((obj) => obj.wrId === r.wrId);
                 this.smartMatches[smIndex].linked = true;
                 this.smartMatches[smIndex].confidenceLevel = 100;
@@ -137,7 +137,7 @@ export class SmartMatchView extends Panel {
     }
 
     async linkNewFile(fullPath: string) {
-        const wrDetails = await this.uploadHelper.uploadWebResource(decodeURI(fullPath));
+        const wrDetails = await this.wrHelper.uploadWebResource(decodeURI(fullPath));
         if (wrDetails) {
             let smIndex = this.smartMatches.findIndex((obj) => obj.localFullPath === decodeURI(fullPath));
             this.smartMatches[smIndex].wrId = wrDetails.webresourceid!;
@@ -155,7 +155,7 @@ export class SmartMatchView extends Panel {
         if (sm) {
             await Promise.all(
                 sm.map(async (rec) => {
-                    await this.uploadHelper.uploadWebResource(rec.localFullPath);
+                    await this.wrHelper.uploadWebResource(rec.localFullPath);
                     let smIndex = this.smartMatches.findIndex((obj) => obj.localFullPath === rec.localFullPath);
                     this.smartMatches[smIndex].base64ContentMatch = true;
                 }),
