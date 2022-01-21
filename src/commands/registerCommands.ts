@@ -162,7 +162,7 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
                 try {
                     drbHelper.openDRB(views);
                 } catch (error) {
-                    errorHandler.log(error, "smartMatch");
+                    errorHandler.log(error, "openDRB");
                 }
             },
         },

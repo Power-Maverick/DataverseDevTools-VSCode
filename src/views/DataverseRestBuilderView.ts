@@ -23,14 +23,10 @@ export class DataverseRestBuilderView extends Panel {
         _.templateSettings.interpolate = /!!{([\s\S]+?)}/g;
         const compiled = _.template(fileHtml);
 
-        const requirementJs = this.getFileUri("resources", "views", "js", "drb_custom.js");
-        const customJs = this.getFileUri("resources", "views", "js", "drb_requirements.js");
+        // const requirementJs = this.getFileUri("resources", "views", "js", "drb_custom.js");
+        // const customJs = this.getFileUri("resources", "views", "js", "drb_requirements.js");
 
-        const viewModel = {
-            drbVersion: "1.0.0.10",
-            requirementJs: requirementJs,
-            customJs: customJs,
-        };
+        const viewModel = {};
 
         return super.render(compiled(viewModel));
     }
