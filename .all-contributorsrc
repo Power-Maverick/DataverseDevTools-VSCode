@@ -136,6 +136,18 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "GuidoPreite",
+      "name": "Guido Preite",
+      "avatar_url": "https://avatars.githubusercontent.com/u/43754988?v=4",
+      "profile": "https://www.crmanswers.net/",
+      "contributions": [
+        "bug",
+        "code",
+        "infra",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7
