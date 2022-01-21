@@ -48,6 +48,22 @@ export function registerTreeDataProviders(vscontext: vscode.ExtensionContext): v
             command: "dvdt.explorer.webresources.filteroff",
             callback: () => wrProvider.filter(),
         },
+        {
+            command: "dvdt.explorer.entities.searchon",
+            callback: () => entityMetadataProvider.search(),
+        },
+        {
+            command: "dvdt.explorer.entities.searchoff",
+            callback: () => entityMetadataProvider.search(),
+        },
+        {
+            command: "dvdt.explorer.webresources.searchon",
+            callback: () => wrProvider.search(),
+        },
+        {
+            command: "dvdt.explorer.webresources.searchoff",
+            callback: () => wrProvider.search(),
+        },
     );
     cmds.forEach((c) => {
         vscontext.subscriptions.push(vscode.commands.registerCommand(c.command, c.callback));

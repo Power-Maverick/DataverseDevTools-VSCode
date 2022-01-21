@@ -84,6 +84,17 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
             },
         },
         {
+            command: "dvdt.explorer.connections.forgetConnectionOnWorkspace",
+            callback: async (connItem: DataverseConnectionTreeItem) => {
+                try {
+                    dvHelper.forgetCurrentWorkspaceConnection();
+                    updateConnectionStatusBar(undefined);
+                } catch (error) {
+                    errorHandler.log(error, "connectDataverse");
+                }
+            },
+        },
+        {
             command: "dvdt.explorer.connections.showConnectionDetails",
             callback: async (connItem: DataverseConnectionTreeItem) => {
                 try {
