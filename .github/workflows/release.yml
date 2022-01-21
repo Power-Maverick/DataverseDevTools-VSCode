@@ -1,31 +1,21 @@
 name: Release
 on:
-  release:
-    types:
-      - published
+  push:
+    branches:
+      - release
   workflow_dispatch:
 
 jobs:
-  release:
+  deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Install Node.js
-        uses: actions/setup-node@v1
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
         with:
           node-version: 14.x
-      - name: Run Build
-        run: |
-            npm install
-            npm ci
-            npm run compile
-      - name: Update CHANGELOG
-        run: npm run version
-      - name: Install the dependencies
-        run: npm install
-      - name: Install vsce
-        run: npm install -g vsce
+      - run: npm ci
       - name: Publish
-        run: vsce publish -p ${{ secrets.VSCE_PAT }}
+        uses: HaaLeo/publish-vscode-extension@v0
+        with:
+          pat: ${{ secrets.VSCE_PAT }}
+          registryUrl: https://marketplace.visualstudio.com

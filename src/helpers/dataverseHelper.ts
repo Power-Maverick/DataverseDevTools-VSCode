@@ -18,7 +18,17 @@ import {
     Token,
     IWebResources,
 } from "../utils/Interfaces";
-import { connectionCurrentStoreKey, connectionStoreKey, customDataverseClientId, entityDefinitionsStoreKey, environmentTypes, loginTypes, solDefinitionsStoreKey, wrDefinitionsStoreKey } from "../utils/Constants";
+import {
+    connectionCurrentStoreKey,
+    connectionStoreKey,
+    customDataverseClientId,
+    entityDefinitionsStoreKey,
+    environmentTypes,
+    loginTypes,
+    reservedWords,
+    solDefinitionsStoreKey,
+    wrDefinitionsStoreKey,
+} from "../utils/Constants";
 import { DataverseConnectionTreeItem } from "../trees/dataverseConnectionDataProvider";
 import { RequestHelper } from "./requestHelper";
 import { ProgressLocation } from "vscode";
@@ -63,6 +73,11 @@ export class DataverseHelper {
 
     public async deleteConnection(connItem: DataverseConnectionTreeItem) {
         await this.removeConnection(connItem.label);
+        vscode.commands.executeCommand("dvdt.explorer.connections.refreshConnection");
+    }
+
+    public async deleteAllConnections() {
+        await this.removeAllConnections();
         vscode.commands.executeCommand("dvdt.explorer.connections.refreshConnection");
     }
 
@@ -260,7 +275,7 @@ export class DataverseHelper {
     //#endregion Public
 
     //#region Private
-    async connectionWizard(): Promise<IConnection | undefined> {
+    private async connectionWizard(): Promise<IConnection | undefined> {
         let usernameUserResponse: string | undefined;
         let passwordUserResponse: string | undefined;
         let tenantIdResponse: string | undefined;
@@ -316,6 +331,10 @@ export class DataverseHelper {
         }
 
         let connNameUserResponse: string | undefined = await vscode.window.showInputBox(Placeholders.getInputBoxOptions(Placeholders.connectionName));
+        if (connNameUserResponse && reservedWords.includes(connNameUserResponse)) {
+            vscode.window.showErrorMessage(ErrorMessages.connNameReservedWords);
+            return undefined;
+        }
         if (!connNameUserResponse) {
             vscode.window.showErrorMessage(ErrorMessages.connNameRequired);
             return undefined;
@@ -342,7 +361,7 @@ export class DataverseHelper {
         return conn;
     }
 
-    async connectInternal(loginType: string, conn: IConnection): Promise<Token> {
+    private async connectInternal(loginType: string, conn: IConnection): Promise<Token> {
         switch (loginType) {
             case loginTypes[0]:
                 return await loginWithUsernamePassword(conn.environmentUrl, conn.userName!, conn.password!);
@@ -354,7 +373,7 @@ export class DataverseHelper {
         }
     }
 
-    saveConnection(connDetail: IConnection) {
+    private saveConnection(connDetail: IConnection) {
         if (!this.getConnectionByName(connDetail.connectionName)) {
             const jsonConn: string = this.vsstate.getFromGlobal(connectionStoreKey);
             if (jsonConn) {
@@ -371,29 +390,46 @@ export class DataverseHelper {
         }
     }
 
-    async removeConnection(connName: string) {
+    private async removeConnection(connName: string) {
         const respDeleteConfirm = await vscode.window.showWarningMessage("Are you sure you want to delete this connection?", { detail: "Confirm your selection", modal: true }, "Yes", "No");
+        if (respDeleteConfirm === "Yes") {
+            this.removeConnectionInternal(connName);
+        }
+    }
+
+    private async removeAllConnections() {
+        const respDeleteConfirm = await vscode.window.showWarningMessage("Are you sure you want to delete ALL connections?", { detail: "Confirm your selection", modal: true }, "Yes", "No");
         if (respDeleteConfirm === "Yes") {
             const jsonConn: string = this.vsstate.getFromGlobal(connectionStoreKey);
             if (jsonConn) {
                 const conns: IConnection[] = JSON.parse(jsonConn);
-                const resultConn = conns.find((c) => c.connectionName === connName);
-
-                const indexConnToRemove = conns.indexOf(resultConn!, 0);
-                if (indexConnToRemove > -1) {
-                    conns.splice(indexConnToRemove, 1);
-                }
-
-                if (conns.length > 0) {
-                    this.vsstate.saveInGlobal(connectionStoreKey, JSON.stringify(conns));
-                } else {
-                    this.vsstate.unsetFromGlobal(connectionStoreKey);
-                }
+                conns.forEach((c) => {
+                    this.removeConnectionInternal(c.connectionName);
+                });
             }
         }
     }
 
-    getConnectionByName(connName: string): IConnection | undefined {
+    private removeConnectionInternal(connName: string) {
+        const jsonConn: string = this.vsstate.getFromGlobal(connectionStoreKey);
+        if (jsonConn) {
+            const conns: IConnection[] = JSON.parse(jsonConn);
+            const resultConn = conns.find((c) => c.connectionName === connName);
+
+            const indexConnToRemove = conns.indexOf(resultConn!, 0);
+            if (indexConnToRemove > -1) {
+                conns.splice(indexConnToRemove, 1);
+            }
+
+            if (conns.length > 0) {
+                this.vsstate.saveInGlobal(connectionStoreKey, JSON.stringify(conns));
+            } else {
+                this.vsstate.unsetFromGlobal(connectionStoreKey);
+            }
+        }
+    }
+
+    private getConnectionByName(connName: string): IConnection | undefined {
         const connFromWS: IConnection = this.vsstate.getFromWorkspace(connectionCurrentStoreKey);
         if (connFromWS && connFromWS.connectionName === connName) {
             return connFromWS;
@@ -407,7 +443,7 @@ export class DataverseHelper {
         return undefined;
     }
 
-    getEntityByName(entityName: string): IEntityDefinition | undefined {
+    private getEntityByName(entityName: string): IEntityDefinition | undefined {
         const jsonEntities: IEntityMetadata = this.vsstate.getFromWorkspace(entityDefinitionsStoreKey);
         if (jsonEntities) {
             return jsonEntities.value.find((e) => e.SchemaName.toLowerCase() === entityName);

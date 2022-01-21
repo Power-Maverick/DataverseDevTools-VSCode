@@ -14,6 +14,7 @@ import { addConnection } from "./connections";
 import { openUri } from "../utils/OpenUri";
 import { ErrorHandler } from "../helpers/errorHandler";
 import { DRBHelper } from "../helpers/drbHelper";
+import { WebResourcesTreeItem } from "../trees/webResourcesDataProvider";
 
 let dvStatusBarItem: vscode.StatusBarItem;
 
@@ -22,7 +23,7 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
     const views = new ViewBase(vscontext);
     const cliHelper = new CLIHelper(vscontext);
     const templateHelper = new TemplateHelper(vscontext);
-    const uploadHelper = new WebResourceHelper(vscontext, dvHelper);
+    const wrHelper = new WebResourceHelper(vscontext, dvHelper);
     const typingHelper = new TypingsHelper(vscontext, dvHelper);
     const drbHelper = new DRBHelper(vscontext);
     const errorHandler = new ErrorHandler(tr);
@@ -48,6 +49,16 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
                     await dvHelper.deleteConnection(connItem);
                 } catch (error) {
                     errorHandler.log(error, "deleteConnection");
+                }
+            },
+        },
+        {
+            command: "dvdt.commands.deleteAllConnections",
+            callback: async () => {
+                try {
+                    await dvHelper.deleteAllConnections();
+                } catch (error) {
+                    errorHandler.log(error, "deleteAllConnections");
                 }
             },
         },
@@ -110,7 +121,7 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
             command: "dvdt.explorer.webresources.uploadWebResource",
             callback: async (uri: vscode.Uri) => {
                 try {
-                    await uploadHelper.uploadWebResource(uri.fsPath);
+                    await wrHelper.uploadWebResource(uri.fsPath);
                 } catch (error) {
                     errorHandler.log(error, "uploadWebResource");
                 }
@@ -130,7 +141,7 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
             command: "dvdt.explorer.webresources.smartMatch",
             callback: async () => {
                 try {
-                    await uploadHelper.smartMatchWebResources(views);
+                    await wrHelper.smartMatchWebResources(views);
                 } catch (error) {
                     errorHandler.log(error, "smartMatch");
                 }
@@ -150,7 +161,7 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
             command: "dvdt.explorer.webresources.compareWebResource",
             callback: async (uri: vscode.Uri) => {
                 try {
-                    await uploadHelper.compareWebResources(uri.fsPath);
+                    await wrHelper.compareWebResources(uri.fsPath);
                 } catch (error) {
                     errorHandler.log(error, "compareWebResource");
                 }
@@ -166,13 +177,23 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
                 }
             },
         },
+        {
+            command: "dvdt.explorer.webresources.linkExistingWebResource",
+            callback: async (uri: vscode.Uri) => {
+                try {
+                    await wrHelper.linkWebResource(uri.fsPath);
+                } catch (error) {
+                    errorHandler.log(error, "linkExistingWebResource");
+                }
+            },
+        },
     );
     cmds.forEach((c) => {
         vscontext.subscriptions.push(vscode.commands.registerCommand(c.command, c.callback));
     });
 
     updateConnectionStatusBar(await dvHelper.reloadWorkspaceConnection());
-    vscode.commands.executeCommand("setContext", `${extensionPrefix}.linkedResources`, await uploadHelper.getLinkedResourceStrings("@_localFileName"));
+    vscode.commands.executeCommand("setContext", `${extensionPrefix}.linkedResources`, await wrHelper.getLinkedResourceStrings("@_localFileName"));
 }
 
 export function updateConnectionStatusBar(conn: IConnection | undefined): void {
