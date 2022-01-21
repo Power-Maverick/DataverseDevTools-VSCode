@@ -211,6 +211,7 @@ There are different ways in which you can contribute to this open-source project
 
 -   Integrate with [Dataverse-ify](https://github.com/scottdurow/dataverse-ify/).
 -   Initiate plugin project.
+-   Ability to create JavaScript project and snippets smiliar to TypeScript version.
 
 ## ✨ Contributing
 
