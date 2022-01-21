@@ -115,6 +115,39 @@
         "test",
         "userTesting"
       ]
+    },
+    {
+      "login": "glemis",
+      "name": "glemis",
+      "avatar_url": "https://avatars.githubusercontent.com/u/4442368?v=4",
+      "profile": "https://github.com/glemis",
+      "contributions": [
+        "bug",
+        "code",
+        "test",
+        "userTesting"
+      ]
+    },
+    {
+      "login": "ericregnier",
+      "name": "Eric Regnier",
+      "avatar_url": "https://avatars.githubusercontent.com/u/9611006?v=4",
+      "profile": "https://github.com/ericregnier",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "GuidoPreite",
+      "name": "Guido Preite",
+      "avatar_url": "https://avatars.githubusercontent.com/u/43754988?v=4",
+      "profile": "https://www.crmanswers.net/",
+      "contributions": [
+        "bug",
+        "code",
+        "infra",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7

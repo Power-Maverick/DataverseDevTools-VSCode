@@ -12,6 +12,7 @@ export class EntitiesDataProvider implements vscode.TreeDataProvider<EntitiesTre
     private refreshTreeData: vscode.EventEmitter<EntitiesTreeItem | undefined | void> = new vscode.EventEmitter<EntitiesTreeItem | undefined | void>();
     private entities: IEntityDefinition[] = [];
     private areEntitiesFiltered: boolean = false;
+    private areEntitiesSearched: boolean = false;
 
     constructor(private vscontext: vscode.ExtensionContext, private dvHelper: DataverseHelper) {}
 
@@ -65,6 +66,29 @@ export class EntitiesDataProvider implements vscode.TreeDataProvider<EntitiesTre
         vscode.commands.executeCommand("setContext", `${extensionPrefix}.entitiesFiltered`, this.areEntitiesFiltered);
     }
 
+    async search(): Promise<void> {
+        const vsstate = new State(this.vscontext);
+        const jsonConn: IEntityMetadata = vsstate.getFromWorkspace(entityDefinitionsStoreKey);
+
+        if (!jsonConn) {
+            vscode.window.showErrorMessage(`${extensionName}: No entities found.`);
+            return;
+        }
+
+        if (this.areEntitiesSearched) {
+            this.entities = jsonConn.value;
+            this.areEntitiesSearched = false;
+        } else {
+            await this.searchWizard(jsonConn.value);
+            this.areEntitiesSearched = true;
+        }
+
+        this.refreshTreeData.fire();
+        vscode.commands.executeCommand("setContext", `${extensionPrefix}.entitiesSearched`, this.areEntitiesSearched);
+    }
+
+    //#region Private
+
     private populateEntities() {
         const vsstate = new State(this.vscontext);
         const jsonConn: IEntityMetadata = vsstate.getFromWorkspace(entityDefinitionsStoreKey);
@@ -109,6 +133,23 @@ export class EntitiesDataProvider implements vscode.TreeDataProvider<EntitiesTre
         }
     }
 
+    private async searchWizard(entityArray: IEntityDefinition[]) {
+        let entQPOptions = entityArray.sort(this.sortEntities).map((e) => {
+            return { label: e.DisplayName.UserLocalizedLabel?.Label ?? e.LogicalName, data: e };
+        });
+        let entitiesOptionsQP: vscode.QuickPickOptions = Placeholders.getQuickPickOptions(Placeholders.entitiesSearch);
+        let entQPResponse = await vscode.window.showQuickPick(entQPOptions, {
+            placeHolder: entitiesOptionsQP.placeHolder,
+            title: entitiesOptionsQP.title,
+            ignoreFocusOut: entitiesOptionsQP.ignoreFocusOut,
+            canPickMany: true,
+        });
+
+        if (entQPResponse) {
+            this.entities = entQPResponse.map((resp) => resp.data);
+        }
+    }
+
     private filterArrayBySolution(a1: IEntityDefinition[], a2: ISolutionComponent[]) {
         let res = [];
         res = a1.filter((el) => {
@@ -118,6 +159,8 @@ export class EntitiesDataProvider implements vscode.TreeDataProvider<EntitiesTre
         });
         return res;
     }
+
+    //#endregion
 
     readonly onDidChangeTreeData: vscode.Event<EntitiesTreeItem | undefined | void> = this.refreshTreeData.event;
 }

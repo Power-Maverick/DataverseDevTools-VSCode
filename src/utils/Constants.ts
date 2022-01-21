@@ -18,7 +18,7 @@ export const solDefinitionsStoreKey: string = `CurrentSolutions`;
 export const smartMatchStoreKey: string = `CurrentSmartMatch`;
 export const environmentTypes: string[] = ["Dev", "QA", "UAT", "Prod"];
 export const loginTypes: string[] = ["Username/Password", "Microsoft Login Prompt", "Client Id and Secret"];
-export const tsTemplateType: string[] = ["TypeScript Only", "Webpack"];
+export const tsTemplateType: string[] = ["Plain TypeScript", "Webpack"];
 export const connectionStatusBarUniqueId: string = `${extensionPrefix}.StatusBarConnectStatus`;
 export const maxRetries: number = 5;
 export const terminalName: string = "Dataverse DevTools";
@@ -32,4 +32,11 @@ export enum WebResourceType {
     html = 1,
     css = 2,
     script = 3,
+}
+
+export enum ConfidenceScores {
+    _90 = 90,
+    _80 = 80,
+    _75 = 75,
+    _60 = 60,
 }

@@ -13,6 +13,7 @@ export interface IConnection {
     tenantId?: string;
     currentAccessToken?: string;
     refreshToken?: string;
+    isCurrentlyConnected?: boolean;
 }
 
 export interface Token {
@@ -149,6 +150,8 @@ export interface IPanel {
     panel: vscode.WebviewPanel;
     extensionUri: vscode.Uri;
     webViewFileName: string;
+    excludeExternalCss?: boolean;
+    excludeExternalJs?: boolean;
 }
 
 export interface IViewOption {
@@ -261,17 +264,18 @@ export interface ISolutionComponent {
 }
 
 export interface ISmartMatchRecord {
-    wrId: string;
-    wrDisplayName: string;
-    wrPath: string;
+    wrId?: string;
+    wrDisplayName?: string;
+    wrPath?: string;
     localFileName: string;
     localFilePath: string;
     localFullPath: string;
-    confidenceLevel: number;
+    confidenceLevel?: number;
     linked: boolean;
+    base64ContentMatch?: boolean;
 }
 
 export interface ILinkView {
     fp: string;
-    id: string;
+    id?: string;
 }

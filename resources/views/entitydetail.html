@@ -4,52 +4,82 @@
 </h4>
 <div>!!{description}</div>
 
-<ul id="tabs-swipe-demo" class="tabs">
+<!-- <ul id="tabs-swipe-demo" class="tabs">
     <li class="tab col s3"><a class="active" href="#entity">Entity Details</a></li>
     <li class="tab col s3"><a href="#attributes">Attributes</a></li>
-</ul>
+</ul> -->
 <br /><br />
-<div id="entity" class="col s12">
-    <form>
-        <div>
-            <label>SLA:</label>
-            <input type="text" value="!!{sla}" readonly />
-        </div>
-        <div>
-            <label>Type:</label>
-            <input type="text" value="!!{entityType}" readonly />
-        </div>
-        <div>
-            <label>Object Type Code:</label>
-            <input id="objtypecode" type="text" value="!!{objectTypeCode}" readonly />
-            <i class="material-icons trailing" onclick="copyToClipboard('objtypecode')">content_copy</i>
-        </div>
-        <div>
-            <label>Primary ID Attribute:</label>
-            <input id="pid" type="text" value="!!{idAttr}" readonly />
-            <i class="material-icons trailing" onclick="copyToClipboard('pid')">content_copy</i>
-        </div>
-        <div>
-            <label>Primary Name Attribute:</label>
-            <input id="pname" type="text" value="!!{nameAttr}" readonly />
-            <i class="material-icons trailing" onclick="copyToClipboard('pname')">content_copy</i>
-        </div>
-        <div>
-            <label>Entity Set Name:</label>
-            <input id="setname" type="text" value="!!{setName}" readonly />
-            <i class="material-icons trailing" onclick="copyToClipboard('setname')">content_copy</i>
-        </div>
-    </form>
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="entitydetails-tab" data-bs-toggle="tab" data-bs-target="#entitydetails" type="button" role="tab" aria-controls="entitydetails" aria-selected="true">Entity Details</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="attr-tab" data-bs-toggle="tab" data-bs-target="#attr" type="button" role="tab" aria-controls="attr" aria-selected="false">Attributes</button>
+    </li>
+</ul>
+<br />
+<div class="tab-content" id="myTabContent">
+    <div class="tab-pane fade show active" id="entitydetails" role="tabpanel" aria-labelledby="entitydetails-tab">
+        <form>
+            <div class="mb-3 row">
+                <label for="sla" class="col-sm-2 col-form-label">SLA:</label>
+                <div class="col-sm-9">
+                    <input type="text" readonly class="form-control-plaintext text-truncate" id="sla" value="!!{sla}" />
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label for="type" class="col-sm-2 col-form-label">Entity Type:</label>
+                <div class="col-sm-9">
+                    <input type="text" readonly class="form-control-plaintext text-truncate" id="type" value="!!{entityType}" />
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label for="objtypecode" class="col-sm-2 col-form-label">Object Type Code:</label>
+                <div class="col-sm-9">
+                    <input type="text" readonly class="form-control-plaintext text-truncate" id="objtypecode" value="!!{objectTypeCode}" />
+                    <button type="button" class="btn btn-primary btn-sm" onclick="copyToClipboard('objtypecode')">Copy <i class="bi bi-clipboard"></i></button>
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label for="pid" class="col-sm-2 col-form-label">Primary ID Attribute:</label>
+                <div class="col-sm-9">
+                    <input type="text" readonly class="form-control-plaintext text-truncate" id="pid" value="!!{idAttr}" />
+                    <button type="button" class="btn btn-primary btn-sm" onclick="copyToClipboard('pid')">Copy <i class="bi bi-clipboard"></i></button>
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label for="pname" class="col-sm-2 col-form-label">Primary Name Attribute:</label>
+                <div class="col-sm-9">
+                    <input type="text" readonly class="form-control-plaintext text-truncate" id="pname" value="!!{nameAttr}" />
+                    <button type="button" class="btn btn-primary btn-sm" onclick="copyToClipboard('pname')">Copy <i class="bi bi-clipboard"></i></button>
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label for="setname" class="col-sm-2 col-form-label">Entity Set Name:</label>
+                <div class="col-sm-9">
+                    <input type="text" readonly class="form-control-plaintext text-truncate" id="setname" value="!!{setName}" />
+                    <button type="button" class="btn btn-primary btn-sm" onclick="copyToClipboard('setname')">Copy <i class="bi bi-clipboard"></i></button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="tab-pane fade" id="attr" role="tabpanel" aria-labelledby="attr-tab">
+        <input class="form-control" id="attrSearch" type="text" placeholder="Search.." />
+        <br />
+        <table class="table table-bordered">
+            <thead>
+                <th>Id</th>
+                <th>Logical Name</th>
+                <th>Schema Name</th>
+                <th>Type</th>
+                <th>Required Level</th>
+            </thead>
+            <tbody id="attrTable">
+                !!{attributes}
+            </tbody>
+        </table>
+    </div>
 </div>
-<div id="attributes" class="col s12">
-    <table>
-        <thead>
-            <th>Id</th>
-            <th>Logical Name</th>
-            <th>Schema Name</th>
-            <th>Type</th>
-            <th>Required Level</th>
-        </thead>
-        !!{attributes}
-    </table>
-</div>
+
+<div id="entity" class="col s12"></div>
+<div id="attributes" class="col s12"></div>

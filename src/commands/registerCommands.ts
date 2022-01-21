@@ -13,6 +13,8 @@ import { ViewBase } from "../views/ViewBase";
 import { addConnection } from "./connections";
 import { openUri } from "../utils/OpenUri";
 import { ErrorHandler } from "../helpers/errorHandler";
+import { DRBHelper } from "../helpers/drbHelper";
+import { WebResourcesTreeItem } from "../trees/webResourcesDataProvider";
 
 let dvStatusBarItem: vscode.StatusBarItem;
 
@@ -21,8 +23,9 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
     const views = new ViewBase(vscontext);
     const cliHelper = new CLIHelper(vscontext);
     const templateHelper = new TemplateHelper(vscontext);
-    const uploadHelper = new WebResourceHelper(vscontext, dvHelper);
+    const wrHelper = new WebResourceHelper(vscontext, dvHelper);
     const typingHelper = new TypingsHelper(vscontext, dvHelper);
+    const drbHelper = new DRBHelper(vscontext);
     const errorHandler = new ErrorHandler(tr);
 
     dvStatusBarItem = vscode.window.createStatusBarItem(connectionStatusBarUniqueId, vscode.StatusBarAlignment.Left);
@@ -81,6 +84,17 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
             },
         },
         {
+            command: "dvdt.explorer.connections.forgetConnectionOnWorkspace",
+            callback: async (connItem: DataverseConnectionTreeItem) => {
+                try {
+                    dvHelper.forgetCurrentWorkspaceConnection();
+                    updateConnectionStatusBar(undefined);
+                } catch (error) {
+                    errorHandler.log(error, "connectDataverse");
+                }
+            },
+        },
+        {
             command: "dvdt.explorer.connections.showConnectionDetails",
             callback: async (connItem: DataverseConnectionTreeItem) => {
                 try {
@@ -118,7 +132,7 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
             command: "dvdt.explorer.webresources.uploadWebResource",
             callback: async (uri: vscode.Uri) => {
                 try {
-                    await uploadHelper.uploadWebResource(uri.fsPath);
+                    await wrHelper.uploadWebResource(uri.fsPath);
                 } catch (error) {
                     errorHandler.log(error, "uploadWebResource");
                 }
@@ -138,7 +152,7 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
             command: "dvdt.explorer.webresources.smartMatch",
             callback: async () => {
                 try {
-                    await uploadHelper.smartMatchWebResources(views);
+                    await wrHelper.smartMatchWebResources(views);
                 } catch (error) {
                     errorHandler.log(error, "smartMatch");
                 }
@@ -158,9 +172,29 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
             command: "dvdt.explorer.webresources.compareWebResource",
             callback: async (uri: vscode.Uri) => {
                 try {
-                    await uploadHelper.compareWebResources(uri.fsPath);
+                    await wrHelper.compareWebResources(uri.fsPath);
                 } catch (error) {
                     errorHandler.log(error, "compareWebResource");
+                }
+            },
+        },
+        {
+            command: "dvdt.commands.openDRB",
+            callback: async () => {
+                try {
+                    drbHelper.openDRB(views);
+                } catch (error) {
+                    errorHandler.log(error, "openDRB");
+                }
+            },
+        },
+        {
+            command: "dvdt.explorer.webresources.linkExistingWebResource",
+            callback: async (uri: vscode.Uri) => {
+                try {
+                    await wrHelper.linkWebResource(uri.fsPath);
+                } catch (error) {
+                    errorHandler.log(error, "linkExistingWebResource");
                 }
             },
         },
@@ -170,7 +204,7 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
     });
 
     updateConnectionStatusBar(await dvHelper.reloadWorkspaceConnection());
-    vscode.commands.executeCommand("setContext", `${extensionPrefix}.linkedResources`, await uploadHelper.getLinkedResourceStrings("@_localFileName"));
+    vscode.commands.executeCommand("setContext", `${extensionPrefix}.linkedResources`, await wrHelper.getLinkedResourceStrings("@_localFileName"));
 }
 
 export function updateConnectionStatusBar(conn: IConnection | undefined): void {

@@ -110,6 +110,12 @@ export class Placeholders {
             case this.tsTemplateType:
                 qpOptions = { placeHolder: this.ipTSTemplateType.placeHolderText, title: this.ipTSTemplateType.prompt, ignoreFocusOut: ignoreFocus };
                 break;
+            case this.entitiesSearch:
+                qpOptions = { placeHolder: this.ipEntitiesSearch.placeHolderText, title: this.ipEntitiesSearch.prompt, ignoreFocusOut: ignoreFocus };
+                break;
+            case this.wrSearch:
+                qpOptions = { placeHolder: this.ipWRSearch.placeHolderText, title: this.ipWRSearch.prompt, ignoreFocusOut: ignoreFocus };
+                break;
             default:
                 qpOptions = { placeHolder: "", ignoreFocusOut: ignoreFocus };
                 break;
@@ -136,6 +142,8 @@ export class Placeholders {
     public static tsNamespace: string = "TS-Namespace";
     public static tsFileName: string = "TS-FileName";
     public static tsTemplateType: string = "TS-TemplateType";
+    public static entitiesSearch: string = "EntitiesSearch";
+    public static wrSearch: string = "WRSearch";
 
     public static required: string = "[Required]";
     public static optional: string = "[Optional]";
@@ -211,5 +219,13 @@ export class Placeholders {
     private static ipTSTemplateType: IPlaceholder = {
         placeHolderText: `${Placeholders.required} Template (e.g.: TypeScript Only, Webpack)`,
         prompt: `Pick your desired bundling template`,
+    };
+    private static ipEntitiesSearch: IPlaceholder = {
+        placeHolderText: `Search & Select Entities`,
+        prompt: `Pick multiple entities`,
+    };
+    private static ipWRSearch: IPlaceholder = {
+        placeHolderText: `Search & Select Web Resources`,
+        prompt: `Pick multiple web resources`,
     };
 }

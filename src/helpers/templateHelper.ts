@@ -1,12 +1,13 @@
 import * as vscode from "vscode";
 import * as path from "path";
+import * as config from "../utils/Config";
+import fetch from "node-fetch";
 import { copyFolderOrFile, createFolder, pathExists, readFileSync, writeFileSync } from "../utils/FileSystem";
 import { Commands } from "../terminals/commands";
 import { Console } from "../terminals/console";
 import { extensionName, tsTemplateType } from "../utils/Constants";
 import { Placeholders } from "../utils/Placeholders";
 import { ErrorMessages } from "../utils/ErrorMessages";
-import fetch from "node-fetch";
 import { pascalize } from "../utils/ExtensionMethods";
 
 export class TemplateHelper {
@@ -16,9 +17,15 @@ export class TemplateHelper {
     constructor(private vscontext: vscode.ExtensionContext) {}
 
     public async initiateTypeScriptProject(wsPath: string) {
-        let tsTemplateTypeOptions: string[] = tsTemplateType;
-        let tsTemplateTypeOptionsQuickPick: vscode.QuickPickOptions = Placeholders.getQuickPickOptions(Placeholders.tsTemplateType);
-        let tsTemplateTypeResponse: string | undefined = await vscode.window.showQuickPick(tsTemplateTypeOptions, tsTemplateTypeOptionsQuickPick);
+        let tsTemplateTypeResponse: string | undefined;
+
+        if (config.get("defaultTypeScriptTemplate") === "None") {
+            let tsTemplateTypeOptions: string[] = tsTemplateType;
+            let tsTemplateTypeOptionsQuickPick: vscode.QuickPickOptions = Placeholders.getQuickPickOptions(Placeholders.tsTemplateType);
+            tsTemplateTypeResponse = await vscode.window.showQuickPick(tsTemplateTypeOptions, tsTemplateTypeOptionsQuickPick);
+        } else {
+            tsTemplateTypeResponse = config.get("defaultTypeScriptTemplate");
+        }
 
         const extPath = this.vscontext.extensionUri.fsPath;
         const tsFolderUri = path.join(extPath, "resources", "templates", "TypeScript");

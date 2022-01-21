@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import * as vscode from "vscode";
 import * as path from "path";
-import { copyFolderOrFile, createTempDirectory, getFileExtension, getFileName, getRelativeFilePath, getWorkspaceFolder, readFileSync, writeFileSync } from "../utils/FileSystem";
+import { copyFolderOrFile, createTempDirectory, getFileExtension, getFileName, getRelativeFilePath, getWorkspaceFolder, readFileAsBase64Sync, readFileSync, writeFileSync } from "../utils/FileSystem";
 import { jsonToXML, xmlToJSON } from "../utils/Parsers";
 import { ILinkerFile, ILinkerRes, ISmartMatchRecord, IWebResource, IWebResources } from "../utils/Interfaces";
 import { DataverseHelper } from "./dataverseHelper";
@@ -35,7 +35,7 @@ export class WebResourceHelper {
             if (wrLinkQPResponse) {
                 if (wrLinkQPResponse === wrLinkQPOptions[0]) {
                     resourceToUpload = await this.linkWebResource(fullPath);
-                    await this.uploadWebResourceInternal(fullPath, resourceToUpload);
+                    return await this.uploadWebResourceInternal(fullPath, resourceToUpload);
                 } else if (wrLinkQPResponse === wrLinkQPOptions[1]) {
                     const wr = await this.uploadWebResourceInternal(fullPath);
                     if (wr) {
@@ -49,11 +49,12 @@ export class WebResourceHelper {
                             "@_localFilePath": localRelativePath,
                         };
                         this.addInLinkerFile(resc);
+                        return wr;
                     }
                 }
             }
         } else {
-            await this.uploadWebResourceInternal(fullPath, resourceToUpload);
+            return await this.uploadWebResourceInternal(fullPath, resourceToUpload);
         }
     }
 
@@ -102,33 +103,67 @@ export class WebResourceHelper {
                     const localRelativePath = getRelativeFilePath(jsFile.fsPath, getWorkspaceFolder()?.fsPath!);
 
                     let linkedResource: ILinkerRes | undefined = await this.getLinkedResourceByLocalFileName(jsFile.fsPath);
+                    let localContent = readFileAsBase64Sync(jsFile.fsPath);
 
-                    // Match with Display Name exact match
-                    let wrFoundByName = jsonWRs.value.find((wr) => wr.displayname?.toLowerCase() === localFileName.toLowerCase());
-                    if (wrFoundByName) {
+                    // Find in Linker first
+                    if (linkedResource && linkedResource["@_Id"]) {
+                        let wr = jsonWRs.value.find((wr) => wr.webresourceid === linkedResource?.["@_Id"]);
+
                         smartMatches.push({
-                            wrId: wrFoundByName.webresourceid!,
-                            wrDisplayName: wrFoundByName.displayname!,
-                            wrPath: wrFoundByName.name!,
-                            localFileName: localFileName,
-                            localFilePath: localRelativePath,
+                            wrId: linkedResource["@_Id"],
+                            wrDisplayName: linkedResource["@_dvDisplayName"],
+                            wrPath: linkedResource["@_dvFilePath"],
+                            localFileName: linkedResource["@_localFileName"],
+                            localFilePath: linkedResource["@_localFilePath"],
                             localFullPath: jsFile.fsPath,
                             confidenceLevel: 100,
-                            linked: linkedResource?.["@_dvFilePath"] === wrFoundByName.name!,
+                            linked: true,
+                            base64ContentMatch: localContent === wr?.content,
                         });
                     } else {
-                        // Match with File Name search in Server Path
-                        let wrFoundByNameSearch = jsonWRs.value.find((wr) => wr.name?.toLowerCase()?.search(localFileName.toLowerCase())! > 0);
-                        if (wrFoundByNameSearch) {
+                        let confidence: number = 0;
+                        let wrMatch: IWebResource | undefined;
+                        // Match with Content & Display Name - 90
+                        const wrFoundByContentAndName = jsonWRs.value.find((wr) => wr.content === localContent && wr.displayname?.toLowerCase() === localFileName.toLowerCase());
+                        // Match with Content & Display Name - 80
+                        const wrFoundByContentAndNameSearch = jsonWRs.value.find((wr) => wr.content === localContent && wr.name?.toLowerCase()?.search(localFileName.toLowerCase())! > 0);
+                        // Match with Display Name exact match - 75
+                        const wrFoundByName = jsonWRs.value.find((wr) => wr.displayname?.toLowerCase() === localFileName.toLowerCase());
+                        // Match with File Name search in Server Path - 60
+                        const wrFoundByNameSearch = jsonWRs.value.find((wr) => wr.name?.toLowerCase()?.search(localFileName.toLowerCase())! > 0);
+
+                        if (wrFoundByContentAndName) {
+                            confidence = 90;
+                            wrMatch = wrFoundByContentAndName;
+                        } else if (wrFoundByContentAndNameSearch) {
+                            confidence = 80;
+                            wrMatch = wrFoundByContentAndNameSearch;
+                        } else if (wrFoundByName) {
+                            confidence = 75;
+                            wrMatch = wrFoundByName;
+                        } else if (wrFoundByNameSearch) {
+                            confidence = 60;
+                            wrMatch = wrFoundByNameSearch;
+                        }
+
+                        if (wrMatch) {
                             smartMatches.push({
-                                wrId: wrFoundByNameSearch.webresourceid!,
-                                wrDisplayName: wrFoundByNameSearch.displayname!,
-                                wrPath: wrFoundByNameSearch.name!,
+                                wrId: wrMatch.webresourceid!,
+                                wrDisplayName: wrMatch.displayname!,
+                                wrPath: wrMatch.name!,
                                 localFileName: localFileName,
                                 localFilePath: localRelativePath,
                                 localFullPath: jsFile.fsPath,
-                                confidenceLevel: 60,
-                                linked: linkedResource?.["@_dvFilePath"] === wrFoundByNameSearch.name!,
+                                confidenceLevel: confidence,
+                                linked: linkedResource?.["@_dvFilePath"] === wrMatch.name!,
+                            });
+                        } else {
+                            // Default - No Match
+                            smartMatches.push({
+                                localFileName: localFileName,
+                                localFilePath: localRelativePath,
+                                localFullPath: jsFile.fsPath,
+                                linked: false,
                             });
                         }
                     }
@@ -159,13 +194,32 @@ export class WebResourceHelper {
             }
         }
     }
+
+    public async linkWebResource(fullPath: string): Promise<ILinkerRes | undefined> {
+        const localFileName = getFileName(fullPath);
+        const localRelativePath = getRelativeFilePath(fullPath, getWorkspaceFolder()?.fsPath!);
+        const linkedResourceIndex: number = await this.getLinkedResourceIndexByLocalFileName(fullPath);
+
+        if (linkedResourceIndex >= 0) {
+            const respUpdateConfirm = await vscode.window.showWarningMessage("This file is already linked. Are you sure you want to re-link this file?", { detail: "Confirm your selection", modal: true }, "Yes", "No");
+            if (respUpdateConfirm === "Yes") {
+                let linkerRescForUpdate = await this.conformLinkerResc(localFileName, localRelativePath);
+                if (linkerRescForUpdate) {
+                    return await this.updateInLinkerFile(linkedResourceIndex, linkerRescForUpdate);
+                }
+            }
+        } else {
+            let linkerRescToAdd = await this.conformLinkerResc(localFileName, localRelativePath);
+            if (linkerRescToAdd) {
+                return await this.addInLinkerFile(linkerRescToAdd);
+            }
+        }
+    }
     //#endregion Public
 
     //#region Private
-    async linkWebResource(fullPath: string): Promise<ILinkerRes | undefined> {
-        const localFileName = getFileName(fullPath);
-        const localRelativePath = getRelativeFilePath(fullPath, getWorkspaceFolder()?.fsPath!);
-        await this.dvHelper.getWebResources();
+
+    private async conformLinkerResc(localFileName: string, localRelativePath: string): Promise<ILinkerRes | undefined> {
         const jsonWRs: IWebResources = this.vsstate.getFromWorkspace(wrDefinitionsStoreKey);
 
         if (jsonWRs) {
@@ -185,12 +239,12 @@ export class WebResourceHelper {
                     "@_localFileName": localFileName,
                     "@_localFilePath": localRelativePath,
                 };
-                return this.addInLinkerFile(resc);
+                return resc;
             }
         }
     }
 
-    async addInLinkerFile(resc: ILinkerRes): Promise<ILinkerRes | undefined> {
+    private async addInLinkerFile(resc: ILinkerRes): Promise<ILinkerRes | undefined> {
         const linkerFile = await this.createLinkerFile();
         if (linkerFile) {
             const linkerFileData = readFileSync(linkerFile.fsPath).toString();
@@ -215,7 +269,26 @@ export class WebResourceHelper {
         }
     }
 
-    async createWebResourceInLinkerFile(resc: ILinkerRes) {
+    private async updateInLinkerFile(oldIndex: number, newResc: ILinkerRes): Promise<ILinkerRes | undefined> {
+        const linkerFile = await this.getLinkerFile();
+        if (linkerFile) {
+            const linkerFileData = readFileSync(linkerFile.fsPath).toString();
+            const linkerFileDataJson = xmlToJSON<ILinkerFile>(linkerFileData);
+
+            if (Array.isArray(linkerFileDataJson.DVDT.WebResources.Resource)) {
+                linkerFileDataJson.DVDT.WebResources.Resource[oldIndex] = newResc;
+            } else {
+                const tResc: ILinkerRes = linkerFileDataJson.DVDT.WebResources.Resource;
+                linkerFileDataJson.DVDT.WebResources.Resource = [];
+                linkerFileDataJson.DVDT.WebResources.Resource.push(newResc);
+            }
+            writeFileSync(linkerFile.fsPath, jsonToXML(linkerFileDataJson));
+            vscode.commands.executeCommand("dvdt.explorer.webresources.loadWebResources");
+            return newResc;
+        }
+    }
+
+    private async createWebResourceInLinkerFile(resc: ILinkerRes) {
         const linkerFile = await this.createLinkerFile();
         if (linkerFile) {
             const linkerFileData = readFileSync(linkerFile.fsPath).toString();
@@ -240,7 +313,7 @@ export class WebResourceHelper {
         }
     }
 
-    async uploadWebResourceInternal(fullPath: string, resc?: ILinkerRes): Promise<IWebResource | undefined> {
+    private async uploadWebResourceInternal(fullPath: string, resc?: ILinkerRes): Promise<IWebResource | undefined> {
         return vscode.window.withProgress(
             {
                 location: vscode.ProgressLocation.Notification,
@@ -248,17 +321,22 @@ export class WebResourceHelper {
             },
             async (progress, token) => {
                 let id: string = "";
+                let wrReturn: IWebResource | undefined;
                 token.onCancellationRequested(() => {
                     console.log("User canceled the long running operation");
                     return;
                 });
                 progress.report({ increment: 0, message: "Uploading..." });
-                if (resc) {
+                if (resc && resc["@_Id"]) {
                     const wr: IWebResource = {
                         content: encodeToBase64(readFileSync(fullPath)),
                     };
                     await this.dvHelper.updateWebResourceContent(resc["@_Id"], wr);
                     id = resc["@_Id"];
+                    wrReturn = wr;
+                    wrReturn.name = resc["@_dvFilePath"];
+                    wrReturn.displayname = resc["@_dvDisplayName"];
+                    wrReturn.webresourceid = resc["@_Id"];
                 } else {
                     const wr = await this.webResourceCreateWizard(fullPath);
                     if (wr) {
@@ -270,7 +348,7 @@ export class WebResourceHelper {
                             this.dvHelper.addWRToSolution(solutionUniqueName, wrId);
                             wr.webresourceid = wrId;
                             id = wrId;
-                            return wr;
+                            wrReturn = wr;
                         }
                     }
                 }
@@ -278,11 +356,12 @@ export class WebResourceHelper {
                 await this.dvHelper.publishWebResource(id);
                 progress.report({ increment: 100 });
                 vscode.window.showInformationMessage(`Web Resource uploaded.`);
+                return wrReturn;
             },
         );
     }
 
-    async getLinkedResourceByLocalFileName(fullFilePath: string): Promise<ILinkerRes | undefined> {
+    private async getLinkedResourceByLocalFileName(fullFilePath: string): Promise<ILinkerRes | undefined> {
         const linkerFile = await this.getLinkerFile();
         if (linkerFile) {
             const localFileName = getFileName(fullFilePath);
@@ -302,7 +381,28 @@ export class WebResourceHelper {
         }
     }
 
-    async createLinkerFile(): Promise<vscode.Uri | undefined> {
+    private async getLinkedResourceIndexByLocalFileName(fullFilePath: string): Promise<number> {
+        const linkerFile = await this.getLinkerFile();
+        if (linkerFile) {
+            const localFileName = getFileName(fullFilePath);
+            const localRelativePath = getRelativeFilePath(fullFilePath, getWorkspaceFolder()?.fsPath!);
+            const linkerFileData = readFileSync(linkerFile.fsPath).toString();
+            const linkerFileDataJson = xmlToJSON<ILinkerFile>(linkerFileData);
+
+            if (Array.isArray(linkerFileDataJson.DVDT.WebResources.Resource)) {
+                return linkerFileDataJson.DVDT.WebResources.Resource.findIndex((r) => r["@_localFileName"] === localFileName && r["@_localFilePath"] === localRelativePath);
+            } else {
+                if (linkerFileDataJson.DVDT.WebResources.Resource) {
+                    const linkFileName = linkerFileDataJson.DVDT.WebResources.Resource["@_localFileName"];
+                    const linkFilePath = linkerFileDataJson.DVDT.WebResources.Resource["@_localFilePath"];
+                    return linkFileName === localFileName && linkFilePath === localRelativePath ? 0 : -1;
+                }
+            }
+        }
+        return -1;
+    }
+
+    private async createLinkerFile(): Promise<vscode.Uri | undefined> {
         if (vscode.workspace.workspaceFolders) {
             const workspaceFolder = vscode.workspace.workspaceFolders[0].uri;
             const linkerFileUri = await this.getLinkerFile();
@@ -318,7 +418,7 @@ export class WebResourceHelper {
         return undefined;
     }
 
-    async getLinkerFile(): Promise<vscode.Uri | undefined> {
+    private async getLinkerFile(): Promise<vscode.Uri | undefined> {
         const linkerFiles = await vscode.workspace.findFiles("**/dvdt.linker.xml", "**/node_modules/**");
         if (linkerFiles.length > 0) {
             //console.log(linkerFiles[0]);
@@ -328,7 +428,7 @@ export class WebResourceHelper {
         return undefined;
     }
 
-    async webResourceCreateWizard(fullPath: string): Promise<IWebResource | undefined> {
+    private async webResourceCreateWizard(fullPath: string): Promise<IWebResource | undefined> {
         // Get solutions (need prefix on that)
         const solutions = await this.dvHelper.getSolutions();
         if (solutions) {

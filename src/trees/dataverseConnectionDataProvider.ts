@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import * as path from "path";
 import { State } from "../utils/State";
-import { connectionStoreKey, environmentTypes, extensionPrefix } from "../utils/Constants";
+import { connectionCurrentStoreKey, connectionStoreKey, environmentTypes, extensionPrefix } from "../utils/Constants";
 import { IConnection, IStore } from "../utils/Interfaces";
 import { observable } from "mobx";
 import { groupBy } from "../utils/ExtensionMethods";
@@ -27,18 +27,18 @@ export class DataverseConnectionDataProvider implements vscode.TreeDataProvider<
     getChildren(element?: DataverseConnectionTreeItem): Thenable<DataverseConnectionTreeItem[]> {
         if (element) {
             // Child
-            const check1 = this.connections.find((c) => c.connectionName === element.label);
-            if (check1) {
+            const connExpand = this.connections.find((c) => c.connectionName === element.label);
+            if (connExpand) {
                 let childTree: DataverseConnectionTreeItem[] = [];
-                childTree.push(new DataverseConnectionTreeItem(check1.environmentUrl, undefined, vscode.TreeItemCollapsibleState.None, 3));
-                childTree.push(new DataverseConnectionTreeItem(check1.userName!, undefined, vscode.TreeItemCollapsibleState.None, 3));
+                childTree.push(new DataverseConnectionTreeItem(connExpand.environmentUrl, undefined, vscode.TreeItemCollapsibleState.None, 3));
+                childTree.push(new DataverseConnectionTreeItem(connExpand.userName!, undefined, vscode.TreeItemCollapsibleState.None, 3));
                 return Promise.resolve(childTree);
             } else {
-                const check2 = this.connections.find((c) => c.environmentUrl === element.label || c.userName === element.label);
-                if (check2) {
+                const noExpandCheck = this.connections.find((c) => c.environmentUrl === element.label || c.userName === element.label);
+                if (noExpandCheck) {
                     return Promise.resolve([]);
                 } else {
-                    // Here element will have the environmentType
+                    // Expand Environment
                     return Promise.resolve(this.getConnectionItems(element.label, this.connections));
                 }
             }
@@ -57,9 +57,9 @@ export class DataverseConnectionDataProvider implements vscode.TreeDataProvider<
     }
 
     private getConnectionItems(connType: string, conns: IConnection[]): DataverseConnectionTreeItem[] {
-        const toConnections = (name: string, version: string): DataverseConnectionTreeItem => {
+        const toConnections = (name: string, version: string, isConnected: boolean): DataverseConnectionTreeItem => {
             if (conns) {
-                return new DataverseConnectionTreeItem(name, version, vscode.TreeItemCollapsibleState.Collapsed, 2);
+                return new DataverseConnectionTreeItem(name, version, vscode.TreeItemCollapsibleState.Collapsed, 2, isConnected);
             } else {
                 return new DataverseConnectionTreeItem(name, version, vscode.TreeItemCollapsibleState.None, 0);
             }
@@ -74,7 +74,7 @@ export class DataverseConnectionDataProvider implements vscode.TreeDataProvider<
             })
             : [];
 
-        const finalConnections = filteredConnections.map((fc) => toConnections(fc.connectionName, fc.userName!));
+        const finalConnections = filteredConnections.map((fc) => toConnections(fc.connectionName, fc.userName!, fc.isCurrentlyConnected!));
         return finalConnections;
     }
 
@@ -84,6 +84,13 @@ export class DataverseConnectionDataProvider implements vscode.TreeDataProvider<
         if (jsonConn) {
             this.connections = JSON.parse(jsonConn);
             store.noConnections = false;
+            const connFromWS: IConnection = vsstate.getFromWorkspace(connectionCurrentStoreKey);
+            if (connFromWS) {
+                let ind = this.connections.findIndex((c) => c.connectionName === connFromWS.connectionName && c.environmentType === connFromWS.environmentType);
+                if (ind !== -1) {
+                    this.connections[ind].isCurrentlyConnected = true;
+                }
+            }
         } else {
             this.connections = [];
             store.noConnections = true;
@@ -95,13 +102,51 @@ export class DataverseConnectionDataProvider implements vscode.TreeDataProvider<
 }
 
 export class DataverseConnectionTreeItem extends TreeItemBase {
-    constructor(public readonly label: string, public readonly desc: string | undefined, public readonly collapsibleState: vscode.TreeItemCollapsibleState, public readonly level: number) {
+    constructor(
+        public readonly label: string,
+        public readonly desc: string | undefined,
+        public readonly collapsibleState: vscode.TreeItemCollapsibleState,
+        public readonly level: number,
+        public readonly current: boolean = false,
+    ) {
         super(label, desc, collapsibleState);
     }
 
     iconPath = {
-        light: path.join(__filename, "..", "..", "..", "resources", "light", this.level === 1 ? "connection-type.svg" : this.level === 2 ? "connection.svg" : this.level === 3 ? "connection-details.svg" : "generic.svg"),
-        dark: path.join(__filename, "..", "..", "..", "resources", "dark", this.level === 1 ? "connection-type.svg" : this.level === 2 ? "connection.svg" : this.level === 3 ? "connection-details.svg" : "generic.svg"),
+        light: path.join(
+            __filename,
+            "..",
+            "..",
+            "..",
+            "resources",
+            "light",
+            this.level === 1
+                ? "connection-type.svg"
+                : this.level === 2 && this.current
+                ? "dataverse.svg"
+                : this.level === 2 && !this.current
+                ? "dataverse-off.svg"
+                : this.level === 3
+                ? "connection-details.svg"
+                : "generic.svg",
+        ),
+        dark: path.join(
+            __filename,
+            "..",
+            "..",
+            "..",
+            "resources",
+            "dark",
+            this.level === 1
+                ? "connection-type.svg"
+                : this.level === 2 && this.current
+                ? "dataverse.svg"
+                : this.level === 2 && !this.current
+                ? "dataverse-off.svg"
+                : this.level === 3
+                ? "connection-details.svg"
+                : "generic.svg",
+        ),
     };
 
     contextValue = this.level === 2 ? "connection" : "connection-child";

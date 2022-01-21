@@ -1,46 +1,101 @@
 <br />
-<br />
-<nav>
-    <div class="nav-wrapper">
-        <ul id="nav-mobile" class="left hide-on-med-and-down">
-            <li>
-                <button class="btn" id="btnUpload" onclick="uploadAll()"><i class="material-icons right ln32">cloud_upload</i>Upload All Linked</button>
-            </li>
-            <li><button class="btn" id="btnLink100Only" onclick="link100Only()">Link 100% Confidence</button></li>
-            <li><button class="btn" id="btnLinkAll" onclick="linkAll()">Link All</button></li>
+
+<div class="alert alert-primary d-flex align-items-center" role="alert">
+    <i class="bi bi-info-square-fill"></i>
+    <div>&nbsp;The <b>LINK</b> buttons will only link the files locally but won't upload anything to Dataverse.</div>
+</div>
+
+<div id="toolbar">
+    <button class="btn btn-primary" id="btnUpload" onclick="uploadAll()"><i class="bi bi-cloud-arrow-up"></i>&nbsp;Upload All Linked</button>
+    <div class="btn-group" role="group">
+        <button id="btnGroupLinkSpecific" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-code-square"></i>&nbsp;Link</button>
+        <ul class="dropdown-menu" aria-labelledby="btnGroupLinkSpecific">
+            <li><a class="dropdown-item" href="#" onclick="linkAll()">All Smart Match</a></li>
+            <li><a class="dropdown-item" href="#" onclick="linkSpecific(90)">90% Confidence Match</a></li>
+            <li><a class="dropdown-item" href="#" onclick="linkSpecific(80)">80% Confidence Match</a></li>
+            <li><a class="dropdown-item" href="#" onclick="linkSpecific(75)">75% Confidence Match</a></li>
+            <li><a class="dropdown-item" href="#" onclick="linkSpecific(60)">60% Confidence Match</a></li>
         </ul>
     </div>
-</nav>
-<!-- <div id="header">
-    <button class="btn" id="btnLink100Only" onclick="link100Only()">Link 100% Confidence</button>
-    <button class="btn" id="btnLinkAll" onclick="linkAll()">Link All</button>
-    <div class="fixed-action-btn">
-        <button class="btn" id="btnUpload" onclick="uploadAll()"><i class="material-icons right pad-left-8">cloud_upload</i>Upload All Linked</button>
-    </div>
-</div> -->
-<div>
-    <p>The <b>LINK</b> buttons will only link the files locally but <span class="realistic-marker-highlight">won't upload anything to Dataverse.</span></p>
-    <svg xmlns="//www.w3.org/2000/svg" version="1.1" class="svg-filters" style="display: none">
-        <defs>
-            <filter id="marker-shape">
-                <feTurbulence type="fractalNoise" baseFrequency="0 0.15" numOctaves="1" result="warp" />
-                <feDisplacementMap xChannelSelector="R" yChannelSelector="G" scale="30" in="SourceGraphic" in2="warp" />
-            </filter>
-        </defs>
-    </svg>
+    <button class="btn btn-primary" data-bs-toggle="offcanvas" data-bs-target="#ocConfidenceLevel" aria-controls="ocConfidenceLevel"><i class="bi bi-eyeglasses"></i>&nbsp;Understand Confidence Levels</button>
 </div>
 <div id="wrs" class="col s12">
-    <table>
+    <table
+        id="matchTable"
+        data-locale="en-US"
+        data-search="true"
+        data-toolbar="#toolbar"
+        data-show-fullscreen="true"
+        data-show-columns="true"
+        data-show-columns-toggle-all="true"
+        data-show-export="true"
+        data-minimum-count-columns="2"
+        data-pagination="true"
+        data-id-field="id"
+        data-page-list="[10, 25, 50, 100, all]"
+    >
         <thead>
-            <th>Web Resource Id</th>
-            <th>Display Name</th>
-            <th>Local File Name</th>
-            <th>Server Path</th>
-            <th>Local Path</th>
-            <th>Confidence Level</th>
-            <th>Linked Status</th>
-            <th>Action</th>
+            <tr>
+                <th colspan="2" data-halign="center">Local</th>
+                <th colspan="3" data-halign="center">Server</th>
+                <th colspan="2" data-halign="center">Mapping</th>
+                <th rowspan="2" data-halign="center" data-valign="middle">Action</th>
+            </tr>
+            <tr>
+                <th>Local File Name</th>
+                <th>Local Path</th>
+                <th>Display Name</th>
+                <th>Server Path</th>
+                <th data-field="id">Web Resource Id</th>
+                <th>Confidence</th>
+                <th>Status</th>
+            </tr>
         </thead>
-        !!{matches}
+        <tbody id="matchBody">
+            !!{matches}
+        </tbody>
     </table>
 </div>
+<!-- Offcanvas -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="ocConfidenceLevel" aria-labelledby="ocConfidenceLevelLabel">
+    <div class="offcanvas-header">
+        <h5 id="ocConfidenceLevelLabel">Confidence Levels</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <ol class="list-group list-group-numbered">
+            <li class="list-group-item d-flex justify-content-between align-items-start">
+                <div class="ms-2 me-auto">
+                    <div class="fw-bold">Confidence Level - 90</div>
+                    Matched on exact Local File Name & Server Display Name, plus matched on the content of the files.
+                </div>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-start">
+                <div class="ms-2 me-auto">
+                    <div class="fw-bold">Confidence Level - 80</div>
+                    Matched on Local File Name in Server Path, plus matched on the content of the files.
+                </div>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-start">
+                <div class="ms-2 me-auto">
+                    <div class="fw-bold">Confidence Level - 75</div>
+                    Matched on exact Local File Name & Server Display Name.
+                </div>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-start">
+                <div class="ms-2 me-auto">
+                    <div class="fw-bold">Confidence Level - 60</div>
+                    Matched on Local File Name in Server Path.
+                </div>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        var toastPreviewInfo = document.getElementById("experimentalPreviewToast");
+        var toast = new bootstrap.Toast(toastPreviewInfo);
+        toast.show();
+    });
+</script>

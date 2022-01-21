@@ -15,6 +15,7 @@ export class WebResourcesDataProvider implements vscode.TreeDataProvider<WebReso
     private webResource: IWebResource[] = [];
     private linkedResources: string[] | undefined = [];
     private areWRFiltered: boolean = false;
+    private areWRSearched: boolean = false;
 
     constructor(private vscontext: vscode.ExtensionContext, private dvHelper: DataverseHelper, private uploadHelper: WebResourceHelper) {}
 
@@ -51,7 +52,6 @@ export class WebResourcesDataProvider implements vscode.TreeDataProvider<WebReso
                                 showCheckmark = true;
                             }
                         }
-
                         return new WebResourcesTreeItem(e.displayname!, e.name, vscode.TreeItemCollapsibleState.None, 2, showCheckmark);
                     }),
                 );
@@ -80,6 +80,28 @@ export class WebResourcesDataProvider implements vscode.TreeDataProvider<WebReso
         vscode.commands.executeCommand("setContext", `${extensionPrefix}.wrFiltered`, this.areWRFiltered);
     }
 
+    async search(): Promise<void> {
+        const vsstate = new State(this.vscontext);
+        const jsonConn: IWebResources = vsstate.getFromWorkspace(wrDefinitionsStoreKey);
+
+        if (!jsonConn) {
+            vscode.window.showErrorMessage(`${extensionName}: No web-resources found.`);
+            return;
+        }
+
+        if (this.areWRSearched) {
+            this.webResource = jsonConn.value;
+            this.areWRSearched = false;
+        } else {
+            await this.searchWizard(jsonConn.value);
+            this.areWRSearched = true;
+        }
+        this.refreshTreeData.fire();
+        vscode.commands.executeCommand("setContext", `${extensionPrefix}.wrSearched`, this.areWRSearched);
+    }
+
+    //#region Private
+
     private async populateWebResources() {
         const vsstate = new State(this.vscontext);
         const jsonConn: IWebResources = vsstate.getFromWorkspace(wrDefinitionsStoreKey);
@@ -107,7 +129,7 @@ export class WebResourcesDataProvider implements vscode.TreeDataProvider<WebReso
         return 0;
     }
 
-    private async filterWizard(entityArray: IWebResource[]) {
+    private async filterWizard(wrArray: IWebResource[]) {
         const solutions = await this.dvHelper.getSolutions();
         if (solutions) {
             let solQPOptions = solutions.value.map((s) => {
@@ -118,10 +140,27 @@ export class WebResourcesDataProvider implements vscode.TreeDataProvider<WebReso
 
             if (solQPResponse) {
                 const resp = await this.dvHelper.fetchWRsInSolution(solQPResponse.data.solutionid);
-                if (entityArray && resp) {
-                    this.webResource = this.filterArrayBySolution(entityArray, resp.value);
+                if (wrArray && resp) {
+                    this.webResource = this.filterArrayBySolution(wrArray, resp.value);
                 }
             }
+        }
+    }
+
+    private async searchWizard(wrArray: IWebResource[]) {
+        let wrQPOptions = wrArray.sort(this.sortWebResources).map((w) => {
+            return { label: w.displayname!, data: w };
+        });
+        let wrOptionsQP: vscode.QuickPickOptions = Placeholders.getQuickPickOptions(Placeholders.wrSearch);
+        let wrQPResponse = await vscode.window.showQuickPick(wrQPOptions, {
+            placeHolder: wrOptionsQP.placeHolder,
+            title: wrOptionsQP.title,
+            ignoreFocusOut: wrOptionsQP.ignoreFocusOut,
+            canPickMany: true,
+        });
+
+        if (wrQPResponse) {
+            this.webResource = wrQPResponse.map((resp) => resp.data);
         }
     }
 
@@ -134,6 +173,8 @@ export class WebResourcesDataProvider implements vscode.TreeDataProvider<WebReso
         });
         return res;
     }
+
+    //#endregion
 
     readonly onDidChangeTreeData: vscode.Event<WebResourcesTreeItem | undefined | void> = this.refreshTreeData.event;
 }
@@ -157,7 +198,17 @@ export class WebResourcesTreeItem extends TreeItemBase {
             "..",
             "resources",
             "light",
-            this.level === 1 ? "webpack.svg" : this.level === 2 && !this.showCheck ? "layers-off.svg" : this.level === 2 && this.showCheck ? "layers.svg" : "generic.svg",
+            this.label === "html"
+                ? "html.svg"
+                : this.label === "css"
+                ? "css.svg"
+                : this.label === "script"
+                ? "js.svg"
+                : this.level === 2 && !this.showCheck
+                ? "file-red.svg"
+                : this.level === 2 && this.showCheck
+                ? "file-green.svg"
+                : "generic.svg",
         ),
         dark: path.join(
             __filename,
@@ -166,7 +217,17 @@ export class WebResourcesTreeItem extends TreeItemBase {
             "..",
             "resources",
             "dark",
-            this.level === 1 ? "webpack.svg" : this.level === 2 && !this.showCheck ? "layers-off.svg" : this.level === 2 && this.showCheck ? "layers.svg" : "generic.svg",
+            this.label === "html"
+                ? "html.svg"
+                : this.label === "css"
+                ? "css.svg"
+                : this.label === "script"
+                ? "js.svg"
+                : this.level === 2 && !this.showCheck
+                ? "file-red.svg"
+                : this.level === 2 && this.showCheck
+                ? "file-green.svg"
+                : "generic.svg",
         ),
     };
 

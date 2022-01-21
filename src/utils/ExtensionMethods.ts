@@ -1,5 +1,11 @@
 const stringIsNumber = (value: any) => isNaN(Number(value)) === false;
 
+/**
+ * Performs a group by on an array based on the key
+ * @param list array of an object
+ * @param getKey anonymous function to identify key for grouping
+ * @returns Record<key, array of object>
+ */
 export const groupBy = <T, K extends keyof any>(list: T[], getKey: (item: T) => K) =>
     list.reduce((previous, currentItem) => {
         const group = getKey(currentItem);
@@ -10,12 +16,22 @@ export const groupBy = <T, K extends keyof any>(list: T[], getKey: (item: T) => 
         return previous;
     }, {} as Record<K, T[]>);
 
+/**
+ * Helps in converting any object into array like Enum
+ * @param e
+ * @returns array of object
+ */
 export const toArray = (e: any) => {
     return Object.keys(e)
         .filter(stringIsNumber)
         .map((key) => e[key]);
 };
 
+/**
+ * Converts a string into camel case
+ * @param str String that needs to be converted in camel case
+ * @returns string
+ */
 export const camelize = (str: string) => {
     return str
         .replace(/(?:^\w|[A-Z]|\b\w)/g, function (word, index) {
@@ -25,6 +41,11 @@ export const camelize = (str: string) => {
         .replace(/[^0-9a-zA-Z_]+/g, "");
 };
 
+/**
+ * Converts a string into pascal case
+ * @param str String that needs to be converted in pascal case
+ * @returns string
+ */
 export const pascalize = (str: string) => {
     return str
         .replace(/\w+/g, function (w) {
@@ -34,6 +55,11 @@ export const pascalize = (str: string) => {
         .replace(/[^0-9a-zA-Z_]+/g, "");
 };
 
+/**
+ * Sanitizes the string by replacing the first number with '_', removing all whitespace & any special characters
+ * @param str String that needs to be cleaned
+ * @returns string
+ */
 export const sanitize = (str: string) => {
     if (str.match(/^\d/)) {
         str = "_".concat(str);
@@ -41,6 +67,11 @@ export const sanitize = (str: string) => {
     return str.replace(/\s+/g, "").replace(/[^0-9a-zA-Z_]+/g, "");
 };
 
+/**
+ * Extracts a GUID from a string
+ * @param str String that has GUID
+ * @returns string that is a GUID
+ */
 export const extractGuid = (str: string): string | undefined => {
     const matches = str.match(/(\{){0,1}[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}(\}){0,1}/g);
     if (matches) {

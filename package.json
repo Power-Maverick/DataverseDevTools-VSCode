@@ -3,7 +3,7 @@
     "displayName": "Dataverse DevTools",
     "description": "The all-in-one tool to develop code for Dataverse/Dynamics 365. Helps you connect to a Dataverse environment, generate TypeScript definitions for entities, create different type of Dataverse-specific projects and much more.",
     "publisher": "danish-naglekar",
-    "version": "1.1.11",
+    "version": "2.0.0",
     "engines": {
         "vscode": "^1.58.0"
     },
@@ -52,34 +52,34 @@
         "menus": {
             "explorer/context": [
                 {
-                    "command": "dvdt.commands.initPlugin",
-                    "group": "%dvdt.menus.group%",
-                    "when": "false"
-                },
-                {
                     "command": "dvdt.commands.initTS",
-                    "group": "%dvdt.menus.group%@1"
+                    "group": "%dvdt.menus.group.ts%@1"
                 },
                 {
                     "command": "dvdt.commands.createTSFile",
-                    "group": "%dvdt.menus.group%@2"
+                    "group": "%dvdt.menus.group.ts%@2"
+                },
+                {
+                    "command": "dvdt.explorer.webresources.linkExistingWebResource",
+                    "when": "resourceExtname in devtools.resourcesExtn",
+                    "group": "%dvdt.menus.group.wr%@1"
                 },
                 {
                     "command": "dvdt.explorer.webresources.uploadWebResource",
                     "when": "resourceExtname in devtools.resourcesExtn",
-                    "group": "%dvdt.menus.group%@3"
+                    "group": "%dvdt.menus.group.wr%@2"
                 },
                 {
                     "command": "dvdt.explorer.webresources.compareWebResource",
-                    "when": "resourceExtname in devtools.resourcesExtn && devtools.showPreviewOptions",
-                    "group": "%dvdt.menus.group%@4"
+                    "when": "resourceExtname in devtools.resourcesExtn && resourceFilename in devtools.linkedResources && devtools.showPreviewOptions",
+                    "group": "%dvdt.menus.group.wr%@3"
                 }
             ],
             "view/title": [
                 {
                     "command": "dvdt.explorer.connections.addConnection",
                     "when": "view == dvConnections",
-                    "group": "navigation@1"
+                    "group": "navigation@3"
                 },
                 {
                     "command": "dvdt.explorer.connections.refreshConnection",
@@ -89,11 +89,21 @@
                 {
                     "command": "dvdt.explorer.entities.filteron",
                     "when": "view == dvEntities && !devtools.entitiesFiltered",
-                    "group": "navigation@1"
+                    "group": "navigation@2"
                 },
                 {
                     "command": "dvdt.explorer.entities.filteroff",
                     "when": "view == dvEntities && devtools.entitiesFiltered",
+                    "group": "navigation@2"
+                },
+                {
+                    "command": "dvdt.explorer.entities.searchon",
+                    "when": "view == dvEntities && !devtools.entitiesSearched",
+                    "group": "navigation@1"
+                },
+                {
+                    "command": "dvdt.explorer.entities.searchoff",
+                    "when": "view == dvEntities && devtools.entitiesSearched",
                     "group": "navigation@1"
                 },
                 {
@@ -109,17 +119,27 @@
                 {
                     "command": "dvdt.explorer.webresources.filteron",
                     "when": "view == dvWebResources && !devtools.wrFiltered",
-                    "group": "navigation@2"
+                    "group": "navigation@3"
                 },
                 {
                     "command": "dvdt.explorer.webresources.filteroff",
                     "when": "view == dvWebResources && devtools.wrFiltered",
+                    "group": "navigation@3"
+                },
+                {
+                    "command": "dvdt.explorer.webresources.searchon",
+                    "when": "view == dvWebResources && !devtools.wrSearched",
+                    "group": "navigation@2"
+                },
+                {
+                    "command": "dvdt.explorer.webresources.searchoff",
+                    "when": "view == dvWebResources && devtools.wrSearched",
                     "group": "navigation@2"
                 },
                 {
                     "command": "dvdt.explorer.webresources.loadWebResources",
                     "when": "view == dvWebResources",
-                    "group": "navigation@3"
+                    "group": "navigation@4"
                 }
             ],
             "view/item/context": [
@@ -139,14 +159,19 @@
                     "group": "navigation@2"
                 },
                 {
-                    "command": "dvdt.explorer.connections.deleteConnection",
-                    "when": "view == dvConnections && viewItem == connection",
-                    "group": "danger"
-                },
-                {
                     "command": "dvdt.explorer.connections.showConnectionDetails",
                     "when": "view == dvConnections && viewItem == connection",
                     "group": "navigation@3"
+                },
+                {
+                    "command": "dvdt.explorer.connections.forgetConnectionOnWorkspace",
+                    "when": "view == dvConnections && viewItem == connection",
+                    "group": "navigation@4"
+                },
+                {
+                    "command": "dvdt.explorer.connections.deleteConnection",
+                    "when": "view == dvConnections && viewItem == connection",
+                    "group": "danger"
                 },
                 {
                     "command": "dvdt.explorer.entities.showEntityDetails",
@@ -232,6 +257,11 @@
                 }
             },
             {
+                "command": "dvdt.explorer.connections.forgetConnectionOnWorkspace",
+                "title": "Forget Connection on current Workspace",
+                "category": "%dvdt.explorer.category%"
+            },
+            {
                 "command": "dvdt.explorer.entities.loadEntities",
                 "title": "Load Entities",
                 "category": "%dvdt.explorer.category%",
@@ -297,7 +327,7 @@
             },
             {
                 "command": "dvdt.explorer.entities.filteron",
-                "title": "Filter",
+                "title": "Filter by Solution",
                 "category": "%dvdt.explorer.category%",
                 "icon": {
                     "light": "resources/light/filter-on.svg",
@@ -314,8 +344,26 @@
                 }
             },
             {
+                "command": "dvdt.explorer.entities.searchon",
+                "title": "Search Entities",
+                "category": "%dvdt.explorer.category%",
+                "icon": {
+                    "light": "resources/light/search.svg",
+                    "dark": "resources/dark/search.svg"
+                }
+            },
+            {
+                "command": "dvdt.explorer.entities.searchoff",
+                "title": "Clear Search",
+                "category": "%dvdt.explorer.category%",
+                "icon": {
+                    "light": "resources/light/search-remove.svg",
+                    "dark": "resources/dark/search-remove.svg"
+                }
+            },
+            {
                 "command": "dvdt.explorer.webresources.filteron",
-                "title": "Filter",
+                "title": "Filter by Solution",
                 "category": "%dvdt.explorer.category%",
                 "icon": {
                     "light": "resources/light/filter-on.svg",
@@ -329,6 +377,24 @@
                 "icon": {
                     "light": "resources/light/filter-off.svg",
                     "dark": "resources/dark/filter-off.svg"
+                }
+            },
+            {
+                "command": "dvdt.explorer.webresources.searchon",
+                "title": "Search Web Resources",
+                "category": "%dvdt.explorer.category%",
+                "icon": {
+                    "light": "resources/light/search.svg",
+                    "dark": "resources/dark/search.svg"
+                }
+            },
+            {
+                "command": "dvdt.explorer.webresources.searchoff",
+                "title": "lcear Search",
+                "category": "%dvdt.explorer.category%",
+                "icon": {
+                    "light": "resources/light/search-remove.svg",
+                    "dark": "resources/dark/search-remove.svg"
                 }
             },
             {
@@ -359,8 +425,16 @@
                 "dataverse-devtools.enableEarlyAccessPreview": {
                     "type": "boolean",
                     "default": false,
-                    "markdownDescription": "%dvdt.config.enablePreview%",
-                    "scope": "window"
+                    "markdownDescription": "%dvdt.config.enablePreview%"
+                },
+                "dataverse-devtools.defaultTypeScriptTemplate": {
+                    "default": "none",
+                    "enum": [
+                        "None",
+                        "Plain TypeScript",
+                        "Webpack"
+                    ],
+                    "markdownDescription": "%dvdt.config.defaultTSTemplate%"
                 }
             }
         }
