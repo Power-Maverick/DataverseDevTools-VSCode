@@ -344,11 +344,6 @@
                 "command": "dvdt.commands.createTSFile",
                 "title": "Add Dataverse TS File",
                 "category": "%dvdt.commands.category%"
-            },
-            {
-                "command": "dvdt.commands.openDRB",
-                "title": "Open Dataverse REST Builder",
-                "category": "%dvdt.commands.category%"
             }
         ],
         "keybindings": [
