@@ -36,6 +36,7 @@ import { openUri } from "../utils/OpenUri";
 import { ViewBase } from "../views/ViewBase";
 import { ConnectionDetailsView } from "../views/ConnectionDetailsView";
 import { EntityDetailsView } from "../views/EntityDetailsView";
+import { EntitiesTreeItem } from "../trees/entitiesDataProvider";
 
 export class DataverseHelper {
     private vsstate: State;
@@ -105,6 +106,7 @@ export class DataverseHelper {
                         progress.report({ increment: 70, message: "Getting web resources..." });
                         await this.getWebResources();
 
+                        vscode.commands.executeCommand("dvdt.explorer.connections.refreshConnection");
                         return new Promise<IConnection>((resolve) => {
                             resolve(conn);
                         });
@@ -181,7 +183,7 @@ export class DataverseHelper {
         }
     }
 
-    public async showEntityDetails(enItem: DataverseConnectionTreeItem, view: ViewBase) {
+    public async showEntityDetails(enItem: EntitiesTreeItem, view: ViewBase) {
         const en: IEntityDefinition | undefined = this.getEntityByName(enItem.desc!);
         if (en) {
             en.Attributes = { value: await this.getAttributesForEntity(en.LogicalName) };

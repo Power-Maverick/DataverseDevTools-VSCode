@@ -13,6 +13,7 @@ export interface IConnection {
     tenantId?: string;
     currentAccessToken?: string;
     refreshToken?: string;
+    isCurrentlyConnected?: boolean;
 }
 
 export interface Token {
