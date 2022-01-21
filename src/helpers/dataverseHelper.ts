@@ -118,6 +118,14 @@ export class DataverseHelper {
         } catch (err) {}
     }
 
+    public forgetCurrentWorkspaceConnection() {
+        const connFromWS: IConnection = this.vsstate.getFromWorkspace(connectionCurrentStoreKey);
+        if (connFromWS) {
+            this.vsstate.unsetFromWorkspace(connectionCurrentStoreKey);
+            vscode.commands.executeCommand("dvdt.explorer.connections.refreshConnection");
+        }
+    }
+
     public async reloadWorkspaceConnection(): Promise<IConnection | undefined> {
         const connFromWS: IConnection = this.vsstate.getFromWorkspace(connectionCurrentStoreKey);
         if (connFromWS) {

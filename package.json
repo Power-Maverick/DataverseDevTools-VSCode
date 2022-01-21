@@ -159,14 +159,19 @@
                     "group": "navigation@2"
                 },
                 {
-                    "command": "dvdt.explorer.connections.deleteConnection",
-                    "when": "view == dvConnections && viewItem == connection",
-                    "group": "danger"
-                },
-                {
                     "command": "dvdt.explorer.connections.showConnectionDetails",
                     "when": "view == dvConnections && viewItem == connection",
                     "group": "navigation@3"
+                },
+                {
+                    "command": "dvdt.explorer.connections.forgetConnectionOnWorkspace",
+                    "when": "view == dvConnections && viewItem == connection",
+                    "group": "navigation@4"
+                },
+                {
+                    "command": "dvdt.explorer.connections.deleteConnection",
+                    "when": "view == dvConnections && viewItem == connection",
+                    "group": "danger"
                 },
                 {
                     "command": "dvdt.explorer.entities.showEntityDetails",
@@ -250,6 +255,11 @@
                     "light": "resources/light/connect.svg",
                     "dark": "resources/dark/connect.svg"
                 }
+            },
+            {
+                "command": "dvdt.explorer.connections.forgetConnectionOnWorkspace",
+                "title": "Forget Connection on current Workspace",
+                "category": "%dvdt.explorer.category%"
             },
             {
                 "command": "dvdt.explorer.entities.loadEntities",
