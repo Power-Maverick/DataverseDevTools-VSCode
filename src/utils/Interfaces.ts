@@ -149,6 +149,8 @@ export interface IPanel {
     panel: vscode.WebviewPanel;
     extensionUri: vscode.Uri;
     webViewFileName: string;
+    excludeExternalCss?: boolean;
+    excludeExternalJs?: boolean;
 }
 
 export interface IViewOption {

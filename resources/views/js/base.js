@@ -1,6 +1,6 @@
 const vscode = acquireVsCodeApi();
 
-var $table = $("#matchTable");
+var $matchTable = $("#matchTable");
 
 $(document).ready(function () {
     $("#attrSearch").on("keyup", function () {
@@ -9,10 +9,12 @@ $(document).ready(function () {
             $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
         });
     });
-    $table.bootstrapTable();
-    $table.bootstrapTable("refreshOptions", {
-        classes: "table table-bordered",
-    });
+    if ($matchTable && $matchTable.bootstrapTable) {
+        $matchTable.bootstrapTable();
+        $matchTable.bootstrapTable("refreshOptions", {
+            classes: "table table-bordered",
+        });
+    }
 });
 
 document.addEventListener("DOMContentLoaded", function () {

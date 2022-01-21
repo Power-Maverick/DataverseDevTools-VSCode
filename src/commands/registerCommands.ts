@@ -13,6 +13,7 @@ import { ViewBase } from "../views/ViewBase";
 import { addConnection } from "./connections";
 import { openUri } from "../utils/OpenUri";
 import { ErrorHandler } from "../helpers/errorHandler";
+import { DRBHelper } from "../helpers/drbHelper";
 import { WebResourcesTreeItem } from "../trees/webResourcesDataProvider";
 
 let dvStatusBarItem: vscode.StatusBarItem;
@@ -24,6 +25,7 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
     const templateHelper = new TemplateHelper(vscontext);
     const wrHelper = new WebResourceHelper(vscontext, dvHelper);
     const typingHelper = new TypingsHelper(vscontext, dvHelper);
+    const drbHelper = new DRBHelper(vscontext);
     const errorHandler = new ErrorHandler(tr);
 
     dvStatusBarItem = vscode.window.createStatusBarItem(connectionStatusBarUniqueId, vscode.StatusBarAlignment.Left);
@@ -162,6 +164,16 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
                     await wrHelper.compareWebResources(uri.fsPath);
                 } catch (error) {
                     errorHandler.log(error, "compareWebResource");
+                }
+            },
+        },
+        {
+            command: "dvdt.commands.openDRB",
+            callback: async () => {
+                try {
+                    drbHelper.openDRB(views);
+                } catch (error) {
+                    errorHandler.log(error, "openDRB");
                 }
             },
         },
