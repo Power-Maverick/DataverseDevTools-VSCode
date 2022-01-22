@@ -3,7 +3,7 @@
     "displayName": "Dataverse DevTools",
     "description": "The all-in-one tool to develop code for Dataverse/Dynamics 365. Helps you connect to a Dataverse environment, generate TypeScript definitions for entities, create different type of Dataverse-specific projects and much more.",
     "publisher": "danish-naglekar",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "engines": {
         "vscode": "^1.58.0"
     },
@@ -409,6 +409,11 @@
             {
                 "command": "dvdt.commands.createTSFile",
                 "title": "Add Dataverse TS File",
+                "category": "%dvdt.commands.category%"
+            },
+            {
+                "command": "dvdt.commands.openDRB",
+                "title": "Open Dataverse REST Builder (DRB)",
                 "category": "%dvdt.commands.category%"
             }
         ],
