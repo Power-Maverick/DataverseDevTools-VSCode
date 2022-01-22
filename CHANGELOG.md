@@ -27,30 +27,13 @@ _Some versions that contains minor bug fixes are omitted from this file._
 -   🐛 Implement Delete All connections [`7bf1673`](https://github.com/Power-Maverick/DataverseDevTools-VSCode/commit/7bf167373f0c39b656e2ff327aa7788a1c9a4b87)
 -   Additional fixes to Smart Match [`937855b`](https://github.com/Power-Maverick/DataverseDevTools-VSCode/commit/937855b236d67427bd3733ea76be8e0a5e8a1751)
 
-## v1.1.11
-
-### Merged
-
--   Resolving issue with connection [`#43`](https://github.com/Power-Maverick/DataverseDevTools-VSCode/pull/43)
--   Working code for compare file feature [`#34`](https://github.com/Power-Maverick/DataverseDevTools-VSCode/pull/34)
--   Feature-23 [`#29`](https://github.com/Power-Maverick/DataverseDevTools-VSCode/pull/29)
--   Add login prompt to prompt authentication to access different AAD resources [`#28`](https://github.com/Power-Maverick/DataverseDevTools-VSCode/pull/28)
--   ✨ Added ability to choose the TS project template [`#27`](https://github.com/Power-Maverick/DataverseDevTools-VSCode/pull/27)
--   Merge: Fixes to TS template and added context menu to add new TS file [`#19`](https://github.com/Power-Maverick/DataverseDevTools-VSCode/pull/19)
--   Smart Matching of Web Resources [`#18`](https://github.com/Power-Maverick/DataverseDevTools-VSCode/pull/18)
--   Fixes to TS template and added context menu to add new TS file [`#17`](https://github.com/Power-Maverick/DataverseDevTools-VSCode/pull/17)
--   Adding MSFT Login Prompt to connection authentication [`#15`](https://github.com/Power-Maverick/DataverseDevTools-VSCode/pull/15)
--   Update reviewer_assign.yml [`#14`](https://github.com/Power-Maverick/DataverseDevTools-VSCode/pull/14)
--   Added AppInsights telemetry to the extension [`#12`](https://github.com/Power-Maverick/DataverseDevTools-VSCode/pull/12)
--   Fix Connection Details View [`#6`](https://github.com/Power-Maverick/DataverseDevTools-VSCode/pull/6)
+## 1.1.11
 
 ### Commits
 
--   Releasing the new ReadMe format [`8c6a69d`](https://github.com/Power-Maverick/DataverseDevTools-VSCode/commit/8c6a69da394ced457ca12c261f663bb1e08ab150)
--   Enabled Entity View filter by Solution [`27dee51`](https://github.com/Power-Maverick/DataverseDevTools-VSCode/commit/27dee51873b5bd054d876ab28cecf08f284e911e)
--   Updated the clientid/secret code to not go through the popup path for authentication [`01954f7`](https://github.com/Power-Maverick/DataverseDevTools-VSCode/commit/01954f7962c321257894fcb09fa468eb1d1b95ee)
+-   Fixed the bug with connection when friendly name is given as Dev, Test, Qa or Prod [#42](https://github.com/Power-Maverick/DataverseDevTools-VSCode/issues/42)
 
-## v1.1.9
+## 1.1.9
 
 ### Commits
 
