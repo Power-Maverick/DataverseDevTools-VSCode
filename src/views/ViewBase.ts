@@ -21,13 +21,16 @@ export class ViewBase {
     }
 }
 
-function getWebviewOptions(extensionUri: vscode.Uri): vscode.WebviewOptions {
+function getWebviewOptions(extensionUri: vscode.Uri): vscode.WebviewOptions & vscode.WebviewPanelOptions {
     return {
         // Enable javascript in the webview
         enableScripts: true,
         enableCommandUris: true,
 
-        // And restrict the webview to only loading content from our extension's `test-harness` directory.
+        // And restrict the webview to only loading content from our extension's directory.
         localResourceRoots: [vscode.Uri.joinPath(extensionUri, "resources")],
+
+        // And make sure the view is retained for DRB
+        retainContextWhenHidden: true,
     };
 }
