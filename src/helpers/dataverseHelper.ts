@@ -52,6 +52,10 @@ export class DataverseHelper {
 
     //#region Public
 
+    /**
+     * Adds a new connection
+     * @returns The connection object.
+     */
     public async addConnection(): Promise<IConnection | undefined> {
         //vscode.window.showInformationMessage(`${extensionName}: Connecting to Dataverse`);
         const conn = await this.connectionWizard();
@@ -72,16 +76,28 @@ export class DataverseHelper {
         return conn;
     }
 
+    /**
+     * Delete a connection from the list of connections.
+     * @param {DataverseConnectionTreeItem} connItem - DataverseConnectionTreeItem
+     */
     public async deleteConnection(connItem: DataverseConnectionTreeItem) {
         await this.removeConnection(connItem.label);
         vscode.commands.executeCommand("dvdt.explorer.connections.refreshConnection");
     }
 
+    /**
+     * Delete all connections from the connections list.
+     */
     public async deleteAllConnections() {
         await this.removeAllConnections();
         vscode.commands.executeCommand("dvdt.explorer.connections.refreshConnection");
     }
 
+    /**
+     * Connect to a Dataverse environment and retrieve the entity metadata and web resources.
+     * @param {DataverseConnectionTreeItem} connItem - DataverseConnectionTreeItem
+     * @returns The connection object.
+     */
     public async connectToDataverse(connItem: DataverseConnectionTreeItem): Promise<IConnection | undefined> {
         try {
             const conn: IConnection | undefined = this.getConnectionByName(connItem.label);
@@ -118,6 +134,9 @@ export class DataverseHelper {
         } catch (err) {}
     }
 
+    /**
+     * Forget the current workspace connection.
+     */
     public forgetCurrentWorkspaceConnection() {
         const connFromWS: IConnection = this.vsstate.getFromWorkspace(connectionCurrentStoreKey);
         if (connFromWS) {
@@ -126,6 +145,10 @@ export class DataverseHelper {
         }
     }
 
+    /**
+     * * Get the connection from the workspace if it exists.
+     * @returns The connection object.
+     */
     public async reloadWorkspaceConnection(): Promise<IConnection | undefined> {
         const connFromWS: IConnection = this.vsstate.getFromWorkspace(connectionCurrentStoreKey);
         if (connFromWS) {
@@ -136,17 +159,29 @@ export class DataverseHelper {
         return undefined;
     }
 
+    /**
+     * Get the current access token from the current connection.
+     * @returns The current access token.
+     */
     public getTokenFromCurrentConnection(): string | undefined {
         const connFromWS: IConnection = this.vsstate.getFromWorkspace(connectionCurrentStoreKey);
         return connFromWS.currentAccessToken;
     }
 
+    /**
+     * Get the entty definition from the current connection.
+     */
     public async getEntityDefinitions() {
         const respData = await this.request.requestData<IEntityMetadata>("EntityDefinitions");
         this.vsstate.saveInWorkspace(entityDefinitionsStoreKey, respData);
         vscode.commands.executeCommand("dvdt.explorer.entities.loadEntities");
     }
 
+    /**
+     * Get the attributes for an entity from the current connection.
+     * @param {string} entityLogicalName - The logical name of the entity to retrieve attributes for.
+     * @returns The response data is an array of attribute metadata objects.
+     */
     public async getAttributesForEntity(entityLogicalName: string): Promise<IAttributeDefinition[]> {
         const respData = await this.request.requestData<IAttributeMetadata>(`EntityDefinitions(LogicalName='${entityLogicalName}')/Attributes`);
         if (respData) {
@@ -156,6 +191,12 @@ export class DataverseHelper {
         }
     }
 
+    /**
+     * Get the OptionSet for an attribute.
+     * @param {string} entityLogicalName - The logical name of the entity.
+     * @param {string} attrLogicalName - The logical name of the attribute.
+     * @returns The optionset for the attribute.
+     */
     public async getOptionsetForAttribute(entityLogicalName: string, attrLogicalName: string): Promise<IOptionSet> {
         const respData = await this.request.requestData<IOptionSetMetadata>(
             `EntityDefinitions(LogicalName='${entityLogicalName}')/Attributes(LogicalName='${attrLogicalName}')/Microsoft.Dynamics.CRM.PicklistAttributeMetadata?$select=LogicalName&$expand=OptionSet($select=Options),GlobalOptionSet($select=Options)`,
@@ -168,6 +209,10 @@ export class DataverseHelper {
         }
     }
 
+    /**
+     * Get the solutions from the current connection.
+     * @returns The solutions are returned as an array of objects.
+     */
     public async getSolutions(): Promise<ISolutions | undefined> {
         const respData = await this.request.requestData<ISolutions>(
             "solutions?$select=description,friendlyname,ismanaged,isvisible,_publisherid_value,solutionid,uniquename,version&$expand=publisherid($select=customizationprefix)&$filter=ismanaged eq false and  isvisible eq true",
@@ -176,6 +221,10 @@ export class DataverseHelper {
         return respData;
     }
 
+    /**
+     * Open the environment URL for the connection.
+     * @param {DataverseConnectionTreeItem} connItem - DataverseConnectionTreeItem
+     */
     public openEnvironment(connItem: DataverseConnectionTreeItem) {
         const conn: IConnection | undefined = this.getConnectionByName(connItem.label);
         if (conn) {
@@ -183,6 +232,11 @@ export class DataverseHelper {
         }
     }
 
+    /**
+     * Show the details of the environment for the current connection.
+     * @param {DataverseConnectionTreeItem} connItem - DataverseConnectionTreeItem
+     * @param {ViewBase} view - ViewBase - the view that is calling this method.
+     */
     public async showEnvironmentDetails(connItem: DataverseConnectionTreeItem, view: ViewBase) {
         const conn: IConnection | undefined = this.getConnectionByName(connItem.label);
         if (conn) {
@@ -191,6 +245,11 @@ export class DataverseHelper {
         }
     }
 
+    /**
+     * Show the details of the entity for the current connection.
+     * @param {EntitiesTreeItem} enItem - The entity tree item that was selected.
+     * @param {ViewBase} view - ViewBase - The view that is calling this method.
+     */
     public async showEntityDetails(enItem: EntitiesTreeItem, view: ViewBase) {
         const en: IEntityDefinition | undefined = this.getEntityByName(enItem.desc!);
         if (en) {
@@ -200,6 +259,9 @@ export class DataverseHelper {
         }
     }
 
+    /**
+     * Get all the web resources from the CRM system and save them in the VS Code workspace.
+     */
     public async getWebResources() {
         const respData = await this.request.requestData<IWebResources>(
             "webresourceset?$filter=(Microsoft.Dynamics.CRM.In(PropertyName=%27webresourcetype%27,PropertyValues=[%271%27,%272%27,%273%27])%20and%20ismanaged%20eq%20false%20and%20iscustomizable/Value%20eq%20true%20)",
@@ -208,6 +270,11 @@ export class DataverseHelper {
         vscode.commands.executeCommand("dvdt.explorer.webresources.loadWebResources");
     }
 
+    /**
+     * Gets the web resource content
+     * @param {string} wrId - The ID of the web resource to retrieve.
+     * @returns The content of the web resource.
+     */
     public async getWebResourceContent(wrId: string): Promise<string | undefined> {
         const selectedWR = await this.request.requestData<IWebResource>(`webresourceset(${wrId})?$select=content`);
         if (selectedWR) {
@@ -215,14 +282,29 @@ export class DataverseHelper {
         }
     }
 
+    /**
+     * Create a new web resource.
+     * @param {IWebResource} wr - IWebResource
+     * @returns The webresourceid of the newly created webresource.
+     */
     public async createWebResource(wr: IWebResource): Promise<string | undefined> {
         return await this.request.postData("webresourceset?$select=webresourceid", JSON.stringify(wr));
     }
 
+    /**
+     * Update the content of a web resource.
+     * @param {string} id - The ID of the web resource to update.
+     * @param {IWebResource} wr - IWebResource
+     * @returns The ID of the web resource.
+     */
     public async updateWebResourceContent(id: string, wr: IWebResource): Promise<string | undefined> {
         return await this.request.patchData(`webresourceset(${id})`, JSON.stringify(wr));
     }
 
+    /**
+     * Publish a web resource to the site.
+     * @param {string} id - The ID of the web resource to publish.
+     */
     public async publishWebResource(id: string) {
         var parameters: any = {};
         parameters.ParameterXml = `<importexportxml><webresources><webresource>${id}</webresource></webresources></importexportxml>`;
@@ -230,6 +312,11 @@ export class DataverseHelper {
         await this.request.postData("PublishXml", json);
     }
 
+    /**
+     * Add a Web Resource to a solution.
+     * @param {string} solName - The name of the solution to add the web resource to.
+     * @param {string} wrId - The ID of the Web Resource to add to the solution.
+     */
     public async addWRToSolution(solName: string, wrId: string) {
         const solComp: IComponentUpdate = {
             // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -244,14 +331,30 @@ export class DataverseHelper {
         await this.request.postData("AddSolutionComponent", JSON.stringify(solComp));
     }
 
+    /**
+     * Fetches entities in a solution
+     * @param {string} solutionId - The ID of the solution to fetch components for.
+     * @returns The data is returned as a list of objects. Each object represents a component in the
+     * solution.
+     */
     public async fetchEntitiesInSolution(solutionId: string) {
         return await this.request.requestData<ISolutionComponents>(`solutioncomponents?$filter=(componenttype%20eq%201%20and%20_solutionid_value%20eq%20${solutionId})`);
     }
 
+    /**
+     * Fetches the web resources in a solution
+     * @param {string} solutionId - The ID of the solution to fetch the components for.
+     * @returns The data is returned as a list of objects. Each object represents a single record.
+     */
     public async fetchWRsInSolution(solutionId: string) {
         return await this.request.requestData<ISolutionComponents>(`solutioncomponents?$filter=(componenttype%20eq%2061%20and%20_solutionid_value%20eq%20${solutionId})`);
     }
 
+    /**
+     * Re-authenticate the current connection.
+     * @param {IConnection} currentConnection - IConnection
+     * @returns The token response.
+     */
     public async reAuthenticate(currentConnection: IConnection): Promise<Token | undefined> {
         let tokenResponse: Token | undefined;
 

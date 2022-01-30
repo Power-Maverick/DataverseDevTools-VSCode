@@ -6,6 +6,10 @@ import { EntitiesDataProvider } from "../trees/entitiesDataProvider";
 import { WebResourcesDataProvider } from "../trees/webResourcesDataProvider";
 import { ICommand } from "../utils/Interfaces";
 
+/**
+ * This function registers all the commands for Tree Data Provider that are available in the Dataverse DevTools extension.
+ * @param vscontext - vscode.ExtensionContext
+ */
 export function registerTreeDataProviders(vscontext: vscode.ExtensionContext): void {
     const dvHelper = new DataverseHelper(vscontext);
     const uploadHelper = new WebResourceHelper(vscontext, dvHelper);

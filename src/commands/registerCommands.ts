@@ -18,6 +18,11 @@ import { WebResourcesTreeItem } from "../trees/webResourcesDataProvider";
 
 let dvStatusBarItem: vscode.StatusBarItem;
 
+/**
+ * This function registers all the commands that are available in the Dataverse DevTools extension.
+ * @param vscontext - The extension context.
+ * @param {TelemetryReporter} tr - The TelemetryReporter object.
+ */
 export async function registerCommands(vscontext: vscode.ExtensionContext, tr: TelemetryReporter): Promise<void> {
     const dvHelper = new DataverseHelper(vscontext);
     const views = new ViewBase(vscontext);
@@ -207,6 +212,10 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
     vscode.commands.executeCommand("setContext", `${extensionPrefix}.linkedResources`, await wrHelper.getLinkedResourceStrings("@_localFileName"));
 }
 
+/**
+ * Update the status bar with the current connection.
+ * @param {IConnection | undefined} conn - The connection object.
+ */
 export function updateConnectionStatusBar(conn: IConnection | undefined): void {
     if (conn) {
         dvStatusBarItem.text = `Connected to: ${conn.environmentUrl}`;
