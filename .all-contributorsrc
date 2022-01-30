@@ -148,6 +148,15 @@
         "infra",
         "test"
       ]
+    },
+    {
+      "login": "SatkunamSuganthar",
+      "name": "SatkunamSuganthar",
+      "avatar_url": "https://avatars.githubusercontent.com/u/97066265?v=4",
+      "profile": "https://github.com/SatkunamSuganthar",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7
