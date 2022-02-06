@@ -40,6 +40,10 @@
                     "name": "Connections"
                 },
                 {
+                    "id": "ppToolBox",
+                    "name": "Power Platform ToolBox"
+                },
+                {
                     "id": "dvEntities",
                     "name": "Entities"
                 },
@@ -189,6 +193,10 @@
             {
                 "view": "dvConnections",
                 "contents": "No connections found.\n[Create New Connection](command:dvdt.explorer.connections.addConnection)"
+            },
+            {
+                "view": "ppToolbox",
+                "contents": "Connect to Dataverse to see list of tools.\n[Connect](command:dvdt.explorer.connections.connectDataverse)"
             },
             {
                 "view": "dvEntities",

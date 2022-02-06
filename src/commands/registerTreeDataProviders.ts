@@ -5,6 +5,7 @@ import { DataverseConnectionDataProvider } from "../trees/dataverseConnectionDat
 import { EntitiesDataProvider } from "../trees/entitiesDataProvider";
 import { WebResourcesDataProvider } from "../trees/webResourcesDataProvider";
 import { ICommand } from "../utils/Interfaces";
+import { ToolsDataProvider } from "../tools/toolsDataProvider";
 
 /**
  * This function registers all the commands for Tree Data Provider that are available in the Dataverse DevTools extension.
@@ -22,6 +23,9 @@ export function registerTreeDataProviders(vscontext: vscode.ExtensionContext): v
 
     const wrProvider = new WebResourcesDataProvider(vscontext, dvHelper, uploadHelper);
     vscode.window.registerTreeDataProvider("dvWebResources", wrProvider);
+
+    const toolsProvider = new ToolsDataProvider(vscontext);
+    vscode.window.registerTreeDataProvider("ppToolBox", toolsProvider);
 
     const cmds: Array<ICommand> = new Array(
         {
