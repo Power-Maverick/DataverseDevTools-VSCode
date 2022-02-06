@@ -38,9 +38,9 @@ export class TemplateHelper {
             if (tsTemplateTypeResponse === tsTemplateType[1]) {
                 // Webpack
                 await copyFolderOrFile(wpFolderUri, wsPath);
-                let namespaceUR: string | undefined = await vscode.window.showInputBox(Placeholders.getInputBoxOptions(Placeholders.tsNamespace));
+                let namespaceUR: string | undefined = await vscode.window.showInputBox(Placeholders.getInputBoxOptions(Placeholders.webpackNamespace));
                 if (!namespaceUR) {
-                    vscode.window.showErrorMessage(ErrorMessages.tsNamespaceRequired);
+                    vscode.window.showErrorMessage(ErrorMessages.webpackNamespaceRequired);
                     return undefined;
                 }
 
@@ -54,8 +54,9 @@ export class TemplateHelper {
             await createFolder(path.join(wsPath, "src"));
             await createFolder(path.join(wsPath, "typings"));
             await createFolder(path.join(wsPath, "WebResources"));
+            await createFolder(path.join(wsPath, "WebResources", "css"));
             await createFolder(path.join(wsPath, "WebResources", "html"));
-            await createFolder(path.join(wsPath, "WebResources", "js"));
+            await createFolder(path.join(wsPath, "WebResources", "scripts"));
         }
 
         let commands: string[] = Array();
@@ -107,5 +108,78 @@ export class TemplateHelper {
         }
 
         vscode.window.showInformationMessage(`${extensionName}: TypeScript file added.`);
+    }
+
+    public async initiateJavaScriptProject(wsPath: string) {
+        const extPath = this.vscontext.extensionUri.fsPath;
+        const jsFolderUri = path.join(extPath, "resources", "templates", "JavaScript");
+
+        if (wsPath) {
+            await copyFolderOrFile(jsFolderUri, wsPath);
+
+            // Webpack
+            let namespaceUR: string | undefined = await vscode.window.showInputBox(Placeholders.getInputBoxOptions(Placeholders.webpackNamespace));
+            if (!namespaceUR) {
+                vscode.window.showErrorMessage(ErrorMessages.webpackNamespaceRequired);
+                return undefined;
+            }
+
+            // Update webpack.config - remove library
+            const webpackConfigFile = path.join(wsPath, "webpack.config.js");
+            let webpackconfigContent: string = readFileSync(webpackConfigFile).toString();
+            let modifiedWebpackconfigContent = webpackconfigContent.replace("NAMESPACE", namespaceUR);
+            writeFileSync(webpackConfigFile, modifiedWebpackconfigContent);
+
+            await createFolder(path.join(wsPath, "src"));
+            await createFolder(path.join(wsPath, "WebResources"));
+            await createFolder(path.join(wsPath, "WebResources", "css"));
+            await createFolder(path.join(wsPath, "WebResources", "html"));
+            await createFolder(path.join(wsPath, "WebResources", "scripts"));
+        }
+
+        let commands: string[] = Array();
+        commands.push(Commands.LoadNpmPackages());
+        Console.runCommand(commands);
+
+        vscode.window.showInformationMessage(`${extensionName}: JavaScript project initialized.`);
+    }
+
+    public async addJavaScriptFile(wsPath: string) {
+        let filenameUR: string | undefined = await vscode.window.showInputBox(Placeholders.getInputBoxOptions(Placeholders.jsFileName));
+        if (!filenameUR) {
+            vscode.window.showErrorMessage(ErrorMessages.jsFileNameRequired);
+            return undefined;
+        }
+
+        const extPath = this.vscontext.extensionUri.fsPath;
+        const fileToCopyUri = path.join(wsPath, `${filenameUR}.js`);
+        const webpackConfigFile = path.join(wsPath, "..", "webpack.config.js");
+
+        if (wsPath) {
+            const filesUri = path.join(extPath, "resources", "templates", "Files", "dvts-js.txt");
+            await copyFolderOrFile(filesUri, fileToCopyUri);
+
+            // Update webpack.config
+            let webpackconfigContent: string = readFileSync(webpackConfigFile).toString();
+            let line: string[] = webpackconfigContent.split("\n");
+            let ind = line.indexOf("    entry: {");
+            if (ind > 0) {
+                line.splice(ind + 1, 0, `        ${filenameUR}: \"./src/${filenameUR}\",`);
+            } else {
+                ind = line.indexOf("    entry: {\r");
+                if (ind > 0) {
+                    line.splice(ind + 1, 0, `        ${filenameUR}: \"./src/${filenameUR}\",`);
+                }
+            }
+
+            let modifiedWebpackconfigContent = line.join("\n");
+            writeFileSync(webpackConfigFile, modifiedWebpackconfigContent);
+
+            // Update newly created file
+            let fileContent: string = readFileSync(fileToCopyUri).toString();
+            writeFileSync(fileToCopyUri, fileContent.replace(/FILENAME/gi, pascalize(filenameUR)));
+        }
+
+        vscode.window.showInformationMessage(`${extensionName}: JavaScript file added.`);
     }
 }

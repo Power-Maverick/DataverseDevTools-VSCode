@@ -1,0 +1,13 @@
+{
+    "root": true,
+    "plugins": ["prettier"],
+    "extends": ["eslint:recommended", "plugin:prettier/recommended", "prettier", "prettier/@typescript-eslint"],
+    "rules": {
+        "prettier/prettier": "error",
+        "curly": "warn",
+        "eqeqeq": "warn",
+        "no-throw-literal": "warn",
+        "semi": "off"
+    },
+    "ignorePatterns": ["out", "dist", "node_modules"]
+}
