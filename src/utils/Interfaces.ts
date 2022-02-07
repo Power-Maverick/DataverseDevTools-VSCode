@@ -286,5 +286,6 @@ export interface ITools {
 
 export interface IToolDetails {
     toolName: string;
+    toolShortName: string;
     toolAuthor: string;
 }

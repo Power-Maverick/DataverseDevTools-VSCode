@@ -2,11 +2,11 @@ import * as vscode from "vscode";
 import * as path from "path";
 
 export class ToolsItemBase extends vscode.TreeItem {
-    constructor(public readonly toolName: string, public readonly shortDesc: string | undefined, public readonly collapsibleState: vscode.TreeItemCollapsibleState) {
+    constructor(public readonly toolName: string, public readonly authorName: string | undefined, public readonly collapsibleState: vscode.TreeItemCollapsibleState) {
         super(toolName, collapsibleState);
 
-        this.tooltip = this.shortDesc ? `${this.toolName}-${this.shortDesc}` : `${this.toolName}`;
-        this.description = this.shortDesc;
+        this.tooltip = this.authorName ? `${this.toolName}-${this.authorName}` : `${this.toolName}`;
+        this.description = this.authorName;
     }
 
     iconPath = {
