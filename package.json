@@ -186,6 +186,11 @@
                     "command": "dvdt.explorer.entities.generateTyping",
                     "when": "view == dvEntities && viewItem == entitymedata",
                     "group": "navigation@1"
+                },
+                {
+                    "command": "dvdt.explorer.tools.launchTool",
+                    "when": "view == ppToolBox",
+                    "group": "inline"
                 }
             ]
         },
@@ -195,7 +200,7 @@
                 "contents": "No connections found.\n[Create New Connection](command:dvdt.explorer.connections.addConnection)"
             },
             {
-                "view": "ppToolbox",
+                "view": "ppToolBox",
                 "contents": "Connect to Dataverse to see list of tools.\n[Connect](command:dvdt.explorer.connections.connectDataverse)"
             },
             {
@@ -423,6 +428,15 @@
                 "command": "dvdt.commands.openDRB",
                 "title": "Open Dataverse REST Builder (DRB)",
                 "category": "%dvdt.commands.category%"
+            },
+            {
+                "command": "dvdt.explorer.tools.launchTool",
+                "title": "Launch tool from ToolBox",
+                "category": "%dvdt.explorer.category%",
+                "icon": {
+                    "light": "resources/light/play.svg",
+                    "dark": "resources/dark/play.svg"
+                }
             }
         ],
         "keybindings": [
