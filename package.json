@@ -57,18 +57,22 @@
             "explorer/context": [
                 {
                     "command": "dvdt.commands.initTS",
+                    "when": "!devtools.isTSProject && !devtools.isJSProject",
                     "group": "%dvdt.menus.group.ts%@1"
                 },
                 {
                     "command": "dvdt.commands.createTSFile",
+                    "when": "devtools.isTSProject && explorerResourceIsFolder",
                     "group": "%dvdt.menus.group.ts%@2"
                 },
                 {
                     "command": "dvdt.commands.initJS",
+                    "when": "!devtools.isTSProject && !devtools.isJSProject",
                     "group": "%dvdt.menus.group.js%@1"
                 },
                 {
                     "command": "dvdt.commands.createJSFile",
+                    "when": "devtools.isJSProject && explorerResourceIsFolder",
                     "group": "%dvdt.menus.group.js%@2"
                 },
                 {

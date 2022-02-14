@@ -7,7 +7,7 @@ import { TemplateHelper } from "../helpers/templateHelper";
 import { TypingsHelper } from "../helpers/typingsHelper";
 import { DataverseConnectionTreeItem } from "../trees/dataverseConnectionDataProvider";
 import { EntitiesTreeItem } from "../trees/entitiesDataProvider";
-import { connectionStatusBarUniqueId, extensionName, extensionPrefix, fileExtensions } from "../utils/Constants";
+import { connectionStatusBarUniqueId, extensionName, extensionPrefix, fileExtensions, jsConfigFileName, tsConfigFileName } from "../utils/Constants";
 import { ICommand, IConnection } from "../utils/Interfaces";
 import { ViewBase } from "../views/ViewBase";
 import { addConnection } from "./connections";
@@ -36,6 +36,8 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
 
     dvStatusBarItem = vscode.window.createStatusBarItem(connectionStatusBarUniqueId, vscode.StatusBarAlignment.Left);
     vscontext.subscriptions.push(dvStatusBarItem);
+
+    validateEnablingOptions();
 
     const cmds: Array<ICommand> = new Array(
         {
@@ -256,4 +258,29 @@ export function updateConnectionStatusBar(conn: IConnection | undefined): void {
     } else {
         dvStatusBarItem.hide();
     }
+}
+
+/**
+ * This function validates enabling or disabling options for DVDT
+ */
+export async function validateEnablingOptions() {
+    try {
+        const folder = vscode.workspace.workspaceFolders?.[0];
+
+        if (folder) {
+            const patternTS = new vscode.RelativePattern(folder, `**/${tsConfigFileName}`);
+            const filesTS = await vscode.workspace.findFiles(patternTS, "{node_modules,out}", 1);
+
+            if (filesTS.length > 0) {
+                await vscode.commands.executeCommand("setContext", `${extensionPrefix}.isTSProject`, true);
+            }
+
+            const patternJS = new vscode.RelativePattern(folder, `**/${jsConfigFileName}`);
+            const filesJS = await vscode.workspace.findFiles(patternJS, "{node_modules,out}", 1);
+
+            if (filesJS.length > 0) {
+                await vscode.commands.executeCommand("setContext", `${extensionPrefix}.isJSProject`, true);
+            }
+        }
+    } catch (e) {}
 }
