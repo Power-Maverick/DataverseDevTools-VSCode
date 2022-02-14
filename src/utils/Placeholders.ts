@@ -65,16 +65,22 @@ export class Placeholders {
                     prompt: this.ipWRUniqueName.prompt,
                 };
                 break;
-            case this.tsNamespace:
+            case this.webpackNamespace:
                 inbOptions = {
-                    placeHolder: this.ipTSNamespace.placeHolderText,
-                    prompt: this.ipTSNamespace.prompt,
+                    placeHolder: this.ipWebpackNamespace.placeHolderText,
+                    prompt: this.ipWebpackNamespace.prompt,
                 };
                 break;
             case this.tsFileName:
                 inbOptions = {
                     placeHolder: this.ipTSFileName.placeHolderText,
                     prompt: this.ipTSFileName.prompt,
+                };
+                break;
+            case this.jsFileName:
+                inbOptions = {
+                    placeHolder: this.ipJSFileName.placeHolderText,
+                    prompt: this.ipJSFileName.prompt,
                 };
                 break;
             default:
@@ -139,8 +145,9 @@ export class Placeholders {
     public static solutionSelection: string = "SolutionSelection";
     public static wrDisplayName: string = "WR-DisplayName";
     public static wrUniqueName: string = "WR-UniqueName";
-    public static tsNamespace: string = "TS-Namespace";
+    public static webpackNamespace: string = "TS-Namespace";
     public static tsFileName: string = "TS-FileName";
+    public static jsFileName: string = "JS-FileName";
     public static tsTemplateType: string = "TS-TemplateType";
     public static entitiesSearch: string = "EntitiesSearch";
     public static wrSearch: string = "WRSearch";
@@ -208,13 +215,17 @@ export class Placeholders {
         placeHolderText: `${Placeholders.required} Unique Name [DO NOT INCLUDE prefix] (e.g. /scripts/forms/myawesomescript.js)`,
         prompt: `Enter your Web Resource unique name without the prefix`,
     };
-    private static ipTSNamespace: IPlaceholder = {
+    private static ipWebpackNamespace: IPlaceholder = {
         placeHolderText: `${Placeholders.required} Namespace (e.g. DV)`,
         prompt: `Enter the namespace for your TypeScript project`,
     };
     private static ipTSFileName: IPlaceholder = {
         placeHolderText: `${Placeholders.required} test [DO NOT INCLUDE .ts]`,
         prompt: `Enter the name of the TypeScript file`,
+    };
+    private static ipJSFileName: IPlaceholder = {
+        placeHolderText: `${Placeholders.required} test [DO NOT INCLUDE .js]`,
+        prompt: `Enter the name of the JavaScript file`,
     };
     private static ipTSTemplateType: IPlaceholder = {
         placeHolderText: `${Placeholders.required} Template (e.g.: TypeScript Only, Webpack)`,

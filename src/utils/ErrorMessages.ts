@@ -9,7 +9,8 @@ export class ErrorMessages {
     public static connNameReservedWords: string = "Cannot used reserved words; choose some other friendly name for your connection.";
     public static wrDisplayNameRequired: string = "Web Resource Display Name is required.";
     public static tsFileNameRequired: string = "TypeScript filename is required.";
-    public static tsNamespaceRequired: string = "Namespace for Webpack is required.";
+    public static jsFileNameRequired: string = "JavaScript filename is required.";
+    public static webpackNamespaceRequired: string = "Namespace for Webpack is required.";
     public static wrCompareError: string = "The selected file is either not linked to a web resources or it does not exists in Dataverse.";
     public static drbConnectionError: string = "Connect to an environment before trying to load Dataverse REST Builder.";
 }
