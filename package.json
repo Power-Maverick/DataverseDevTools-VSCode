@@ -60,6 +60,14 @@
                     "group": "%dvdt.menus.group.ts%@2"
                 },
                 {
+                    "command": "dvdt.commands.initJS",
+                    "group": "%dvdt.menus.group.js%@1"
+                },
+                {
+                    "command": "dvdt.commands.createJSFile",
+                    "group": "%dvdt.menus.group.js%@2"
+                },
+                {
                     "command": "dvdt.explorer.webresources.linkExistingWebResource",
                     "when": "resourceExtname in devtools.resourcesExtn",
                     "group": "%dvdt.menus.group.wr%@1"
@@ -297,6 +305,11 @@
                 }
             },
             {
+                "command": "dvdt.commands.initJS",
+                "title": "Create Dataverse JS Project",
+                "category": "%dvdt.commands.category%"
+            },
+            {
                 "command": "dvdt.commands.initTS",
                 "title": "Create Dataverse TS Project",
                 "category": "%dvdt.commands.category%"
@@ -412,6 +425,11 @@
                 "category": "%dvdt.commands.category%"
             },
             {
+                "command": "dvdt.commands.createJSFile",
+                "title": "Add Dataverse JS File",
+                "category": "%dvdt.commands.category%"
+            },
+            {
                 "command": "dvdt.commands.openDRB",
                 "title": "Open Dataverse REST Builder (DRB)",
                 "category": "%dvdt.commands.category%"
@@ -421,6 +439,10 @@
             {
                 "command": "dvdt.commands.initTS",
                 "key": "ctrl+d ctrl+t"
+            },
+            {
+                "command": "dvdt.commands.initJS",
+                "key": "ctrl+d ctrl+j"
             }
         ],
         "configuration": {

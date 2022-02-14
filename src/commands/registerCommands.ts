@@ -119,10 +119,6 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
                 }
             },
         },
-        // {
-        //     command: "dvdt.commands.initPlugin",
-        //     callback: (uri: vscode.Uri) => cliHelper.initiatePluginProject(uri.fsPath),
-        // },
         {
             command: "dvdt.commands.initTS",
             callback: async (uri: vscode.Uri) => {
@@ -169,7 +165,7 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
                 try {
                     await templateHelper.addTypeScriptFile(uri.fsPath);
                 } catch (error) {
-                    errorHandler.log(error, "initTS");
+                    errorHandler.log(error, "createTSFile");
                 }
             },
         },
@@ -200,6 +196,26 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
                     await wrHelper.linkWebResource(uri.fsPath);
                 } catch (error) {
                     errorHandler.log(error, "linkExistingWebResource");
+                }
+            },
+        },
+        {
+            command: "dvdt.commands.initJS",
+            callback: async (uri: vscode.Uri) => {
+                try {
+                    await templateHelper.initiateJavaScriptProject(uri.fsPath);
+                } catch (error) {
+                    errorHandler.log(error, "initJS");
+                }
+            },
+        },
+        {
+            command: "dvdt.commands.createJSFile",
+            callback: async (uri: vscode.Uri) => {
+                try {
+                    await templateHelper.addJavaScriptFile(uri.fsPath);
+                } catch (error) {
+                    errorHandler.log(error, "createJSFile");
                 }
             },
         },
