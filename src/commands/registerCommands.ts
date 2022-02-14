@@ -15,6 +15,7 @@ import { openUri } from "../utils/OpenUri";
 import { ErrorHandler } from "../helpers/errorHandler";
 import { DRBHelper } from "../helpers/drbHelper";
 import { WebResourcesTreeItem } from "../trees/webResourcesDataProvider";
+import { ToolsTreeItem } from "../tools/toolsDataProvider";
 
 let dvStatusBarItem: vscode.StatusBarItem;
 
@@ -196,6 +197,22 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
                     await wrHelper.linkWebResource(uri.fsPath);
                 } catch (error) {
                     errorHandler.log(error, "linkExistingWebResource");
+                }
+            },
+        },
+        {
+            command: "dvdt.explorer.tools.launchTool",
+            callback: async (toolItem: ToolsTreeItem) => {
+                try {
+                    switch (toolItem.toolShortName) {
+                        case "drb":
+                            drbHelper.openDRB(views);
+                            break;
+                        default:
+                            break;
+                    }
+                } catch (error) {
+                    errorHandler.log(error, "launchTool");
                 }
             },
         },

@@ -1,0 +1,3 @@
+{
+    "tools": [{ "toolName": "Dataverse REST Builder", "toolShortName": "drb", "toolAuthor": "Guido Preite" }]
+}
