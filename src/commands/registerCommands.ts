@@ -7,7 +7,7 @@ import { TemplateHelper } from "../helpers/templateHelper";
 import { TypingsHelper } from "../helpers/typingsHelper";
 import { DataverseConnectionTreeItem } from "../trees/dataverseConnectionDataProvider";
 import { EntitiesTreeItem } from "../trees/entitiesDataProvider";
-import { connectionStatusBarUniqueId, extensionName, extensionPrefix, fileExtensions } from "../utils/Constants";
+import { connectionStatusBarUniqueId, extensionName, extensionPrefix, fileExtensions, jsConfigFileName, tsConfigFileName } from "../utils/Constants";
 import { ICommand, IConnection } from "../utils/Interfaces";
 import { ViewBase } from "../views/ViewBase";
 import { addConnection } from "./connections";
@@ -15,6 +15,7 @@ import { openUri } from "../utils/OpenUri";
 import { ErrorHandler } from "../helpers/errorHandler";
 import { DRBHelper } from "../helpers/drbHelper";
 import { WebResourcesTreeItem } from "../trees/webResourcesDataProvider";
+import { ToolsTreeItem } from "../tools/toolsDataProvider";
 
 let dvStatusBarItem: vscode.StatusBarItem;
 
@@ -35,6 +36,8 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
 
     dvStatusBarItem = vscode.window.createStatusBarItem(connectionStatusBarUniqueId, vscode.StatusBarAlignment.Left);
     vscontext.subscriptions.push(dvStatusBarItem);
+
+    validateEnablingOptions();
 
     const cmds: Array<ICommand> = new Array(
         {
@@ -119,10 +122,6 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
                 }
             },
         },
-        // {
-        //     command: "dvdt.commands.initPlugin",
-        //     callback: (uri: vscode.Uri) => cliHelper.initiatePluginProject(uri.fsPath),
-        // },
         {
             command: "dvdt.commands.initTS",
             callback: async (uri: vscode.Uri) => {
@@ -169,7 +168,7 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
                 try {
                     await templateHelper.addTypeScriptFile(uri.fsPath);
                 } catch (error) {
-                    errorHandler.log(error, "initTS");
+                    errorHandler.log(error, "createTSFile");
                 }
             },
         },
@@ -203,6 +202,42 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
                 }
             },
         },
+        {
+            command: "dvdt.explorer.tools.launchTool",
+            callback: async (toolItem: ToolsTreeItem) => {
+                try {
+                    switch (toolItem.toolShortName) {
+                        case "drb":
+                            drbHelper.openDRB(views);
+                            break;
+                        default:
+                            break;
+                    }
+                } catch (error) {
+                    errorHandler.log(error, "launchTool");
+                }
+            },
+        },
+        {
+            command: "dvdt.commands.initJS",
+            callback: async (uri: vscode.Uri) => {
+                try {
+                    await templateHelper.initiateJavaScriptProject(uri.fsPath);
+                } catch (error) {
+                    errorHandler.log(error, "initJS");
+                }
+            },
+        },
+        {
+            command: "dvdt.commands.createJSFile",
+            callback: async (uri: vscode.Uri) => {
+                try {
+                    await templateHelper.addJavaScriptFile(uri.fsPath);
+                } catch (error) {
+                    errorHandler.log(error, "createJSFile");
+                }
+            },
+        },
     );
     cmds.forEach((c) => {
         vscontext.subscriptions.push(vscode.commands.registerCommand(c.command, c.callback));
@@ -223,4 +258,29 @@ export function updateConnectionStatusBar(conn: IConnection | undefined): void {
     } else {
         dvStatusBarItem.hide();
     }
+}
+
+/**
+ * This function validates enabling or disabling options for DVDT
+ */
+export async function validateEnablingOptions() {
+    try {
+        const folder = vscode.workspace.workspaceFolders?.[0];
+
+        if (folder) {
+            const patternTS = new vscode.RelativePattern(folder, `**/${tsConfigFileName}`);
+            const filesTS = await vscode.workspace.findFiles(patternTS, "{node_modules,out}", 1);
+
+            if (filesTS.length > 0) {
+                await vscode.commands.executeCommand("setContext", `${extensionPrefix}.isTSProject`, true);
+            }
+
+            const patternJS = new vscode.RelativePattern(folder, `**/${jsConfigFileName}`);
+            const filesJS = await vscode.workspace.findFiles(patternJS, "{node_modules,out}", 1);
+
+            if (filesJS.length > 0) {
+                await vscode.commands.executeCommand("setContext", `${extensionPrefix}.isJSProject`, true);
+            }
+        }
+    } catch (e) {}
 }

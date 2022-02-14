@@ -27,6 +27,8 @@ export const portADFS: number = 29827;
 export const redirectUrl: string = `http://localhost:${portADFS}/callback/`;
 export const configSectionName: string = "dataverse-devtools";
 export const reservedWords: string[] = ["Dev", "QA", "UAT", "Prod"];
+export const tsConfigFileName: string = "tsconfig.json";
+export const jsConfigFileName: string = "jsconfig.json";
 
 export enum WebResourceType {
     html = 1,

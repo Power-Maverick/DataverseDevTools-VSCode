@@ -279,3 +279,13 @@ export interface ILinkView {
     fp: string;
     id?: string;
 }
+
+export interface ITools {
+    tools: IToolDetails[];
+}
+
+export interface IToolDetails {
+    toolName: string;
+    toolShortName: string;
+    toolAuthor: string;
+}
