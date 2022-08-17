@@ -96,77 +96,27 @@ export class WebResourceHelper {
 
         if (jsonWRs) {
             const jsFiles = await vscode.workspace.findFiles("**/*.js", "/node_modules/");
+            const cssFiles = await vscode.workspace.findFiles("**/*.css", "/node_modules/");
+            const htmlFiles = await vscode.workspace.findFiles("**/*.html", "/node_modules/");
 
             await Promise.all(
-                jsFiles.map(async (jsFile) => {
-                    const localFileName = getFileName(jsFile.fsPath);
-                    const localRelativePath = getRelativeFilePath(jsFile.fsPath, getWorkspaceFolder()?.fsPath!);
+                jsFiles.map(async (file) => {
+                    const sw = await this.processWRFiles(file, jsonWRs);
+                    smartMatches.push(sw);
+                }),
+            );
 
-                    let linkedResource: ILinkerRes | undefined = await this.getLinkedResourceByLocalFileName(jsFile.fsPath);
-                    let localContent = readFileAsBase64Sync(jsFile.fsPath);
+            await Promise.all(
+                cssFiles.map(async (file) => {
+                    const sw = await this.processWRFiles(file, jsonWRs);
+                    smartMatches.push(sw);
+                }),
+            );
 
-                    // Find in Linker first
-                    if (linkedResource && linkedResource["@_Id"]) {
-                        let wr = jsonWRs.value.find((wr) => wr.webresourceid === linkedResource?.["@_Id"]);
-
-                        smartMatches.push({
-                            wrId: linkedResource["@_Id"],
-                            wrDisplayName: linkedResource["@_dvDisplayName"],
-                            wrPath: linkedResource["@_dvFilePath"],
-                            localFileName: linkedResource["@_localFileName"],
-                            localFilePath: linkedResource["@_localFilePath"],
-                            localFullPath: jsFile.fsPath,
-                            confidenceLevel: 100,
-                            linked: true,
-                            base64ContentMatch: localContent === wr?.content,
-                        });
-                    } else {
-                        let confidence: number = 0;
-                        let wrMatch: IWebResource | undefined;
-                        // Match with Content & Display Name - 90
-                        const wrFoundByContentAndName = jsonWRs.value.find((wr) => wr.content === localContent && wr.displayname?.toLowerCase() === localFileName.toLowerCase());
-                        // Match with Content & Display Name - 80
-                        const wrFoundByContentAndNameSearch = jsonWRs.value.find((wr) => wr.content === localContent && wr.name?.toLowerCase()?.search(localFileName.toLowerCase())! > 0);
-                        // Match with Display Name exact match - 75
-                        const wrFoundByName = jsonWRs.value.find((wr) => wr.displayname?.toLowerCase() === localFileName.toLowerCase());
-                        // Match with File Name search in Server Path - 60
-                        const wrFoundByNameSearch = jsonWRs.value.find((wr) => wr.name?.toLowerCase()?.search(localFileName.toLowerCase())! > 0);
-
-                        if (wrFoundByContentAndName) {
-                            confidence = 90;
-                            wrMatch = wrFoundByContentAndName;
-                        } else if (wrFoundByContentAndNameSearch) {
-                            confidence = 80;
-                            wrMatch = wrFoundByContentAndNameSearch;
-                        } else if (wrFoundByName) {
-                            confidence = 75;
-                            wrMatch = wrFoundByName;
-                        } else if (wrFoundByNameSearch) {
-                            confidence = 60;
-                            wrMatch = wrFoundByNameSearch;
-                        }
-
-                        if (wrMatch) {
-                            smartMatches.push({
-                                wrId: wrMatch.webresourceid!,
-                                wrDisplayName: wrMatch.displayname!,
-                                wrPath: wrMatch.name!,
-                                localFileName: localFileName,
-                                localFilePath: localRelativePath,
-                                localFullPath: jsFile.fsPath,
-                                confidenceLevel: confidence,
-                                linked: linkedResource?.["@_dvFilePath"] === wrMatch.name!,
-                            });
-                        } else {
-                            // Default - No Match
-                            smartMatches.push({
-                                localFileName: localFileName,
-                                localFilePath: localRelativePath,
-                                localFullPath: jsFile.fsPath,
-                                linked: false,
-                            });
-                        }
-                    }
+            await Promise.all(
+                htmlFiles.map(async (file) => {
+                    const sw = await this.processWRFiles(file, jsonWRs);
+                    smartMatches.push(sw);
                 }),
             );
 
@@ -219,14 +169,86 @@ export class WebResourceHelper {
 
     //#region Private
 
+    private async processWRFiles(wrFile: vscode.Uri, jsonWRs: IWebResources): Promise<ISmartMatchRecord> {
+        const localFileName = getFileName(wrFile.fsPath);
+        const localRelativePath = getRelativeFilePath(wrFile.fsPath, getWorkspaceFolder()?.fsPath!);
+
+        let linkedResource: ILinkerRes | undefined = await this.getLinkedResourceByLocalFileName(wrFile.fsPath);
+        let localContent = readFileAsBase64Sync(wrFile.fsPath);
+
+        // Find in Linker first
+        if (linkedResource && linkedResource["@_Id"]) {
+            let wr = jsonWRs.value.find((wr) => wr.webresourceid === linkedResource?.["@_Id"]);
+
+            return {
+                wrId: linkedResource["@_Id"],
+                wrDisplayName: linkedResource["@_dvDisplayName"],
+                wrPath: linkedResource["@_dvFilePath"],
+                localFileName: linkedResource["@_localFileName"],
+                localFilePath: linkedResource["@_localFilePath"],
+                localFullPath: wrFile.fsPath,
+                confidenceLevel: 100,
+                linked: true,
+                base64ContentMatch: localContent === wr?.content,
+            };
+        } else {
+            let confidence: number = 0;
+            let wrMatch: IWebResource | undefined;
+            // Match with Content & Display Name - 90
+            const wrFoundByContentAndName = jsonWRs.value.find((wr) => wr.content === localContent && wr.displayname?.toLowerCase() === localFileName.toLowerCase());
+            // Match with Content & Display Name - 80
+            const wrFoundByContentAndNameSearch = jsonWRs.value.find((wr) => wr.content === localContent && wr.name?.toLowerCase()?.search(localFileName.toLowerCase())! > 0);
+            // Match with Display Name exact match - 75
+            const wrFoundByName = jsonWRs.value.find((wr) => wr.displayname?.toLowerCase() === localFileName.toLowerCase());
+            // Match with File Name search in Server Path - 60
+            const wrFoundByNameSearch = jsonWRs.value.find((wr) => wr.name?.toLowerCase()?.search(localFileName.toLowerCase())! > 0);
+
+            if (wrFoundByContentAndName) {
+                confidence = 90;
+                wrMatch = wrFoundByContentAndName;
+            } else if (wrFoundByContentAndNameSearch) {
+                confidence = 80;
+                wrMatch = wrFoundByContentAndNameSearch;
+            } else if (wrFoundByName) {
+                confidence = 75;
+                wrMatch = wrFoundByName;
+            } else if (wrFoundByNameSearch) {
+                confidence = 60;
+                wrMatch = wrFoundByNameSearch;
+            }
+
+            if (wrMatch) {
+                return {
+                    wrId: wrMatch.webresourceid!,
+                    wrDisplayName: wrMatch.displayname!,
+                    wrPath: wrMatch.name!,
+                    localFileName: localFileName,
+                    localFilePath: localRelativePath,
+                    localFullPath: wrFile.fsPath,
+                    confidenceLevel: confidence,
+                    linked: linkedResource?.["@_dvFilePath"] === wrMatch.name!,
+                };
+            } else {
+                // Default - No Match
+                return {
+                    localFileName: localFileName,
+                    localFilePath: localRelativePath,
+                    localFullPath: wrFile.fsPath,
+                    linked: false,
+                };
+            }
+        }
+    }
+
     private async conformLinkerResc(localFileName: string, localRelativePath: string): Promise<ILinkerRes | undefined> {
         const jsonWRs: IWebResources = this.vsstate.getFromWorkspace(wrDefinitionsStoreKey);
 
         if (jsonWRs) {
             let wrQPOptions = jsonWRs.value
-                .filter((w) => w.webresourcetype === WebResourceType.script)
+                // Allow mapping any WR type
+                //.filter((w) => w.webresourcetype === WebResourceType.script)
                 .map((w) => {
-                    return { label: w.displayname!, data: w };
+                    return { label: `${w.displayname!} ${w.webresourcetype! === 1 ? "(html)" : w.webresourcetype! === 2 ? "(css)" : w.webresourcetype! === 3 ? "(js)" : w.webresourcetype!}`, data: w };
                 });
             let wrOptionsQP: vscode.QuickPickOptions = Placeholders.getQuickPickOptions(Placeholders.webResourceSelection);
             let wrQPResponse = await vscode.window.showQuickPick(wrQPOptions, wrOptionsQP);
@@ -314,10 +336,12 @@ export class WebResourceHelper {
     }
 
     private async uploadWebResourceInternal(fullPath: string, resc?: ILinkerRes): Promise<IWebResource | undefined> {
+        var fileName = getFileName(fullPath);
+
         return vscode.window.withProgress(
             {
                 location: vscode.ProgressLocation.Notification,
-                title: "Uploading Web Resources",
+                title: `Uploading ${fileName}`,
             },
             async (progress, token) => {
                 let id: string = "";
@@ -355,7 +379,7 @@ export class WebResourceHelper {
                 progress.report({ increment: 50, message: "Publishing..." });
                 await this.dvHelper.publishWebResource(id);
                 progress.report({ increment: 100 });
-                vscode.window.showInformationMessage(`Web Resource uploaded.`);
+                vscode.window.showInformationMessage(`${fileName} uploaded.`);
                 return wrReturn;
             },
         );

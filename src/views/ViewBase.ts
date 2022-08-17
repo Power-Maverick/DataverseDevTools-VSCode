@@ -16,7 +16,7 @@ export class ViewBase {
     }
 
     public async getWebView(view: IViewOption): Promise<vscode.WebviewPanel> {
-        const column = vscode.window.activeTextEditor ? vscode.ViewColumn.Beside : vscode.ViewColumn.One;
+        const column = vscode.window.activeTextEditor ? vscode.ViewColumn.Active : vscode.ViewColumn.One;
         return vscode.window.createWebviewPanel(`${extensionPrefix}.${view.type}`, view.title, column || vscode.ViewColumn.One, getWebviewOptions(this.vscontext.extensionUri));
     }
 }
