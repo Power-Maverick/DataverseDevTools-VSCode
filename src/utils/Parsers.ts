@@ -8,6 +8,7 @@ const options = {
     parseAttributeValue: true,
     trimValues: true,
     attributeNamePrefix: "@_",
+    format: true,
 };
 
 export function xmlToJSON<T>(xmlData: string): T {
