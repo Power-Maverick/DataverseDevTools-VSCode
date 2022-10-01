@@ -11,7 +11,10 @@ import { activeDirectoryEndpointUrl, customDataverseClientId, defaultDataverseCl
 import { CodeResult, createServer, RedirectResult, startServer } from "./server";
 import { Token } from "../utils/Interfaces";
 import { AuthenticationScheme } from "@azure/msal-common";
+import { useIdentityPlugin, DefaultAzureCredential } from "@azure/identity";
+import { vsCodePlugin } from "@azure/identity-vscode";
 
+useIdentityPlugin(vsCodePlugin);
 class UriEventHandler extends vscode.EventEmitter<vscode.Uri> implements vscode.UriHandler {
     public handleUri(uri: vscode.Uri) {
         this.fire(uri);
@@ -29,7 +32,24 @@ function parseQuery(uri: vscode.Uri): any {
         return prev;
     }, {});
 }
+export async function loginWithAzure(envUrl: string): Promise<Token> {
+    const credential = new DefaultAzureCredential();
+    const scope = `${envUrl}/.default`;
+    const tokenResponse = await credential.getToken(scope);
+    const tokenExpiry = new Date(tokenResponse.expiresOnTimestamp);
 
+    if (tokenResponse !== null) {
+        let token: Token = {
+            access_token: tokenResponse.token,
+            token_type: "bearer",
+            scope: scope,
+            expires_in: tokenResponse.expiresOnTimestamp !== null ? (tokenExpiry.getTime() - tokenExpiry.getMilliseconds()) / 1000 : 0,
+        };
+        return token;
+    } else {
+        throw error("Unable to fetch token");
+    }
+}
 export async function loginWithUsernamePassword(envUrl: string, un: string, p: string): Promise<Token> {
     const requestUrl = tokenEndpointUrl;
 
