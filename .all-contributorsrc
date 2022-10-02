@@ -159,6 +159,23 @@
             "contributions": [
                 "bug"
             ]
+        },
+        {
+            "login": "rajyraman",
+            "name": "Natraj Yegnaraman",
+            "avatar_url": "https://avatars.githubusercontent.com/u/5035266?v=4",
+            "profile": "http://dreamingincrm.com/",
+            "contributions": [
+                "code",
+                "content",
+                "design",
+                "example",
+                "ideas",
+                "maintenance",
+                "security",
+                "userTesting",
+                "tool"
+            ]
         }
     ],
     "contributorsPerLine": 7

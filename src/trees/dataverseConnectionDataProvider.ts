@@ -30,8 +30,11 @@ export class DataverseConnectionDataProvider implements vscode.TreeDataProvider<
             const connExpand = this.connections.find((c) => c.connectionName === element.label);
             if (connExpand) {
                 let childTree: DataverseConnectionTreeItem[] = [];
-                childTree.push(new DataverseConnectionTreeItem(connExpand.environmentUrl, undefined, vscode.TreeItemCollapsibleState.None, 3));
-                childTree.push(new DataverseConnectionTreeItem(connExpand.userName!, undefined, vscode.TreeItemCollapsibleState.None, 3));
+                if (connExpand.userName) {
+                    childTree.push(new DataverseConnectionTreeItem(`${connExpand.environmentUrl} (${connExpand.userName})`, undefined, vscode.TreeItemCollapsibleState.None, 3));
+                } else {
+                    childTree.push(new DataverseConnectionTreeItem(connExpand.environmentUrl, undefined, vscode.TreeItemCollapsibleState.None, 3));
+                }
                 return Promise.resolve(childTree);
             } else {
                 const noExpandCheck = this.connections.find((c) => c.environmentUrl === element.label || c.userName === element.label);
