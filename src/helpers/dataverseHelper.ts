@@ -114,6 +114,9 @@ export class DataverseHelper {
                         progress.report({ increment: 0, message: "Connecting to environment..." });
                         const tokenResponse = await this.connectInternal(conn.loginType, conn);
                         conn.currentAccessToken = tokenResponse.access_token!;
+                        if (tokenResponse.access_token) {
+                            conn.userName = JSON.parse(Buffer.from(tokenResponse.access_token.split('.')[1], 'base64').toString())?.upn;
+                        }
                         conn.refreshToken = tokenResponse.refresh_token!;
                         progress.report({ increment: 10 });
                         this.vsstate.saveInWorkspace(connectionCurrentStoreKey, conn);
