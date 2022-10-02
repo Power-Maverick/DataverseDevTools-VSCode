@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import fetch from "node-fetch";
 import { v4 as uuid } from "uuid";
-import { apiPartUrl, connectionCurrentStoreKey, customDataverseClientId, loginTypes, maxRetries } from "../utils/Constants";
+import { apiPartUrl, connectionCurrentStoreKey, customDataverseClientId, LoginTypes, maxRetries } from "../utils/Constants";
 import { IConnection } from "../utils/Interfaces";
 import { State } from "../utils/State";
 import { DataverseHelper } from "./dataverseHelper";

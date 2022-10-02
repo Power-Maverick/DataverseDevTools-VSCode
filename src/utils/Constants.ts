@@ -17,7 +17,6 @@ export const wrDefinitionsStoreKey: string = `CurrentWRs`;
 export const solDefinitionsStoreKey: string = `CurrentSolutions`;
 export const smartMatchStoreKey: string = `CurrentSmartMatch`;
 export const environmentTypes: string[] = ["Dev", "QA", "UAT", "Prod"];
-export enum loginTypes { UserNamePassword = "Username/Password", MicrosoftLogin = "Microsoft Login Prompt", ClientIdSecret = "Client Id and Secret", Azure = "Azure" };
 export const tsTemplateType: string[] = ["Plain TypeScript", "Webpack"];
 export const connectionStatusBarUniqueId: string = `${extensionPrefix}.StatusBarConnectStatus`;
 export const maxRetries: number = 5;
@@ -29,6 +28,13 @@ export const configSectionName: string = "dataverse-devtools";
 export const reservedWords: string[] = ["Dev", "QA", "UAT", "Prod"];
 export const tsConfigFileName: string = "tsconfig.json";
 export const jsConfigFileName: string = "jsconfig.json";
+
+export enum LoginTypes {
+    userNamePassword = "Username/Password",
+    microsoftLogin = "Microsoft Login Prompt",
+    clientIdSecret = "Client Id and Secret",
+    azure = "Azure",
+}
 
 export enum WebResourceType {
     html = 1,

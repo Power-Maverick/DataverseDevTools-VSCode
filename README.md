@@ -89,6 +89,7 @@ There are 3 ways you can connect to your Dataverse Environment.
 | Username & Password    | This works with environments without MFA-enabled and needs no extra configuration.                                                                                                                                                                                                                                             |
 | Microsoft Login Prompt | Uses DVDT's Public App registered in Azure AD. This will need approval from Azure Admin before you can use it for authentication. This connection other than approving the public Azure AD app (which is a one-time activity) needs no extra configuration. This connection will work with MFA-enabled authentication as well. |
 | Client Id & Secret     | This works with MFA-enabled authentication but needs extra configuration of Azure AD App Registration. To know more on app registration process [read here](https://docs.microsoft.com/en-us/powerapps/developer/data-platform/walkthrough-register-app-azure-active-directory?WT.mc_id=BA-MVP-5003877).                       |
+| Azure                  | If you are already logged in inside VSCode using Az extension, Azure CLI or Azure PowerShell, you can leverage Azure Identity Framework to get authenticated against Dataverse. The developer has to use the same account for both Azure and Power Platform for this work. (thanks to @rajyraman for this method)              |
 
 Below is one of the way you can create the connection.
 
@@ -209,9 +210,9 @@ There are different ways in which you can contribute to this open-source project
 
 ## 💭 Planned Features
 
--   Integrate with [Dataverse-ify](https://github.com/scottdurow/dataverse-ify/).
--   Initiate plugin project.
--   Ability to create JavaScript project and snippets smiliar to TypeScript version.
+-   [ ] Integrate with [Dataverse-ify](https://github.com/scottdurow/dataverse-ify/).
+-   [ ] Initiate plugin project.
+-   [x] Ability to create JavaScript project and snippets (_smiliar to TypeScript version_).
 
 ## ✨ Contributing
 

@@ -498,6 +498,7 @@
         "watch": "tsc -watch -p ./",
         "pretest": "npm run compile && npm run lint",
         "lint": "eslint src --ext ts",
+        "format": "prettier --write src",
         "test": "node ./out/test/runTest.js",
         "version": "auto-changelog -p && git add CHANGELOG.md",
         "contributors:add": "all-contributors add",

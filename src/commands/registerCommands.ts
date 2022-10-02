@@ -282,5 +282,5 @@ export async function validateEnablingOptions() {
                 await vscode.commands.executeCommand("setContext", `${extensionPrefix}.isJSProject`, true);
             }
         }
-    } catch (e) { }
+    } catch (e) {}
 }
