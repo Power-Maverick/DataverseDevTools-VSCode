@@ -253,7 +253,7 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
  */
 export function updateConnectionStatusBar(conn: IConnection | undefined): void {
     if (conn) {
-        dvStatusBarItem.text = `Connected to: ${conn.environmentUrl}`;
+        dvStatusBarItem.text = conn.userName ? `Connected to: ${conn.environmentUrl} as ${conn.userName}` : `Connected to: ${conn.environmentUrl}`;
         dvStatusBarItem.show();
     } else {
         dvStatusBarItem.hide();
@@ -282,5 +282,5 @@ export async function validateEnablingOptions() {
                 await vscode.commands.executeCommand("setContext", `${extensionPrefix}.isJSProject`, true);
             }
         }
-    } catch (e) {}
+    } catch (e) { }
 }

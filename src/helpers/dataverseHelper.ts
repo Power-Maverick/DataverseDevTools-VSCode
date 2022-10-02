@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { loginWithClientIdSecret, loginWithPrompt, loginWithRefreshToken, loginWithUsernamePassword } from "../login/login";
+import { loginWithAzure, loginWithClientIdSecret, loginWithPrompt, loginWithRefreshToken, loginWithUsernamePassword } from "../login/login";
 import { Placeholders } from "../utils/Placeholders";
 import { ErrorMessages } from "../utils/ErrorMessages";
 import { State } from "../utils/State";
@@ -114,6 +114,9 @@ export class DataverseHelper {
                         progress.report({ increment: 0, message: "Connecting to environment..." });
                         const tokenResponse = await this.connectInternal(conn.loginType, conn);
                         conn.currentAccessToken = tokenResponse.access_token!;
+                        if (tokenResponse.access_token) {
+                            conn.userName = JSON.parse(Buffer.from(tokenResponse.access_token.split('.')[1], 'base64').toString())?.upn;
+                        }
                         conn.refreshToken = tokenResponse.refresh_token!;
                         progress.report({ increment: 10 });
                         this.vsstate.saveInWorkspace(connectionCurrentStoreKey, conn);
@@ -131,7 +134,7 @@ export class DataverseHelper {
             } else {
                 return undefined;
             }
-        } catch (err) {}
+        } catch (err) { }
     }
 
     /**
@@ -364,14 +367,17 @@ export class DataverseHelper {
 
         if (!tokenResponse) {
             switch (currentConnection.loginType) {
-                case loginTypes[0]:
+                case loginTypes.UserNamePassword:
                     tokenResponse = await loginWithUsernamePassword(currentConnection.environmentUrl, currentConnection.userName!, currentConnection.password!);
                     break;
-                case loginTypes[2]:
+                case loginTypes.ClientIdSecret:
                     tokenResponse = await loginWithClientIdSecret(currentConnection.environmentUrl, currentConnection.userName!, currentConnection.password!, currentConnection.tenantId!);
                     break;
-                case loginTypes[1]:
+                case loginTypes.MicrosoftLogin:
                     tokenResponse = await loginWithPrompt(customDataverseClientId, false, currentConnection.environmentUrl, openUri, redirectTimeout);
+                    break;
+                case loginTypes.Azure:
+                    tokenResponse = await loginWithAzure(currentConnection.environmentUrl);
                     break;
             }
         }
@@ -398,12 +404,12 @@ export class DataverseHelper {
             return undefined;
         }
 
-        let logintypeOptions: string[] = loginTypes;
+        let logintypeOptions: string[] = Object.keys(loginTypes).map(loginType => loginTypes[loginType as keyof typeof loginTypes]);
         let logintypeOptionsQuickPick: vscode.QuickPickOptions = Placeholders.getQuickPickOptions(Placeholders.logintype);
-        let logintypeResponse: string | undefined = await vscode.window.showQuickPick(logintypeOptions, logintypeOptionsQuickPick);
-
-        switch (logintypeResponse) {
-            case loginTypes[0]:
+        let logintypeResponse = await vscode.window.showQuickPick(logintypeOptions, logintypeOptionsQuickPick) ?? '';
+        const selectedLogin = logintypeResponse as loginTypes;
+        switch (selectedLogin) {
+            case loginTypes.UserNamePassword:
                 // Username/Password
                 usernameUserResponse = await vscode.window.showInputBox(Placeholders.getInputBoxOptions(Placeholders.userName));
                 if (!usernameUserResponse) {
@@ -417,7 +423,7 @@ export class DataverseHelper {
                     return undefined;
                 }
                 break;
-            case loginTypes[2]:
+            case loginTypes.ClientIdSecret:
                 // Client Id / Secret
                 usernameUserResponse = await vscode.window.showInputBox(Placeholders.getInputBoxOptions(Placeholders.clientId));
                 if (!usernameUserResponse) {
@@ -437,9 +443,12 @@ export class DataverseHelper {
                     return undefined;
                 }
                 break;
-            case loginTypes[1]:
+            case loginTypes.Azure:
+                logintypeResponse = loginTypes.Azure;
+                break;
+            case loginTypes.MicrosoftLogin:
             default:
-                logintypeResponse = loginTypes[1];
+                logintypeResponse = loginTypes.MicrosoftLogin;
                 break;
         }
 
@@ -476,11 +485,13 @@ export class DataverseHelper {
 
     private async connectInternal(loginType: string, conn: IConnection): Promise<Token> {
         switch (loginType) {
-            case loginTypes[0]:
+            case loginTypes.UserNamePassword:
                 return await loginWithUsernamePassword(conn.environmentUrl, conn.userName!, conn.password!);
-            case loginTypes[2]:
+            case loginTypes.ClientIdSecret:
                 return await loginWithClientIdSecret(conn.environmentUrl, conn.userName!, conn.password!, conn.tenantId!);
-            case loginTypes[1]:
+            case loginTypes.Azure:
+                return await loginWithAzure(conn.environmentUrl);
+            case loginTypes.MicrosoftLogin:
             default:
                 return await loginWithPrompt(customDataverseClientId, false, conn.environmentUrl, openUri, redirectTimeout);
         }
@@ -567,4 +578,4 @@ export class DataverseHelper {
     //#endregion Private
 }
 
-async function redirectTimeout(): Promise<void> {}
+async function redirectTimeout(): Promise<void> { }
