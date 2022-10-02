@@ -32,6 +32,7 @@ function parseQuery(uri: vscode.Uri): any {
         return prev;
     }, {});
 }
+
 export async function loginWithAzure(envUrl: string): Promise<Token> {
     const credential = new DefaultAzureCredential();
     const scope = `${envUrl}/.default`;
@@ -50,6 +51,7 @@ export async function loginWithAzure(envUrl: string): Promise<Token> {
         throw error("Unable to fetch token");
     }
 }
+
 export async function loginWithUsernamePassword(envUrl: string, un: string, p: string): Promise<Token> {
     const requestUrl = tokenEndpointUrl;
 

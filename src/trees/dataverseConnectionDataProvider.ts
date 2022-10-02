@@ -30,10 +30,11 @@ export class DataverseConnectionDataProvider implements vscode.TreeDataProvider<
             const connExpand = this.connections.find((c) => c.connectionName === element.label);
             if (connExpand) {
                 let childTree: DataverseConnectionTreeItem[] = [];
-                if (connExpand.userName)
+                if (connExpand.userName) {
                     childTree.push(new DataverseConnectionTreeItem(`${connExpand.environmentUrl} (${connExpand.userName})`, undefined, vscode.TreeItemCollapsibleState.None, 3));
-                else
+                } else {
                     childTree.push(new DataverseConnectionTreeItem(connExpand.environmentUrl, undefined, vscode.TreeItemCollapsibleState.None, 3));
+                }
                 return Promise.resolve(childTree);
             } else {
                 const noExpandCheck = this.connections.find((c) => c.environmentUrl === element.label || c.userName === element.label);
@@ -125,12 +126,12 @@ export class DataverseConnectionTreeItem extends TreeItemBase {
             this.level === 1
                 ? "connection-type.svg"
                 : this.level === 2 && this.current
-                    ? "dataverse.svg"
-                    : this.level === 2 && !this.current
-                        ? "dataverse-off.svg"
-                        : this.level === 3
-                            ? "connection-details.svg"
-                            : "generic.svg",
+                ? "dataverse.svg"
+                : this.level === 2 && !this.current
+                ? "dataverse-off.svg"
+                : this.level === 3
+                ? "connection-details.svg"
+                : "generic.svg",
         ),
         dark: path.join(
             __filename,
@@ -142,12 +143,12 @@ export class DataverseConnectionTreeItem extends TreeItemBase {
             this.level === 1
                 ? "connection-type.svg"
                 : this.level === 2 && this.current
-                    ? "dataverse.svg"
-                    : this.level === 2 && !this.current
-                        ? "dataverse-off.svg"
-                        : this.level === 3
-                            ? "connection-details.svg"
-                            : "generic.svg",
+                ? "dataverse.svg"
+                : this.level === 2 && !this.current
+                ? "dataverse-off.svg"
+                : this.level === 3
+                ? "connection-details.svg"
+                : "generic.svg",
         ),
     };
 
