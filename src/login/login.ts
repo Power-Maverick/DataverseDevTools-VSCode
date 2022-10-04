@@ -15,6 +15,7 @@ import { useIdentityPlugin, DefaultAzureCredential } from "@azure/identity";
 import { vsCodePlugin } from "@azure/identity-vscode";
 
 useIdentityPlugin(vsCodePlugin);
+
 class UriEventHandler extends vscode.EventEmitter<vscode.Uri> implements vscode.UriHandler {
     public handleUri(uri: vscode.Uri) {
         this.fire(uri);
