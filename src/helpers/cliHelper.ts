@@ -14,4 +14,22 @@ export class CLIHelper {
         commands.push(Commands.InitPlugin());
         Console.runCommand(commands);
     }
+
+    public launchPRT() {
+        let commands: string[] = Array();
+        commands.push(Commands.LaunchPluginRegistration());
+        Console.runCommand(commands);
+    }
+
+    public launchCMT() {
+        let commands: string[] = Array();
+        commands.push(Commands.LaunchConfigurationMigration());
+        Console.runCommand(commands);
+    }
+
+    public launchPD() {
+        let commands: string[] = Array();
+        commands.push(Commands.LaunchPackageDeployer());
+        Console.runCommand(commands);
+    }
 }

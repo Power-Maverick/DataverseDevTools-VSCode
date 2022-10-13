@@ -193,6 +193,36 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
             },
         },
         {
+            command: "dvdt.commands.launchPRT",
+            callback: async () => {
+                try {
+                    cliHelper.launchPRT();
+                } catch (error) {
+                    errorHandler.log(error, "launchPRT");
+                }
+            },
+        },
+        {
+            command: "dvdt.commands.launchCMT",
+            callback: async () => {
+                try {
+                    cliHelper.launchCMT();
+                } catch (error) {
+                    errorHandler.log(error, "launchCMT");
+                }
+            },
+        },
+        {
+            command: "dvdt.commands.launchPD",
+            callback: async () => {
+                try {
+                    cliHelper.launchPD();
+                } catch (error) {
+                    errorHandler.log(error, "launchPD");
+                }
+            },
+        },
+        {
             command: "dvdt.explorer.webresources.linkExistingWebResource",
             callback: async (uri: vscode.Uri) => {
                 try {
@@ -209,6 +239,15 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
                     switch (toolItem.toolShortName) {
                         case "drb":
                             drbHelper.openDRB(views);
+                            break;
+                        case "prt":
+                            cliHelper.launchPRT();
+                            break;
+                        case "cmt":
+                            cliHelper.launchCMT();
+                            break;
+                        case "pd":
+                            cliHelper.launchPD();
                             break;
                         default:
                             break;

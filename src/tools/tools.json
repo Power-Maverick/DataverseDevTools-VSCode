@@ -1,3 +1,8 @@
 {
-    "tools": [{ "toolName": "Dataverse REST Builder", "toolShortName": "drb", "toolAuthor": "Guido Preite" }]
+    "tools": [
+        { "toolName": "Dataverse REST Builder", "toolShortName": "drb", "toolAuthor": "Guido Preite" },
+        { "toolName": "Plugin Registration", "toolShortName": "prt", "toolAuthor": "Microsoft" },
+        { "toolName": "Configuration Migration", "toolShortName": "cmt", "toolAuthor": "Microsoft" },
+        { "toolName": "Package Deployer", "toolShortName": "pd", "toolAuthor": "Microsoft" }
+    ]
 }
