@@ -11,4 +11,16 @@ export class Commands {
     public static LoadNpmPackages() {
         return `npm install`;
     }
+
+    public static LaunchPluginRegistration() {
+        return `pac tool prt`;
+    }
+
+    public static LaunchConfigurationMigration() {
+        return `pac tool cmt`;
+    }
+
+    public static LaunchPackageDeployer() {
+        return `pac tool pd`;
+    }
 }
