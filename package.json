@@ -3,7 +3,7 @@
     "displayName": "Dataverse DevTools",
     "description": "The all-in-one tool to develop code for Dataverse/Dynamics 365. Helps you connect to a Dataverse environment, generate TypeScript definitions for entities, create different type of Dataverse-specific projects and much more.",
     "publisher": "danish-naglekar",
-    "version": "2.0.16",
+    "version": "2.0.17",
     "engines": {
         "vscode": "^1.58.0"
     },

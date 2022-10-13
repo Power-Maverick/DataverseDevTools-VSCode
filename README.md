@@ -67,6 +67,7 @@
     - [Entities](#entities)
     - [Web Resources](#web-resources)
   - [Smart Match Web Resources](#smart-match-web-resources)
+- [⚒️ Tools](#️-tools)
 - [🔥 Using Typings](#-using-typings)
 - [⌨ Keyboard Shortcuts](#-keyboard-shortcuts)
 - [🎁 Early-Access Preview](#-early-access-preview)
@@ -155,6 +156,17 @@ Once you build your project you can upload your script directly from the VS Code
 ### Smart Match Web Resources
 
 ![SmartMatch](https://github.com/Power-Maverick/DataverseDevTools-VSCode/blob/main/assets/SmartMatchScreen.gif?raw=true)
+
+## ⚒️ Tools
+
+You can launch your favorite Power Platform tools right from VSCode. Below are the list of currently integrated tools with DVDT.
+
+| Tool Name                | Author       |
+| ------------------------ | ------------ |
+| Dataverse REST Builder   | Guido Preite |
+| Plugin Registration Tool | Microsoft    |
+| Configuration Migration  | Microsoft    |
+| Package Deployer         | Microsoft    |
 
 ## 🔥 Using Typings
 
