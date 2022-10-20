@@ -44,6 +44,10 @@
                     "name": "Power Platform ToolBox"
                 },
                 {
+                    "id": "ppCLICommands",
+                    "name": "CLI Commands"
+                },
+                {
                     "id": "dvEntities",
                     "name": "Entities"
                 },
@@ -202,6 +206,11 @@
                 {
                     "command": "dvdt.explorer.tools.launchTool",
                     "when": "view == ppToolBox",
+                    "group": "inline"
+                },
+                {
+                    "command": "dvdt.explorer.cli.executeCommand",
+                    "when": "view == ppCLICommands && viewItem == cli-command",
                     "group": "inline"
                 }
             ]
@@ -454,6 +463,15 @@
             {
                 "command": "dvdt.explorer.tools.launchTool",
                 "title": "Launch tool from ToolBox",
+                "category": "%dvdt.explorer.category%",
+                "icon": {
+                    "light": "resources/light/play.svg",
+                    "dark": "resources/dark/play.svg"
+                }
+            },
+            {
+                "command": "dvdt.explorer.cli.executeCommand",
+                "title": "Execute",
                 "category": "%dvdt.explorer.category%",
                 "icon": {
                     "light": "resources/light/play.svg",

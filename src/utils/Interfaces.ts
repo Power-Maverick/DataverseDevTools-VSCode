@@ -289,3 +289,20 @@ export interface IToolDetails {
     toolShortName: string;
     toolAuthor: string;
 }
+
+export interface IPowerPlatformCLIs {
+    commands: IPowerPlatformCLIDetails[];
+}
+
+export interface IPowerPlatformCLIDetails {
+    group: string;
+    subcommand: string;
+    parameters: IPowerPlatformCLICommandParameter[];
+}
+
+export interface IPowerPlatformCLICommandParameter {
+    name: string;
+    placeholder: string;
+    isRequired: boolean;
+    type: string;
+}

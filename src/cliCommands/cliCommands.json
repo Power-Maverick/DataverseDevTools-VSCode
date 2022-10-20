@@ -1,0 +1,101 @@
+{
+    "commands": [
+        {
+            "group": "admin",
+            "subcommand": "assign-user",
+            "parameters": [
+                { "name": "environment", "placeholder": "00000000-0000-0000-0000-000000000000", "isRequired": true, "type": "string" },
+                { "name": "role", "placeholder": "System Administrator", "isRequired": true, "type": "string" },
+                { "name": "user", "placeholder": "00000000-0000-0000-0000-000000000000", "isRequired": true, "type": "string" }
+            ]
+        },
+        {
+            "group": "admin",
+            "subcommand": "backup",
+            "parameters": [{ "name": "label", "placeholder": "My Backup", "isRequired": true, "type": "string" }]
+        },
+        {
+            "group": "admin",
+            "subcommand": "copy",
+            "parameters": []
+        },
+        {
+            "group": "admin",
+            "subcommand": "create",
+            "parameters": [{ "name": "type", "placeholder": "Sandbox", "isRequired": true, "type": "optionset", "options": ["Sandbox", "Production"] }]
+        },
+        {
+            "group": "admin",
+            "subcommand": "delete",
+            "parameters": []
+        },
+        {
+            "group": "admin",
+            "subcommand": "list",
+            "parameters": []
+        },
+        {
+            "group": "admin",
+            "subcommand": "list-app-templates",
+            "parameters": []
+        },
+        {
+            "group": "admin",
+            "subcommand": "list-backups",
+            "parameters": []
+        },
+        {
+            "group": "admin",
+            "subcommand": "reset",
+            "parameters": []
+        },
+        {
+            "group": "admin",
+            "subcommand": "restore",
+            "parameters": [{ "name": "selected-backup", "placeholder": "DateTime of the backup in 'mm/dd/yyyy hh:mm' format OR string 'latest'", "isRequired": true, "type": "string" }]
+        },
+        {
+            "group": "admin",
+            "subcommand": "status",
+            "parameters": []
+        },
+        {
+            "group": "auth",
+            "subcommand": "clear",
+            "parameters": []
+        },
+        {
+            "group": "auth",
+            "subcommand": "create",
+            "parameters": [{ "name": "url", "placeholder": "https://myorg.crm.dynamics.com", "isRequired": true, "type": "string" }]
+        },
+        {
+            "group": "auth",
+            "subcommand": "delete",
+            "parameters": [{ "name": "index", "placeholder": "2", "isRequired": true, "type": "string" }]
+        },
+        {
+            "group": "auth",
+            "subcommand": "list",
+            "parameters": []
+        },
+        {
+            "group": "auth",
+            "subcommand": "name",
+            "parameters": [
+                { "name": "index", "placeholder": "2", "isRequired": true, "type": "string" },
+                { "name": "name", "placeholder": "My Profile (maximum 12 characters)", "isRequired": true, "type": "string" }
+            ]
+        },
+        {
+            "group": "auth",
+            "subcommand": "select",
+            "parameters": [{ "name": "index", "placeholder": "2", "isRequired": true, "type": "string" }]
+        },
+        {
+            "group": "auth",
+            "subcommand": "update",
+            "parameters": [{ "name": "index", "placeholder": "2", "isRequired": true, "type": "string" }]
+        }
+    ]
+}
