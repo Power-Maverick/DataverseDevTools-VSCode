@@ -16,6 +16,7 @@ import { ErrorHandler } from "../helpers/errorHandler";
 import { DRBHelper } from "../helpers/drbHelper";
 import { WebResourcesTreeItem } from "../trees/webResourcesDataProvider";
 import { ToolsTreeItem } from "../tools/toolsDataProvider";
+import { CliCommandTreeItem } from "../cliCommands/cliCommandsDataProvider";
 
 let dvStatusBarItem: vscode.StatusBarItem;
 
@@ -252,6 +253,16 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
                         default:
                             break;
                     }
+                } catch (error) {
+                    errorHandler.log(error, "launchTool");
+                }
+            },
+        },
+        {
+            command: "dvdt.explorer.cli.executeCommand",
+            callback: async (cliItem: CliCommandTreeItem) => {
+                try {
+                    cliHelper.executeCliCommand(cliItem);
                 } catch (error) {
                     errorHandler.log(error, "launchTool");
                 }

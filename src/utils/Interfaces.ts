@@ -289,3 +289,33 @@ export interface IToolDetails {
     toolShortName: string;
     toolAuthor: string;
 }
+export interface ICliCommandList {
+    commands: ICliCommand[];
+}
+
+export interface ICliCommand {
+    name: string;
+    help: string;
+    verbs?: ICliCommandVerb[];
+}
+
+export interface ICliCommandVerb {
+    name: string;
+    help: string;
+    arguments?: ICliCommandArgument[];
+}
+
+export interface ICliCommandArgument {
+    name: string;
+    alias: null | string;
+    help: null | string;
+    isRequired: boolean;
+    isSwitch: boolean;
+    isUri: boolean;
+    allowMultipleValues: boolean;
+    listOfValues?: string;
+    listOfDisplayValues?: string;
+    minLength?: number;
+    maxLength?: number;
+    RegexHelp?: string;
+}
