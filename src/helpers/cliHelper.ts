@@ -2,8 +2,8 @@ import * as vscode from "vscode";
 import { CliCommandTreeItem } from "../cliCommands/cliCommandsDataProvider";
 import { Commands } from "../terminals/commands";
 import { Console } from "../terminals/console";
-import { ErrorMessages } from "../utils/ErrorMessages";
-import { IPowerPlatformCLICommandParameter } from "../utils/Interfaces";
+import { ICliCommandArgument } from "../utils/Interfaces";
+
 export class CLIHelper {
     /**
      * Initialization constructor for VS Code Context
@@ -38,18 +38,17 @@ export class CLIHelper {
     public async executeCliCommand(cliItem: CliCommandTreeItem) {
         let commands: string[] = Array();
 
-        if (cliItem.cliDetails?.parameters && cliItem.cliDetails?.parameters.length > 0) {
+        if (cliItem.cmdVerb?.arguments?.length! > 0) {
             // With multiple parameters
-            let parameters: string[] | undefined = await this.getParameters(cliItem.cliDetails.subcommand, cliItem.cliDetails.parameters);
-
-            let mainCommand: string = `pac ${cliItem.cliDetails?.group} ${cliItem.cliDetails?.subcommand}`;
-            if (parameters) {
-                mainCommand += ` ${parameters.join(" ")}`;
+            let params: string[] | undefined = await this.getParameters(cliItem.cmdVerb?.name!, cliItem.cmdVerb?.arguments!);
+            let mainCommand: string = `pac ${cliItem.cmd} ${cliItem.cmdVerb?.name}`;
+            if (params) {
+                mainCommand += ` ${params.join(" ")}`;
             }
             commands.push(mainCommand);
         } else {
             // No parameters
-            commands.push(`pac ${cliItem.cliDetails?.group} ${cliItem.cliDetails?.subcommand}`);
+            commands.push(`pac ${cliItem.cmd} ${cliItem.cmdVerb?.name}`);
         }
 
         if (commands.length > 0) {
@@ -57,24 +56,40 @@ export class CLIHelper {
         }
     }
 
-    async getParameters(subcommand: string, parameters: IPowerPlatformCLICommandParameter[]) {
+    async getParameters(cmd: string, parameters: ICliCommandArgument[]) {
         let pArray: string[] = Array();
         for await (const param of parameters) {
+            // Preview version will only include Required attributes
             if (param.isRequired) {
-                switch (param.type) {
-                    case "string":
-                        let paramResponse: string | undefined = await vscode.window.showInputBox({ title: `Parameters for ${subcommand}`, prompt: param.name, placeHolder: param.placeholder });
-                        if (paramResponse) {
-                            pArray.push(`--${param.name} ${paramResponse}`);
-                        } else {
-                            vscode.window.showErrorMessage(`${param.name} is required.`);
-                            return undefined;
-                        }
-                        break;
-                    case "optionset":
-                        break;
-                    default:
-                        break;
+                if (param.listOfValues) {
+                    // Show Quick Options
+                    var vals: string[] = new Array();
+                    vals = param.listOfValues.split(",");
+                    let optionResp = await vscode.window.showQuickPick(vals, { placeHolder: param.help!, title: `Options for ${param.name}`, ignoreFocusOut: true });
+                    if (optionResp) {
+                        pArray.push(`${param.name} ${optionResp}`);
+                    } else {
+                        vscode.window.showErrorMessage(`${param.name} is required.`);
+                        return undefined;
+                    }
+                }
+                if (param.isSwitch) {
+                    let optionResp = await vscode.window.showQuickPick(["true", "false"], { placeHolder: param.help!, title: `Options for ${param.name}`, ignoreFocusOut: true });
+                    if (optionResp) {
+                        pArray.push(`${param.name} ${optionResp}`);
+                    } else {
+                        vscode.window.showErrorMessage(`${param.name} is required.`);
+                        return undefined;
+                    }
+                } else {
+                    // Show Input Option
+                    let paramResponse: string | undefined = await vscode.window.showInputBox({ title: `Parameters for ${cmd}`, prompt: param.name, placeHolder: param.help! });
+                    if (paramResponse) {
+                        pArray.push(`${param.name} ${paramResponse}`);
+                    } else {
+                        vscode.window.showErrorMessage(`${param.name} is required.`);
+                        return undefined;
+                    }
                 }
             }
         }

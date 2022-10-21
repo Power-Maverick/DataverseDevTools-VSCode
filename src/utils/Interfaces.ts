@@ -289,20 +289,33 @@ export interface IToolDetails {
     toolShortName: string;
     toolAuthor: string;
 }
-
-export interface IPowerPlatformCLIs {
-    commands: IPowerPlatformCLIDetails[];
+export interface ICliCommandList {
+    commands: ICliCommand[];
 }
 
-export interface IPowerPlatformCLIDetails {
-    group: string;
-    subcommand: string;
-    parameters: IPowerPlatformCLICommandParameter[];
-}
-
-export interface IPowerPlatformCLICommandParameter {
+export interface ICliCommand {
     name: string;
-    placeholder: string;
+    help: string;
+    verbs?: ICliCommandVerb[];
+}
+
+export interface ICliCommandVerb {
+    name: string;
+    help: string;
+    arguments?: ICliCommandArgument[];
+}
+
+export interface ICliCommandArgument {
+    name: string;
+    alias: null | string;
+    help: null | string;
     isRequired: boolean;
-    type: string;
+    isSwitch: boolean;
+    isUri: boolean;
+    allowMultipleValues: boolean;
+    listOfValues?: string;
+    listOfDisplayValues?: string;
+    minLength?: number;
+    maxLength?: number;
+    RegexHelp?: string;
 }

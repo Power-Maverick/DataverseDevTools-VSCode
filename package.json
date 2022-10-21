@@ -3,7 +3,7 @@
     "displayName": "Dataverse DevTools",
     "description": "The all-in-one tool to develop code for Dataverse/Dynamics 365. Helps you connect to a Dataverse environment, generate TypeScript definitions for entities, create different type of Dataverse-specific projects and much more.",
     "publisher": "danish-naglekar",
-    "version": "2.0.17",
+    "version": "2.1.0",
     "engines": {
         "vscode": "^1.58.0"
     },
@@ -227,6 +227,10 @@
             {
                 "view": "dvEntities",
                 "contents": "No entities found.\n[Clear Filter](command:dvdt.explorer.entities.filteroff)"
+            },
+            {
+                "view": "ppCLICommands",
+                "contents": "Enable preview features from the Settings to see list of CLI commands"
             }
         ],
         "viewsContainers": {

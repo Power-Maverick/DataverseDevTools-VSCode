@@ -1,12 +1,12 @@
 import * as vscode from "vscode";
 import * as path from "path";
-import { IPowerPlatformCLIDetails, IPowerPlatformCLIs } from "../utils/Interfaces";
+import * as config from "../utils/Config";
+import { ICliCommandVerb, ICliCommandList } from "../utils/Interfaces";
 import { CliCommandItemBase } from "./cliCommandsItemBase";
 import cliInJson from "./cliCommands.json";
-import { groupBy } from "../utils/ExtensionMethods";
 
 export class CliCommandDataProvider implements vscode.TreeDataProvider<CliCommandTreeItem> {
-    private cliCommands: IPowerPlatformCLIs | undefined;
+    private cliCommands: ICliCommandList | undefined;
 
     constructor(private vscontext: vscode.ExtensionContext) {
         this.cliCommands = cliInJson;
@@ -17,30 +17,30 @@ export class CliCommandDataProvider implements vscode.TreeDataProvider<CliComman
     }
 
     getChildren(element?: CliCommandTreeItem): vscode.ProviderResult<CliCommandTreeItem[]> {
-        if (element) {
-            // Child
-            let cliCommandTree: CliCommandTreeItem[] = [];
-
-            this.cliCommands?.commands.map((cmd) => {
-                if (cmd.group === element.label) {
-                    cliCommandTree.push(new CliCommandTreeItem(cmd.subcommand, cmd.group, vscode.TreeItemCollapsibleState.None, 2, cmd));
+        if (config.get("enableEarlyAccessPreview")) {
+            if (element) {
+                let cliCommandTree: CliCommandTreeItem[] = [];
+                const cliExpand = this.cliCommands?.commands.find((c) => c.name === element.label);
+                if (cliExpand) {
+                    cliExpand.verbs?.map((verb) => {
+                        cliCommandTree.push(new CliCommandTreeItem(verb.name, verb.help, vscode.TreeItemCollapsibleState.None, 2, cliExpand.name, verb));
+                    });
                 }
-            });
-            return Promise.resolve(cliCommandTree);
-        } else {
-            // Parent
-            const results = groupBy(this.cliCommands?.commands!, (c) => c.group);
-            const keys = Object.keys(results) as Array<string>;
-            let parentTree: CliCommandTreeItem[] = [];
 
-            keys.map((t) => {
-                if (results[t]) {
-                    parentTree.push(new CliCommandTreeItem(t, undefined, vscode.TreeItemCollapsibleState.Collapsed, 1, undefined));
-                }
-            });
-            return Promise.resolve(parentTree);
+                return Promise.resolve(cliCommandTree);
+            } else {
+                let parentTree: CliCommandTreeItem[] = [];
+                this.cliCommands?.commands.map((t) => {
+                    if (t.name) {
+                        parentTree.push(new CliCommandTreeItem(t.name, t.help, vscode.TreeItemCollapsibleState.Collapsed, 1, undefined, undefined));
+                    }
+                });
+                return Promise.resolve(parentTree);
+            }
         }
     }
+
+    //#endregion
 }
 
 export class CliCommandTreeItem extends CliCommandItemBase {
@@ -49,7 +49,8 @@ export class CliCommandTreeItem extends CliCommandItemBase {
         public readonly group: string | undefined,
         public readonly collapsibleState: vscode.TreeItemCollapsibleState,
         public readonly level: number,
-        public readonly cliDetails: IPowerPlatformCLIDetails | undefined,
+        public readonly cmd: string | undefined,
+        public readonly cmdVerb: ICliCommandVerb | undefined,
     ) {
         super(cmdName, group, collapsibleState);
     }
