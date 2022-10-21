@@ -72,8 +72,7 @@ export class CLIHelper {
                         vscode.window.showErrorMessage(`${param.name} is required.`);
                         return undefined;
                     }
-                }
-                if (param.isSwitch) {
+                } else if (param.isSwitch) {
                     let optionResp = await vscode.window.showQuickPick(["true", "false"], { placeHolder: param.help!, title: `Options for ${param.name}`, ignoreFocusOut: true });
                     if (optionResp) {
                         pArray.push(`${param.name} ${optionResp}`);
