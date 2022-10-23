@@ -3,7 +3,7 @@
     "displayName": "Dataverse DevTools",
     "description": "The all-in-one tool to develop code for Dataverse/Dynamics 365. Helps you connect to a Dataverse environment, generate TypeScript definitions for entities, create different type of Dataverse-specific projects and much more.",
     "publisher": "danish-naglekar",
-    "version": "2.0.17",
+    "version": "2.1.0",
     "engines": {
         "vscode": "^1.58.0"
     },
@@ -42,6 +42,10 @@
                 {
                     "id": "ppToolBox",
                     "name": "Power Platform ToolBox"
+                },
+                {
+                    "id": "ppCLICommands",
+                    "name": "CLI Commands"
                 },
                 {
                     "id": "dvEntities",
@@ -203,6 +207,11 @@
                     "command": "dvdt.explorer.tools.launchTool",
                     "when": "view == ppToolBox",
                     "group": "inline"
+                },
+                {
+                    "command": "dvdt.explorer.cli.executeCommand",
+                    "when": "view == ppCLICommands && viewItem == cli-command",
+                    "group": "inline"
                 }
             ]
         },
@@ -218,6 +227,10 @@
             {
                 "view": "dvEntities",
                 "contents": "No entities found.\n[Clear Filter](command:dvdt.explorer.entities.filteroff)"
+            },
+            {
+                "view": "ppCLICommands",
+                "contents": "Enable preview features from the Settings to see list of CLI commands"
             }
         ],
         "viewsContainers": {
@@ -454,6 +467,15 @@
             {
                 "command": "dvdt.explorer.tools.launchTool",
                 "title": "Launch tool from ToolBox",
+                "category": "%dvdt.explorer.category%",
+                "icon": {
+                    "light": "resources/light/play.svg",
+                    "dark": "resources/dark/play.svg"
+                }
+            },
+            {
+                "command": "dvdt.explorer.cli.executeCommand",
+                "title": "Execute",
                 "category": "%dvdt.explorer.category%",
                 "icon": {
                     "light": "resources/light/play.svg",
