@@ -1,0 +1,17 @@
+reviewers:
+  # The default reviewers
+  defaults:
+    - repository-owners
+
+  # Reviewer groups each of which has a list of GitHub usernames
+  groups:
+    repository-owners:
+      - power-maverick
+      - BenediktBergmann
+      - mohsinonxrm
+
+options:
+  ignore_draft: true
+  ignored_keywords:
+    - DO NOT REVIEW
+  enable_group_assignment: false
