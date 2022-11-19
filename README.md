@@ -194,6 +194,8 @@ All the Power Platform CLI commands are easily categorized in a tree format that
 
 ![PacCliCommands](https://github.com/Power-Maverick/DataverseDevTools-VSCode/blob/main/assets/PacCliCommands.gif?raw=true)
 
+![PacCliModelBuilder](https://github.com/Power-Maverick/DataverseDevTools-VSCode/blob/main/assets/PacCliModelBuilder.gif?raw=true)
+
 ## ⌨ Keyboard Shortcuts
 
 | Command                   | Keyboard Shortcut    |
@@ -204,9 +206,7 @@ All the Power Platform CLI commands are easily categorized in a tree format that
 
 This list showcases the features that are build and ready but not fully tested to be released. You can enable these features by navigating to `File` > `Preferences` > `Settings` and search for `Dataverse DevTools` and make sure `Enable Early Access Preview` is **checked**.
 
-| Preview Feature             | Details                                                                                                                                                                    |
-| --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Power Platform CLI Commands | Easily execute Power Plaform CLI commands. If a parameter is required then tool will prompt you to enter the data. At this time only required parameters will be prompted. |
+> No features in early-access at the moment.
 
 ## 🧪 Alpha-Testing
 

@@ -3282,6 +3282,135 @@
                     ]
                 }
             ]
+        },
+        {
+            "name": "modelbuilder",
+            "help": "Code Generator for Dataverse APIs and Tables",
+            "verbs": [
+                {
+                    "name": "build",
+                    "help": "Builds a code model for Dataverse APIs and Tables.",
+                    "arguments": [
+                        {
+                            "name": "--outdirectory",
+                            "alias": "-o",
+                            "help": "Write Directory for entity, message and optionset files.",
+                            "isRequired": true,
+                            "isSwitch": false,
+                            "isUri": false,
+                            "allowMultipleValues": false
+                        },
+                        {
+                            "name": "--settingsTemplateFile",
+                            "alias": "-stf",
+                            "help": "Contains Settings to be used for this run of the Dataverse Model Builder.",
+                            "isRequired": true,
+                            "isSwitch": false,
+                            "isFile": true,
+                            "isUri": false,
+                            "allowMultipleValues": false,
+                            "isException": true,
+                            "exception": {
+                                "name": "Use setting file",
+                                "help": "Do you want to use existing settings file?",
+                                "ifTrueSkipAll": true
+                            }
+                        },
+                        {
+                            "name": "--suppressGeneratedCodeAttribute",
+                            "alias": "-sgca",
+                            "help": "When set, this suppress all generated objects being tagged with the code generation engine and version.",
+                            "isRequired": true,
+                            "isSwitch": true,
+                            "isUri": false,
+                            "allowMultipleValues": false
+                        },
+                        {
+                            "name": "--namespace",
+                            "alias": "-n",
+                            "help": "The namespace for the generated code.  The default namespace is the global namespace.",
+                            "isRequired": true,
+                            "isSwitch": false,
+                            "isUri": false,
+                            "allowMultipleValues": false
+                        },
+                        {
+                            "name": "--serviceContextName",
+                            "alias": "-sctx",
+                            "help": "The name for the generated service context.",
+                            "isRequired": true,
+                            "isSwitch": false,
+                            "isUri": false,
+                            "allowMultipleValues": false,
+                            "isException": true,
+                            "exception": {
+                                "name": "Require ServiceContextName",
+                                "help": "Do you want to generate ServiceContextName?"
+                            }
+                        },
+                        {
+                            "name": "--generateActions",
+                            "alias": "-a",
+                            "help": "When set, Emits message classes as part of code generation.",
+                            "isRequired": true,
+                            "isSwitch": true,
+                            "isUri": false,
+                            "allowMultipleValues": false,
+                            "isException": true,
+                            "exception": {
+                                "name": "Generate Actions",
+                                "help": "Do you want to generate Actions?"
+                            }
+                        },
+                        {
+                            "name": "--emitfieldsclasses",
+                            "alias": "-efc",
+                            "help": "Generate a constants structure that contains all of the field names by entity at the time of code generation.",
+                            "isRequired": true,
+                            "isSwitch": true,
+                            "isUri": false,
+                            "allowMultipleValues": false
+                        },
+                        {
+                            "name": "--entitynamesfilter",
+                            "alias": "-enf",
+                            "help": "Filters the list of entities. Pass in as a semicolon separated list.  e.g. 'entity1;entity2'.",
+                            "isRequired": true,
+                            "isSwitch": false,
+                            "isUri": false,
+                            "allowMultipleValues": false,
+                            "isException": true,
+                            "exception": {
+                                "name": "Filter Entity List",
+                                "help": "Do you want to filter Entity List?"
+                            }
+                        },
+                        {
+                            "name": "--messagenamesfilter",
+                            "alias": "-mnf",
+                            "help": "Filters the list of messages. Pass in as a semicolon separated list.  e.g. 'messages1;messages2'.",
+                            "isRequired": true,
+                            "isSwitch": false,
+                            "isUri": false,
+                            "allowMultipleValues": false,
+                            "isException": true,
+                            "exception": {
+                                "name": "Filter Message List",
+                                "help": "Do you want to filter Message List?"
+                            }
+                        },
+                        {
+                            "name": "--writesettingsTemplateFile",
+                            "alias": "-wstf",
+                            "help": "When Set, writes a settings file out to the output directory with the current passed settings.",
+                            "isRequired": true,
+                            "isSwitch": true,
+                            "isUri": false,
+                            "allowMultipleValues": false
+                        }
+                    ]
+                }
+            ]
         }
     ]
 }

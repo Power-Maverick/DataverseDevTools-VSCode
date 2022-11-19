@@ -318,4 +318,13 @@ export interface ICliCommandArgument {
     minLength?: number;
     maxLength?: number;
     RegexHelp?: string;
+    isException?: boolean;
+    exception?: ICliCommandExceptionArgument;
+    isFile?: boolean;
+}
+
+export interface ICliCommandExceptionArgument {
+    name: string;
+    help: string;
+    ifTrueSkipAll?: boolean;
 }
