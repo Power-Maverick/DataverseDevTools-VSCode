@@ -37,6 +37,7 @@ import { ViewBase } from "../views/ViewBase";
 import { ConnectionDetailsView } from "../views/ConnectionDetailsView";
 import { EntityDetailsView } from "../views/EntityDetailsView";
 import { EntitiesTreeItem } from "../trees/entitiesDataProvider";
+import { updateConnectionStatusBar } from "../commands/registerCommands";
 
 export class DataverseHelper {
     private vsstate: State;
@@ -549,6 +550,12 @@ export class DataverseHelper {
                 this.vsstate.saveInGlobal(connectionStoreKey, JSON.stringify(conns));
             } else {
                 this.vsstate.unsetFromGlobal(connectionStoreKey);
+            }
+
+            const connFromWS: IConnection = this.vsstate.getFromWorkspace(connectionCurrentStoreKey);
+            if (connFromWS && connFromWS.connectionName === connName) {
+                this.vsstate.unsetFromWorkspace(connectionCurrentStoreKey);
+                updateConnectionStatusBar(undefined);
             }
         }
     }
