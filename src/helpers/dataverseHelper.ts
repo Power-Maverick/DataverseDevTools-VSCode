@@ -100,42 +100,42 @@ export class DataverseHelper {
      * @returns The connection object.
      */
     public async connectToDataverse(connItem: DataverseConnectionTreeItem): Promise<IConnection | undefined> {
-        try {
-            const conn: IConnection | undefined = this.getConnectionByName(connItem.label);
-            if (conn) {
-                return vscode.window.withProgress(
-                    {
-                        location: ProgressLocation.Notification,
-                    },
-                    async (progress, token) => {
-                        token.onCancellationRequested(() => {
-                            console.log("User canceled the long running operation");
-                            return;
-                        });
-                        progress.report({ increment: 0, message: "Connecting to environment..." });
-                        const tokenResponse = await this.connectInternal(conn.loginType, conn);
-                        conn.currentAccessToken = tokenResponse.access_token!;
-                        if (tokenResponse.access_token) {
-                            conn.userName = JSON.parse(Buffer.from(tokenResponse.access_token.split(".")[1], "base64").toString())?.upn;
-                        }
-                        conn.refreshToken = tokenResponse.refresh_token!;
-                        progress.report({ increment: 10 });
-                        this.vsstate.saveInWorkspace(connectionCurrentStoreKey, conn);
-                        progress.report({ increment: 30, message: "Getting entity metadata..." });
-                        await this.getEntityDefinitions();
-                        progress.report({ increment: 70, message: "Getting web resources..." });
-                        await this.getWebResources();
+        const conn: IConnection | undefined = this.getConnectionByName(connItem.label);
+        if (conn) {
+            return vscode.window.withProgress(
+                {
+                    location: ProgressLocation.Notification,
+                    cancellable: true,
+                    title: "Connecting to Dataverse",
+                },
+                async (progress, token) => {
+                    token.onCancellationRequested(() => {
+                        console.log("User canceled the long running operation");
+                        return;
+                    });
+                    progress.report({ increment: 0, message: "Connecting to environment..." });
+                    const tokenResponse = await this.connectInternal(conn.loginType, conn);
+                    conn.currentAccessToken = tokenResponse.access_token!;
+                    if (tokenResponse.access_token) {
+                        conn.userName = JSON.parse(Buffer.from(tokenResponse.access_token.split(".")[1], "base64").toString())?.upn;
+                    }
+                    conn.refreshToken = tokenResponse.refresh_token!;
+                    progress.report({ increment: 10 });
+                    this.vsstate.saveInWorkspace(connectionCurrentStoreKey, conn);
+                    progress.report({ increment: 30, message: "Getting entity metadata..." });
+                    await this.getEntityDefinitions();
+                    progress.report({ increment: 70, message: "Getting web resources..." });
+                    await this.getWebResources();
 
-                        vscode.commands.executeCommand("dvdt.explorer.connections.refreshConnection");
-                        return new Promise<IConnection>((resolve) => {
-                            resolve(conn);
-                        });
-                    },
-                );
-            } else {
-                return undefined;
-            }
-        } catch (err) {}
+                    vscode.commands.executeCommand("dvdt.explorer.connections.refreshConnection");
+                    return new Promise<IConnection>((resolve) => {
+                        resolve(conn);
+                    });
+                },
+            );
+        } else {
+            return undefined;
+        }
     }
 
     /**
