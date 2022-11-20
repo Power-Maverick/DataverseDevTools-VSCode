@@ -58,14 +58,30 @@ export class CLIHelper {
 
     async getParameters(cmd: string, parameters: ICliCommandArgument[]) {
         let pArray: string[] = Array();
+        let breakAll: boolean = false;
+
         for await (const param of parameters) {
             // Preview version will only include Required attributes
             if (param.isRequired) {
-                if (param.listOfValues) {
+                if (param.isException && param.exception) {
+                    let optionResp = await vscode.window.showQuickPick(["true", "false"], { placeHolder: param.exception.help!, title: param.exception.name!, ignoreFocusOut: true });
+                    if (optionResp === "false") {
+                        continue;
+                    } else if (optionResp === "true" && param.exception.ifTrueSkipAll) {
+                        breakAll = true;
+                    }
+                }
+
+                if (param.isFile) {
+                    let fileResp = await vscode.window.showOpenDialog({ canSelectFiles: true, canSelectFolders: false, canSelectMany: false, openLabel: `Select ${param.name}`, title: param.help! });
+                    if (fileResp) {
+                        pArray.push(`${param.name} "${fileResp[0].fsPath}"`);
+                    }
+                } else if (param.listOfValues) {
                     // Show Quick Options
                     var vals: string[] = new Array();
                     vals = param.listOfValues.split(",");
-                    let optionResp = await vscode.window.showQuickPick(vals, { placeHolder: param.help!, title: `Options for ${param.name}`, ignoreFocusOut: true });
+                    let optionResp = await vscode.window.showQuickPick(vals, { placeHolder: param.help!, title: `Option for ${param.name}`, ignoreFocusOut: true });
                     if (optionResp) {
                         pArray.push(`${param.name} ${optionResp}`);
                     } else {
@@ -73,7 +89,7 @@ export class CLIHelper {
                         return undefined;
                     }
                 } else if (param.isSwitch) {
-                    let optionResp = await vscode.window.showQuickPick(["true", "false"], { placeHolder: param.help!, title: `Options for ${param.name}`, ignoreFocusOut: true });
+                    let optionResp = await vscode.window.showQuickPick(["true", "false"], { placeHolder: param.help!, title: `Option for ${param.name}`, ignoreFocusOut: true });
                     if (optionResp) {
                         pArray.push(`${param.name} ${optionResp}`);
                     } else {
@@ -82,14 +98,18 @@ export class CLIHelper {
                     }
                 } else {
                     // Show Input Option
-                    let paramResponse: string | undefined = await vscode.window.showInputBox({ title: `Parameters for ${cmd}`, prompt: param.name, placeHolder: param.help! });
+                    let paramResponse: string | undefined = await vscode.window.showInputBox({ title: `Option for ${param.name}`, prompt: param.name, placeHolder: param.help! });
                     if (paramResponse) {
-                        pArray.push(`${param.name} ${paramResponse}`);
+                        pArray.push(`${param.name} "${paramResponse}"`);
                     } else {
                         vscode.window.showErrorMessage(`${param.name} is required.`);
                         return undefined;
                     }
                 }
+            }
+
+            if (breakAll) {
+                break;
             }
         }
         return pArray;

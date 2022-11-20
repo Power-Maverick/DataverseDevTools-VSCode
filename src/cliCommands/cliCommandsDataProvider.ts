@@ -17,27 +17,27 @@ export class CliCommandDataProvider implements vscode.TreeDataProvider<CliComman
     }
 
     getChildren(element?: CliCommandTreeItem): vscode.ProviderResult<CliCommandTreeItem[]> {
-        if (config.get("enableEarlyAccessPreview")) {
-            if (element) {
-                let cliCommandTree: CliCommandTreeItem[] = [];
-                const cliExpand = this.cliCommands?.commands.find((c) => c.name === element.label);
-                if (cliExpand) {
-                    cliExpand.verbs?.map((verb) => {
-                        cliCommandTree.push(new CliCommandTreeItem(verb.name, verb.help, vscode.TreeItemCollapsibleState.None, 2, cliExpand.name, verb));
-                    });
-                }
-
-                return Promise.resolve(cliCommandTree);
-            } else {
-                let parentTree: CliCommandTreeItem[] = [];
-                this.cliCommands?.commands.map((t) => {
-                    if (t.name) {
-                        parentTree.push(new CliCommandTreeItem(t.name, t.help, vscode.TreeItemCollapsibleState.Collapsed, 1, undefined, undefined));
-                    }
+        //if (config.get("enableEarlyAccessPreview")) {
+        if (element) {
+            let cliCommandTree: CliCommandTreeItem[] = [];
+            const cliExpand = this.cliCommands?.commands.find((c) => c.name === element.label);
+            if (cliExpand) {
+                cliExpand.verbs?.map((verb) => {
+                    cliCommandTree.push(new CliCommandTreeItem(verb.name, verb.help, vscode.TreeItemCollapsibleState.None, 2, cliExpand.name, verb));
                 });
-                return Promise.resolve(parentTree);
             }
+
+            return Promise.resolve(cliCommandTree);
+        } else {
+            let parentTree: CliCommandTreeItem[] = [];
+            this.cliCommands?.commands.map((t) => {
+                if (t.name) {
+                    parentTree.push(new CliCommandTreeItem(t.name, t.help, vscode.TreeItemCollapsibleState.Collapsed, 1, undefined, undefined));
+                }
+            });
+            return Promise.resolve(parentTree);
         }
+        //}
     }
 
     //#endregion

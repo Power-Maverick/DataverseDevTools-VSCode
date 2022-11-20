@@ -3,45 +3,37 @@ description: Suggest an idea for this project
 title: "[Feature]: "
 labels: [enhancement, triage]
 assignees:
-  - Power-Maverick
+    - Power-Maverick
 body:
-  - type: markdown
-    attributes:
-      value: |
-        Thanks for taking the time to provide an enhancement idea for the tool!
-  - type: input
-    id: contact
-    attributes:
-      label: Contact Details
-      description: How can we get in touch with you if we need more info?
-      placeholder: ex. Twitter handle, LinkedIn profile, email@example.com
-    validations:
-      required: false
-  - type: dropdown
-    id: is-problem
-    attributes:
-      label: Is your feature request related to a problem?
-      options:
-        - 'Yes'
-        - 'No'
-    validations:
-      required: true
-  - type: textarea
-    id: problem
-    attributes:
-      label: Describe the problem?
-    validations:
-      required: false
-  - type: textarea
-    id: solution
-    attributes:
-      label: Provide a solution or an idea you would like to see in the tool?
-      description: Also if you can provide any alternatives you have considered that would be great!
-    validations:
-      required: false
-  - type: textarea
-    id: logs
-    attributes:
-      label: Relevant log output
-      description: Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks.
-      render: shell
+    - type: markdown
+      attributes:
+          value: |
+              Thanks for taking the time to provide an enhancement idea for the tool!
+    - type: dropdown
+      id: is-problem
+      attributes:
+          label: Is your feature request related to a problem?
+          options:
+              - "Yes"
+              - "No"
+      validations:
+          required: true
+    - type: textarea
+      id: problem
+      attributes:
+          label: Describe the problem?
+      validations:
+          required: false
+    - type: textarea
+      id: solution
+      attributes:
+          label: Provide a solution or an idea you would like to see in the tool?
+          description: Also if you can provide any alternatives you have considered that would be great!
+      validations:
+          required: false
+    - type: textarea
+      id: logs
+      attributes:
+          label: Relevant log output
+          description: Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks.
+          render: shell

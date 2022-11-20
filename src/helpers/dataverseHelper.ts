@@ -37,6 +37,7 @@ import { ViewBase } from "../views/ViewBase";
 import { ConnectionDetailsView } from "../views/ConnectionDetailsView";
 import { EntityDetailsView } from "../views/EntityDetailsView";
 import { EntitiesTreeItem } from "../trees/entitiesDataProvider";
+import { updateConnectionStatusBar } from "../commands/registerCommands";
 
 export class DataverseHelper {
     private vsstate: State;
@@ -99,42 +100,52 @@ export class DataverseHelper {
      * @returns The connection object.
      */
     public async connectToDataverse(connItem: DataverseConnectionTreeItem): Promise<IConnection | undefined> {
-        try {
-            const conn: IConnection | undefined = this.getConnectionByName(connItem.label);
-            if (conn) {
-                return vscode.window.withProgress(
-                    {
-                        location: ProgressLocation.Notification,
-                    },
-                    async (progress, token) => {
-                        token.onCancellationRequested(() => {
-                            console.log("User canceled the long running operation");
-                            return;
-                        });
-                        progress.report({ increment: 0, message: "Connecting to environment..." });
-                        const tokenResponse = await this.connectInternal(conn.loginType, conn);
-                        conn.currentAccessToken = tokenResponse.access_token!;
-                        if (tokenResponse.access_token) {
-                            conn.userName = JSON.parse(Buffer.from(tokenResponse.access_token.split(".")[1], "base64").toString())?.upn;
+        const conn: IConnection | undefined = this.getConnectionByName(connItem.label);
+        if (conn) {
+            return vscode.window.withProgress(
+                {
+                    location: ProgressLocation.Notification,
+                    cancellable: true,
+                    title: "Connecting to Dataverse",
+                },
+                async (progress, token) => {
+                    token.onCancellationRequested(() => {
+                        console.log("User canceled the long running operation");
+                        return;
+                    });
+                    progress.report({ increment: 0, message: "Connecting to environment..." });
+                    const tokenResponse = await this.connectInternal(conn.loginType, conn);
+                    conn.currentAccessToken = tokenResponse.access_token!;
+                    if (tokenResponse.access_token) {
+                        switch (conn.loginType) {
+                            case LoginTypes.clientIdSecret:
+                                conn.userName = JSON.parse(Buffer.from(tokenResponse.access_token.split(".")[1], "base64").toString())?.appid;
+                                break;
+                            case LoginTypes.userNamePassword:
+                            case LoginTypes.azure:
+                            case LoginTypes.microsoftLogin:
+                            default:
+                                conn.userName = JSON.parse(Buffer.from(tokenResponse.access_token.split(".")[1], "base64").toString())?.upn;
+                                break;
                         }
-                        conn.refreshToken = tokenResponse.refresh_token!;
-                        progress.report({ increment: 10 });
-                        this.vsstate.saveInWorkspace(connectionCurrentStoreKey, conn);
-                        progress.report({ increment: 30, message: "Getting entity metadata..." });
-                        await this.getEntityDefinitions();
-                        progress.report({ increment: 70, message: "Getting web resources..." });
-                        await this.getWebResources();
+                    }
+                    conn.refreshToken = tokenResponse.refresh_token!;
+                    progress.report({ increment: 10 });
+                    this.vsstate.saveInWorkspace(connectionCurrentStoreKey, conn);
+                    progress.report({ increment: 30, message: "Getting entity metadata..." });
+                    await this.getEntityDefinitions();
+                    progress.report({ increment: 70, message: "Getting web resources..." });
+                    await this.getWebResources();
 
-                        vscode.commands.executeCommand("dvdt.explorer.connections.refreshConnection");
-                        return new Promise<IConnection>((resolve) => {
-                            resolve(conn);
-                        });
-                    },
-                );
-            } else {
-                return undefined;
-            }
-        } catch (err) {}
+                    vscode.commands.executeCommand("dvdt.explorer.connections.refreshConnection");
+                    return new Promise<IConnection>((resolve) => {
+                        resolve(conn);
+                    });
+                },
+            );
+        } else {
+            return undefined;
+        }
     }
 
     /**
@@ -549,6 +560,12 @@ export class DataverseHelper {
                 this.vsstate.saveInGlobal(connectionStoreKey, JSON.stringify(conns));
             } else {
                 this.vsstate.unsetFromGlobal(connectionStoreKey);
+            }
+
+            const connFromWS: IConnection = this.vsstate.getFromWorkspace(connectionCurrentStoreKey);
+            if (connFromWS && connFromWS.connectionName === connName) {
+                this.vsstate.unsetFromWorkspace(connectionCurrentStoreKey);
+                updateConnectionStatusBar(undefined);
             }
         }
     }
