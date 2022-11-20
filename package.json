@@ -230,7 +230,7 @@
             },
             {
                 "view": "ppCLICommands",
-                "contents": "Enable preview features from the Settings to see list of CLI commands"
+                "contents": "Unable to load CLI commands.\nPlease reload the tool."
             }
         ],
         "viewsContainers": {
