@@ -117,7 +117,17 @@ export class DataverseHelper {
                     const tokenResponse = await this.connectInternal(conn.loginType, conn);
                     conn.currentAccessToken = tokenResponse.access_token!;
                     if (tokenResponse.access_token) {
-                        conn.userName = JSON.parse(Buffer.from(tokenResponse.access_token.split(".")[1], "base64").toString())?.upn;
+                        switch (conn.loginType) {
+                            case LoginTypes.clientIdSecret:
+                                conn.userName = JSON.parse(Buffer.from(tokenResponse.access_token.split(".")[1], "base64").toString())?.appid;
+                                break;
+                            case LoginTypes.userNamePassword:
+                            case LoginTypes.azure:
+                            case LoginTypes.microsoftLogin:
+                            default:
+                                conn.userName = JSON.parse(Buffer.from(tokenResponse.access_token.split(".")[1], "base64").toString())?.upn;
+                                break;
+                        }
                     }
                     conn.refreshToken = tokenResponse.refresh_token!;
                     progress.report({ increment: 10 });
