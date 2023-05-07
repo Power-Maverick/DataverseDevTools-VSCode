@@ -8,7 +8,7 @@ module.exports = {
         filename: "[name].js",
         sourceMapFilename: "maps/[name].js.map",
         path: path.resolve(__dirname, "./Webresources/scripts"),
-        library: ["NAMESPACE"],
+        library: ["NAMESPACE", '[name]'],
         libraryTarget: "var",
     },
     module: {
