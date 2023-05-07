@@ -17,7 +17,7 @@ export class WebResourcesDataProvider implements vscode.TreeDataProvider<WebReso
     private areWRFiltered: boolean = false;
     private areWRSearched: boolean = false;
 
-    constructor(private vscontext: vscode.ExtensionContext, private dvHelper: DataverseHelper, private uploadHelper: WebResourceHelper) {}
+    constructor(private vscontext: vscode.ExtensionContext, private dvHelper: DataverseHelper, private uploadHelper: WebResourceHelper) { }
 
     async refresh(): Promise<void> {
         await this.populateWebResources();
@@ -40,7 +40,13 @@ export class WebResourcesDataProvider implements vscode.TreeDataProvider<WebReso
         } else {
             // Child
             const selectedType: WebResourceType = (<any>WebResourceType)[element.label];
-            const checkType = this.webResource.filter((w) => w.webresourcetype === selectedType);
+            let checkType: Array<IWebResource> | undefined = undefined;
+
+            if (selectedType === WebResourceType.others) {
+                checkType = this.webResource.filter((w) => w.webresourcetype !== undefined && w.webresourcetype > WebResourceType.script);
+            } else {
+                checkType = this.webResource.filter((w) => w.webresourcetype === selectedType);
+            }
 
             if (checkType) {
                 return Promise.resolve(
@@ -201,14 +207,14 @@ export class WebResourcesTreeItem extends TreeItemBase {
             this.label === "html"
                 ? "html.svg"
                 : this.label === "css"
-                ? "css.svg"
-                : this.label === "script"
-                ? "js.svg"
-                : this.level === 2 && !this.showCheck
-                ? "file-red.svg"
-                : this.level === 2 && this.showCheck
-                ? "file-green.svg"
-                : "generic.svg",
+                    ? "css.svg"
+                    : this.label === "script"
+                        ? "js.svg"
+                        : this.level === 2 && !this.showCheck
+                            ? "file-red.svg"
+                            : this.level === 2 && this.showCheck
+                                ? "file-green.svg"
+                                : "generic.svg",
         ),
         dark: path.join(
             __filename,
@@ -220,14 +226,14 @@ export class WebResourcesTreeItem extends TreeItemBase {
             this.label === "html"
                 ? "html.svg"
                 : this.label === "css"
-                ? "css.svg"
-                : this.label === "script"
-                ? "js.svg"
-                : this.level === 2 && !this.showCheck
-                ? "file-red.svg"
-                : this.level === 2 && this.showCheck
-                ? "file-green.svg"
-                : "generic.svg",
+                    ? "css.svg"
+                    : this.label === "script"
+                        ? "js.svg"
+                        : this.level === 2 && !this.showCheck
+                            ? "file-red.svg"
+                            : this.level === 2 && this.showCheck
+                                ? "file-green.svg"
+                                : "generic.svg",
         ),
     };
 

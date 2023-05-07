@@ -1,201 +1,202 @@
 {
-  "projectName": "DataverseDevTools-VSCode",
-  "projectOwner": "Power-Maverick",
-  "repoType": "github",
-  "repoHost": "https://github.com",
-  "files": [
-    "README.md"
-  ],
-  "imageSize": 100,
-  "commit": true,
-  "commitConvention": "eslint",
-  "contributors": [
-    {
-      "login": "Power-Maverick",
-      "name": "Danish Naglekar",
-      "avatar_url": "https://avatars.githubusercontent.com/u/36135520?v=4",
-      "profile": "https://powermaverick.dev/",
-      "contributions": [
-        "question",
-        "code",
-        "content",
-        "design",
-        "doc",
-        "infra",
-        "security",
-        "test",
-        "tool",
-        "tutorial"
-      ]
-    },
-    {
-      "login": "mohsinonxrm",
-      "name": "mohsinonxrm",
-      "avatar_url": "https://avatars.githubusercontent.com/u/21046804?v=4",
-      "profile": "https://github.com/mohsinonxrm",
-      "contributions": [
-        "question",
-        "bug",
-        "code",
-        "example",
-        "ideas",
-        "plugin",
-        "research",
-        "userTesting"
-      ]
-    },
-    {
-      "login": "JoshSmithXRM",
-      "name": "Josh Smith",
-      "avatar_url": "https://avatars.githubusercontent.com/u/6895577?v=4",
-      "profile": "https://github.com/JoshSmithXRM",
-      "contributions": [
-        "bug",
-        "maintenance",
-        "userTesting"
-      ]
-    },
-    {
-      "login": "P-focT",
-      "name": "P-focT",
-      "avatar_url": "https://avatars.githubusercontent.com/u/81171713?v=4",
-      "profile": "https://github.com/P-focT",
-      "contributions": [
-        "bug",
-        "maintenance",
-        "userTesting"
-      ]
-    },
-    {
-      "login": "BenediktBergmann",
-      "name": "Benedikt Bergmann",
-      "avatar_url": "https://avatars.githubusercontent.com/u/9703748?v=4",
-      "profile": "https://benediktbergmann.eu/",
-      "contributions": [
-        "example",
-        "ideas"
-      ]
-    },
-    {
-      "login": "filcole",
-      "name": "Phil Cole",
-      "avatar_url": "https://avatars.githubusercontent.com/u/6078398?v=4",
-      "profile": "https://github.com/filcole",
-      "contributions": [
-        "bug",
-        "ideas"
-      ]
-    },
-    {
-      "login": "improving-jeffd",
-      "name": "Jeff Dodds",
-      "avatar_url": "https://avatars.githubusercontent.com/u/1213947?v=4",
-      "profile": "https://github.com/improving-jeffd",
-      "contributions": [
-        "mentoring"
-      ]
-    },
-    {
-      "login": "MattB-msft",
-      "name": "MattB",
-      "avatar_url": "https://avatars.githubusercontent.com/u/10568244?v=4",
-      "profile": "http://www.powerapps.com/",
-      "contributions": [
-        "mentoring"
-      ]
-    },
-    {
-      "login": "thomassandsor",
-      "name": "Thomas Sandsør",
-      "avatar_url": "https://avatars.githubusercontent.com/u/33664322?v=4",
-      "profile": "http://www.crmkeeper.com/",
-      "contributions": [
-        "bug",
-        "ideas",
-        "test",
-        "userTesting"
-      ]
-    },
-    {
-      "login": "glemis",
-      "name": "glemis",
-      "avatar_url": "https://avatars.githubusercontent.com/u/4442368?v=4",
-      "profile": "https://github.com/glemis",
-      "contributions": [
-        "bug",
-        "code",
-        "test",
-        "userTesting"
-      ]
-    },
-    {
-      "login": "ericregnier",
-      "name": "Eric Regnier",
-      "avatar_url": "https://avatars.githubusercontent.com/u/9611006?v=4",
-      "profile": "https://github.com/ericregnier",
-      "contributions": [
-        "bug"
-      ]
-    },
-    {
-      "login": "GuidoPreite",
-      "name": "Guido Preite",
-      "avatar_url": "https://avatars.githubusercontent.com/u/43754988?v=4",
-      "profile": "https://www.crmanswers.net/",
-      "contributions": [
-        "bug",
-        "code",
-        "infra",
-        "test",
-        "maintenance",
-        "userTesting"
-      ]
-    },
-    {
-      "login": "SatkunamSuganthar",
-      "name": "SatkunamSuganthar",
-      "avatar_url": "https://avatars.githubusercontent.com/u/97066265?v=4",
-      "profile": "https://github.com/SatkunamSuganthar",
-      "contributions": [
-        "bug"
-      ]
-    },
-    {
-      "login": "rajyraman",
-      "name": "Natraj Yegnaraman",
-      "avatar_url": "https://avatars.githubusercontent.com/u/5035266?v=4",
-      "profile": "http://dreamingincrm.com/",
-      "contributions": [
-        "code",
-        "content",
-        "design",
-        "example",
-        "ideas",
-        "maintenance",
-        "security",
-        "userTesting",
-        "tool"
-      ]
-    },
-    {
-      "login": "petrochuk",
-      "name": "Andrew Petrochuk",
-      "avatar_url": "https://avatars.githubusercontent.com/u/30735471?v=4",
-      "profile": "https://github.com/petrochuk",
-      "contributions": [
-        "data",
-        "ideas"
-      ]
-    },
-    {
-      "login": "cyco77",
-      "name": "Lars Hildebrandt",
-      "avatar_url": "https://avatars.githubusercontent.com/u/1198698?v=4",
-      "profile": "https://github.com/cyco77",
-      "contributions": [
-        "code"
-      ]
-    }
-  ],
-  "contributorsPerLine": 7
+    "projectName": "DataverseDevTools-VSCode",
+    "projectOwner": "Power-Maverick",
+    "repoType": "github",
+    "repoHost": "https://github.com",
+    "files": [
+        "README.md"
+    ],
+    "imageSize": 100,
+    "commit": true,
+    "commitConvention": "eslint",
+    "contributors": [
+        {
+            "login": "Power-Maverick",
+            "name": "Danish Naglekar",
+            "avatar_url": "https://avatars.githubusercontent.com/u/36135520?v=4",
+            "profile": "https://powermaverick.dev/",
+            "contributions": [
+                "question",
+                "code",
+                "content",
+                "design",
+                "doc",
+                "infra",
+                "security",
+                "test",
+                "tool",
+                "tutorial"
+            ]
+        },
+        {
+            "login": "mohsinonxrm",
+            "name": "mohsinonxrm",
+            "avatar_url": "https://avatars.githubusercontent.com/u/21046804?v=4",
+            "profile": "https://github.com/mohsinonxrm",
+            "contributions": [
+                "question",
+                "bug",
+                "code",
+                "example",
+                "ideas",
+                "plugin",
+                "research",
+                "userTesting"
+            ]
+        },
+        {
+            "login": "JoshSmithXRM",
+            "name": "Josh Smith",
+            "avatar_url": "https://avatars.githubusercontent.com/u/6895577?v=4",
+            "profile": "https://github.com/JoshSmithXRM",
+            "contributions": [
+                "bug",
+                "maintenance",
+                "userTesting"
+            ]
+        },
+        {
+            "login": "P-focT",
+            "name": "P-focT",
+            "avatar_url": "https://avatars.githubusercontent.com/u/81171713?v=4",
+            "profile": "https://github.com/P-focT",
+            "contributions": [
+                "bug",
+                "maintenance",
+                "userTesting"
+            ]
+        },
+        {
+            "login": "BenediktBergmann",
+            "name": "Benedikt Bergmann",
+            "avatar_url": "https://avatars.githubusercontent.com/u/9703748?v=4",
+            "profile": "https://benediktbergmann.eu/",
+            "contributions": [
+                "example",
+                "ideas"
+            ]
+        },
+        {
+            "login": "filcole",
+            "name": "Phil Cole",
+            "avatar_url": "https://avatars.githubusercontent.com/u/6078398?v=4",
+            "profile": "https://github.com/filcole",
+            "contributions": [
+                "bug",
+                "ideas"
+            ]
+        },
+        {
+            "login": "improving-jeffd",
+            "name": "Jeff Dodds",
+            "avatar_url": "https://avatars.githubusercontent.com/u/1213947?v=4",
+            "profile": "https://github.com/improving-jeffd",
+            "contributions": [
+                "mentoring"
+            ]
+        },
+        {
+            "login": "MattB-msft",
+            "name": "MattB",
+            "avatar_url": "https://avatars.githubusercontent.com/u/10568244?v=4",
+            "profile": "http://www.powerapps.com/",
+            "contributions": [
+                "mentoring"
+            ]
+        },
+        {
+            "login": "thomassandsor",
+            "name": "Thomas Sandsør",
+            "avatar_url": "https://avatars.githubusercontent.com/u/33664322?v=4",
+            "profile": "http://www.crmkeeper.com/",
+            "contributions": [
+                "bug",
+                "ideas",
+                "test",
+                "userTesting"
+            ]
+        },
+        {
+            "login": "glemis",
+            "name": "glemis",
+            "avatar_url": "https://avatars.githubusercontent.com/u/4442368?v=4",
+            "profile": "https://github.com/glemis",
+            "contributions": [
+                "bug",
+                "code",
+                "test",
+                "userTesting"
+            ]
+        },
+        {
+            "login": "ericregnier",
+            "name": "Eric Regnier",
+            "avatar_url": "https://avatars.githubusercontent.com/u/9611006?v=4",
+            "profile": "https://github.com/ericregnier",
+            "contributions": [
+                "bug"
+            ]
+        },
+        {
+            "login": "GuidoPreite",
+            "name": "Guido Preite",
+            "avatar_url": "https://avatars.githubusercontent.com/u/43754988?v=4",
+            "profile": "https://www.crmanswers.net/",
+            "contributions": [
+                "bug",
+                "code",
+                "infra",
+                "test",
+                "maintenance",
+                "userTesting"
+            ]
+        },
+        {
+            "login": "SatkunamSuganthar",
+            "name": "SatkunamSuganthar",
+            "avatar_url": "https://avatars.githubusercontent.com/u/97066265?v=4",
+            "profile": "https://github.com/SatkunamSuganthar",
+            "contributions": [
+                "bug"
+            ]
+        },
+        {
+            "login": "rajyraman",
+            "name": "Natraj Yegnaraman",
+            "avatar_url": "https://avatars.githubusercontent.com/u/5035266?v=4",
+            "profile": "http://dreamingincrm.com/",
+            "contributions": [
+                "code",
+                "content",
+                "design",
+                "example",
+                "ideas",
+                "maintenance",
+                "security",
+                "userTesting",
+                "tool"
+            ]
+        },
+        {
+            "login": "petrochuk",
+            "name": "Andrew Petrochuk",
+            "avatar_url": "https://avatars.githubusercontent.com/u/30735471?v=4",
+            "profile": "https://github.com/petrochuk",
+            "contributions": [
+                "data",
+                "ideas"
+            ]
+        },
+        {
+            "login": "cyco77",
+            "name": "Lars Hildebrandt",
+            "avatar_url": "https://avatars.githubusercontent.com/u/1198698?v=4",
+            "profile": "https://github.com/cyco77",
+            "contributions": [
+                "code",
+                "ideas"
+            ]
+        }
+    ],
+    "contributorsPerLine": 7
 }

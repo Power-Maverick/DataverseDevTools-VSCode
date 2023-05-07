@@ -248,7 +248,7 @@ export class WebResourceHelper {
                 // Allow mapping any WR type
                 //.filter((w) => w.webresourcetype === WebResourceType.script)
                 .map((w) => {
-                    return { label: `${w.displayname!} ${w.webresourcetype! === 1 ? "(html)" : w.webresourcetype! === 2 ? "(css)" : w.webresourcetype! === 3 ? "(js)" : w.webresourcetype!}`, data: w };
+                    return { label: `${w.displayname!}  - ${w.name!}`, data: w };
                 });
             let wrOptionsQP: vscode.QuickPickOptions = Placeholders.getQuickPickOptions(Placeholders.webResourceSelection);
             let wrQPResponse = await vscode.window.showQuickPick(wrQPOptions, wrOptionsQP);
