@@ -186,6 +186,15 @@
         "data",
         "ideas"
       ]
+    },
+    {
+      "login": "cyco77",
+      "name": "Lars Hildebrandt",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1198698?v=4",
+      "profile": "https://github.com/cyco77",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7

@@ -275,6 +275,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     </tr>
     <tr>
       <td align="center"><a href="https://github.com/petrochuk"><img src="https://avatars.githubusercontent.com/u/30735471?v=4?s=100" width="100px;" alt="Andrew Petrochuk"/><br /><sub><b>Andrew Petrochuk</b></sub></a><br /><a href="#data-petrochuk" title="Data">🔣</a> <a href="#ideas-petrochuk" title="Ideas, Planning, & Feedback">🤔</a></td>
+      <td align="center"><a href="https://github.com/cyco77"><img src="https://avatars.githubusercontent.com/u/1198698?v=4?s=100" width="100px;" alt="Lars Hildebrandt"/><br /><sub><b>Lars Hildebrandt</b></sub></a><br /><a href="https://github.com/Power-Maverick/DataverseDevTools-VSCode/commits?author=cyco77" title="Code">💻</a></td>
     </tr>
   </tbody>
   <tfoot>
