@@ -40,6 +40,14 @@ export enum WebResourceType {
     html = 1,
     css = 2,
     script = 3,
+    xml = 4,
+    png = 5,
+    jpg = 6,
+    gif = 7,
+    xsl = 9,
+    ico = 10,
+    svg = 11,
+    resx = 12,
     others = -1
 }
 

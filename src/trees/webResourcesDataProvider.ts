@@ -33,7 +33,10 @@ export class WebResourcesDataProvider implements vscode.TreeDataProvider<WebReso
             // Parent
             let parentTree: WebResourcesTreeItem[] = [];
             toArray(WebResourceType).map((t) => {
-                parentTree.push(new WebResourcesTreeItem(t, undefined, vscode.TreeItemCollapsibleState.Expanded, 1));
+                const type: WebResourceType = (<any>WebResourceType)[t];
+                if (type <= WebResourceType.script) {
+                    parentTree.push(new WebResourcesTreeItem(t, undefined, vscode.TreeItemCollapsibleState.Expanded, 1));
+                }
             });
 
             return Promise.resolve(parentTree);

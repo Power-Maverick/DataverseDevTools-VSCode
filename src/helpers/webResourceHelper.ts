@@ -98,6 +98,16 @@ export class WebResourceHelper {
             const jsFiles = await vscode.workspace.findFiles("**/*.js", "/node_modules/");
             const cssFiles = await vscode.workspace.findFiles("**/*.css", "/node_modules/");
             const htmlFiles = await vscode.workspace.findFiles("**/*.html", "/node_modules/");
+            const htmFiles = await vscode.workspace.findFiles("**/*.htm", "/node_modules/");
+            const xmlFiles = await vscode.workspace.findFiles("**/*.xml", "/node_modules/");
+            const pngFiles = await vscode.workspace.findFiles("**/*.png", "/node_modules/");
+            const jpgFiles = await vscode.workspace.findFiles("**/*.jpg", "/node_modules/");
+            const gifFiles = await vscode.workspace.findFiles("**/*.gif", "/node_modules/");
+            const xslFiles = await vscode.workspace.findFiles("**/*.xsl", "/node_modules/");
+            const xsltFiles = await vscode.workspace.findFiles("**/*.xslt", "/node_modules/");
+            const icoFiles = await vscode.workspace.findFiles("**/*.ico", "/node_modules/");
+            const svgFiles = await vscode.workspace.findFiles("**/*.svg", "/node_modules/");
+            const resxFiles = await vscode.workspace.findFiles("**/*.resx", "/node_modules/");
 
             await Promise.all(
                 jsFiles.map(async (file) => {
@@ -115,6 +125,69 @@ export class WebResourceHelper {
 
             await Promise.all(
                 htmlFiles.map(async (file) => {
+                    const sw = await this.processWRFiles(file, jsonWRs);
+                    smartMatches.push(sw);
+                }),
+            );
+
+            await Promise.all(
+                htmFiles.map(async (file) => {
+                    const sw = await this.processWRFiles(file, jsonWRs);
+                    smartMatches.push(sw);
+                }),
+            );
+
+            await Promise.all(
+                pngFiles.map(async (file) => {
+                    const sw = await this.processWRFiles(file, jsonWRs);
+                    smartMatches.push(sw);
+                }),
+            );
+
+            await Promise.all(
+                jpgFiles.map(async (file) => {
+                    const sw = await this.processWRFiles(file, jsonWRs);
+                    smartMatches.push(sw);
+                }),
+            );
+
+            await Promise.all(
+                gifFiles.map(async (file) => {
+                    const sw = await this.processWRFiles(file, jsonWRs);
+                    smartMatches.push(sw);
+                }),
+            );
+
+            await Promise.all(
+                xslFiles.map(async (file) => {
+                    const sw = await this.processWRFiles(file, jsonWRs);
+                    smartMatches.push(sw);
+                }),
+            );
+
+            await Promise.all(
+                xsltFiles.map(async (file) => {
+                    const sw = await this.processWRFiles(file, jsonWRs);
+                    smartMatches.push(sw);
+                }),
+            );
+
+            await Promise.all(
+                icoFiles.map(async (file) => {
+                    const sw = await this.processWRFiles(file, jsonWRs);
+                    smartMatches.push(sw);
+                }),
+            );
+
+            await Promise.all(
+                svgFiles.map(async (file) => {
+                    const sw = await this.processWRFiles(file, jsonWRs);
+                    smartMatches.push(sw);
+                }),
+            );
+
+            await Promise.all(
+                resxFiles.map(async (file) => {
                     const sw = await this.processWRFiles(file, jsonWRs);
                     smartMatches.push(sw);
                 }),
@@ -482,6 +555,15 @@ export class WebResourceHelper {
                     css: () => WebResourceType.css,
                     html: () => WebResourceType.html,
                     htm: () => WebResourceType.html,
+                    xml: () => WebResourceType.xml,
+                    png: () => WebResourceType.png,
+                    jpg: () => WebResourceType.jpg,
+                    gif: () => WebResourceType.gif,
+                    xsl: () => WebResourceType.xsl,
+                    xslt: () => WebResourceType.xsl,
+                    ico: () => WebResourceType.ico,
+                    svg: () => WebResourceType.svg,
+                    resx: () => WebResourceType.resx
                 });
 
                 const wrContent = encodeToBase64(readFileSync(fullPath));
