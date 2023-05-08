@@ -48,7 +48,7 @@ export enum WebResourceType {
     ico = 10,
     svg = 11,
     resx = 12,
-    others = -1
+    others = -1,
 }
 
 export enum ConfidenceScores {

@@ -31,11 +31,15 @@ export class WebResourcesDataProvider implements vscode.TreeDataProvider<WebReso
     async getChildren(element?: WebResourcesTreeItem): Promise<WebResourcesTreeItem[]> {
         if (!element) {
             // Parent
+
+            const allowedFolder = ['html', 'css', 'script', 'others'];
+
             let parentTree: WebResourcesTreeItem[] = [];
-            toArray(WebResourceType).map((t) => {
-                const type: WebResourceType = (<any>WebResourceType)[t];
-                if (type <= WebResourceType.script) {
-                    parentTree.push(new WebResourcesTreeItem(t, undefined, vscode.TreeItemCollapsibleState.Expanded, 1));
+            toArray(WebResourceType).map((t: WebResourceType) => {
+                if (allowedFolder.indexOf(t.toString()) > -1) {
+                    parentTree.push(
+                        new WebResourcesTreeItem(
+                            t.toString(), undefined, vscode.TreeItemCollapsibleState.Expanded, 1));
                 }
             });
 
@@ -46,7 +50,8 @@ export class WebResourcesDataProvider implements vscode.TreeDataProvider<WebReso
             let checkType: Array<IWebResource> | undefined = undefined;
 
             if (selectedType === WebResourceType.others) {
-                checkType = this.webResource.filter((w) => w.webresourcetype !== undefined && w.webresourcetype > WebResourceType.script);
+                checkType = this.webResource.filter(
+                    (w) => w.webresourcetype !== undefined && w.webresourcetype > WebResourceType.script);
             } else {
                 checkType = this.webResource.filter((w) => w.webresourcetype === selectedType);
             }
