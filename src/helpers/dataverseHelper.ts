@@ -278,7 +278,7 @@ export class DataverseHelper {
      */
     public async getWebResources() {
         const respData = await this.request.requestData<IWebResources>(
-            "webresourceset?$filter=(Microsoft.Dynamics.CRM.In(PropertyName=%27webresourcetype%27,PropertyValues=[%271%27,%272%27,%273%27])%20and%20ismanaged%20eq%20false%20and%20iscustomizable/Value%20eq%20true%20)",
+            "webresourceset?$filter=(ismanaged%20eq%20false%20and%20iscustomizable/Value%20eq%20true%20)",
         );
         this.vsstate.saveInWorkspace(wrDefinitionsStoreKey, respData);
         vscode.commands.executeCommand("dvdt.explorer.webresources.loadWebResources");
@@ -595,4 +595,4 @@ export class DataverseHelper {
     //#endregion Private
 }
 
-async function redirectTimeout(): Promise<void> {}
+async function redirectTimeout(): Promise<void> { }

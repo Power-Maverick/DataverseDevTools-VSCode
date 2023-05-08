@@ -1,9 +1,9 @@
-class FILENAME {
-    /* Use typings to create entity specific formContext. Like shown below is for 'Account' */
-    //private static formContext: Xrm.Account;
+// Usage Example: FILENAME.onLoad
 
-    static onLoad(executionContext: Xrm.Events.EventContext) {
-        //this.formContext = executionContext.getFormContext();
-        //this.formContext.getAttribute("accountnumber").getValue();
+export class FILENAME {
+    onLoad(executionContext: Xrm.Events.EventContext) {
+        /* Use typings to create entity specific formContext. Like shown below is for 'Account' */
+        //const formContext: Xrm.Account = executionContext.getFormContext();
+        //formContext.getAttribute("accountnumber").getValue();
     }
 }

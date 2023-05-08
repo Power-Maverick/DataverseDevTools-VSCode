@@ -21,7 +21,7 @@ export const tsTemplateType: string[] = ["Plain TypeScript", "Webpack"];
 export const connectionStatusBarUniqueId: string = `${extensionPrefix}.StatusBarConnectStatus`;
 export const maxRetries: number = 5;
 export const terminalName: string = "Dataverse DevTools";
-export const fileExtensions: string[] = [".js", ".html", ".css"];
+export const fileExtensions: string[] = [".js", ".html", ".css", ".xml", ".png", ".jpg", ".gif", ".xsl", ".ico", ".svg", ".resx"];
 export const portADFS: number = 29827;
 export const redirectUrl: string = `http://localhost:${portADFS}/callback/`;
 export const configSectionName: string = "dataverse-devtools";
@@ -40,6 +40,15 @@ export enum WebResourceType {
     html = 1,
     css = 2,
     script = 3,
+    xml = 4,
+    png = 5,
+    jpg = 6,
+    gif = 7,
+    xsl = 9,
+    ico = 10,
+    svg = 11,
+    resx = 12,
+    others = -1,
 }
 
 export enum ConfidenceScores {
