@@ -105,6 +105,7 @@ export interface IAttributeMetadata {
 
 export interface IAttributeDefinition {
     AttributeType: string;
+    AttributeOf: string;
     MaxLength: number;
     IsPrimaryId: boolean;
     IsSearchable: boolean;
