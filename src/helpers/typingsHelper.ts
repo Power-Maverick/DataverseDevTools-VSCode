@@ -65,7 +65,7 @@ export class TypingsHelper {
     /**
      * Initialization constructor for VS Code Context
      */
-    constructor(private vscontext: vscode.ExtensionContext, private dvHelper: DataverseHelper) {}
+    constructor(private vscontext: vscode.ExtensionContext, private dvHelper: DataverseHelper) { }
 
     public async generateTyping(entityLogicalName: string): Promise<void> {
         const attributes = await this.dvHelper.getAttributesForEntity(entityLogicalName);
@@ -106,6 +106,16 @@ export class TypingsHelper {
             .filter((a) => a.AttributeType === "Picklist" && a.IsCustomizable.Value && !a.LogicalName.endsWith("_base"))
             .forEach(async (a) => {
                 const attrEnum = await this.parseOptionSetsAsEnums(entityLogicalName, a.LogicalName);
+                if (attrEnum) {
+                    nsEnum.members.push(attrEnum);
+                }
+            });
+
+        attributes
+            .sort(this.sortAttributes)
+            .filter((a) => (a.AttributeOf === "statecode" || a.AttributeOf === "statuscode") && !a.LogicalName.endsWith("_base"))
+            .forEach(async (a) => {
+                const attrEnum = await this.parseOptionSetsAsEnums(entityLogicalName, a.AttributeOf);
                 if (attrEnum) {
                     nsEnum.members.push(attrEnum);
                 }

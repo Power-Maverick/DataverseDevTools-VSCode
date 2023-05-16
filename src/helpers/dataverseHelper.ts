@@ -212,9 +212,18 @@ export class DataverseHelper {
      * @returns The optionset for the attribute.
      */
     public async getOptionsetForAttribute(entityLogicalName: string, attrLogicalName: string): Promise<IOptionSet> {
-        const respData = await this.request.requestData<IOptionSetMetadata>(
-            `EntityDefinitions(LogicalName='${entityLogicalName}')/Attributes(LogicalName='${attrLogicalName}')/Microsoft.Dynamics.CRM.PicklistAttributeMetadata?$select=LogicalName&$expand=OptionSet($select=Options),GlobalOptionSet($select=Options)`,
-        );
+
+        let url = '';
+
+        if (attrLogicalName === 'statecode') {
+            url = `EntityDefinitions(LogicalName='${entityLogicalName}')/Attributes(LogicalName='statecode')/Microsoft.Dynamics.CRM.StateAttributeMetadata?$select=LogicalName&$expand=OptionSet($select=Options),GlobalOptionSet($select=Options)`;
+        } else if (attrLogicalName === 'statuscode') {
+            url = `EntityDefinitions(LogicalName='${entityLogicalName}')/Attributes(LogicalName='statuscode')/Microsoft.Dynamics.CRM.StatusAttributeMetadata?$select=LogicalName&$expand=OptionSet($select=Options),GlobalOptionSet($select=Options)`;
+        } else {
+            url = `EntityDefinitions(LogicalName='${entityLogicalName}')/Attributes(LogicalName='${attrLogicalName}')/Microsoft.Dynamics.CRM.PicklistAttributeMetadata?$select=LogicalName&$expand=OptionSet($select=Options),GlobalOptionSet($select=Options)`;
+        }
+
+        const respData = await this.request.requestData<IOptionSetMetadata>(url);
         if (respData) {
             return Promise.resolve(respData.OptionSet);
         } else {
