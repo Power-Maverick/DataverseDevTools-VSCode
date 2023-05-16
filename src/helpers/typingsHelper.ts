@@ -113,7 +113,8 @@ export class TypingsHelper {
 
         attributes
             .sort(this.sortAttributes)
-            .filter((a) => a.AttributeTypeName.Value === "MultiSelectPicklistType" && a.IsCustomizable.Value && !a.LogicalName.endsWith("_base"))
+            .filter((a) => a.AttributeTypeName.Value === "MultiSelectPicklistType"
+                && a.IsCustomizable.Value && !a.LogicalName.endsWith("_base"))
             .forEach(async (a) => {
                 const attrEnum = await this.parseMultiSelectOptionSetsAsEnums(entityLogicalName, a.LogicalName);
                 if (attrEnum) {
@@ -187,7 +188,8 @@ export class TypingsHelper {
         }
     }
 
-    private async parseMultiSelectOptionSetsAsEnums(entityLogicalName: string, attrLogicalName: string): Promise<dom.EnumDeclaration | undefined> {
+    private async parseMultiSelectOptionSetsAsEnums(entityLogicalName: string, attrLogicalName: string):
+        Promise<dom.EnumDeclaration | undefined> {
         const optionset = await this.dvHelper.getMultiSelectOptionsetForAttribute(entityLogicalName, attrLogicalName);
         if (optionset && optionset.Options) {
             return this.createAttributeEnum(
