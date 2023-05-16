@@ -103,8 +103,13 @@ export interface IAttributeMetadata {
     value: IAttributeDefinition[];
 }
 
+export interface IAttributeTypeName {
+    Value: string;
+}
+
 export interface IAttributeDefinition {
     AttributeType: string;
+    AttributeTypeName: IAttributeTypeName;
     AttributeOf: string;
     MaxLength: number;
     IsPrimaryId: boolean;

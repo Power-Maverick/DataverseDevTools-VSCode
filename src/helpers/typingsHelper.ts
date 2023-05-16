@@ -113,6 +113,16 @@ export class TypingsHelper {
 
         attributes
             .sort(this.sortAttributes)
+            .filter((a) => a.AttributeTypeName.Value === "MultiSelectPicklistType" && a.IsCustomizable.Value && !a.LogicalName.endsWith("_base"))
+            .forEach(async (a) => {
+                const attrEnum = await this.parseMultiSelectOptionSetsAsEnums(entityLogicalName, a.LogicalName);
+                if (attrEnum) {
+                    nsEnum.members.push(attrEnum);
+                }
+            });
+
+        attributes
+            .sort(this.sortAttributes)
             .filter((a) => (a.AttributeOf === "statecode" || a.AttributeOf === "statuscode") && !a.LogicalName.endsWith("_base"))
             .forEach(async (a) => {
                 const attrEnum = await this.parseOptionSetsAsEnums(entityLogicalName, a.AttributeOf);
@@ -169,9 +179,22 @@ export class TypingsHelper {
                 attrLogicalName,
                 optionset.Options.map((o) => {
                     let optionName: string | undefined;
-                    if (o.Label.UserLocalizedLabel.LanguageCode === 1033) {
-                        optionName = sanitize(pascalize(o.Label.UserLocalizedLabel.Label));
-                    }
+                    optionName = sanitize(pascalize(o.Label.UserLocalizedLabel.Label));
+
+                    return <IOptionValue>{ name: optionName, value: o.Value };
+                }),
+            );
+        }
+    }
+
+    private async parseMultiSelectOptionSetsAsEnums(entityLogicalName: string, attrLogicalName: string): Promise<dom.EnumDeclaration | undefined> {
+        const optionset = await this.dvHelper.getMultiSelectOptionsetForAttribute(entityLogicalName, attrLogicalName);
+        if (optionset && optionset.Options) {
+            return this.createAttributeEnum(
+                attrLogicalName,
+                optionset.Options.map((o) => {
+                    let optionName: string | undefined;
+                    optionName = sanitize(pascalize(o.Label.UserLocalizedLabel.Label));
                     return <IOptionValue>{ name: optionName, value: o.Value };
                 }),
             );

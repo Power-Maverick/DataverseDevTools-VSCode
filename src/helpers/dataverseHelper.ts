@@ -213,23 +213,23 @@ export class DataverseHelper {
      */
     public async getOptionsetForAttribute(entityLogicalName: string, attrLogicalName: string): Promise<IOptionSet> {
 
-        let url = '';
-
         if (attrLogicalName === 'statecode') {
-            url = `EntityDefinitions(LogicalName='${entityLogicalName}')/Attributes(LogicalName='statecode')/Microsoft.Dynamics.CRM.StateAttributeMetadata?$select=LogicalName&$expand=OptionSet($select=Options),GlobalOptionSet($select=Options)`;
+            return await this.innerGetOptionsetForAttribute(entityLogicalName, attrLogicalName, "Microsoft.Dynamics.CRM.StateAttributeMetadata");
         } else if (attrLogicalName === 'statuscode') {
-            url = `EntityDefinitions(LogicalName='${entityLogicalName}')/Attributes(LogicalName='statuscode')/Microsoft.Dynamics.CRM.StatusAttributeMetadata?$select=LogicalName&$expand=OptionSet($select=Options),GlobalOptionSet($select=Options)`;
+            return await this.innerGetOptionsetForAttribute(entityLogicalName, attrLogicalName, "Microsoft.Dynamics.CRM.StatusAttributeMetadata");
         } else {
-            url = `EntityDefinitions(LogicalName='${entityLogicalName}')/Attributes(LogicalName='${attrLogicalName}')/Microsoft.Dynamics.CRM.PicklistAttributeMetadata?$select=LogicalName&$expand=OptionSet($select=Options),GlobalOptionSet($select=Options)`;
+            return await this.innerGetOptionsetForAttribute(entityLogicalName, attrLogicalName, "Microsoft.Dynamics.CRM.PicklistAttributeMetadata");
         }
+    }
 
-        const respData = await this.request.requestData<IOptionSetMetadata>(url);
-        if (respData) {
-            return Promise.resolve(respData.OptionSet);
-        } else {
-            // eslint-disable-next-line @typescript-eslint/naming-convention
-            return Promise.resolve({ Options: [] });
-        }
+    /**
+     * Get the OptionSet for an multi select attribute.
+     * @param {string} entityLogicalName - The logical name of the entity.
+     * @param {string} attrLogicalName - The logical name of the attribute.
+     * @returns The optionset for the attribute.
+     */
+    public async getMultiSelectOptionsetForAttribute(entityLogicalName: string, attrLogicalName: string): Promise<IOptionSet> {
+        return await this.innerGetOptionsetForAttribute(entityLogicalName, attrLogicalName, "Microsoft.Dynamics.CRM.MultiSelectPicklistAttributeMetadata");
     }
 
     /**
@@ -600,6 +600,20 @@ export class DataverseHelper {
         }
 
         return undefined;
+    }
+
+
+    private async innerGetOptionsetForAttribute(entityLogicalName: string, attrLogicalName: string, metadataType: string): Promise<IOptionSet> {
+
+        let url = `EntityDefinitions(LogicalName='${entityLogicalName}')/Attributes(LogicalName='${attrLogicalName}')/${metadataType}?$select=LogicalName&$expand=OptionSet($select=Options),GlobalOptionSet($select=Options)`;
+
+        const respData = await this.request.requestData<IOptionSetMetadata>(url);
+        if (respData) {
+            return Promise.resolve(respData.OptionSet);
+        } else {
+            // eslint-disable-next-line @typescript-eslint/naming-convention
+            return Promise.resolve({ Options: [] });
+        }
     }
     //#endregion Private
 }
