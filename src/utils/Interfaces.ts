@@ -96,6 +96,7 @@ export interface IEntityDefinition {
     IsVisibleInMobileClient: IIs;
     IsReadOnlyInMobileClient: IIs;
     IsOfflineInMobileClient: IIs;
+    TableType: string;
     Attributes: IAttributeMetadata;
 }
 

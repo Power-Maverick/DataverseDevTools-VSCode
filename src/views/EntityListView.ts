@@ -1,0 +1,42 @@
+import * as vscode from "vscode";
+import * as path from "path";
+import { IEntityDefinition } from "../utils/Interfaces";
+import { Panel } from "./PanelBase";
+import { readFileSync } from "../utils/FileSystem";
+import _ = require("lodash");
+
+export class EntityListView extends Panel {
+    entities?: IEntityDefinition[];
+
+    constructor(entities: IEntityDefinition[], webview: vscode.WebviewPanel, vscontext: vscode.ExtensionContext) {
+        super({ panel: webview, extensionUri: vscontext.extensionUri, webViewFileName: "entitylist.html" });
+        this.entities = entities;
+        // Set the webview's initial html content
+        super.update();
+    }
+
+    getHtmlForWebview(webviewFileName: string): string {
+        const pathOnDisk = path.join(this.panelOptions.extensionUri.fsPath, "resources", "views", webviewFileName);
+        const fileHtml = readFileSync(pathOnDisk).toString();
+        _.templateSettings.interpolate = /!!{([\s\S]+?)}/g;
+        const compiled = _.template(fileHtml);
+
+        let viewModel = {
+            entities: ''
+        };
+
+        this.entities?.forEach(element => {
+
+            viewModel.entities += `<tr>`;
+            viewModel.entities += `<td>${element.MetadataId}</td>`;
+            viewModel.entities += `<td>${element.ObjectTypeCode}</td>`;
+            viewModel.entities += `<td>${element.LogicalName}</td>`;
+            viewModel.entities += `<td>${element.SchemaName}</td>`;
+            viewModel.entities += `<td>${element.Description?.UserLocalizedLabel?.Label}</td>`;
+            viewModel.entities += `<td>${element.TableType}</td>`;
+            viewModel.entities += `</tr>`;
+        });
+
+        return super.render(compiled(viewModel));
+    }
+}

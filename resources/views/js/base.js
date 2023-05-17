@@ -17,6 +17,21 @@ $(document).ready(function () {
     }
 });
 
+$(document).ready(function () {
+    $("#entitiesSearch").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+        $("#entTable tr").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+        });
+    });
+    if ($matchTable && $matchTable.bootstrapTable) {
+        $matchTable.bootstrapTable();
+        $matchTable.bootstrapTable("refreshOptions", {
+            classes: "table table-bordered",
+        });
+    }
+});
+
 document.addEventListener("DOMContentLoaded", function () {
     var elems = document.querySelectorAll(".fixed-action-btn");
     // var instances = M.FloatingActionButton.init(elems, {
@@ -69,4 +84,49 @@ function link(fullPath, wrId) {
         command: "link",
         value: `{ "fp": "${fullPath}", "id": "${wrId}" }`,
     });
+}
+
+function sortTable(tableId, n) {
+    var table,
+        rows,
+        switching,
+        i,
+        x,
+        y,
+        shouldSwitch,
+        dir,
+        switchcount = 0;
+    table = document.getElementById(tableId);
+    switching = true;
+    dir = "asc";
+    while (switching) {
+        switching = false;
+        rows = table.rows;
+        for (i = 1; i < rows.length - 1; i++) {
+            shouldSwitch = false;
+            x = rows[i].getElementsByTagName("TD")[n];
+            y = rows[i + 1].getElementsByTagName("TD")[n];
+            if (dir == "asc") {
+                if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                    shouldSwitch = true;
+                    break;
+                }
+            } else if (dir == "desc") {
+                if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                    shouldSwitch = true;
+                    break;
+                }
+            }
+        }
+        if (shouldSwitch) {
+            rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+            switching = true;
+            switchcount++;
+        } else {
+            if (switchcount == 0 && dir == "asc") {
+                dir = "desc";
+                switching = true;
+            }
+        }
+    }
 }

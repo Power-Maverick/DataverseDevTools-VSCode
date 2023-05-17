@@ -66,15 +66,15 @@
     <div class="tab-pane fade" id="attr" role="tabpanel" aria-labelledby="attr-tab">
         <input class="form-control" id="attrSearch" type="text" placeholder="Search.." />
         <br />
-        <table class="table table-bordered" id="attributesTable">
+        <table class="table table-bordered sortable" id="attributesTable">
             <thead>
-                <th onclick="sortTable(0)">Id</th>
-                <th onclick="sortTable(1)">Logical Name</th>
-                <th onclick="sortTable(2)">Schema Name</th>
-                <th onclick="sortTable(3)">Type</th>
-                <th onclick="sortTable(4)">Attribute Type Name</th>
-                <th onclick="sortTable(4)">Attribute Of</th>
-                <th onclick="sortTable(5)">Required Level</th>
+                <th onclick="sortTable('attributesTable',0)">Id</th>
+                <th onclick="sortTable('attributesTable',1)">Logical Name</th>
+                <th onclick="sortTable('attributesTable',2)">Schema Name</th>
+                <th onclick="sortTable('attributesTable',3)">Type</th>
+                <th onclick="sortTable('attributesTable',4)">Attribute Type Name</th>
+                <th onclick="sortTable('attributesTable',4)">Attribute Of</th>
+                <th onclick="sortTable('attributesTable',5)">Required Level</th>
             </thead>
             <tbody id="attrTable">
                 !!{attributes}
@@ -85,49 +85,3 @@
 
 <div id="entity" class="col s12"></div>
 <div id="attributes" class="col s12"></div>
-<script>
-    function sortTable(n) {
-        var table,
-            rows,
-            switching,
-            i,
-            x,
-            y,
-            shouldSwitch,
-            dir,
-            switchcount = 0;
-        table = document.getElementById("attributesTable");
-        switching = true;
-        dir = "asc";
-        while (switching) {
-            switching = false;
-            rows = table.rows;
-            for (i = 1; i < rows.length - 1; i++) {
-                shouldSwitch = false;
-                x = rows[i].getElementsByTagName("TD")[n];
-                y = rows[i + 1].getElementsByTagName("TD")[n];
-                if (dir == "asc") {
-                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
-                        shouldSwitch = true;
-                        break;
-                    }
-                } else if (dir == "desc") {
-                    if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
-                        shouldSwitch = true;
-                        break;
-                    }
-                }
-            }
-            if (shouldSwitch) {
-                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-                switching = true;
-                switchcount++;
-            } else {
-                if (switchcount == 0 && dir == "asc") {
-                    dir = "desc";
-                    switching = true;
-                }
-            }
-        }
-    }
-</script>

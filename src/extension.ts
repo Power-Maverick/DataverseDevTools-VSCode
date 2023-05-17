@@ -26,7 +26,7 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.commands.executeCommand("setContext", `${extensionPrefix}.resourcesExtn`, fileExtensions);
     vscode.commands.executeCommand("setContext", `${extensionPrefix}.showPreviewOptions`, config.get("enableEarlyAccessPreview"));
 
-    registerTreeDataProviders(context);
+    registerTreeDataProviders(context, reporter);
     registerCommands(context, reporter);
 
     let dataverseToolsPublicApi = {

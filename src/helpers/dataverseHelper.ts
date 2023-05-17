@@ -38,6 +38,7 @@ import { ConnectionDetailsView } from "../views/ConnectionDetailsView";
 import { EntityDetailsView } from "../views/EntityDetailsView";
 import { EntitiesTreeItem } from "../trees/entitiesDataProvider";
 import { updateConnectionStatusBar } from "../commands/registerCommands";
+import { EntityListView } from "../views/EntityListView";
 
 export class DataverseHelper {
     private vsstate: State;
@@ -280,6 +281,24 @@ export class DataverseHelper {
             const webview = await view.getWebView({ type: "showEntityDetails", title: "Show Entity Details" });
             new EntityDetailsView(en, webview, this.vscontext);
         }
+    }
+
+    /**
+     * Show the details of the entity for the current connection.
+     * @param {ViewBase} view - ViewBase - The view that is calling this method.
+     */
+    public async showMetadataExplorer(view: ViewBase) {
+        const vsstate = new State(this.vscontext);
+        const jsonConn: IEntityMetadata = vsstate.getFromWorkspace(entityDefinitionsStoreKey);
+
+        let entities: IEntityDefinition[] = [];
+
+        if (jsonConn) {
+            entities = jsonConn.value;
+        }
+
+        const webview = await view.getWebView({ type: "showEntityList", title: "Show Entity List" });
+        new EntityListView(entities, webview, this.vscontext);
     }
 
     /**

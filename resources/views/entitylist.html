@@ -1,0 +1,21 @@
+<!-- <ul id="tabs-swipe-demo" class="tabs">
+    <li class="tab col s3"><a class="active" href="#entity">Entity Details</a></li>
+    <li class="tab col s3"><a href="#attributes">Attributes</a></li>
+</ul> -->
+<br /><br />
+
+<input class="form-control" id="entitiesSearch" type="text" placeholder="Search.." />
+<br />
+<table class="table table-bordered sortable" id="entitiesTable">
+    <thead>
+        <th onclick="sortTable('entitiesTable',0)">Id</th>
+        <th onclick="sortTable('entitiesTable',1)">ObjectTypeCode</th>
+        <th onclick="sortTable('entitiesTable',2)">LogicalName</th>
+        <th onclick="sortTable('entitiesTable',3)">SchemaName</th>
+        <th onclick="sortTable('entitiesTable',4)">Description</th>
+        <th onclick="sortTable('entitiesTable',5)">TableType</th>
+    </thead>
+    <tbody id="entTable">
+        !!{entities}
+    </tbody>
+</table>
