@@ -90,27 +90,23 @@ function sortTable(tableId, column) {
     var table = document.getElementById(tableId);
     var tbody = table.querySelector("tbody");
     var rows = Array.from(tbody.rows);
-    var sortOrder = 1; // Aufsteigende Sortierreihenfolge
+    var sortOrder = 1;
     var headerRow = table.querySelector("thead tr");
     var sortIcons = headerRow.querySelectorAll(".sort-icon");
 
-    // Überprüfen, ob die Spalte bereits sortiert ist
     if (headerRow.cells[column].classList.contains("sorted")) {
-        // Wenn bereits sortiert, die Sortierreihenfolge umkehren
         sortOrder = headerRow.cells[column].classList.contains("asc") ? -1 : 1;
         headerRow.cells[column].classList.toggle("asc");
         headerRow.cells[column].classList.toggle("desc");
     } else {
-        // Wenn nicht sortiert, die vorherige Sortierung entfernen
         var sortedCells = table.querySelectorAll(".sorted");
         sortedCells.forEach(function (cell) {
             cell.classList.remove("sorted", "asc", "desc");
         });
-        // Die aktuelle Spalte als aufsteigend sortiert markieren
+
         headerRow.cells[column].classList.add("sorted", "asc");
     }
 
-    // Aktualisieren der Sortiersymbole
     sortIcons.forEach(function (sortIcon, index) {
         if (index === column) {
             sortIcon.classList.remove("asc", "desc");
@@ -120,7 +116,6 @@ function sortTable(tableId, column) {
         }
     });
 
-    // Sortieren der Tabellenzeilen
     rows.sort(function (a, b) {
         var cellA = a.cells[column].textContent.toLowerCase();
         var cellB = b.cells[column].textContent.toLowerCase();
@@ -129,7 +124,6 @@ function sortTable(tableId, column) {
         return 0;
     });
 
-    // Aktualisieren der Tabellenreihenfolge im tbody
     rows.forEach(function (row) {
         tbody.appendChild(row);
     });

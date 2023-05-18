@@ -49,9 +49,6 @@ export class EntityListView extends Panel {
             viewModel.entities += `</tr>`;
         });
 
-        // HasActivities, HasNotes, IsActivity, IsActivityParty, IsAuditEnabled.Value, IsCustomEntity, IsCustomizable.Value, 
-        // IsDocumentManagementEnabled,IsDuplicateDetectionEnabled.Value, IsManaged, OwnershipType, 
-
         return super.render(compiled(viewModel));
     }
 }

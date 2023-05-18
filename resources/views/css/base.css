@@ -92,21 +92,21 @@ input {
     white-space: nowrap;
 }
 
-.sort-icon {
+.table .sort-icon {
     display: inline-block;
     margin-left: 5px;
     font-weight: bold;
   }
   
-  .sort-icon .asc-icon,
-  .sort-icon .desc-icon {
+.table .sort-icon .asc-icon,
+.table .sort-icon .desc-icon {
     display: none;
-  }
+}
   
-  .sort-icon.asc .asc-icon,
-  .sort-icon.desc .desc-icon {
+.table th .asc .asc-icon,
+.table th .desc .desc-icon {
     display: inline;
-  }
+}
   
 
 /**** Navigation ****/
