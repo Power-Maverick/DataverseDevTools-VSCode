@@ -8,12 +8,125 @@
 <br />
 <table class="table table-bordered sortable" id="entitiesTable">
     <thead>
-        <th onclick="sortTable('entitiesTable',0)">Id</th>
-        <th onclick="sortTable('entitiesTable',1)">ObjectTypeCode</th>
-        <th onclick="sortTable('entitiesTable',2)">LogicalName</th>
-        <th onclick="sortTable('entitiesTable',3)">SchemaName</th>
-        <th onclick="sortTable('entitiesTable',4)">Description</th>
-        <th onclick="sortTable('entitiesTable',5)">TableType</th>
+        <th onclick="sortTable('entitiesTable',0)">
+            Id
+            <div class="sort-icon">
+                <span class="asc-icon">&#9650;</span>
+                <span class="desc-icon">&#9660;</span>
+            </div>
+        </th>
+        <th onclick="sortTable('entitiesTable',1)">
+            Object Type Code
+            <div class="sort-icon">
+                <span class="asc-icon">&#9650;</span>
+                <span class="desc-icon">&#9660;</span>
+            </div>
+        </th>
+        <th onclick="sortTable('entitiesTable',2)">
+            Logical Name
+            <div class="sort-icon">
+                <span class="asc-icon">&#9650;</span>
+                <span class="desc-icon">&#9660;</span>
+            </div>
+        </th>
+        <th onclick="sortTable('entitiesTable',3)">
+            Schema Name
+            <div class="sort-icon">
+                <span class="asc-icon">&#9650;</span>
+                <span class="desc-icon">&#9660;</span>
+            </div>
+        </th>
+        <th onclick="sortTable('entitiesTable',4)">
+            Description
+            <div class="sort-icon">
+                <span class="asc-icon">&#9650;</span>
+                <span class="desc-icon">&#9660;</span>
+            </div>
+        </th>
+        <th onclick="sortTable('entitiesTable',5)">
+            Table Type
+            <div class="sort-icon">
+                <span class="asc-icon">&#9650;</span>
+                <span class="desc-icon">&#9660;</span>
+            </div>
+        </th>
+        <th onclick="sortTable('entitiesTable',6)">
+            Has Activities
+            <div class="sort-icon">
+                <span class="asc-icon">&#9650;</span>
+                <span class="desc-icon">&#9660;</span>
+            </div>
+        </th>
+        <th onclick="sortTable('entitiesTable',7)">
+            Has Notes
+            <div class="sort-icon">
+                <span class="asc-icon">&#9650;</span>
+                <span class="desc-icon">&#9660;</span>
+            </div>
+        </th>
+        <th onclick="sortTable('entitiesTable',8)">
+            Is Activity
+            <div class="sort-icon">
+                <span class="asc-icon">&#9650;</span>
+                <span class="desc-icon">&#9660;</span>
+            </div>
+        </th>
+        <th onclick="sortTable('entitiesTable',9)">
+            Is Activity Party
+            <div class="sort-icon">
+                <span class="asc-icon">&#9650;</span>
+                <span class="desc-icon">&#9660;</span>
+            </div>
+        </th>
+        <th onclick="sortTable('entitiesTable',10)">
+            Is Audit Enabled
+            <div class="sort-icon">
+                <span class="asc-icon">&#9650;</span>
+                <span class="desc-icon">&#9660;</span>
+            </div>
+        </th>
+        <th onclick="sortTable('entitiesTable',11)">
+            Is Custom Entity
+            <div class="sort-icon">
+                <span class="asc-icon">&#9650;</span>
+                <span class="desc-icon">&#9660;</span>
+            </div>
+        </th>
+        <th onclick="sortTable('entitiesTable',12)">
+            Is Customizable
+            <div class="sort-icon">
+                <span class="asc-icon">&#9650;</span>
+                <span class="desc-icon">&#9660;</span>
+            </div>
+        </th>
+        <th onclick="sortTable('entitiesTable',13)">
+            Is Document Management Enabled
+            <div class="sort-icon">
+                <span class="asc-icon">&#9650;</span>
+                <span class="desc-icon">&#9660;</span>
+            </div>
+        </th>
+        <th onclick="sortTable('entitiesTable',14)">
+            Is Duplicate Detection Enabled
+            <div class="sort-icon">
+                <span class="asc-icon">&#9650;</span>
+                <span class="desc-icon">&#9660;</span>
+            </div>
+        </th>
+        <th onclick="sortTable('entitiesTable',15)">
+            Is Managed
+            <div class="sort-icon">
+                <span class="asc-icon">&#9650;</span>
+                <span class="desc-icon">&#9660;</span>
+            </div>
+        </th>
+        <th onclick="sortTable('entitiesTable',16)">
+            Ownership Type
+            <div class="sort-icon">
+                <span class="asc-icon">&#9650;</span>
+                <span class="desc-icon">&#9660;</span>
+            </div>
+        </th>
     </thead>
     <tbody id="entTable">
         !!{entities}

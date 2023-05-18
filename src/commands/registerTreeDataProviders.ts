@@ -16,7 +16,7 @@ import { ErrorHandler } from "../helpers/errorHandler";
  * @param vscontext - vscode.ExtensionContext 
  * @param {TelemetryReporter} tr - The TelemetryReporter object.
  */
-export const registerTreeDataProviders = function (vscontext: vscode.ExtensionContext, tr: TelemetryReporter): void {
+export const registerTreeDataProviders = (vscontext: vscode.ExtensionContext, tr: TelemetryReporter): void => {
     const dvHelper = new DataverseHelper(vscontext);
     const uploadHelper = new WebResourceHelper(vscontext, dvHelper);
 

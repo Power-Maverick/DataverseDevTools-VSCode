@@ -68,13 +68,55 @@
         <br />
         <table class="table table-bordered sortable" id="attributesTable">
             <thead>
-                <th onclick="sortTable('attributesTable',0)">Id</th>
-                <th onclick="sortTable('attributesTable',1)">Logical Name</th>
-                <th onclick="sortTable('attributesTable',2)">Schema Name</th>
-                <th onclick="sortTable('attributesTable',3)">Type</th>
-                <th onclick="sortTable('attributesTable',4)">Attribute Type Name</th>
-                <th onclick="sortTable('attributesTable',4)">Attribute Of</th>
-                <th onclick="sortTable('attributesTable',5)">Required Level</th>
+                <th onclick="sortTable('attributesTable',0)">
+                    Id
+                    <div class="sort-icon">
+                        <span class="asc-icon">&#9650;</span>
+                        <span class="desc-icon">&#9660;</span>
+                    </div>
+                </th>
+                <th onclick="sortTable('attributesTable',1)">
+                    Logical Name
+                    <div class="sort-icon">
+                        <span class="asc-icon">&#9650;</span>
+                        <span class="desc-icon">&#9660;</span>
+                    </div>
+                </th>
+                <th onclick="sortTable('attributesTable',2)">
+                    Schema Name
+                    <div class="sort-icon">
+                        <span class="asc-icon">&#9650;</span>
+                        <span class="desc-icon">&#9660;</span>
+                    </div>
+                </th>
+                <th onclick="sortTable('attributesTable',3)">
+                    Type
+                    <div class="sort-icon">
+                        <span class="asc-icon">&#9650;</span>
+                        <span class="desc-icon">&#9660;</span>
+                    </div>
+                </th>
+                <th onclick="sortTable('attributesTable',4)">
+                    Attribute Type Name
+                    <div class="sort-icon">
+                        <span class="asc-icon">&#9650;</span>
+                        <span class="desc-icon">&#9660;</span>
+                    </div>
+                </th>
+                <th onclick="sortTable('attributesTable',4)">
+                    Attribute Of
+                    <div class="sort-icon">
+                        <span class="asc-icon">&#9650;</span>
+                        <span class="desc-icon">&#9660;</span>
+                    </div>
+                </th>
+                <th onclick="sortTable('attributesTable',5)">
+                    Required Level
+                    <div class="sort-icon">
+                        <span class="asc-icon">&#9650;</span>
+                        <span class="desc-icon">&#9660;</span>
+                    </div>
+                </th>
             </thead>
             <tbody id="attrTable">
                 !!{attributes}

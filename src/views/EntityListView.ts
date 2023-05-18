@@ -34,8 +34,23 @@ export class EntityListView extends Panel {
             viewModel.entities += `<td>${element.SchemaName}</td>`;
             viewModel.entities += `<td>${element.Description?.UserLocalizedLabel?.Label}</td>`;
             viewModel.entities += `<td>${element.TableType}</td>`;
+            viewModel.entities += `<td>${element.HasActivities}</td>`;
+            viewModel.entities += `<td>${element.HasNotes}</td>`;
+            viewModel.entities += `<td>${element.IsActivity}</td>`;
+            viewModel.entities += `<td>${element.IsActivityParty}</td>`;
+            viewModel.entities += `<td>${element.IsAuditEnabled?.Value}</td>`;
+            viewModel.entities += `<td>${element.IsCustomEntity}</td>`;
+            viewModel.entities += `<td>${element.IsCustomizable?.Value}</td>`;
+            viewModel.entities += `<td>${element.IsDocumentManagementEnabled}</td>`;
+            viewModel.entities += `<td>${element.IsDuplicateDetectionEnabled?.Value}</td>`;
+            viewModel.entities += `<td>${element.IsManaged}</td>`;
+            viewModel.entities += `<td>${element.OwnershipType}</td>`;
+
             viewModel.entities += `</tr>`;
         });
+
+        // HasActivities, HasNotes, IsActivity, IsActivityParty, IsAuditEnabled.Value, IsCustomEntity, IsCustomizable.Value, 
+        // IsDocumentManagementEnabled,IsDuplicateDetectionEnabled.Value, IsManaged, OwnershipType, 
 
         return super.render(compiled(viewModel));
     }

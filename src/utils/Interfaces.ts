@@ -52,6 +52,7 @@ export interface IEntityDefinition {
     IsSLAEnabled: boolean;
     IsBPFEntity: boolean;
     IsActivity: boolean;
+    IsActivityParty: boolean;
     IsAvailableOffline: boolean;
     IsAIRUpdated: boolean;
     IconLargeName: null;

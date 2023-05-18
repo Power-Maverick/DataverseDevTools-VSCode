@@ -89,7 +89,25 @@ input {
 
 .sortable th {
     cursor: pointer;
+    white-space: nowrap;
 }
+
+.sort-icon {
+    display: inline-block;
+    margin-left: 5px;
+    font-weight: bold;
+  }
+  
+  .sort-icon .asc-icon,
+  .sort-icon .desc-icon {
+    display: none;
+  }
+  
+  .sort-icon.asc .asc-icon,
+  .sort-icon.desc .desc-icon {
+    display: inline;
+  }
+  
 
 /**** Navigation ****/
 nav {

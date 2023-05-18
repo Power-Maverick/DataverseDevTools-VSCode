@@ -86,47 +86,51 @@ function link(fullPath, wrId) {
     });
 }
 
-function sortTable(tableId, n) {
-    var table,
-        rows,
-        switching,
-        i,
-        x,
-        y,
-        shouldSwitch,
-        dir,
-        switchcount = 0;
-    table = document.getElementById(tableId);
-    switching = true;
-    dir = "asc";
-    while (switching) {
-        switching = false;
-        rows = table.rows;
-        for (i = 1; i < rows.length - 1; i++) {
-            shouldSwitch = false;
-            x = rows[i].getElementsByTagName("TD")[n];
-            y = rows[i + 1].getElementsByTagName("TD")[n];
-            if (dir == "asc") {
-                if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
-                    shouldSwitch = true;
-                    break;
-                }
-            } else if (dir == "desc") {
-                if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
-                    shouldSwitch = true;
-                    break;
-                }
-            }
-        }
-        if (shouldSwitch) {
-            rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-            switching = true;
-            switchcount++;
-        } else {
-            if (switchcount == 0 && dir == "asc") {
-                dir = "desc";
-                switching = true;
-            }
-        }
+function sortTable(tableId, column) {
+    var table = document.getElementById(tableId);
+    var tbody = table.querySelector("tbody");
+    var rows = Array.from(tbody.rows);
+    var sortOrder = 1; // Aufsteigende Sortierreihenfolge
+    var headerRow = table.querySelector("thead tr");
+    var sortIcons = headerRow.querySelectorAll(".sort-icon");
+
+    // Überprüfen, ob die Spalte bereits sortiert ist
+    if (headerRow.cells[column].classList.contains("sorted")) {
+        // Wenn bereits sortiert, die Sortierreihenfolge umkehren
+        sortOrder = headerRow.cells[column].classList.contains("asc") ? -1 : 1;
+        headerRow.cells[column].classList.toggle("asc");
+        headerRow.cells[column].classList.toggle("desc");
+    } else {
+        // Wenn nicht sortiert, die vorherige Sortierung entfernen
+        var sortedCells = table.querySelectorAll(".sorted");
+        sortedCells.forEach(function (cell) {
+            cell.classList.remove("sorted", "asc", "desc");
+        });
+        // Die aktuelle Spalte als aufsteigend sortiert markieren
+        headerRow.cells[column].classList.add("sorted", "asc");
     }
+
+    // Aktualisieren der Sortiersymbole
+    sortIcons.forEach(function (sortIcon, index) {
+        if (index === column) {
+            sortIcon.classList.remove("asc", "desc");
+            sortIcon.classList.add(sortOrder === 1 ? "asc" : "desc");
+        } else {
+            sortIcon.classList.remove("asc", "desc");
+        }
+    });
+
+    // Sortieren der Tabellenzeilen
+    rows.sort(function (a, b) {
+        var cellA = a.cells[column].textContent.toLowerCase();
+        var cellB = b.cells[column].textContent.toLowerCase();
+        if (cellA < cellB) return -sortOrder;
+        if (cellA > cellB) return sortOrder;
+        return 0;
+    });
+
+    // Aktualisieren der Tabellenreihenfolge im tbody
+    rows.forEach(function (row) {
+        tbody.appendChild(row);
+    });
 }
