@@ -3,10 +3,10 @@ import * as path from "path";
 import { IEntityDefinition } from "../utils/Interfaces";
 import { Panel } from "./PanelBase";
 import { readFileSync } from "../utils/FileSystem";
-import _ = require("lodash");
+import _ from "lodash";
 
 export class EntityListView extends Panel {
-    entities?: IEntityDefinition[];
+    private entities?: IEntityDefinition[];
 
     constructor(entities: IEntityDefinition[], webview: vscode.WebviewPanel, vscontext: vscode.ExtensionContext) {
         super({ panel: webview, extensionUri: vscontext.extensionUri, webViewFileName: "entitylist.html" });
@@ -15,14 +15,14 @@ export class EntityListView extends Panel {
         super.update();
     }
 
-    getHtmlForWebview(webviewFileName: string): string {
+    public getHtmlForWebview(webviewFileName: string): string {
         const pathOnDisk = path.join(this.panelOptions.extensionUri.fsPath, "resources", "views", webviewFileName);
         const fileHtml = readFileSync(pathOnDisk).toString();
         _.templateSettings.interpolate = /!!{([\s\S]+?)}/g;
         const compiled = _.template(fileHtml);
 
-        let viewModel = {
-            entities: ''
+        const viewModel = {
+            entities: '',
         };
 
         this.entities?.forEach(element => {

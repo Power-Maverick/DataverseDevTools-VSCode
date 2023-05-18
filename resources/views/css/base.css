@@ -87,7 +87,7 @@ input {
     color: var(--vscode-editor-foreground);
 }
 
-.table.sortable th {
+.sortable th {
     cursor: pointer;
 }
 
