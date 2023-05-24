@@ -271,14 +271,14 @@ export class DataverseHelper {
 
     /**
      * Show the details of the entity for the current connection.
-     * @param {EntitiesTreeItem} enItem - The entity tree item that was selected.
+     * @param {string} entityName - EntityName of tree item that was selected.
      * @param {ViewBase} view - ViewBase - The view that is calling this method.
      */
-    public async showEntityDetails(enItem: EntitiesTreeItem, view: ViewBase) {
-        const en: IEntityDefinition | undefined = this.getEntityByName(enItem.desc!);
+    public async showEntityDetails(entityName: string, view: ViewBase) {
+        const en: IEntityDefinition | undefined = this.getEntityByName(entityName);
         if (en) {
             en.Attributes = { value: await this.getAttributesForEntity(en.LogicalName) };
-            const webview = await view.getWebView({ type: "showEntityDetails", title: "Show Entity Details" });
+            const webview = await view.getWebView({ type: "showEntityDetails", title: `Entity Details: ${entityName}` });
             new EntityDetailsView(en, webview, this.vscontext);
         }
     }

@@ -117,7 +117,17 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
             command: "dvdt.explorer.entities.showEntityDetails",
             callback: async (enItem: EntitiesTreeItem) => {
                 try {
-                    await dvHelper.showEntityDetails(enItem, views);
+                    await dvHelper.showEntityDetails(enItem.desc!, views);
+                } catch (error) {
+                    errorHandler.log(error, "showEntityDetails");
+                }
+            },
+        },
+        {
+            command: "dvdt.explorer.entities.showEntityDetailsByEntityName",
+            callback: async (entityName: string) => {
+                try {
+                    await dvHelper.showEntityDetails(entityName, views);
                 } catch (error) {
                     errorHandler.log(error, "showEntityDetails");
                 }
@@ -332,5 +342,5 @@ export async function validateEnablingOptions() {
                 await vscode.commands.executeCommand("setContext", `${extensionPrefix}.isJSProject`, true);
             }
         }
-    } catch (e) {}
+    } catch (e) { }
 }
