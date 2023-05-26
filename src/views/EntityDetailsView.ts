@@ -40,6 +40,8 @@ export class EntityDetailsView extends Panel {
                 viewModel.attributes += `<td>${a.LogicalName}</td>`;
                 viewModel.attributes += `<td>${a.SchemaName}</td>`;
                 viewModel.attributes += `<td>${a.AttributeType}</td>`;
+                viewModel.attributes += `<td>${a.AttributeTypeName.Value}</td>`;
+                viewModel.attributes += `<td>${a.AttributeOf ? a.AttributeOf : ''}</td>`;
                 viewModel.attributes += `<td>${a.RequiredLevel.Value}</td>`;
                 viewModel.attributes += `</tr>`;
             });

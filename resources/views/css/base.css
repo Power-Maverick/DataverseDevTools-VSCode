@@ -2,8 +2,9 @@
 body {
     background-color: transparent;
     color: var(--vscode-editor-foreground);
-    font-family: var(--vscode-font-family);
-    font-weight: var(--vscode-font-weight);
+    font-family: var(--vscode-editor-font-family);
+    font-weight: var(--vscode-editor-font-weight);
+    font-size: var(--vscode-editor-font-size );
     margin: 0;
 }
 
@@ -85,6 +86,28 @@ input {
 .table {
     color: var(--vscode-editor-foreground);
 }
+
+.sortable th {
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.table .sort-icon {
+    display: inline-block;
+    margin-left: 5px;
+    font-weight: bold;
+  }
+  
+.table .sort-icon .asc-icon,
+.table .sort-icon .desc-icon {
+    display: none;
+}
+  
+.table th .asc .asc-icon,
+.table th .desc .desc-icon {
+    display: inline;
+}
+  
 
 /**** Navigation ****/
 nav {

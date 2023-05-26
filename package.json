@@ -107,6 +107,11 @@
                     "group": "navigation@2"
                 },
                 {
+                    "command": "dvdt.explorer.entities.showMetadataExplorer",
+                    "when": "view == dvEntities",
+                    "group": "navigation@2"
+                },
+                {
                     "command": "dvdt.explorer.entities.filteron",
                     "when": "view == dvEntities && !devtools.entitiesFiltered",
                     "group": "navigation@2"
@@ -384,6 +389,15 @@
                 "icon": {
                     "light": "resources/light/filter-off.svg",
                     "dark": "resources/dark/filter-off.svg"
+                }
+            },
+            {
+                "command": "dvdt.explorer.entities.showMetadataExplorer",
+                "title": "Show Metadata Explorer",
+                "category": "%dvdt.explorer.metadataexplorer%",
+                "icon": {
+                    "light": "resources/light/table-light.svg",
+                    "dark": "resources/dark/table-light.svg"
                 }
             },
             {

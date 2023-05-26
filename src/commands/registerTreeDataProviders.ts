@@ -7,14 +7,21 @@ import { WebResourcesDataProvider } from "../trees/webResourcesDataProvider";
 import { ICommand } from "../utils/Interfaces";
 import { ToolsDataProvider } from "../tools/toolsDataProvider";
 import { CliCommandDataProvider } from "../cliCommands/cliCommandsDataProvider";
+import { ViewBase } from "../views/ViewBase";
+import TelemetryReporter from "vscode-extension-telemetry";
+import { ErrorHandler } from "../helpers/errorHandler";
 
 /**
  * This function registers all the commands for Tree Data Provider that are available in the Dataverse DevTools extension.
- * @param vscontext - vscode.ExtensionContext
+ * @param vscontext - vscode.ExtensionContext 
+ * @param {TelemetryReporter} tr - The TelemetryReporter object.
  */
-export function registerTreeDataProviders(vscontext: vscode.ExtensionContext): void {
+export const registerTreeDataProviders = (vscontext: vscode.ExtensionContext, tr: TelemetryReporter): void => {
     const dvHelper = new DataverseHelper(vscontext);
     const uploadHelper = new WebResourceHelper(vscontext, dvHelper);
+
+    const views = new ViewBase(vscontext);
+    const errorHandler = new ErrorHandler(tr);
 
     const dataverseConnProvider = new DataverseConnectionDataProvider(vscontext);
     vscode.window.registerTreeDataProvider("dvConnections", dataverseConnProvider);
@@ -59,6 +66,16 @@ export function registerTreeDataProviders(vscontext: vscode.ExtensionContext): v
         {
             command: "dvdt.explorer.webresources.filteroff",
             callback: () => wrProvider.filter(),
+        },
+        {
+            callback: async () => {
+                try {
+                    await dvHelper.showMetadataExplorer(views);
+                } catch (error) {
+                    errorHandler.log(error, "showMetadataExplorer");
+                }
+            },
+            command: "dvdt.explorer.entities.showMetadataExplorer",
         },
         {
             command: "dvdt.explorer.entities.searchon",

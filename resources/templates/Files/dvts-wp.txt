@@ -1,7 +1,7 @@
 // Usage Example: NAMESPACE.FILENAME.onLoad
 
-export onLoad(executionContext: Xrm.Events.EventContext) {
+export const onLoad = (executionContext: Xrm.Events.EventContext): void => {
     /* Use typings to create entity specific formContext. Like shown below is for 'Account' */
     //const formContext: Xrm.Account = executionContext.getFormContext();
     //formContext.getAttribute("accountnumber").getValue();
-}
+};
