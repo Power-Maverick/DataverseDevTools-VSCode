@@ -117,11 +117,23 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
             command: "dvdt.explorer.entities.showEntityDetails",
             callback: async (enItem: EntitiesTreeItem) => {
                 try {
-                    await dvHelper.showEntityDetails(enItem, views);
+                    if (enItem.desc !== undefined) {
+                        await dvHelper.showEntityDetails(enItem.desc, views);
+                    }
                 } catch (error) {
                     errorHandler.log(error, "showEntityDetails");
                 }
             },
+        },
+        {
+            callback: async (entityName: string) => {
+                try {
+                    await dvHelper.showEntityDetails(entityName, views);
+                } catch (error) {
+                    errorHandler.log(error, "showEntityDetailsByEntityName");
+                }
+            },
+            command: "dvdt.explorer.entities.showEntityDetailsByEntityName",
         },
         {
             command: "dvdt.commands.initTS",
@@ -332,5 +344,5 @@ export async function validateEnablingOptions() {
                 await vscode.commands.executeCommand("setContext", `${extensionPrefix}.isJSProject`, true);
             }
         }
-    } catch (e) {}
+    } catch (e) { }
 }

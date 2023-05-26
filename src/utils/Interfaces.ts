@@ -52,6 +52,7 @@ export interface IEntityDefinition {
     IsSLAEnabled: boolean;
     IsBPFEntity: boolean;
     IsActivity: boolean;
+    IsActivityParty: boolean;
     IsAvailableOffline: boolean;
     IsAIRUpdated: boolean;
     IconLargeName: null;
@@ -96,6 +97,7 @@ export interface IEntityDefinition {
     IsVisibleInMobileClient: IIs;
     IsReadOnlyInMobileClient: IIs;
     IsOfflineInMobileClient: IIs;
+    TableType: string;
     Attributes: IAttributeMetadata;
 }
 
@@ -103,8 +105,13 @@ export interface IAttributeMetadata {
     value: IAttributeDefinition[];
 }
 
+export interface IAttributeTypeName {
+    Value: string;
+}
+
 export interface IAttributeDefinition {
     AttributeType: string;
+    AttributeTypeName: IAttributeTypeName;
     AttributeOf: string;
     MaxLength: number;
     IsPrimaryId: boolean;

@@ -1,3 +1,5 @@
+// Usage Example: FILENAME.onLoad
+
 export var FILENAME = (function () {
     ("use strict");
     var formContext;

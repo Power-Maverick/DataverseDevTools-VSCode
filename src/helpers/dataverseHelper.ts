@@ -38,6 +38,7 @@ import { ConnectionDetailsView } from "../views/ConnectionDetailsView";
 import { EntityDetailsView } from "../views/EntityDetailsView";
 import { EntitiesTreeItem } from "../trees/entitiesDataProvider";
 import { updateConnectionStatusBar } from "../commands/registerCommands";
+import { EntityListView } from "../views/EntityListView";
 
 export class DataverseHelper {
     private vsstate: State;
@@ -213,23 +214,23 @@ export class DataverseHelper {
      */
     public async getOptionsetForAttribute(entityLogicalName: string, attrLogicalName: string): Promise<IOptionSet> {
 
-        let url = '';
-
         if (attrLogicalName === 'statecode') {
-            url = `EntityDefinitions(LogicalName='${entityLogicalName}')/Attributes(LogicalName='statecode')/Microsoft.Dynamics.CRM.StateAttributeMetadata?$select=LogicalName&$expand=OptionSet($select=Options),GlobalOptionSet($select=Options)`;
+            return await this.innerGetOptionsetForAttribute(entityLogicalName, attrLogicalName, "Microsoft.Dynamics.CRM.StateAttributeMetadata");
         } else if (attrLogicalName === 'statuscode') {
-            url = `EntityDefinitions(LogicalName='${entityLogicalName}')/Attributes(LogicalName='statuscode')/Microsoft.Dynamics.CRM.StatusAttributeMetadata?$select=LogicalName&$expand=OptionSet($select=Options),GlobalOptionSet($select=Options)`;
+            return await this.innerGetOptionsetForAttribute(entityLogicalName, attrLogicalName, "Microsoft.Dynamics.CRM.StatusAttributeMetadata");
         } else {
-            url = `EntityDefinitions(LogicalName='${entityLogicalName}')/Attributes(LogicalName='${attrLogicalName}')/Microsoft.Dynamics.CRM.PicklistAttributeMetadata?$select=LogicalName&$expand=OptionSet($select=Options),GlobalOptionSet($select=Options)`;
+            return await this.innerGetOptionsetForAttribute(entityLogicalName, attrLogicalName, "Microsoft.Dynamics.CRM.PicklistAttributeMetadata");
         }
+    }
 
-        const respData = await this.request.requestData<IOptionSetMetadata>(url);
-        if (respData) {
-            return Promise.resolve(respData.OptionSet);
-        } else {
-            // eslint-disable-next-line @typescript-eslint/naming-convention
-            return Promise.resolve({ Options: [] });
-        }
+    /**
+     * Get the OptionSet for an multi select attribute.
+     * @param {string} entityLogicalName - The logical name of the entity.
+     * @param {string} attrLogicalName - The logical name of the attribute.
+     * @returns The optionset for the attribute.
+     */
+    public async getMultiSelectOptionsetForAttribute(entityLogicalName: string, attrLogicalName: string): Promise<IOptionSet> {
+        return await this.innerGetOptionsetForAttribute(entityLogicalName, attrLogicalName, "Microsoft.Dynamics.CRM.MultiSelectPicklistAttributeMetadata");
     }
 
     /**
@@ -270,16 +271,34 @@ export class DataverseHelper {
 
     /**
      * Show the details of the entity for the current connection.
-     * @param {EntitiesTreeItem} enItem - The entity tree item that was selected.
+     * @param {string} entityName - EntityName of tree item that was selected.
      * @param {ViewBase} view - ViewBase - The view that is calling this method.
      */
-    public async showEntityDetails(enItem: EntitiesTreeItem, view: ViewBase) {
-        const en: IEntityDefinition | undefined = this.getEntityByName(enItem.desc!);
+    public async showEntityDetails(entityName: string, view: ViewBase) {
+        const en: IEntityDefinition | undefined = this.getEntityByName(entityName);
         if (en) {
             en.Attributes = { value: await this.getAttributesForEntity(en.LogicalName) };
-            const webview = await view.getWebView({ type: "showEntityDetails", title: "Show Entity Details" });
+            const webview = await view.getWebView({ type: "showEntityDetails", title: `Entity Details: ${entityName}` });
             new EntityDetailsView(en, webview, this.vscontext);
         }
+    }
+
+    /**
+     * Show the details of the entity for the current connection.
+     * @param {ViewBase} view - ViewBase - The view that is calling this method.
+     */
+    public async showMetadataExplorer(view: ViewBase) {
+        const vsstate = new State(this.vscontext);
+        const jsonConn: IEntityMetadata = vsstate.getFromWorkspace(entityDefinitionsStoreKey);
+
+        let entities: IEntityDefinition[] = [];
+
+        if (jsonConn) {
+            entities = jsonConn.value;
+        }
+
+        const webview = await view.getWebView({ type: "showEntityList", title: "Show Entity List" });
+        new EntityListView(entities, webview, this.vscontext);
     }
 
     /**
@@ -600,6 +619,20 @@ export class DataverseHelper {
         }
 
         return undefined;
+    }
+
+
+    private async innerGetOptionsetForAttribute(entityLogicalName: string, attrLogicalName: string, metadataType: string): Promise<IOptionSet> {
+
+        let url = `EntityDefinitions(LogicalName='${entityLogicalName}')/Attributes(LogicalName='${attrLogicalName}')/${metadataType}?$select=LogicalName&$expand=OptionSet($select=Options),GlobalOptionSet($select=Options)`;
+
+        const respData = await this.request.requestData<IOptionSetMetadata>(url);
+        if (respData) {
+            return Promise.resolve(respData.OptionSet);
+        } else {
+            // eslint-disable-next-line @typescript-eslint/naming-convention
+            return Promise.resolve({ Options: [] });
+        }
     }
     //#endregion Private
 }
