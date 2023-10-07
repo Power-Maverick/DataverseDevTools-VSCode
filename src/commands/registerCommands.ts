@@ -1,22 +1,20 @@
+import TelemetryReporter from "@vscode/extension-telemetry";
 import * as vscode from "vscode";
-import TelemetryReporter from "vscode-extension-telemetry";
+import { CliCommandTreeItem } from "../cliCommands/cliCommandsDataProvider";
 import { CLIHelper } from "../helpers/cliHelper";
-import { WebResourceHelper } from "../helpers/webResourceHelper";
 import { DataverseHelper } from "../helpers/dataverseHelper";
+import { DRBHelper } from "../helpers/drbHelper";
+import { ErrorHandler } from "../helpers/errorHandler";
 import { TemplateHelper } from "../helpers/templateHelper";
 import { TypingsHelper } from "../helpers/typingsHelper";
+import { WebResourceHelper } from "../helpers/webResourceHelper";
+import { ToolsTreeItem } from "../tools/toolsDataProvider";
 import { DataverseConnectionTreeItem } from "../trees/dataverseConnectionDataProvider";
 import { EntitiesTreeItem } from "../trees/entitiesDataProvider";
-import { connectionStatusBarUniqueId, extensionName, extensionPrefix, fileExtensions, jsConfigFileName, tsConfigFileName } from "../utils/Constants";
+import { connectionStatusBarUniqueId, extensionPrefix, jsConfigFileName, tsConfigFileName } from "../utils/Constants";
 import { ICommand, IConnection } from "../utils/Interfaces";
 import { ViewBase } from "../views/ViewBase";
 import { addConnection } from "./connections";
-import { openUri } from "../utils/OpenUri";
-import { ErrorHandler } from "../helpers/errorHandler";
-import { DRBHelper } from "../helpers/drbHelper";
-import { WebResourcesTreeItem } from "../trees/webResourcesDataProvider";
-import { ToolsTreeItem } from "../tools/toolsDataProvider";
-import { CliCommandTreeItem } from "../cliCommands/cliCommandsDataProvider";
 
 let dvStatusBarItem: vscode.StatusBarItem;
 
@@ -344,5 +342,5 @@ export async function validateEnablingOptions() {
                 await vscode.commands.executeCommand("setContext", `${extensionPrefix}.isJSProject`, true);
             }
         }
-    } catch (e) { }
+    } catch (e) {}
 }

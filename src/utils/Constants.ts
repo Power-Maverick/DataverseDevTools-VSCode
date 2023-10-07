@@ -33,7 +33,7 @@ export enum LoginTypes {
     userNamePassword = "Username/Password",
     microsoftLogin = "Microsoft Login Prompt",
     clientIdSecret = "Client Id and Secret",
-    azure = "Azure",
+    // azure = "Azure",
 }
 
 export enum WebResourceType {
