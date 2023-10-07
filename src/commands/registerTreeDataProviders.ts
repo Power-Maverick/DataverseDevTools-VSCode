@@ -1,19 +1,19 @@
 import * as vscode from "vscode";
-import { WebResourceHelper } from "../helpers/webResourceHelper";
+import TelemetryReporter from "vscode-extension-telemetry";
+import { CliCommandDataProvider } from "../cliCommands/cliCommandsDataProvider";
 import { DataverseHelper } from "../helpers/dataverseHelper";
+import { ErrorHandler } from "../helpers/errorHandler";
+import { WebResourceHelper } from "../helpers/webResourceHelper";
+import { ToolsDataProvider } from "../tools/toolsDataProvider";
 import { DataverseConnectionDataProvider } from "../trees/dataverseConnectionDataProvider";
 import { EntitiesDataProvider } from "../trees/entitiesDataProvider";
 import { WebResourcesDataProvider } from "../trees/webResourcesDataProvider";
 import { ICommand } from "../utils/Interfaces";
-import { ToolsDataProvider } from "../tools/toolsDataProvider";
-import { CliCommandDataProvider } from "../cliCommands/cliCommandsDataProvider";
 import { ViewBase } from "../views/ViewBase";
-import TelemetryReporter from "vscode-extension-telemetry";
-import { ErrorHandler } from "../helpers/errorHandler";
 
 /**
  * This function registers all the commands for Tree Data Provider that are available in the Dataverse DevTools extension.
- * @param vscontext - vscode.ExtensionContext 
+ * @param vscontext - vscode.ExtensionContext
  * @param {TelemetryReporter} tr - The TelemetryReporter object.
  */
 export const registerTreeDataProviders = (vscontext: vscode.ExtensionContext, tr: TelemetryReporter): void => {
@@ -97,4 +97,4 @@ export const registerTreeDataProviders = (vscontext: vscode.ExtensionContext, tr
     cmds.forEach((c) => {
         vscontext.subscriptions.push(vscode.commands.registerCommand(c.command, c.callback));
     });
-}
+};
