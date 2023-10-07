@@ -1,4 +1,4 @@
-import * as xmlparser from "fast-xml-parser";
+import { XMLBuilder, XMLParser } from "fast-xml-parser";
 
 const options = {
     ignoreAttributes: false,
@@ -12,11 +12,13 @@ const options = {
 };
 
 export function xmlToJSON<T>(xmlData: string): T {
-    var jsonObj: T = xmlparser.parse(xmlData, options);
+    const parser = new XMLParser(options);
+    var jsonObj: T = parser.parse(xmlData);
     return jsonObj;
 }
 
 export function jsonToXML<T>(json: T): string {
-    var _parser = new xmlparser.j2xParser(options);
-    return _parser.parse(json);
+    const builder = new XMLBuilder(options);
+    var xmlObj = builder.build(json);
+    return xmlObj;
 }
