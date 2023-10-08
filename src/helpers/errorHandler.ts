@@ -1,5 +1,5 @@
+import TelemetryReporter from "@vscode/extension-telemetry";
 import * as vscode from "vscode";
-import TelemetryReporter from "vscode-extension-telemetry";
 import { extensionName } from "../utils/Constants";
 import { openUri } from "../utils/OpenUri";
 
@@ -22,6 +22,6 @@ export class ErrorHandler {
                 );
             }
         });
-        this.reporter.sendTelemetryException(err, { command: cmd });
+        this.reporter.sendTelemetryErrorEvent(err, { command: cmd });
     }
 }

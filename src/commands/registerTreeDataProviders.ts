@@ -1,5 +1,5 @@
+import TelemetryReporter from "@vscode/extension-telemetry";
 import * as vscode from "vscode";
-import TelemetryReporter from "vscode-extension-telemetry";
 import { CliCommandDataProvider } from "../cliCommands/cliCommandsDataProvider";
 import { DataverseHelper } from "../helpers/dataverseHelper";
 import { ErrorHandler } from "../helpers/errorHandler";
