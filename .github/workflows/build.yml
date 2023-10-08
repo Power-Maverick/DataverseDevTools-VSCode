@@ -23,4 +23,4 @@ jobs:
               run: |
                   npm install
                   npm ci
-                  npm run package
+                  npm run compile
