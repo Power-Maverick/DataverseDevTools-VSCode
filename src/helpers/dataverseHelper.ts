@@ -1,44 +1,43 @@
 import * as vscode from "vscode";
-import { loginWithAzure, loginWithClientIdSecret, loginWithPrompt, loginWithRefreshToken, loginWithUsernamePassword } from "../login/login";
-import { Placeholders } from "../utils/Placeholders";
-import { ErrorMessages } from "../utils/ErrorMessages";
-import { State } from "../utils/State";
+import { ProgressLocation } from "vscode";
+import { updateConnectionStatusBar } from "../commands/registerCommands";
+import { loginWithClientIdSecret, loginWithPrompt, loginWithRefreshToken, loginWithUsernamePassword } from "../login/login";
+import { DataverseConnectionTreeItem } from "../trees/dataverseConnectionDataProvider";
 import {
-    IAttributeDefinition,
-    IAttributeMetadata,
-    IConnection,
-    IEntityDefinition,
-    IEntityMetadata,
-    IOptionSet,
-    IOptionSetMetadata,
-    IComponentUpdate,
-    ISolutions,
-    IWebResource,
-    ISolutionComponents,
-    Token,
-    IWebResources,
-} from "../utils/Interfaces";
-import {
+    LoginTypes,
     connectionCurrentStoreKey,
     connectionStoreKey,
     customDataverseClientId,
     entityDefinitionsStoreKey,
     environmentTypes,
-    LoginTypes,
     reservedWords,
     solDefinitionsStoreKey,
     wrDefinitionsStoreKey,
 } from "../utils/Constants";
-import { DataverseConnectionTreeItem } from "../trees/dataverseConnectionDataProvider";
-import { RequestHelper } from "./requestHelper";
-import { ProgressLocation } from "vscode";
+import { ErrorMessages } from "../utils/ErrorMessages";
+import {
+    IAttributeDefinition,
+    IAttributeMetadata,
+    IComponentUpdate,
+    IConnection,
+    IEntityDefinition,
+    IEntityMetadata,
+    IOptionSet,
+    IOptionSetMetadata,
+    ISolutionComponents,
+    ISolutions,
+    IWebResource,
+    IWebResources,
+    Token,
+} from "../utils/Interfaces";
 import { openUri } from "../utils/OpenUri";
-import { ViewBase } from "../views/ViewBase";
+import { Placeholders } from "../utils/Placeholders";
+import { State } from "../utils/State";
 import { ConnectionDetailsView } from "../views/ConnectionDetailsView";
 import { EntityDetailsView } from "../views/EntityDetailsView";
-import { EntitiesTreeItem } from "../trees/entitiesDataProvider";
-import { updateConnectionStatusBar } from "../commands/registerCommands";
 import { EntityListView } from "../views/EntityListView";
+import { ViewBase } from "../views/ViewBase";
+import { RequestHelper } from "./requestHelper";
 
 export class DataverseHelper {
     private vsstate: State;
@@ -123,7 +122,7 @@ export class DataverseHelper {
                                 conn.userName = JSON.parse(Buffer.from(tokenResponse.access_token.split(".")[1], "base64").toString())?.appid;
                                 break;
                             case LoginTypes.userNamePassword:
-                            case LoginTypes.azure:
+                            // case LoginTypes.azure:
                             case LoginTypes.microsoftLogin:
                             default:
                                 conn.userName = JSON.parse(Buffer.from(tokenResponse.access_token.split(".")[1], "base64").toString())?.upn;
@@ -213,10 +212,9 @@ export class DataverseHelper {
      * @returns The optionset for the attribute.
      */
     public async getOptionsetForAttribute(entityLogicalName: string, attrLogicalName: string): Promise<IOptionSet> {
-
-        if (attrLogicalName === 'statecode') {
+        if (attrLogicalName === "statecode") {
             return await this.innerGetOptionsetForAttribute(entityLogicalName, attrLogicalName, "Microsoft.Dynamics.CRM.StateAttributeMetadata");
-        } else if (attrLogicalName === 'statuscode') {
+        } else if (attrLogicalName === "statuscode") {
             return await this.innerGetOptionsetForAttribute(entityLogicalName, attrLogicalName, "Microsoft.Dynamics.CRM.StatusAttributeMetadata");
         } else {
             return await this.innerGetOptionsetForAttribute(entityLogicalName, attrLogicalName, "Microsoft.Dynamics.CRM.PicklistAttributeMetadata");
@@ -305,9 +303,7 @@ export class DataverseHelper {
      * Get all the web resources from the CRM system and save them in the VS Code workspace.
      */
     public async getWebResources() {
-        const respData = await this.request.requestData<IWebResources>(
-            "webresourceset?$filter=(ismanaged%20eq%20false%20and%20iscustomizable/Value%20eq%20true%20)",
-        );
+        const respData = await this.request.requestData<IWebResources>("webresourceset?$filter=(ismanaged%20eq%20false%20and%20iscustomizable/Value%20eq%20true%20)");
         this.vsstate.saveInWorkspace(wrDefinitionsStoreKey, respData);
         vscode.commands.executeCommand("dvdt.explorer.webresources.loadWebResources");
     }
@@ -415,9 +411,9 @@ export class DataverseHelper {
                 case LoginTypes.microsoftLogin:
                     tokenResponse = await loginWithPrompt(customDataverseClientId, false, currentConnection.environmentUrl, openUri, redirectTimeout);
                     break;
-                case LoginTypes.azure:
-                    tokenResponse = await loginWithAzure(currentConnection.environmentUrl);
-                    break;
+                // case LoginTypes.azure:
+                //     tokenResponse = await loginWithAzure(currentConnection.environmentUrl);
+                //     break;
             }
         }
 
@@ -482,9 +478,9 @@ export class DataverseHelper {
                     return undefined;
                 }
                 break;
-            case LoginTypes.azure:
-                logintypeResponse = LoginTypes.azure;
-                break;
+            // case LoginTypes.azure:
+            //     logintypeResponse = LoginTypes.azure;
+            //     break;
             case LoginTypes.microsoftLogin:
             default:
                 logintypeResponse = LoginTypes.microsoftLogin;
@@ -528,8 +524,8 @@ export class DataverseHelper {
                 return await loginWithUsernamePassword(conn.environmentUrl, conn.userName!, conn.password!);
             case LoginTypes.clientIdSecret:
                 return await loginWithClientIdSecret(conn.environmentUrl, conn.userName!, conn.password!, conn.tenantId!);
-            case LoginTypes.azure:
-                return await loginWithAzure(conn.environmentUrl);
+            // case LoginTypes.azure:
+            //     return await loginWithAzure(conn.environmentUrl);
             case LoginTypes.microsoftLogin:
             default:
                 return await loginWithPrompt(customDataverseClientId, false, conn.environmentUrl, openUri, redirectTimeout);
@@ -621,9 +617,7 @@ export class DataverseHelper {
         return undefined;
     }
 
-
     private async innerGetOptionsetForAttribute(entityLogicalName: string, attrLogicalName: string, metadataType: string): Promise<IOptionSet> {
-
         let url = `EntityDefinitions(LogicalName='${entityLogicalName}')/Attributes(LogicalName='${attrLogicalName}')/${metadataType}?$select=LogicalName&$expand=OptionSet($select=Options),GlobalOptionSet($select=Options)`;
 
         const respData = await this.request.requestData<IOptionSetMetadata>(url);
@@ -637,4 +631,4 @@ export class DataverseHelper {
     //#endregion Private
 }
 
-async function redirectTimeout(): Promise<void> { }
+async function redirectTimeout(): Promise<void> {}
