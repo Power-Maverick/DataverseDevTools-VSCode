@@ -5,16 +5,10 @@
     "tasks": [
         {
             "type": "npm",
-            "script": "webpack",
-            "problemMatcher": "$ts-webpack",
-            "isBackground": true,
-            "presentation": {
-                "reveal": "never"
-            },
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
+            "script": "webpack-dev",
+            "problemMatcher": [],
+            "label": "npm: webpack-dev",
+            "detail": "webpack --mode development --watch"
         }
     ]
 }
