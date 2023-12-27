@@ -51,6 +51,8 @@
   <a href="https://github.com/Power-Maverick/DataverseDevTools-VSCode/discussions/categories/q-a">Support</a>
 </h3>
 
+> CURRENTLY TOOL IS FACING SOME ISSUES WITH THE LATEST VSCODE VERSION AND I AM ACTIVELY TRYING TO RESOLVE IT. There is an open discussion created with VS Code team which you can find [here](https://github.com/microsoft/vscode-discussions/discussions/859#discussion-5711556)
+
 > Do check-out the [planned features](#-planned-features) list. We need your help to complete these planned features.
 
 **Table of contents**
@@ -59,7 +61,7 @@
   - [Connect to your Dataverse environment](#connect-to-your-dataverse-environment)
   - [Remembers the connected environment per workspace](#remembers-the-connected-environment-per-workspace)
   - [See connection and entity details (with copy feature)](#see-connection-and-entity-details-with-copy-feature)
-  - [Initialize TypeScript project & add TS File](#initialize-typescript-project--add-ts-file)
+  - [Initialize TypeScript project \& add TS File](#initialize-typescript-project--add-ts-file)
   - [Generate Typings](#generate-typings)
   - [Intellisense for type generated](#intellisense-for-type-generated)
   - [Upload Web Resources](#upload-web-resources)
