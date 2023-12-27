@@ -1,21 +1,21 @@
 name: Release
 on:
-  push:
-    branches:
-      - release
-  workflow_dispatch:
+    push:
+        branches:
+            - release
+    workflow_dispatch:
 
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
-        with:
-          node-version: 14.x
-      - run: npm ci
-      - name: Publish
-        uses: HaaLeo/publish-vscode-extension@v0
-        with:
-          pat: ${{ secrets.VSCE_PAT }}
-          registryUrl: https://marketplace.visualstudio.com
+    deploy:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - uses: actions/setup-node@v1
+              with:
+                  node-version: 20.x
+            - run: npm ci
+            - name: Publish
+              uses: HaaLeo/publish-vscode-extension@v0
+              with:
+                  pat: ${{ secrets.VSCE_PAT }}
+                  registryUrl: https://marketplace.visualstudio.com
