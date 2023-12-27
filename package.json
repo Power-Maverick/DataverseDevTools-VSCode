@@ -1,11 +1,39 @@
 {
     "name": "dataverse-devtools",
     "displayName": "Dataverse DevTools",
+    "version": "2.1.12",
     "description": "The all-in-one tool to develop code for Dataverse/Dynamics 365. Helps you connect to a Dataverse environment, generate TypeScript definitions for entities, create different type of Dataverse-specific projects and much more.",
     "publisher": "danish-naglekar",
-    "version": "2.1.11",
+    "author": {
+        "name": "Danish Naglekar"
+    },
+    "categories": [
+        "Other"
+    ],
+    "icon": "resources/DVDT-Icon.png",
+    "galleryBanner": {
+        "color": "#C80000",
+        "theme": "dark"
+    },
+    "pricing": "Free",
+    "activationEvents": [
+        "*"
+    ],
     "engines": {
         "vscode": "^1.58.0"
+    },
+    "main": "./out/extension",
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "pretest": "npm run compile && npm run lint",
+        "lint": "eslint src --ext ts",
+        "format": "prettier --write src",
+        "test": "node ./out/test/runTest.js",
+        "version": "auto-changelog -p && git add CHANGELOG.md",
+        "contributors:add": "all-contributors add",
+        "contributors:generate": "all-contributors generate"
     },
     "homepage": "https://github.com/Power-Maverick/DataverseDevTools-VSCode",
     "bugs": {
@@ -15,9 +43,6 @@
         "type": "git",
         "url": "https://github.com/Power-Maverick/DataverseDevTools-VSCode.git"
     },
-    "categories": [
-        "Other"
-    ],
     "keywords": [
         "Dataverse",
         "Power Apps",
@@ -27,11 +52,6 @@
         "Dev Tools"
     ],
     "qna": "https://github.com/Power-Maverick/DataverseDevTools-VSCode/discussions",
-    "activationEvents": [
-        "*"
-    ],
-    "main": "./out/extension.js",
-    "icon": "resources/DVDT-Icon.png",
     "contributes": {
         "views": {
             "dvd-explorer": [
@@ -527,18 +547,6 @@
                 }
             }
         }
-    },
-    "scripts": {
-        "vscode:prepublish": "npm run compile",
-        "compile": "tsc -p ./",
-        "watch": "tsc -watch -p ./",
-        "pretest": "npm run compile && npm run lint",
-        "lint": "eslint src --ext ts",
-        "format": "prettier --write src",
-        "test": "node ./out/test/runTest.js",
-        "version": "auto-changelog -p && git add CHANGELOG.md",
-        "contributors:add": "all-contributors add",
-        "contributors:generate": "all-contributors generate"
     },
     "devDependencies": {
         "@types/glob": "^7.1.3",
