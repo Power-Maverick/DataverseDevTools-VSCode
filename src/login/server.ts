@@ -3,8 +3,8 @@ import * as fs from "fs";
 import * as http from "http";
 import * as net from "net";
 import * as path from "path";
-import * as url from "url";
 import { parse, ParsedUrlQuery } from "querystring";
+import * as url from "url";
 
 interface Deferred<T> {
     resolve: (result: T | Promise<T>) => void;
@@ -88,10 +88,10 @@ export function createServer(nonce: string): {
                 }
                 break;
             case "/":
-                sendFile(res, path.join(__filename, "..", "..", "..", "CodeFlowResult", "index.html"), "text/html; charset=utf-8");
+                sendFile(res, path.join(__filename, "..", "CodeFlowResult", "index.html"), "text/html; charset=utf-8");
                 break;
             case "/main.css":
-                sendFile(res, path.join(__filename, "..", "..", "..", "CodeFlowResult", "main.css"), "text/css; charset=utf-8");
+                sendFile(res, path.join(__filename, "..", "CodeFlowResult", "main.css"), "text/css; charset=utf-8");
                 break;
             case "/callback/":
                 deferredCode.resolve(
@@ -137,10 +137,11 @@ export function createTerminateServer(server: http.Server): () => Promise<void> 
 }
 
 export async function startServer(server: http.Server, adfs: boolean): Promise<number> {
-    let portTimer: NodeJS.Timer;
+    let portTimer: NodeJS.Timeout;
     function cancelPortTimer() {
         clearTimeout(portTimer);
     }
+
     const portPromise = new Promise<number>((resolve, reject) => {
         portTimer = setTimeout(() => {
             reject(new Error("Timeout waiting for port"));

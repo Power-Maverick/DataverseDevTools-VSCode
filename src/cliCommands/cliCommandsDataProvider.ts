@@ -1,9 +1,8 @@
-import * as vscode from "vscode";
 import * as path from "path";
-import * as config from "../utils/Config";
-import { ICliCommandVerb, ICliCommandList } from "../utils/Interfaces";
-import { CliCommandItemBase } from "./cliCommandsItemBase";
+import * as vscode from "vscode";
+import { ICliCommandList, ICliCommandVerb } from "../utils/Interfaces";
 import cliInJson from "./cliCommands.json";
+import { CliCommandItemBase } from "./cliCommandsItemBase";
 
 export class CliCommandDataProvider implements vscode.TreeDataProvider<CliCommandTreeItem> {
     private cliCommands: ICliCommandList | undefined;
@@ -56,8 +55,8 @@ export class CliCommandTreeItem extends CliCommandItemBase {
     }
 
     iconPath = {
-        light: path.join(__filename, "..", "..", "..", "resources", "light", this.level === 1 ? "folder.svg" : this.level === 2 ? "cli.svg" : "generic.svg"),
-        dark: path.join(__filename, "..", "..", "..", "resources", "dark", this.level === 1 ? "folder.svg" : this.level === 2 ? "cli.svg" : "generic.svg"),
+        light: path.join(__filename, "..", "resources", "light", this.level === 1 ? "folder.svg" : this.level === 2 ? "cli.svg" : "generic.svg"),
+        dark: path.join(__filename, "..", "resources", "dark", this.level === 1 ? "folder.svg" : this.level === 2 ? "cli.svg" : "generic.svg"),
     };
 
     contextValue = this.level === 2 ? "cli-command" : "cli-group";

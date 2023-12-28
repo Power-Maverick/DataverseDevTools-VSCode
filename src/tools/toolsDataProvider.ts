@@ -1,8 +1,8 @@
-import * as vscode from "vscode";
 import * as path from "path";
+import * as vscode from "vscode";
 import { ITools } from "../utils/Interfaces";
-import { ToolsItemBase } from "./toolsItemBase";
 import toolsInJson from "./tools.json";
+import { ToolsItemBase } from "./toolsItemBase";
 
 export class ToolsDataProvider implements vscode.TreeDataProvider<ToolsTreeItem> {
     constructor(private vscontext: vscode.ExtensionContext) {}
@@ -32,16 +32,12 @@ export class ToolsTreeItem extends ToolsItemBase {
         light: path.join(
             __filename,
             "..",
-            "..",
-            "..",
             "resources",
             "toolIcons",
             this.toolShortName === "drb" ? "drb.png" : this.toolShortName === "prt" ? "prt.png" : this.toolShortName === "cmt" ? "cmt.png" : this.toolShortName === "pd" ? "pd.png" : "generic.svg",
         ),
         dark: path.join(
             __filename,
-            "..",
-            "..",
             "..",
             "resources",
             "toolIcons",
