@@ -1,10 +1,10 @@
-import * as vscode from "vscode";
-import * as path from "path";
-import { State } from "../utils/State";
-import { connectionCurrentStoreKey, connectionStoreKey, environmentTypes, extensionPrefix } from "../utils/Constants";
-import { IConnection, IStore } from "../utils/Interfaces";
 import { observable } from "mobx";
+import * as path from "path";
+import * as vscode from "vscode";
+import { connectionCurrentStoreKey, connectionStoreKey, environmentTypes, extensionPrefix } from "../utils/Constants";
 import { groupBy } from "../utils/ExtensionMethods";
+import { IConnection, IStore } from "../utils/Interfaces";
+import { State } from "../utils/State";
 import { TreeItemBase } from "./treeItemBase";
 
 export class DataverseConnectionDataProvider implements vscode.TreeDataProvider<DataverseConnectionTreeItem> {
@@ -119,8 +119,6 @@ export class DataverseConnectionTreeItem extends TreeItemBase {
         light: path.join(
             __filename,
             "..",
-            "..",
-            "..",
             "resources",
             "light",
             this.level === 1
@@ -135,8 +133,6 @@ export class DataverseConnectionTreeItem extends TreeItemBase {
         ),
         dark: path.join(
             __filename,
-            "..",
-            "..",
             "..",
             "resources",
             "dark",

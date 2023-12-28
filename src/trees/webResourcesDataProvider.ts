@@ -1,14 +1,14 @@
-import * as vscode from "vscode";
-import * as path from "path";
-import { State } from "../utils/State";
-import { extensionName, extensionPrefix, WebResourceType, wrDefinitionsStoreKey } from "../utils/Constants";
-import { ISolutionComponent, IStore, IWebResource, IWebResources } from "../utils/Interfaces";
 import { observable } from "mobx";
-import { TreeItemBase } from "./treeItemBase";
-import { toArray } from "../utils/ExtensionMethods";
-import { WebResourceHelper } from "../helpers/webResourceHelper";
+import * as path from "path";
+import * as vscode from "vscode";
 import { DataverseHelper } from "../helpers/dataverseHelper";
+import { WebResourceHelper } from "../helpers/webResourceHelper";
+import { extensionName, extensionPrefix, WebResourceType, wrDefinitionsStoreKey } from "../utils/Constants";
+import { toArray } from "../utils/ExtensionMethods";
+import { ISolutionComponent, IStore, IWebResource, IWebResources } from "../utils/Interfaces";
 import { Placeholders } from "../utils/Placeholders";
+import { State } from "../utils/State";
+import { TreeItemBase } from "./treeItemBase";
 
 export class WebResourcesDataProvider implements vscode.TreeDataProvider<WebResourcesTreeItem> {
     private refreshTreeData: vscode.EventEmitter<WebResourcesTreeItem | undefined | void> = new vscode.EventEmitter<WebResourcesTreeItem | undefined | void>();
@@ -17,7 +17,7 @@ export class WebResourcesDataProvider implements vscode.TreeDataProvider<WebReso
     private areWRFiltered: boolean = false;
     private areWRSearched: boolean = false;
 
-    constructor(private vscontext: vscode.ExtensionContext, private dvHelper: DataverseHelper, private uploadHelper: WebResourceHelper) { }
+    constructor(private vscontext: vscode.ExtensionContext, private dvHelper: DataverseHelper, private uploadHelper: WebResourceHelper) {}
 
     async refresh(): Promise<void> {
         await this.populateWebResources();
@@ -32,14 +32,12 @@ export class WebResourcesDataProvider implements vscode.TreeDataProvider<WebReso
         if (!element) {
             // Parent
 
-            const allowedFolder = ['html', 'css', 'script', 'others'];
+            const allowedFolder = ["html", "css", "script", "others"];
 
             let parentTree: WebResourcesTreeItem[] = [];
             toArray(WebResourceType).map((t: WebResourceType) => {
                 if (allowedFolder.indexOf(t.toString()) > WebResourceType.others) {
-                    parentTree.push(
-                        new WebResourcesTreeItem(
-                            t.toString(), undefined, vscode.TreeItemCollapsibleState.Expanded, 1));
+                    parentTree.push(new WebResourcesTreeItem(t.toString(), undefined, vscode.TreeItemCollapsibleState.Expanded, 1));
                 }
             });
 
@@ -50,8 +48,7 @@ export class WebResourcesDataProvider implements vscode.TreeDataProvider<WebReso
             let checkType: Array<IWebResource> | undefined = undefined;
 
             if (selectedType === WebResourceType.others) {
-                checkType = this.webResource.filter(
-                    (w) => w.webresourcetype !== undefined && w.webresourcetype > WebResourceType.script);
+                checkType = this.webResource.filter((w) => w.webresourcetype !== undefined && w.webresourcetype > WebResourceType.script);
             } else {
                 checkType = this.webResource.filter((w) => w.webresourcetype === selectedType);
             }
@@ -208,40 +205,36 @@ export class WebResourcesTreeItem extends TreeItemBase {
         light: path.join(
             __filename,
             "..",
-            "..",
-            "..",
             "resources",
             "light",
             this.label === "html"
                 ? "html.svg"
                 : this.label === "css"
-                    ? "css.svg"
-                    : this.label === "script"
-                        ? "js.svg"
-                        : this.level === 2 && !this.showCheck
-                            ? "file-red.svg"
-                            : this.level === 2 && this.showCheck
-                                ? "file-green.svg"
-                                : "generic.svg",
+                ? "css.svg"
+                : this.label === "script"
+                ? "js.svg"
+                : this.level === 2 && !this.showCheck
+                ? "file-red.svg"
+                : this.level === 2 && this.showCheck
+                ? "file-green.svg"
+                : "generic.svg",
         ),
         dark: path.join(
             __filename,
-            "..",
-            "..",
             "..",
             "resources",
             "dark",
             this.label === "html"
                 ? "html.svg"
                 : this.label === "css"
-                    ? "css.svg"
-                    : this.label === "script"
-                        ? "js.svg"
-                        : this.level === 2 && !this.showCheck
-                            ? "file-red.svg"
-                            : this.level === 2 && this.showCheck
-                                ? "file-green.svg"
-                                : "generic.svg",
+                ? "css.svg"
+                : this.label === "script"
+                ? "js.svg"
+                : this.level === 2 && !this.showCheck
+                ? "file-red.svg"
+                : this.level === 2 && this.showCheck
+                ? "file-green.svg"
+                : "generic.svg",
         ),
     };
 

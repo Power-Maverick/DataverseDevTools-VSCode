@@ -1,12 +1,12 @@
-import * as vscode from "vscode";
-import * as path from "path";
-import { State } from "../utils/State";
-import { entityDefinitionsStoreKey, extensionName, extensionPrefix } from "../utils/Constants";
-import { IStore, IEntityDefinition, IEntityMetadata, ISolutionComponents, ISolutionComponent } from "../utils/Interfaces";
 import { observable } from "mobx";
-import { TreeItemBase } from "./treeItemBase";
+import * as path from "path";
+import * as vscode from "vscode";
 import { DataverseHelper } from "../helpers/dataverseHelper";
+import { entityDefinitionsStoreKey, extensionName, extensionPrefix } from "../utils/Constants";
+import { IEntityDefinition, IEntityMetadata, ISolutionComponent, IStore } from "../utils/Interfaces";
 import { Placeholders } from "../utils/Placeholders";
+import { State } from "../utils/State";
+import { TreeItemBase } from "./treeItemBase";
 
 export class EntitiesDataProvider implements vscode.TreeDataProvider<EntitiesTreeItem> {
     private refreshTreeData: vscode.EventEmitter<EntitiesTreeItem | undefined | void> = new vscode.EventEmitter<EntitiesTreeItem | undefined | void>();
@@ -177,8 +177,8 @@ export class EntitiesTreeItem extends TreeItemBase {
     }
 
     iconPath = {
-        light: path.join(__filename, "..", "..", "..", "resources", "light", this.level === 1 ? "table.svg" : this.level === 2 ? "column.svg" : "generic.svg"),
-        dark: path.join(__filename, "..", "..", "..", "resources", "dark", this.level === 1 ? "table.svg" : this.level === 2 ? "column.svg" : "generic.svg"),
+        light: path.join(__filename, "..", "resources", "light", this.level === 1 ? "table.svg" : this.level === 2 ? "column.svg" : "generic.svg"),
+        dark: path.join(__filename, "..", "resources", "dark", this.level === 1 ? "table.svg" : this.level === 2 ? "column.svg" : "generic.svg"),
     };
 
     contextValue = "entitymedata";

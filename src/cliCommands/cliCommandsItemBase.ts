@@ -1,5 +1,5 @@
-import * as vscode from "vscode";
 import * as path from "path";
+import * as vscode from "vscode";
 
 export class CliCommandItemBase extends vscode.TreeItem {
     constructor(public readonly label: string, public readonly desc: string | undefined, public readonly collapsibleState: vscode.TreeItemCollapsibleState) {
@@ -10,8 +10,8 @@ export class CliCommandItemBase extends vscode.TreeItem {
     }
 
     iconPath = {
-        light: path.join(__filename, "..", "..", "..", "resources", "light", "generic.svg"),
-        dark: path.join(__filename, "..", "..", "..", "resources", "dark", "generic.svg"),
+        light: path.join(__filename, "..", "resources", "light", "generic.svg"),
+        dark: path.join(__filename, "..", "resources", "dark", "generic.svg"),
     };
 
     //contextValue = this.level === 2 ? "connection" : "connection-child";
