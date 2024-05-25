@@ -313,7 +313,7 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
  */
 export function updateConnectionStatusBar(conn: IConnection | undefined): void {
     if (conn) {
-        dvStatusBarItem.text = conn.userName ? `Connected to: ${conn.environmentUrl} as ${conn.userName}` : `Connected to: ${conn.environmentUrl}`;
+        dvStatusBarItem.text = conn.userName ? `Connected to: ${conn.connectionName} as ${conn.userName}` : `Connected to: ${conn.connectionName}`;
         dvStatusBarItem.show();
     } else {
         dvStatusBarItem.hide();

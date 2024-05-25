@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-// import { VisualStudioCodeCredential, useIdentityPlugin } from "@azure/identity";
-// import { vsCodePlugin } from "@azure/identity-vscode";
+import { DefaultAzureCredential, useIdentityPlugin } from "@azure/identity";
+import { vsCodePlugin } from "@azure/identity-vscode";
 import * as msal from "@azure/msal-node";
 import * as axios from "axios";
 import { error } from "console";
@@ -13,7 +13,7 @@ import { activeDirectoryEndpointUrl, defaultDataverseClientId, genericTenant, to
 import { Token } from "../utils/Interfaces";
 import { CodeResult, RedirectResult, createServer, startServer } from "./server";
 
-// useIdentityPlugin(vsCodePlugin);
+useIdentityPlugin(vsCodePlugin);
 
 class UriEventHandler extends vscode.EventEmitter<vscode.Uri> implements vscode.UriHandler {
     public handleUri(uri: vscode.Uri) {
@@ -33,24 +33,24 @@ function parseQuery(uri: vscode.Uri): any {
     }, {});
 }
 
-// export async function loginWithAzure(envUrl: string): Promise<Token> {
-//     const credential = new VisualStudioCodeCredential();
-//     const scope = `${envUrl}/.default`;
-//     const tokenResponse = await credential.getToken(scope);
-//     const tokenExpiry = new Date(tokenResponse.expiresOnTimestamp);
+export async function loginWithAzure(envUrl: string): Promise<Token> {
+    const credential = new DefaultAzureCredential();
+    const scope = `${envUrl}/.default`;
+    const tokenResponse = await credential.getToken(scope);
+    const tokenExpiry = new Date(tokenResponse.expiresOnTimestamp);
 
-//     if (tokenResponse !== null) {
-//         let token: Token = {
-//             access_token: tokenResponse.token,
-//             token_type: "bearer",
-//             scope: scope,
-//             expires_in: tokenResponse.expiresOnTimestamp !== null ? (tokenExpiry.getTime() - tokenExpiry.getMilliseconds()) / 1000 : 0,
-//         };
-//         return token;
-//     } else {
-//         throw error("Unable to fetch token");
-//     }
-// }
+    if (tokenResponse !== null) {
+        let token: Token = {
+            access_token: tokenResponse.token,
+            token_type: "bearer",
+            scope: scope,
+            expires_in: tokenResponse.expiresOnTimestamp !== null ? (tokenExpiry.getTime() - tokenExpiry.getMilliseconds()) / 1000 : 0,
+        };
+        return token;
+    } else {
+        throw error("Unable to fetch token");
+    }
+}
 
 export async function loginWithUsernamePassword(envUrl: string, un: string, p: string): Promise<Token> {
     const requestUrl = tokenEndpointUrl;

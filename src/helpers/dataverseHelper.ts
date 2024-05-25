@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import { ProgressLocation } from "vscode";
 import { updateConnectionStatusBar } from "../commands/registerCommands";
-import { loginWithClientIdSecret, loginWithPrompt, loginWithRefreshToken, loginWithUsernamePassword } from "../login/login";
+import { loginWithAzure, loginWithClientIdSecret, loginWithPrompt, loginWithRefreshToken, loginWithUsernamePassword } from "../login/login";
 import { DataverseConnectionTreeItem } from "../trees/dataverseConnectionDataProvider";
 import {
     LoginTypes,
@@ -122,7 +122,7 @@ export class DataverseHelper {
                                 conn.userName = JSON.parse(Buffer.from(tokenResponse.access_token.split(".")[1], "base64").toString())?.appid;
                                 break;
                             case LoginTypes.userNamePassword:
-                            // case LoginTypes.azure:
+                            case LoginTypes.azure:
                             case LoginTypes.microsoftLogin:
                             default:
                                 conn.userName = JSON.parse(Buffer.from(tokenResponse.access_token.split(".")[1], "base64").toString())?.upn;
@@ -411,9 +411,9 @@ export class DataverseHelper {
                 case LoginTypes.microsoftLogin:
                     tokenResponse = await loginWithPrompt(customDataverseClientId, false, currentConnection.environmentUrl, openUri, redirectTimeout);
                     break;
-                // case LoginTypes.azure:
-                //     tokenResponse = await loginWithAzure(currentConnection.environmentUrl);
-                //     break;
+                case LoginTypes.azure:
+                    tokenResponse = await loginWithAzure(currentConnection.environmentUrl);
+                    break;
             }
         }
 
@@ -478,9 +478,9 @@ export class DataverseHelper {
                     return undefined;
                 }
                 break;
-            // case LoginTypes.azure:
-            //     logintypeResponse = LoginTypes.azure;
-            //     break;
+            case LoginTypes.azure:
+                logintypeResponse = LoginTypes.azure;
+                break;
             case LoginTypes.microsoftLogin:
             default:
                 logintypeResponse = LoginTypes.microsoftLogin;
@@ -524,8 +524,8 @@ export class DataverseHelper {
                 return await loginWithUsernamePassword(conn.environmentUrl, conn.userName!, conn.password!);
             case LoginTypes.clientIdSecret:
                 return await loginWithClientIdSecret(conn.environmentUrl, conn.userName!, conn.password!, conn.tenantId!);
-            // case LoginTypes.azure:
-            //     return await loginWithAzure(conn.environmentUrl);
+            case LoginTypes.azure:
+                return await loginWithAzure(conn.environmentUrl);
             case LoginTypes.microsoftLogin:
             default:
                 return await loginWithPrompt(customDataverseClientId, false, conn.environmentUrl, openUri, redirectTimeout);
