@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { DefaultAzureCredential, useIdentityPlugin } from "@azure/identity";
+import { AzureCliCredential, useIdentityPlugin } from "@azure/identity";
 import { vsCodePlugin } from "@azure/identity-vscode";
 import * as msal from "@azure/msal-node";
 import * as axios from "axios";
@@ -34,7 +34,7 @@ function parseQuery(uri: vscode.Uri): any {
 }
 
 export async function loginWithAzure(envUrl: string): Promise<Token> {
-    const credential = new DefaultAzureCredential();
+    const credential = new AzureCliCredential();
     const scope = `${envUrl}/.default`;
     const tokenResponse = await credential.getToken(scope);
     const tokenExpiry = new Date(tokenResponse.expiresOnTimestamp);
