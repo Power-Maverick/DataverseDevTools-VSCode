@@ -14,6 +14,7 @@ const options = {
 export function xmlToJSON<T>(xmlData: string): T {
     const parser = new XMLParser(options);
     var jsonObj: T = parser.parse(xmlData);
+    (jsonObj as any)["?xml"]["@_version"] = "1.0";
     return jsonObj;
 }
 
