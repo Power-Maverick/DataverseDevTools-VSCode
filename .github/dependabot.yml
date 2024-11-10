@@ -9,6 +9,7 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "monthly"
+    target-branch: "dependencies"
     # Specify labels for npm pull requests
     labels:
       - "dependencies"
