@@ -1,18 +1,18 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import * as vscode from "vscode";
-import * as path from "path";
-import { copyFolderOrFile, createTempDirectory, getFileExtension, getFileName, getRelativeFilePath, getWorkspaceFolder, readFileAsBase64Sync, readFileSync, writeFileSync } from "../utils/FileSystem";
-import { jsonToXML, xmlToJSON } from "../utils/Parsers";
-import { ILinkerFile, ILinkerRes, ISmartMatchRecord, IWebResource, IWebResources } from "../utils/Interfaces";
-import { DataverseHelper } from "./dataverseHelper";
-import { State } from "../utils/State";
-import { smartMatchStoreKey, WebResourceType, wrDefinitionsStoreKey } from "../utils/Constants";
-import { Placeholders } from "../utils/Placeholders";
-import { ErrorMessages } from "../utils/ErrorMessages";
 import { reduce } from "conditional-reduce";
+import * as path from "path";
+import * as vscode from "vscode";
+import { WebResourceType, wrDefinitionsStoreKey } from "../utils/Constants";
+import { ErrorMessages } from "../utils/ErrorMessages";
 import { decodeFromBase64, encodeToBase64, extractGuid } from "../utils/ExtensionMethods";
-import { ViewBase } from "../views/ViewBase";
+import { copyFolderOrFile, createTempDirectory, getFileExtension, getFileName, getRelativeFilePath, getWorkspaceFolder, readFileAsBase64Sync, readFileSync, writeFileSync } from "../utils/FileSystem";
+import { ILinkerFile, ILinkerRes, ISmartMatchRecord, IWebResource, IWebResources } from "../utils/Interfaces";
+import { jsonToXML, xmlToJSON } from "../utils/Parsers";
+import { Placeholders } from "../utils/Placeholders";
+import { State } from "../utils/State";
 import { SmartMatchView } from "../views/SmartMatchView";
+import { ViewBase } from "../views/ViewBase";
+import { DataverseHelper } from "./dataverseHelper";
 
 export class WebResourceHelper {
     private vsstate: State;
@@ -563,7 +563,7 @@ export class WebResourceHelper {
                     xslt: () => WebResourceType.xsl,
                     ico: () => WebResourceType.ico,
                     svg: () => WebResourceType.svg,
-                    resx: () => WebResourceType.resx
+                    resx: () => WebResourceType.resx,
                 });
 
                 const wrContent = encodeToBase64(readFileSync(fullPath));
