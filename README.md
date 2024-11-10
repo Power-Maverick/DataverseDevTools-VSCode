@@ -51,8 +51,6 @@
   <a href="https://github.com/Power-Maverick/DataverseDevTools-VSCode/discussions/categories/q-a">Support</a>
 </h3>
 
-> CURRENTLY TOOL IS FACING SOME ISSUES WITH THE LATEST VSCODE VERSION AND I AM ACTIVELY TRYING TO RESOLVE IT. There is an open discussion created with VS Code team which you can find [here](https://github.com/microsoft/vscode-discussions/discussions/859#discussion-5711556)
-
 > Do check-out the [planned features](#-planned-features) list. We need your help to complete these planned features.
 
 **Table of contents**

@@ -5,10 +5,10 @@
     "tasks": [
         {
             "type": "npm",
-            "script": "webpack-dev",
+            "script": "compile",
             "problemMatcher": [],
-            "label": "npm: webpack-dev",
-            "detail": "webpack --mode development --watch"
+            "label": "webpack",
+            "detail": "webpack"
         }
     ]
 }

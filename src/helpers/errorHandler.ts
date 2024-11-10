@@ -19,12 +19,21 @@ export class ErrorHandler {
                 var reportMessage = `VSCode version: ${vscode.version}. \nExtension version: ${extension.packageJSON.version}. \nError occured in ${cmd} command. \nError code: ${err.code}. \nError message: ${err.message}. \nError stack: ${err.stack}.`;
                 var sId = vscode.env.sessionId;
                 await openUri(
-                    `https://github.com/Power-Maverick/DataverseDevTools-VSCode/issues/new?assignees=Power-Maverick&labels=bug%2Ctriage&template=issue-form-bug.yaml&title=%5BBug%5D%3A+&logs=${decodeURI(
+                    `https://github.com/Power-Maverick/DataverseDevTools-VSCode/issues/new?assignees=Power-Maverick&labels=bug%2Ctriage&template=issue-form-bug.yaml&title=%5BBug%5D:%20Error%20in%20${cmd}+&logs=${decodeURI(
                         reportMessage,
                     )}&sessionid=${sId}`,
                 );
             }
         });
-        this.reporter.sendTelemetryErrorEvent(err, { command: cmd });
+        // All errors are logged to customEvent telemetry
+        this.reporter.sendTelemetryErrorEvent(cmd, {
+            command: cmd,
+            vscodeVersion: vscode.version,
+            extensionVersion: extension.packageJSON.version,
+            errorCode: err.code,
+            errorMessage: err.message,
+            errorStack: err.stack,
+            sessionId: vscode.env.sessionId,
+        });
     }
 }
