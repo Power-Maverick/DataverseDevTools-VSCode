@@ -25,6 +25,15 @@ export class ErrorHandler {
                 );
             }
         });
-        this.reporter.sendTelemetryErrorEvent(err, { command: cmd });
+        // All errors are logged to customEvent telemetry
+        this.reporter.sendTelemetryErrorEvent(cmd, {
+            command: cmd,
+            vscodeVersion: vscode.version,
+            extensionVersion: extension.packageJSON.version,
+            errorCode: err.code,
+            errorMessage: err.message,
+            errorStack: err.stack,
+            sessionId: vscode.env.sessionId,
+        });
     }
 }
