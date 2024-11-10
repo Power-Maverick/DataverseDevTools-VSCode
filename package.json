@@ -563,7 +563,7 @@
         "all-contributors-cli": "^6.20.0",
         "auto-changelog": "^2.3.0",
         "copy-webpack-plugin": "^11.0.0",
-        "eslint": "^8.56.0",
+        "eslint": "^9.14.0",
         "glob": "^7.1.7",
         "mocha": "^10.0.0",
         "ts-loader": "^9.5.1",
