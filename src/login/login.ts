@@ -89,9 +89,9 @@ export async function loginWithPrompt(clientId: string, adfs: boolean, dataverse
     if (vscode.env.uiKind === vscode.UIKind.Web) {
         //return loginWithoutLocalServer(clientId, environment, adfs, tenantId);
     }
-    if (adfs && terminateServer) {
-        await terminateServer();
-    }
+    // if (adfs && terminateServer) {
+    //     await terminateServer();
+    // }
 
     if (adfs) {
         //terminateServer = createTerminateServer(server);

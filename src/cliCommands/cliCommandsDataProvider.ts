@@ -55,8 +55,8 @@ export class CliCommandTreeItem extends CliCommandItemBase {
     }
 
     iconPath = {
-        light: path.join(__filename, "..", "resources", "light", this.level === 1 ? "folder.svg" : this.level === 2 ? "cli.svg" : "generic.svg"),
-        dark: path.join(__filename, "..", "resources", "dark", this.level === 1 ? "folder.svg" : this.level === 2 ? "cli.svg" : "generic.svg"),
+        light: vscode.Uri.file(path.join(__filename, "..", "resources", "light", this.level === 1 ? "folder.svg" : this.level === 2 ? "cli.svg" : "generic.svg")),
+        dark: vscode.Uri.file(path.join(__filename, "..", "resources", "dark", this.level === 1 ? "folder.svg" : this.level === 2 ? "cli.svg" : "generic.svg")),
     };
 
     contextValue = this.level === 2 ? "cli-command" : "cli-group";

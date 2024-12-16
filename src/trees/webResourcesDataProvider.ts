@@ -202,39 +202,43 @@ export class WebResourcesTreeItem extends TreeItemBase {
     }
 
     iconPath = {
-        light: path.join(
-            __filename,
-            "..",
-            "resources",
-            "light",
-            this.label === "html"
-                ? "html.svg"
-                : this.label === "css"
-                ? "css.svg"
-                : this.label === "script"
-                ? "js.svg"
-                : this.level === 2 && !this.showCheck
-                ? "file-red.svg"
-                : this.level === 2 && this.showCheck
-                ? "file-green.svg"
-                : "generic.svg",
+        light: vscode.Uri.file(
+            path.join(
+                __filename,
+                "..",
+                "resources",
+                "light",
+                this.label === "html"
+                    ? "html.svg"
+                    : this.label === "css"
+                    ? "css.svg"
+                    : this.label === "script"
+                    ? "js.svg"
+                    : this.level === 2 && !this.showCheck
+                    ? "file-red.svg"
+                    : this.level === 2 && this.showCheck
+                    ? "file-green.svg"
+                    : "generic.svg",
+            ),
         ),
-        dark: path.join(
-            __filename,
-            "..",
-            "resources",
-            "dark",
-            this.label === "html"
-                ? "html.svg"
-                : this.label === "css"
-                ? "css.svg"
-                : this.label === "script"
-                ? "js.svg"
-                : this.level === 2 && !this.showCheck
-                ? "file-red.svg"
-                : this.level === 2 && this.showCheck
-                ? "file-green.svg"
-                : "generic.svg",
+        dark: vscode.Uri.file(
+            path.join(
+                __filename,
+                "..",
+                "resources",
+                "dark",
+                this.label === "html"
+                    ? "html.svg"
+                    : this.label === "css"
+                    ? "css.svg"
+                    : this.label === "script"
+                    ? "js.svg"
+                    : this.level === 2 && !this.showCheck
+                    ? "file-red.svg"
+                    : this.level === 2 && this.showCheck
+                    ? "file-green.svg"
+                    : "generic.svg",
+            ),
         ),
     };
 

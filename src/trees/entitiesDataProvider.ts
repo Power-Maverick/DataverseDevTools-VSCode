@@ -177,8 +177,8 @@ export class EntitiesTreeItem extends TreeItemBase {
     }
 
     iconPath = {
-        light: path.join(__filename, "..", "resources", "light", this.level === 1 ? "table.svg" : this.level === 2 ? "column.svg" : "generic.svg"),
-        dark: path.join(__filename, "..", "resources", "dark", this.level === 1 ? "table.svg" : this.level === 2 ? "column.svg" : "generic.svg"),
+        light: vscode.Uri.file(path.join(__filename, "..", "resources", "light", this.level === 1 ? "table.svg" : this.level === 2 ? "column.svg" : "generic.svg")),
+        dark: vscode.Uri.file(path.join(__filename, "..", "resources", "dark", this.level === 1 ? "table.svg" : this.level === 2 ? "column.svg" : "generic.svg")),
     };
 
     contextValue = "entitymedata";
