@@ -10,8 +10,8 @@ export class ToolsItemBase extends vscode.TreeItem {
     }
 
     iconPath = {
-        light: path.join(__filename, "..", "resources", "light", "generic.svg"),
-        dark: path.join(__filename, "..", "resources", "dark", "generic.svg"),
+        light: vscode.Uri.file(path.join(__filename, "..", "resources", "light", "generic.svg")),
+        dark: vscode.Uri.file(path.join(__filename, "..", "resources", "dark", "generic.svg")),
     };
 
     //contextValue = this.level === 2 ? "connection" : "connection-child";

@@ -116,35 +116,39 @@ export class DataverseConnectionTreeItem extends TreeItemBase {
     }
 
     iconPath = {
-        light: path.join(
-            __filename,
-            "..",
-            "resources",
-            "light",
-            this.level === 1
-                ? "connection-type.svg"
-                : this.level === 2 && this.current
-                ? "dataverse.svg"
-                : this.level === 2 && !this.current
-                ? "dataverse-off.svg"
-                : this.level === 3
-                ? "connection-details.svg"
-                : "generic.svg",
+        light: vscode.Uri.file(
+            path.join(
+                __filename,
+                "..",
+                "resources",
+                "light",
+                this.level === 1
+                    ? "connection-type.svg"
+                    : this.level === 2 && this.current
+                    ? "dataverse.svg"
+                    : this.level === 2 && !this.current
+                    ? "dataverse-off.svg"
+                    : this.level === 3
+                    ? "connection-details.svg"
+                    : "generic.svg",
+            ),
         ),
-        dark: path.join(
-            __filename,
-            "..",
-            "resources",
-            "dark",
-            this.level === 1
-                ? "connection-type.svg"
-                : this.level === 2 && this.current
-                ? "dataverse.svg"
-                : this.level === 2 && !this.current
-                ? "dataverse-off.svg"
-                : this.level === 3
-                ? "connection-details.svg"
-                : "generic.svg",
+        dark: vscode.Uri.file(
+            path.join(
+                __filename,
+                "..",
+                "resources",
+                "dark",
+                this.level === 1
+                    ? "connection-type.svg"
+                    : this.level === 2 && this.current
+                    ? "dataverse.svg"
+                    : this.level === 2 && !this.current
+                    ? "dataverse-off.svg"
+                    : this.level === 3
+                    ? "connection-details.svg"
+                    : "generic.svg",
+            ),
         ),
     };
 

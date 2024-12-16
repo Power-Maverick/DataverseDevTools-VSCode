@@ -14,7 +14,11 @@ const options = {
 export function xmlToJSON<T>(xmlData: string): T {
     const parser = new XMLParser(options);
     var jsonObj: T = parser.parse(xmlData);
-    (jsonObj as any)["?xml"]["@_version"] = "1.0";
+    let tempObj = jsonObj as any;
+    // Check if xml attribute exists; if it does then add version = 1.0
+    if ("?xml" in tempObj) {
+        (jsonObj as any)["?xml"]["@_version"] = "1.0";
+    }
     return jsonObj;
 }
 

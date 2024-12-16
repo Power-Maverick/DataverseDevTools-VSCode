@@ -29,19 +29,23 @@ export class ToolsTreeItem extends ToolsItemBase {
     }
 
     iconPath = {
-        light: path.join(
-            __filename,
-            "..",
-            "resources",
-            "toolIcons",
-            this.toolShortName === "drb" ? "drb.png" : this.toolShortName === "prt" ? "prt.png" : this.toolShortName === "cmt" ? "cmt.png" : this.toolShortName === "pd" ? "pd.png" : "generic.svg",
+        light: vscode.Uri.file(
+            path.join(
+                __filename,
+                "..",
+                "resources",
+                "toolIcons",
+                this.toolShortName === "drb" ? "drb.png" : this.toolShortName === "prt" ? "prt.png" : this.toolShortName === "cmt" ? "cmt.png" : this.toolShortName === "pd" ? "pd.png" : "generic.svg",
+            ),
         ),
-        dark: path.join(
-            __filename,
-            "..",
-            "resources",
-            "toolIcons",
-            this.toolShortName === "drb" ? "drb.png" : this.toolShortName === "prt" ? "prt.png" : this.toolShortName === "cmt" ? "cmt.png" : this.toolShortName === "pd" ? "pd.png" : "generic.svg",
+        dark: vscode.Uri.file(
+            path.join(
+                __filename,
+                "..",
+                "resources",
+                "toolIcons",
+                this.toolShortName === "drb" ? "drb.png" : this.toolShortName === "prt" ? "prt.png" : this.toolShortName === "cmt" ? "cmt.png" : this.toolShortName === "pd" ? "pd.png" : "generic.svg",
+            ),
         ),
     };
 }
