@@ -587,7 +587,7 @@
         "lodash": "^4.17.21",
         "mobx": "6.3.2",
         "node-fetch": "^2.6.1",
-        "uuid": "^8.3.2"
+        "uuid": "^11.0.3"
     },
     "auto-changelog": {
         "template": "keepachangelog",
