@@ -1,11 +1,11 @@
-import * as vscode from "vscode";
 import * as dom from "dts-dom";
-import { DataverseHelper } from "./dataverseHelper";
-import { camelize, pascalize, sanitize } from "../utils/ExtensionMethods";
-import { IAttributeDefinition, IOptionValue } from "../utils/Interfaces";
-import { getWorkspaceFolder, writeFileSync } from "../utils/FileSystem";
-import { Placeholders } from "../utils/Placeholders";
+import * as vscode from "vscode";
 import { extensionName } from "../utils/Constants";
+import { camelize, pascalize, sanitize } from "../utils/ExtensionMethods";
+import { getWorkspaceFolder, writeFileSync } from "../utils/FileSystem";
+import { IAttributeDefinition, IOptionValue } from "../utils/Interfaces";
+import { Placeholders } from "../utils/Placeholders";
+import { DataverseHelper } from "./dataverseHelper";
 
 const typingNamespace: string = "Xrm";
 const typingInterface: string = "EventContext";
@@ -65,7 +65,7 @@ export class TypingsHelper {
     /**
      * Initialization constructor for VS Code Context
      */
-    constructor(private vscontext: vscode.ExtensionContext, private dvHelper: DataverseHelper) { }
+    constructor(private vscontext: vscode.ExtensionContext, private dvHelper: DataverseHelper) {}
 
     public async generateTyping(entityLogicalName: string): Promise<void> {
         const attributes = await this.dvHelper.getAttributesForEntity(entityLogicalName);
@@ -73,33 +73,38 @@ export class TypingsHelper {
         const pascalizedEntityName = pascalize(entityLogicalName);
         const interfaceAttributes = dom.create.interface(`${pascalizedEntityName}Attributes`);
         const nsXrm = dom.create.namespace(typingNamespace);
+        const nsEntity = dom.create.namespace(pascalizedEntityName);
         const nsEnum = dom.create.namespace(`${pascalizedEntityName}Enum`);
         const refPath = [dom.create.tripleSlashReferencePathDirective("../node_modules/@types/xrm/index.d.ts")];
         const emitOptions: dom.EmitOptions = {
             tripleSlashDirectives: refPath,
         };
 
-        const typeEntity = dom.create.alias(pascalizedEntityName, dom.create.namedTypeReference(`${typingOmitAttribute} & ${typingOmitControl} & ${interfaceAttributes.name}`), dom.DeclarationFlags.None);
+        const typeEntity = dom.create.alias(
+            pascalizedEntityName,
+            dom.create.namedTypeReference(`${typingOmitAttribute} & ${typingOmitControl} & ${interfaceAttributes.name}`),
+            dom.DeclarationFlags.None,
+        );
         const interfaceEventContext = dom.create.interface(typingInterface);
         interfaceEventContext.members.push(dom.create.method(typingMethod, [], typeEntity));
         nsXrm.members.push(typeEntity);
         nsXrm.members.push(interfaceEventContext);
 
-        attributes
-            .sort(this.sortAttributes)
-            .filter((a) => a.AttributeType !== "Virtual" && a.IsCustomizable.Value && !a.LogicalName.endsWith("_base"))
-            .forEach((a) => {
-                interfaceAttributes.members.push(this.createAttributeMethod(a));
-                //intf.members.push(dom.create.method("getThing", [dom.create.parameter("x", dom.type.number)], dom.type.void, dom.DeclarationFlags.Optional));
-            });
+        const filteredAttributes = attributes.sort(this.sortAttributes).filter((a) => a.AttributeType !== "Virtual" && a.IsCustomizable.Value && !a.LogicalName.endsWith("_base"));
 
-        attributes
-            .sort(this.sortAttributes)
-            .filter((a) => a.AttributeType !== "Virtual" && a.IsCustomizable.Value && !a.LogicalName.endsWith("_base"))
-            .forEach((a) => {
-                interfaceAttributes.members.push(this.createControlMethod(a));
-            });
+        filteredAttributes.forEach((a) => {
+            interfaceAttributes.members.push(this.createAttributeMethod(a));
+        });
+
+        filteredAttributes.forEach((a) => {
+            interfaceAttributes.members.push(this.createControlMethod(a));
+        });
+
         nsXrm.members.push(interfaceAttributes);
+
+        const attrEnum = this.createEntityAttributes("Attributes", filteredAttributes);
+        nsEntity.members.push(dom.create.const("EntityLogicalName", dom.type.stringLiteral(entityLogicalName)));
+        nsEntity.members.push(attrEnum);
 
         attributes
             .sort(this.sortAttributes)
@@ -113,8 +118,7 @@ export class TypingsHelper {
 
         attributes
             .sort(this.sortAttributes)
-            .filter((a) => a.AttributeTypeName.Value === "MultiSelectPicklistType"
-                && a.IsCustomizable.Value && !a.LogicalName.endsWith("_base"))
+            .filter((a) => a.AttributeTypeName.Value === "MultiSelectPicklistType" && a.IsCustomizable.Value && !a.LogicalName.endsWith("_base"))
             .forEach(async (a) => {
                 const attrEnum = await this.parseMultiSelectOptionSetsAsEnums(entityLogicalName, a.LogicalName);
                 if (attrEnum) {
@@ -141,8 +145,7 @@ export class TypingsHelper {
             let dirResponse: string | undefined = await vscode.window.showQuickPick(dirs, dirQuickPick);
 
             if (dirResponse) {
-                writeFileSync(vscode.Uri.joinPath(wsPath, dirResponse, `${camelizedEntityName}.d.ts`).fsPath, dom.emit(nsEnum, emitOptions).concat(dom.emit(nsXrm)));
-                //console.log(dom.emit(nsXrm, emitOptions));
+                writeFileSync(vscode.Uri.joinPath(wsPath, dirResponse, `${camelizedEntityName}.d.ts`).fsPath, dom.emit(nsEnum, emitOptions).concat(dom.emit(nsEntity)).concat(dom.emit(nsXrm)));
             }
         }
 
@@ -161,6 +164,16 @@ export class TypingsHelper {
         const returnType = dom.create.namedTypeReference(controlTypeDefMap.get(attr.AttributeType) || xrmControl);
 
         return dom.create.method("getControl", [logicalNameParam], returnType);
+    }
+
+    private createEntityAttributes(entityLogicalName: string, attrs: IAttributeDefinition[]): dom.EnumDeclaration {
+        const e = dom.create.enum(entityLogicalName, true, dom.DeclarationFlags.ReadOnly);
+        attrs.forEach((a) => {
+            if (a.LogicalName) {
+                e.members.push(dom.create.enumValue(a.LogicalName.toLowerCase(), a.LogicalName.toLowerCase()));
+            }
+        });
+        return e;
     }
 
     private createAttributeEnum(attrLogicalName: string, options: IOptionValue[]): dom.EnumDeclaration | undefined {
@@ -188,8 +201,7 @@ export class TypingsHelper {
         }
     }
 
-    private async parseMultiSelectOptionSetsAsEnums(entityLogicalName: string, attrLogicalName: string):
-        Promise<dom.EnumDeclaration | undefined> {
+    private async parseMultiSelectOptionSetsAsEnums(entityLogicalName: string, attrLogicalName: string): Promise<dom.EnumDeclaration | undefined> {
         const optionset = await this.dvHelper.getMultiSelectOptionsetForAttribute(entityLogicalName, attrLogicalName);
         if (optionset && optionset.Options) {
             return this.createAttributeEnum(
