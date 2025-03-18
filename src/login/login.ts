@@ -9,9 +9,9 @@ import { ServerResponse } from "http";
 import fetch from "node-fetch";
 import * as url from "url";
 import * as vscode from "vscode";
-import { activeDirectoryEndpointUrl, defaultDataverseClientId, genericTenant, tokenEndpointUrl } from "../utils/Constants";
+import { activeDirectoryEndpointUrl, authorityUrl, defaultDataverseClientId, genericTenant, tokenEndpointUrl } from "../utils/Constants";
 import { Token } from "../utils/Interfaces";
-import { CodeResult, RedirectResult, createServer, startServer } from "./server";
+import { CodeResult, RedirectResult, createServer, startServer, stopServer } from "./server";
 
 // useIdentityPlugin(vsCodePlugin);
 
@@ -23,7 +23,7 @@ class UriEventHandler extends vscode.EventEmitter<vscode.Uri> implements vscode.
 
 const handler: UriEventHandler = new UriEventHandler();
 vscode.window.registerUriHandler(handler);
-let terminateServer: () => Promise<void>;
+
 /* eslint-disable @typescript-eslint/no-unsafe-return, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access */
 function parseQuery(uri: vscode.Uri): any {
     return uri.query.split("&").reduce((prev: any, current) => {
@@ -79,12 +79,22 @@ export async function loginWithUsernamePassword(envUrl: string, un: string, p: s
     }
 }
 
-export async function loginWithPrompt(clientId: string, adfs: boolean, dataverseUrl: string, openUri: (url: string) => Promise<void>, redirectTimeout: () => Promise<void>): Promise<Token> {
+/**
+ * @deprecated Use loginWithMicrosoftPrompt instead
+ * Login with Dataverse DevTool App
+ */
+export async function loginWithDataverseDevToolApp(
+    clientId: string,
+    adfs: boolean,
+    dataverseUrl: string,
+    openUri: (url: string) => Promise<void>,
+    redirectTimeout: () => Promise<void>,
+): Promise<Token> {
     const nonce: string = crypto.randomBytes(16).toString("base64");
     const { server, redirectPromise, codePromise } = createServer(nonce);
-    const port: number = await startServer(server, adfs);
+    const port: number = await startServer(server, 19472);
     const requestUrl = tokenEndpointUrl;
-    const redirectUrl: string = `http://localhost:${port}/callback/`;
+    const redirectUrl: string = `http://localhost:${port}/`;
 
     if (vscode.env.uiKind === vscode.UIKind.Web) {
         //return loginWithoutLocalServer(clientId, environment, adfs, tenantId);
@@ -125,7 +135,6 @@ export async function loginWithPrompt(clientId: string, adfs: boolean, dataverse
         await openUri(`http://localhost:${port}/signin?nonce=${encodeURIComponent(nonce)}`);
         pca.getAuthCodeUrl(authCodeUrlParameters)
             .then(async (response) => {
-                console.log(response);
                 // eslint-disable-next-line @typescript-eslint/no-misused-promises
                 const redirectTimer = setTimeout(() => redirectTimeout().catch(console.error), 10 * 1000);
                 const redirectResult: RedirectResult = await redirectPromise;
@@ -175,7 +184,7 @@ export async function loginWithPrompt(clientId: string, adfs: boolean, dataverse
             });
             if (resp) {
                 console.log(resp.data.access_token);
-                serverResponse.writeHead(302, { Location: "/" });
+                serverResponse.writeHead(302, { Location: "/success" });
                 serverResponse.end();
                 return resp.data;
             } else {
@@ -187,6 +196,7 @@ export async function loginWithPrompt(clientId: string, adfs: boolean, dataverse
                 Location: `/?error=${encodeURIComponent((err && err.message) || "Unknown error")}`,
             });
             serverResponse.end();
+            stopServer(server);
             throw err;
         }
     } finally {
@@ -258,5 +268,95 @@ export async function loginWithRefreshToken(clientId: string, dataverseUrl: stri
         return resp.data;
     } else {
         throw error("Unable to fetch token");
+    }
+}
+
+export async function loginWithMicrosoftPrompt(dataverseUrl: string, openUri: (url: string) => Promise<void>, redirectTimeout: () => Promise<void>): Promise<Token> {
+    const nonce: string = crypto.randomBytes(16).toString("base64");
+    const { server, redirectPromise, codePromise } = createServer(nonce);
+    const port: number = await startServer(server, 19800);
+    const requestUrl = tokenEndpointUrl;
+    try {
+        const clientConfig: msal.Configuration = {
+            auth: {
+                clientId: defaultDataverseClientId,
+                authority: authorityUrl,
+            },
+        };
+        const pca = new msal.PublicClientApplication(clientConfig);
+        const authCodeUrlParameters: msal.AuthorizationUrlRequest = {
+            scopes: ["openid", `${dataverseUrl}/.default`],
+            redirectUri: `http://localhost:${port}/`,
+        };
+
+        await openUri(`http://localhost:${port}/signin?nonce=${encodeURIComponent(nonce)}`);
+        pca.getAuthCodeUrl(authCodeUrlParameters)
+            .then(async (response) => {
+                // eslint-disable-next-line @typescript-eslint/no-misused-promises
+                const redirectTimer = setTimeout(() => redirectTimeout().catch(server.closeAllConnections), 10 * 1000);
+                const redirectResult: RedirectResult = await redirectPromise;
+                if ("err" in redirectResult) {
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                    const { err, res } = redirectResult;
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+                    res.writeHead(302, { Location: `/?error=${encodeURIComponent((err && err.message) || "Unknown error")}` });
+                    res.end();
+                    throw err;
+                }
+                clearTimeout(redirectTimer);
+                const signInUrl: string = response;
+                redirectResult.res.writeHead(302, { Location: signInUrl });
+                redirectResult.res.end();
+            })
+            .catch((error) => {
+                console.log(JSON.stringify(error));
+                throw error;
+            });
+
+        const codeResult: CodeResult = await codePromise;
+        const serverResponse: ServerResponse = codeResult.res;
+        try {
+            if ("err" in codeResult) {
+                throw codeResult.err;
+            }
+            axios.default.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
+            const params = new url.URLSearchParams({
+                grant_type: "authorization_code",
+                code: codeResult.code,
+                redirect_uri: `http://localhost:${port}`,
+                client_id: defaultDataverseClientId,
+                prompt: "login",
+            });
+            const config = {
+                headers: {
+                    Origin: "http://localhost",
+                },
+            };
+
+            let resp = await axios.default.post(requestUrl, params.toString(), config).catch((error) => {
+                console.log(`ERROR: ${JSON.stringify(error.response.data)}`);
+                throw error;
+            });
+            if (resp) {
+                console.log(resp.data.access_token);
+                serverResponse.writeHead(302, { Location: "/success" });
+                serverResponse.end();
+                return resp.data;
+            } else {
+                throw error("Unable to fetch token");
+            }
+        } catch (err: any) {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+            serverResponse.writeHead(302, {
+                Location: `/?error=${encodeURIComponent((err && err.message) || "Unknown error")}`,
+            });
+            serverResponse.end();
+            stopServer(server);
+            throw err;
+        }
+    } finally {
+        setTimeout(() => {
+            stopServer(server);
+        }, 5000);
     }
 }
