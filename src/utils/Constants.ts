@@ -4,6 +4,7 @@ export const extensionCodeName: string = "dataverse-devtools";
 export const extensionUniqueName: string = "danish-naglekar.dataverse-devtools";
 export const aiKey: string = "490f2bf6-8f2a-4cc1-873b-c2a62d0a2ec8";
 export const activeDirectoryEndpointUrl: string = "https://login.microsoftonline.com/";
+export const authorityUrl: string = "https://login.windows.net/common";
 export const genericTenant: string = "organizations";
 export const tokenEndpointUrl: string = `${activeDirectoryEndpointUrl}${genericTenant}/oauth2/v2.0/token`;
 export const defaultDataverseClientId: string = `51f81489-12ee-4a9e-aaae-a2591f45987d`;
@@ -30,9 +31,9 @@ export const tsConfigFileName: string = "tsconfig.json";
 export const jsConfigFileName: string = "jsconfig.json";
 
 export enum LoginTypes {
-    userNamePassword = "Username/Password",
-    microsoftLogin = "Microsoft Login Prompt",
+    microsoftLogin = "Microsoft Login Prompt (Recommended)",
     clientIdSecret = "Client Id and Secret",
+    userNamePassword = "Username/Password",
     // azure = "Azure",
 }
 

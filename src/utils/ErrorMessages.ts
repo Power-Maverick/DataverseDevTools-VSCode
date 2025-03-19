@@ -13,4 +13,5 @@ export class ErrorMessages {
     public static webpackNamespaceRequired: string = "Namespace for Webpack is required.";
     public static wrCompareError: string = "The selected file is either not linked to a web resources or it does not exists in Dataverse.";
     public static drbConnectionError: string = "Connect to an environment before trying to load Dataverse REST Builder.";
+    public static invalidLoginType: string = "Invalid Login Type.";
 }

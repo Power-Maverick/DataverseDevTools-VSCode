@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import { ProgressLocation } from "vscode";
 import { updateConnectionStatusBar } from "../commands/registerCommands";
-import { loginWithClientIdSecret, loginWithPrompt, loginWithRefreshToken, loginWithUsernamePassword } from "../login/login";
+import { loginWithClientIdSecret, loginWithMicrosoftPrompt, loginWithRefreshToken, loginWithUsernamePassword } from "../login/login";
 import { DataverseConnectionTreeItem } from "../trees/dataverseConnectionDataProvider";
 import {
     LoginTypes,
@@ -409,7 +409,7 @@ export class DataverseHelper {
                     tokenResponse = await loginWithClientIdSecret(currentConnection.environmentUrl, currentConnection.userName!, currentConnection.password!, currentConnection.tenantId!);
                     break;
                 case LoginTypes.microsoftLogin:
-                    tokenResponse = await loginWithPrompt(customDataverseClientId, false, currentConnection.environmentUrl, openUri, redirectTimeout);
+                    tokenResponse = await loginWithMicrosoftPrompt(currentConnection.environmentUrl, openUri, redirectTimeout);
                     break;
                 // case LoginTypes.azure:
                 //     tokenResponse = await loginWithAzure(currentConnection.environmentUrl);
@@ -527,8 +527,9 @@ export class DataverseHelper {
             // case LoginTypes.azure:
             //     return await loginWithAzure(conn.environmentUrl);
             case LoginTypes.microsoftLogin:
+                return await loginWithMicrosoftPrompt(conn.environmentUrl, openUri, redirectTimeout);
             default:
-                return await loginWithPrompt(customDataverseClientId, false, conn.environmentUrl, openUri, redirectTimeout);
+                throw new Error(ErrorMessages.invalidLoginType);
         }
     }
 
