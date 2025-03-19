@@ -87,13 +87,10 @@ export function createServer(nonce: string): {
                     deferredRedirect.resolve({ err, res });
                 }
                 break;
-            case "/":
-                sendFile(res, path.join(__filename, "..", "CodeFlowResult", "index.html"), "text/html; charset=utf-8");
-                break;
             case "/main.css":
                 sendFile(res, path.join(__filename, "..", "CodeFlowResult", "main.css"), "text/css; charset=utf-8");
                 break;
-            case "/callback/":
+            case "/":
                 deferredCode.resolve(
                     callback(nonce, reqUrl)
                         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -102,6 +99,9 @@ export function createServer(nonce: string): {
                             (err) => ({ err, res }),
                         ),
                 );
+                break;
+            case "/success":
+                sendFile(res, path.join(__filename, "..", "CodeFlowResult", "index.html"), "text/html; charset=utf-8");
                 break;
             default:
                 res.writeHead(404);
@@ -136,7 +136,7 @@ export function createTerminateServer(server: http.Server): () => Promise<void> 
     };
 }
 
-export async function startServer(server: http.Server, adfs: boolean): Promise<number> {
+export async function startServer(server: http.Server, port: number): Promise<number> {
     let portTimer: NodeJS.Timeout;
     function cancelPortTimer() {
         clearTimeout(portTimer);
@@ -159,10 +159,14 @@ export async function startServer(server: http.Server, adfs: boolean): Promise<n
             reject(new Error("Closed"));
         });
         // server.listen(adfs ? portADFS : 0, "127.0.0.1");
-        server.listen(19472, "127.0.0.1");
+        server.listen(port, "127.0.0.1"); //19472
     });
     portPromise.then(cancelPortTimer, cancelPortTimer);
     return portPromise;
+}
+
+export async function stopServer(server: http.Server): Promise<void> {
+    return new Promise<void>(() => server.close());
 }
 
 function sendFile(res: http.ServerResponse, filepath: string, contentType: string): void {
