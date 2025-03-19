@@ -15,7 +15,7 @@
       <img src="https://github.com/Power-Maverick/DataverseDevTools-VSCode/actions/workflows/build.yml/badge.svg?branch=main"/>
     </a>
     <a href="https://github.com/Power-Maverick/DataverseDevTools-VSCode/actions/workflows/release.yml" alt="Release">
-      <img src="https://github.com/Power-Maverick/DataverseDevTools-VSCode/actions/workflows/release.yml/badge.svg?branch=main"/>
+      <img src="https://github.com/Power-Maverick/DataverseDevTools-VSCode/actions/workflows/release.yml/badge.svg?branch=release"/>
     </a>
     <a href="https://github.com/Power-Maverick/DataverseDevTools-VSCode/blob/master/LICENSE" alt="License">
       <img src="https://img.shields.io/github/license/Power-Maverick/DataverseDevTools-VSCode"/>
@@ -55,30 +55,33 @@
 
 **Table of contents**
 
-- [⚙ Features](#-features)
-  - [Connect to your Dataverse environment](#connect-to-your-dataverse-environment)
-  - [Remembers the connected environment per workspace](#remembers-the-connected-environment-per-workspace)
-  - [See connection and entity details (with copy feature)](#see-connection-and-entity-details-with-copy-feature)
-  - [Initialize TypeScript project \& add TS File](#initialize-typescript-project--add-ts-file)
-  - [Generate Typings](#generate-typings)
-  - [Intellisense for type generated](#intellisense-for-type-generated)
-  - [Upload Web Resources](#upload-web-resources)
-  - [Filter by solution](#filter-by-solution)
-    - [Entities](#entities)
-    - [Web Resources](#web-resources)
-  - [Smart Match Web Resources](#smart-match-web-resources)
-- [⚒️ Tools](#️-tools)
-- [🔥 Using Typings](#-using-typings)
-- [🎮 Power Platform CLI Commands](#-power-platform-cli-commands)
-- [⌨ Keyboard Shortcuts](#-keyboard-shortcuts)
-- [🎁 Early-Access Preview](#-early-access-preview)
-- [🧪 Alpha-Testing](#-alpha-testing)
-    - [⌚ Features available for alpha-test](#-features-available-for-alpha-test)
-- [💭 Planned Features](#-planned-features)
-- [✨ Contributing](#-contributing)
-- [🔉 Discussions](#-discussions)
-- [📃 License](#-license)
-- [✍ Credits](#-credits)
+-   [⚙ Features](#-features)
+    -   [Connect to your Dataverse environment](#connect-to-your-dataverse-environment)
+    -   [Remembers the connected environment per workspace](#remembers-the-connected-environment-per-workspace)
+    -   [See connection and entity details (with copy feature)](#see-connection-and-entity-details-with-copy-feature)
+    -   [Initialize TypeScript project \& add TS File](#initialize-typescript-project--add-ts-file)
+    -   [Generate Typings](#generate-typings)
+    -   [Intellisense for type generated](#intellisense-for-type-generated)
+    -   [Upload Web Resources](#upload-web-resources)
+    -   [Filter by solution](#filter-by-solution)
+        -   [Entities](#entities)
+        -   [Web Resources](#web-resources)
+    -   [Smart Match Web Resources](#smart-match-web-resources)
+-   [⚒️ Tools](#️-tools)
+-   [🔥 Using Typings](#-using-typings)
+-   [Generate Typing](#generate-typing)
+    -   [When working with Xrm object from @types/xrm](#when-working-with-xrm-object-from-typesxrm)
+    -   [When working with entity and attributes only](#when-working-with-entity-and-attributes-only)
+-   [🎮 Power Platform CLI Commands](#-power-platform-cli-commands)
+-   [⌨ Keyboard Shortcuts](#-keyboard-shortcuts)
+-   [🎁 Early-Access Preview](#-early-access-preview)
+-   [🧪 Alpha-Testing](#-alpha-testing)
+    -   [⌚ Features available for alpha-test](#-features-available-for-alpha-test)
+-   [💭 Planned Features](#-planned-features)
+-   [✨ Contributing](#-contributing)
+-   [🔉 Discussions](#-discussions)
+-   [📃 License](#-license)
+-   [✍ Credits](#-credits)
 
 ## ⚙ Features
 
@@ -86,12 +89,12 @@
 
 There are 3 ways you can connect to your Dataverse Environment.
 
-| Connection Type        | Description                                                                                                                                                                                                                                                                                                                                                                                                            |
-| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Username & Password    | This works with environments without MFA-enabled and needs no extra configuration.                                                                                                                                                                                                                                                                                                                                     |
-| Microsoft Login Prompt | Uses DVDT's Public App registered in Azure AD. This will need approval from Azure Admin before you can use it for authentication. This connection other than approving the public Azure AD app (which is a one-time activity) needs no extra configuration. This connection will work with MFA-enabled authentication as well.                                                                                         |
-| Client Id & Secret     | This works with MFA-enabled authentication but needs extra configuration of Azure AD App Registration. To know more on app registration process [read here](https://docs.microsoft.com/en-us/powerapps/developer/data-platform/walkthrough-register-app-azure-active-directory?WT.mc_id=BA-MVP-5003877).                                                                                                               |
-| Azure                  | If you are already logged in inside VSCode using Az extension, Azure CLI or Azure PowerShell, you can leverage Azure Identity Framework to get authenticated against Dataverse. The developer has to use the same account for both Azure and Power Platform for this work (thanks to [Natraj Yegnaraman](https://github.com/rajyraman) for this method). This is a single-click authentication method with no prompts. |
+| Connection Type                      | Description                                                                                                                                                                                                                                                                                                                                                                                                            |
+| ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Microsoft Login Prompt (Recommended) | Uses Microsoft Dev App Id. This connection will work with MFA-enabled authentication as well.                                                                                                                                                                                                                                                                                                                          |
+| Username & Password                  | This works with environments without MFA-enabled and needs no extra configuration.                                                                                                                                                                                                                                                                                                                                     |
+| Client Id & Secret                   | This works with MFA-enabled authentication but needs extra configuration of Azure AD App Registration. To know more on app registration process [read here](https://docs.microsoft.com/en-us/powerapps/developer/data-platform/walkthrough-register-app-azure-active-directory?WT.mc_id=BA-MVP-5003877).                                                                                                               |
+| Azure                                | If you are already logged in inside VSCode using Az extension, Azure CLI or Azure PowerShell, you can leverage Azure Identity Framework to get authenticated against Dataverse. The developer has to use the same account for both Azure and Power Platform for this work (thanks to [Natraj Yegnaraman](https://github.com/rajyraman) for this method). This is a single-click authentication method with no prompts. |
 
 Below is one of the way you can create the connection.
 
@@ -171,10 +174,15 @@ You can launch your favorite Power Platform tools right from VSCode. Below are t
 
 ## 🔥 Using Typings
 
+## Generate Typing
+
 1. Go to **Dataverse DevTools** from the _Activity Side Bar_.
 2. From the list of entities, right-click the entity for which you want to create a typing and choose `Generate Typings` option. You can also filter the list of entities by clicking the filter button on the Entities panel as shown [here](#filter-by-solution).
-3. Create a onLoad function in your TypeScript file with parameter as `executionContext: Xrm.Events.EventContext`.
-4. Initialize your `FormContext` global variable casting it with `Xrm.<entity name>`.
+
+### When working with Xrm object from @types/xrm
+
+1. Create a onLoad function in your TypeScript file with parameter as `executionContext: Xrm.Events.EventContext`.
+2. Initialize your `FormContext` global variable casting it with `Xrm.<entity name>`.
 
 For example:
 If you wanted to use _Accounts_ entity typings in your TypeScript file then after the typings are generated the code in your TypeScript file will look as shown below:
@@ -187,6 +195,23 @@ export function onLoad(executionContext: Xrm.Events.EventContext) {
 ```
 
 In the above code snippet, `Xrm.Account` is a typing generated by Dataverse DevTools to provide intellisense specific to the **Account** entity.
+
+### When working with entity and attributes only
+
+1. Just use by typings the entity name
+
+For example:
+If you wanted to use _Accounts_ entity typings in your TypeScript file then after the typings are generated the code in your TypeScript file will look as shown below:
+
+```TypeScript
+let fetchAccount =
+  `<fetch>
+    <entity name="${Account.EntityLogicalName}">
+      <attribute name="${Account.Attribute.accountid}" />
+      <attribute name="${Account.Attribute.telephone1}" />
+    </entity>
+  </fetch>`;
+```
 
 ## 🎮 Power Platform CLI Commands
 

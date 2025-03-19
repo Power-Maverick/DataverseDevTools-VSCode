@@ -527,8 +527,9 @@ export class DataverseHelper {
             // case LoginTypes.azure:
             //     return await loginWithAzure(conn.environmentUrl);
             case LoginTypes.microsoftLogin:
-            default:
                 return await loginWithMicrosoftPrompt(conn.environmentUrl, openUri, redirectTimeout);
+            default:
+                throw new Error(ErrorMessages.invalidLoginType);
         }
     }
 
