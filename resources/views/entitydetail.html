@@ -1,129 +1,110 @@
-<h4>
-    !!{entityLogicalName}
-    <h6 style="display: inline">Schema Name: !!{entitySchemaName}</h6>
-</h4>
+<h2>!!{entityLogicalName}</h2>
+<h3 style="display: inline">Schema Name: !!{entitySchemaName}</h3>
+
 <div>!!{description}</div>
 
-<!-- <ul id="tabs-swipe-demo" class="tabs">
-    <li class="tab col s3"><a class="active" href="#entity">Entity Details</a></li>
-    <li class="tab col s3"><a href="#attributes">Attributes</a></li>
-</ul> -->
-<br /><br />
-<ul class="nav nav-tabs" id="myTab" role="tablist">
-    <li class="nav-item" role="presentation">
-        <button class="nav-link active" id="entitydetails-tab" data-bs-toggle="tab" data-bs-target="#entitydetails" type="button" role="tab" aria-controls="entitydetails" aria-selected="true">Entity Details</button>
-    </li>
-    <li class="nav-item" role="presentation">
-        <button class="nav-link" id="attr-tab" data-bs-toggle="tab" data-bs-target="#attr" type="button" role="tab" aria-controls="attr" aria-selected="false">Attributes</button>
-    </li>
-</ul>
-<br />
-<div class="tab-content" id="myTabContent">
-    <div class="tab-pane fade show active" id="entitydetails" role="tabpanel" aria-labelledby="entitydetails-tab">
-        <form>
-            <div class="mb-3 row">
-                <label for="sla" class="col-sm-2 col-form-label">SLA:</label>
-                <div class="col-sm-9">
-                    <input type="text" readonly class="form-control-plaintext text-truncate" id="sla" value="!!{sla}" />
-                </div>
-            </div>
-            <div class="mb-3 row">
-                <label for="type" class="col-sm-2 col-form-label">Entity Type:</label>
-                <div class="col-sm-9">
-                    <input type="text" readonly class="form-control-plaintext text-truncate" id="type" value="!!{entityType}" />
-                </div>
-            </div>
-            <div class="mb-3 row">
-                <label for="objtypecode" class="col-sm-2 col-form-label">Object Type Code:</label>
-                <div class="col-sm-9">
-                    <input type="text" readonly class="form-control-plaintext text-truncate" id="objtypecode" value="!!{objectTypeCode}" />
-                    <button type="button" class="btn btn-primary btn-sm" onclick="copyToClipboard('objtypecode')">Copy <i class="bi bi-clipboard"></i></button>
-                </div>
-            </div>
-            <div class="mb-3 row">
-                <label for="pid" class="col-sm-2 col-form-label">Primary ID Attribute:</label>
-                <div class="col-sm-9">
-                    <input type="text" readonly class="form-control-plaintext text-truncate" id="pid" value="!!{idAttr}" />
-                    <button type="button" class="btn btn-primary btn-sm" onclick="copyToClipboard('pid')">Copy <i class="bi bi-clipboard"></i></button>
-                </div>
-            </div>
-            <div class="mb-3 row">
-                <label for="pname" class="col-sm-2 col-form-label">Primary Name Attribute:</label>
-                <div class="col-sm-9">
-                    <input type="text" readonly class="form-control-plaintext text-truncate" id="pname" value="!!{nameAttr}" />
-                    <button type="button" class="btn btn-primary btn-sm" onclick="copyToClipboard('pname')">Copy <i class="bi bi-clipboard"></i></button>
-                </div>
-            </div>
-            <div class="mb-3 row">
-                <label for="setname" class="col-sm-2 col-form-label">Entity Set Name:</label>
-                <div class="col-sm-9">
-                    <input type="text" readonly class="form-control-plaintext text-truncate" id="setname" value="!!{setName}" />
-                    <button type="button" class="btn btn-primary btn-sm" onclick="copyToClipboard('setname')">Copy <i class="bi bi-clipboard"></i></button>
-                </div>
-            </div>
-        </form>
-    </div>
-    <div class="tab-pane fade" id="attr" role="tabpanel" aria-labelledby="attr-tab">
-        <input class="form-control" id="attrSearch" type="text" placeholder="Search.." />
-        <br />
-        <table class="table table-bordered sortable" id="attributesTable">
-            <thead>
-                <th onclick="sortTable('attributesTable',0)">
-                    Id
-                    <div class="sort-icon">
-                        <span class="asc-icon">&#9650;</span>
-                        <span class="desc-icon">&#9660;</span>
-                    </div>
-                </th>
-                <th onclick="sortTable('attributesTable',1)">
-                    Logical Name
-                    <div class="sort-icon">
-                        <span class="asc-icon">&#9650;</span>
-                        <span class="desc-icon">&#9660;</span>
-                    </div>
-                </th>
-                <th onclick="sortTable('attributesTable',2)">
-                    Schema Name
-                    <div class="sort-icon">
-                        <span class="asc-icon">&#9650;</span>
-                        <span class="desc-icon">&#9660;</span>
-                    </div>
-                </th>
-                <th onclick="sortTable('attributesTable',3)">
-                    Type
-                    <div class="sort-icon">
-                        <span class="asc-icon">&#9650;</span>
-                        <span class="desc-icon">&#9660;</span>
-                    </div>
-                </th>
-                <th onclick="sortTable('attributesTable',4)">
-                    Attribute Type Name
-                    <div class="sort-icon">
-                        <span class="asc-icon">&#9650;</span>
-                        <span class="desc-icon">&#9660;</span>
-                    </div>
-                </th>
-                <th onclick="sortTable('attributesTable',4)">
-                    Attribute Of
-                    <div class="sort-icon">
-                        <span class="asc-icon">&#9650;</span>
-                        <span class="desc-icon">&#9660;</span>
-                    </div>
-                </th>
-                <th onclick="sortTable('attributesTable',5)">
-                    Required Level
-                    <div class="sort-icon">
-                        <span class="asc-icon">&#9650;</span>
-                        <span class="desc-icon">&#9660;</span>
-                    </div>
-                </th>
-            </thead>
-            <tbody id="attrTable">
-                !!{attributes}
-            </tbody>
-        </table>
-    </div>
-</div>
+<vscode-panels>
+    <vscode-panel-tab id="tab-1">Entity Details</vscode-panel-tab>
+    <vscode-panel-tab id="tab-2">Attributes</vscode-panel-tab>
+    <vscode-panel-view id="view-1">
+        <div class="entityDetails">
+            <table>
+                <tr>
+                    <td><label for="sla">SLA:</label></td>
+                    <td><vscode-text-field readonly id="sla" value="!!{sla}"></vscode-text-field></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><label for="entityType">Entity Type:</label></td>
+                    <td><vscode-text-field readonly id="entityType" value="!!{entityType}"></vscode-text-field></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><label for="objtypecode">Object Type Code:</label></td>
+                    <td><vscode-text-field readonly id="objtypecode" value="!!{objectTypeCode}"></vscode-text-field></td>
+                    <td><vscode-button onclick="copyToClipboard('objtypecode')">Copy</vscode-button></td>
+                </tr>
+                <tr>
+                    <td><label for="pid">Primary ID Attribute:</label></td>
+                    <td><vscode-text-field readonly id="pid" value="!!{idAttr}"></vscode-text-field></td>
+                    <td><vscode-button onclick="copyToClipboard('pid')">Copy</vscode-button></td>
+                </tr>
+                <tr>
+                    <td><label for="pname">Primary Name Attribute:</label></td>
+                    <td><vscode-text-field readonly id="pname" value="!!{nameAttr}"></vscode-text-field></td>
+                    <td><vscode-button onclick="copyToClipboard('pname')">Copy</vscode-button></td>
+                </tr>
+                <tr>
+                    <td><label for="setname">Entity Set Name:</label></td>
+                    <td><vscode-text-field readonly id="setname" value="!!{setName}"></vscode-text-field></td>
+                    <td><vscode-button onclick="copyToClipboard('setname')">Copy</vscode-button></td>
+                </tr>
+            </table>
+        </div>
+    </vscode-panel-view>
+    <vscode-panel-view id="view-2">
+        <div class="attributesList">
+            <vscode-text-field id="attrSearch" placeholder="Search.."></vscode-text-field>
+            <br />
+            <table class="table table-bordered sortable" id="attributesTable">
+                <thead>
+                    <th onclick="sortTable('attributesTable',0)">
+                        Id
+                        <div class="sort-icon">
+                            <span class="asc-icon">&#9650;</span>
+                            <span class="desc-icon">&#9660;</span>
+                        </div>
+                    </th>
+                    <th onclick="sortTable('attributesTable',1)">
+                        Logical Name
+                        <div class="sort-icon">
+                            <span class="asc-icon">&#9650;</span>
+                            <span class="desc-icon">&#9660;</span>
+                        </div>
+                    </th>
+                    <th onclick="sortTable('attributesTable',2)">
+                        Schema Name
+                        <div class="sort-icon">
+                            <span class="asc-icon">&#9650;</span>
+                            <span class="desc-icon">&#9660;</span>
+                        </div>
+                    </th>
+                    <th onclick="sortTable('attributesTable',3)">
+                        Type
+                        <div class="sort-icon">
+                            <span class="asc-icon">&#9650;</span>
+                            <span class="desc-icon">&#9660;</span>
+                        </div>
+                    </th>
+                    <th onclick="sortTable('attributesTable',4)">
+                        Attribute Type Name
+                        <div class="sort-icon">
+                            <span class="asc-icon">&#9650;</span>
+                            <span class="desc-icon">&#9660;</span>
+                        </div>
+                    </th>
+                    <th onclick="sortTable('attributesTable',4)">
+                        Attribute Of
+                        <div class="sort-icon">
+                            <span class="asc-icon">&#9650;</span>
+                            <span class="desc-icon">&#9660;</span>
+                        </div>
+                    </th>
+                    <th onclick="sortTable('attributesTable',5)">
+                        Required Level
+                        <div class="sort-icon">
+                            <span class="asc-icon">&#9650;</span>
+                            <span class="desc-icon">&#9660;</span>
+                        </div>
+                    </th>
+                </thead>
+                <tbody id="attrTable">
+                    !!{attributes}
+                </tbody>
+            </table>
+        </div>
+    </vscode-panel-view>
+</vscode-panels>
 
 <div id="entity" class="col s12"></div>
 <div id="attributes" class="col s12"></div>

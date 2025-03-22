@@ -1,11 +1,11 @@
 import * as vscode from "vscode";
 import * as path from "path";
 import { IEntityDefinition } from "../utils/Interfaces";
-import { Panel } from "./PanelBase";
 import { readFileSync } from "../utils/FileSystem";
 import _ from "lodash";
+import { VsCodePanel } from "./base/VsCodePanelBase";
 
-export class EntityListView extends Panel {
+export class EntityListView extends VsCodePanel {
     private entities?: IEntityDefinition[];
 
     constructor(entities: IEntityDefinition[], webview: vscode.WebviewPanel, vscontext: vscode.ExtensionContext) {

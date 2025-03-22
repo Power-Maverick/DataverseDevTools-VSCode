@@ -1,11 +1,11 @@
 import * as vscode from "vscode";
 import * as path from "path";
 import { IConnection } from "../utils/Interfaces";
-import { Panel } from "./PanelBase";
 import { readFileSync } from "../utils/FileSystem";
 import _ = require("lodash");
+import { VsCodePanel } from "./base/VsCodePanelBase";
 
-export class ConnectionDetailsView extends Panel {
+export class ConnectionDetailsView extends VsCodePanel {
     conn?: IConnection;
 
     constructor(connDetails: IConnection, webview: vscode.WebviewPanel, vscontext: vscode.ExtensionContext) {
