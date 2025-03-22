@@ -1,10 +1,10 @@
 /**** General ****/
 body {
-    background-color: transparent;
+    /* background-color: transparent; */
     color: var(--vscode-editor-foreground);
     font-family: var(--vscode-editor-font-family);
     font-weight: var(--vscode-editor-font-weight);
-    font-size: var(--vscode-editor-font-size );
+    font-size: var(--vscode-editor-font-size);
     margin: 0;
 }
 
@@ -96,18 +96,66 @@ input {
     display: inline-block;
     margin-left: 5px;
     font-weight: bold;
-  }
-  
+}
+
 .table .sort-icon .asc-icon,
 .table .sort-icon .desc-icon {
     display: none;
 }
-  
+
 .table th .asc .asc-icon,
 .table th .desc .desc-icon {
     display: inline;
 }
-  
+
+.table tr:hover {
+    background: var(--list-hover-background);
+    outline: 1px dotted var(--contrast-active-border);
+    outline-offset: -1px;
+}
+
+.table th {
+    padding: calc(var(--design-unit) * 1px) calc(var(--design-unit) * 3px);
+    color: var(--foreground);
+    opacity: 1;
+    box-sizing: border-box;
+    font-family: var(--font-family);
+    font-size: var(--type-ramp-base-font-size);
+    line-height: var(--type-ramp-base-line-height);
+    font-weight: 400;
+    border: solid calc(var(--border-width) * 1px) transparent;
+    border-radius: calc(var(--corner-radius) * 1px);
+    text-align: left;
+}
+
+.table td {
+    padding: calc(var(--design-unit) * 1px) calc(var(--design-unit) * 3px);
+    color: var(--foreground);
+    opacity: 1;
+    box-sizing: border-box;
+    font-family: var(--font-family);
+    font-size: var(--type-ramp-base-font-size);
+    line-height: var(--type-ramp-base-line-height);
+    font-weight: 400;
+    border: solid calc(var(--border-width) * 1px) transparent;
+    border-radius: calc(var(--corner-radius) * 1px);
+}
+
+.table .nowrap {
+    white-space: nowrap;
+}
+
+/**** Tabs ****/
+.attributesList,
+.entityDetails {
+    display: flex;
+    flex-direction: column;
+}
+
+.attributesList div,
+.entityDetails div {
+    display: inline-block;
+}
 
 /**** Navigation ****/
 nav {
