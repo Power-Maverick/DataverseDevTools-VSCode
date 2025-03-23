@@ -238,3 +238,93 @@ nav ul li {
     /* top: 0.1em; */
     padding: 0 0.25em;
 }
+
+/**** VS Code Styling ****/
+
+/* Button */
+
+.vscode-button {
+    align-items: center;
+    background-color: var(--vscode-button-background);
+    border-color: var(--vscode-button-border, var(--vscode-button-background));
+    border-style: solid;
+    border-radius: 2px;
+    border-width: 1px;
+    color: var(--vscode-button-foreground);
+    cursor: pointer;
+    display: inline-flex;
+    font-family: var(--vscode-font-family);
+    font-size: var(--vscode-font-size);
+    font-weight: var(--vscode-font-weight);
+    line-height: 22px;
+    overflow: hidden;
+    padding: 1px 13px;
+    user-select: none;
+    white-space: nowrap;
+}
+
+.vscode-button:hover {
+    background-color: var(--vscode-button-hoverBackground);
+}
+
+.vscode-button:focus,
+.vscode-button:active {
+    outline: none;
+}
+
+.vscode-button:focus {
+    background-color: var(--vscode-button-hoverBackground);
+    outline: 1px solid var(--vscode-focusBorder);
+    outline-offset: 2px;
+}
+
+/* Textfield */
+
+input.vscode-textfield {
+    background-color: var(--vscode-settings-textInputBackground);
+    border-color: var(--vscode-settings-textInputBorder, var(--vscode-settings-textInputBackground));
+    border-radius: 2px;
+    border-style: solid;
+    border-width: 1px;
+    box-sizing: border-box;
+    color: var(--vscode-settings-textInputForeground);
+    font-family: var(--vscode-font-family);
+    font-size: var(--vscode-font-size);
+    font-weight: var(--vscode-font-weight);
+    line-height: 22px;
+    max-width: 100%;
+    outline: none;
+    position: relative;
+    width: 320px;
+}
+
+input.vscode-textfield:focus,
+input.vscode-textfield:focus:invalid {
+    outline: none;
+    border-color: var(--vscode-focusBorder);
+}
+
+/* Table */
+
+#attributesTable th,
+#entitiesTable th {
+    font-weight: bold;
+}
+
+#attributesTable td,
+#attributesTable th,
+#entitiesTable td,
+#entitiesTable th {
+    margin: 8px;
+    padding: 8px;
+}
+
+#attrTable tr:hover,
+#entTable tr:hover {
+    background: var(--vscode-list-hoverBackground);
+}
+
+#attrTable td,
+#entTable td {
+    white-space: nowrap;
+}

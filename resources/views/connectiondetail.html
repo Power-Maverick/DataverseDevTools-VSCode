@@ -4,29 +4,29 @@
 <form>
     <table>
         <tr>
-            <td><label for="envurl">Environment URL:</label></td>
-            <td><vscode-text-field readonly id="envurl" value="!!{envUrl}"></vscode-text-field></td>
-            <td><vscode-button onclick="copyToClipboard('envUrl')">Copy</vscode-button></td>
+            <td><label for="envUrl">Environment URL:</label></td>
+            <td><input class="vscode-textfield" readonly id="envUrl" value="!!{envUrl}"></input></td>
+            <td><button type="button" class="vscode-button" onclick="copyToClipboard(event, 'envUrl')">Copy</button></td>
         </tr>
         <tr>
             <td><label for="type">Login Type:</label></td>
-            <td><vscode-text-field readonly id="type" value="!!{loginType}"></vscode-text-field></td>
+            <td><input class="vscode-textfield" readonly id="type" value="!!{loginType}"></input></td>
             <td></td>
         </tr>
         <tr>
             <td><label for="uname">Username:</label></td>
-            <td><vscode-text-field readonly id="uname" value="!!{userName}"></vscode-text-field></td>
-            <td><vscode-button onclick="copyToClipboard('uname')">Copy</vscode-button></td>
+            <td><input class="vscode-textfield" readonly id="uname" value="!!{userName}"></input></td>
+            <td><button class="vscode-button" onclick="copyToClipboard(event, 'uname')">Copy</button></td>
         </tr>
         <tr>
             <td><label for="pass">Access Token:</label></td>
-            <td><vscode-text-field readonly id="pass" value="!!{token}"></vscode-text-field></td>
-            <td><vscode-button onclick="copyToClipboard('pass')">Copy</vscode-button></td>
+            <td><input class="vscode-textfield" readonly id="pass" value="!!{token}"></input></td>
+            <td><button class="vscode-button" onclick="copyToClipboard(event, 'pass')">Copy</button></td>
         </tr>
         <tr>
             <td><label for="refresh">Refresh Token:</label></td>
-            <td><vscode-text-field readonly id="refresh" value="!!{token}"></vscode-text-field></td>
-            <td><vscode-button onclick="copyToClipboard('refresh')">Copy</vscode-button></td>
+            <td><input class="vscode-textfield" readonly id="refresh" value="!!{token}"></input></td>
+            <td><button class="vscode-button" onclick="copyToClipboard(event, 'refresh')">Copy</button></td>
         </tr>
     </table>
 </form>

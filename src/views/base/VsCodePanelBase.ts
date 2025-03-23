@@ -79,7 +79,6 @@ export class VsCodePanel {
                         ${htmlPartial}
                     </div>                    
                     <script src="${baseJs}"></script>
-                    <script src="https://cdnjs.cloudflare.com/ajax/libs/vscode-webview-ui-toolkit/1.2.2/toolkit.min.js" type="module"></script>
                 </body>
                 </html>`;
     }

@@ -32,7 +32,9 @@ document.addEventListener("DOMContentLoaded", function () {
     // });
 });
 
-function copyToClipboard(id) {
+function copyToClipboard(event, id) {
+    event.preventDefault(); // Prevents the default behavior
+
     var copyText = document.getElementById(id);
 
     navigator.clipboard.writeText(copyText.value);
