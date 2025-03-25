@@ -20,6 +20,9 @@
     <a href="https://github.com/Power-Maverick/DataverseDevTools-VSCode/blob/master/LICENSE" alt="License">
       <img src="https://img.shields.io/github/license/Power-Maverick/DataverseDevTools-VSCode"/>
     </a>
+    <a href="https://app.codacy.com/gh/Power-Maverick/DataverseDevTools-VSCode?utm_source=github.com&utm_medium=referral&utm_content=Power-Maverick/DataverseDevTools-VSCode&utm_campaign=Badge_Grade" alt="Codacy Badge">
+      <img src="https://api.codacy.com/project/badge/Grade/b947883a529941309d08736843cb126f"/>
+    </a>
 </p>
 
 <p align="center">
@@ -247,8 +250,7 @@ There are different ways in which you can contribute to this open-source project
 
 #### ⌚ Features available for alpha-test
 
-1. **Ability for users to select their default TS template**: From the settings option you can now select your default TS Project Template. Selecting the default template will skip the question when you initiate a TS Project.
-2. **Improvement to Smart Match**: Smart Match has got a new look-and-feel. It is more robust, shows all the available local files with a status of linked, recommended link or not linked. Recommended link will have a confidence score that will help you link the local files with server files.
+> No features in alpha-testing at the moment.
 
 > Report any issues or feedback on GitHub.
 
@@ -256,7 +258,6 @@ There are different ways in which you can contribute to this open-source project
 
 -   [ ] Integrate with [Dataverse-ify](https://github.com/scottdurow/dataverse-ify/).
 -   [ ] Initiate plugin project.
--   [x] Ability to create JavaScript project and snippets (_smiliar to TypeScript version_).
 
 ## ✨ Contributing
 
