@@ -1,38 +1,32 @@
-<h3>!!{connName}</h3>
-<h5>!!{connType}</h5>
+<h2>!!{connName}</h2>
+<h3 style="display: inline">Connection Type: !!{connType}</h3>
+
 <form>
-    <div class="mb-3 row">
-        <label for="envurl" class="col-sm-2 col-form-label">Environment URL:</label>
-        <div class="col-sm-9">
-            <input type="text" readonly class="form-control-plaintext text-truncate" id="envurl" value="!!{envUrl}" />
-            <button type="button" class="btn btn-primary btn-sm" onclick="copyToClipboard('envurl')">Copy <i class="bi bi-clipboard"></i></button>
-        </div>
-    </div>
-    <div class="mb-3 row">
-        <label for="type" class="col-sm-2 col-form-label">Login Type:</label>
-        <div class="col-sm-9">
-            <input type="text" readonly class="form-control-plaintext text-truncate" id="type" value="!!{loginType}" />
-        </div>
-    </div>
-    <div class="mb-3 row">
-        <label for="uname" class="col-sm-2 col-form-label">Username:</label>
-        <div class="col-sm-9">
-            <input type="text" readonly class="form-control-plaintext text-truncate" id="uname" value="!!{userName}" />
-            <button type="button" class="btn btn-primary btn-sm" onclick="copyToClipboard('uname')">Copy <i class="bi bi-clipboard"></i></button>
-        </div>
-    </div>
-    <div class="mb-3 row">
-        <label for="pass" class="col-sm-2 col-form-label">Access Token:</label>
-        <div class="col-sm-9">
-            <input type="text" readonly class="form-control-plaintext text-truncate" id="pass" value="!!{token}" />
-            <button type="button" class="btn btn-primary btn-sm" onclick="copyToClipboard('pass')">Copy <i class="bi bi-clipboard"></i></button>
-        </div>
-    </div>
-    <div class="mb-3 row">
-        <label for="refresh" class="col-sm-2 col-form-label">Refresh Token:</label>
-        <div class="col-sm-9">
-            <input type="text" readonly class="form-control-plaintext text-truncate" id="refresh" value="!!{refreshToken}" />
-            <button type="button" class="btn btn-primary btn-sm" onclick="copyToClipboard('refresh')">Copy <i class="bi bi-clipboard"></i></button>
-        </div>
-    </div>
+    <table>
+        <tr>
+            <td><label for="envUrl">Environment URL:</label></td>
+            <td><input class="vscode-textfield" readonly id="envUrl" value="!!{envUrl}"></input></td>
+            <td><button type="button" class="vscode-button" onclick="copyToClipboard(event, 'envUrl')">Copy</button></td>
+        </tr>
+        <tr>
+            <td><label for="type">Login Type:</label></td>
+            <td><input class="vscode-textfield" readonly id="type" value="!!{loginType}"></input></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td><label for="uname">Username:</label></td>
+            <td><input class="vscode-textfield" readonly id="uname" value="!!{userName}"></input></td>
+            <td><button class="vscode-button" onclick="copyToClipboard(event, 'uname')">Copy</button></td>
+        </tr>
+        <tr>
+            <td><label for="pass">Access Token:</label></td>
+            <td><input class="vscode-textfield" readonly id="pass" value="!!{token}"></input></td>
+            <td><button class="vscode-button" onclick="copyToClipboard(event, 'pass')">Copy</button></td>
+        </tr>
+        <tr>
+            <td><label for="refresh">Refresh Token:</label></td>
+            <td><input class="vscode-textfield" readonly id="refresh" value="!!{token}"></input></td>
+            <td><button class="vscode-button" onclick="copyToClipboard(event, 'refresh')">Copy</button></td>
+        </tr>
+    </table>
 </form>
