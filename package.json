@@ -518,16 +518,6 @@
                 }
             }
         ],
-        "keybindings": [
-            {
-                "command": "dvdt.commands.initTS",
-                "key": "ctrl+d ctrl+t"
-            },
-            {
-                "command": "dvdt.commands.initJS",
-                "key": "ctrl+d ctrl+j"
-            }
-        ],
         "configuration": {
             "type": "object",
             "title": "%dvdt.config.title%",

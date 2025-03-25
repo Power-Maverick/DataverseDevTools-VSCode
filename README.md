@@ -76,7 +76,6 @@
     -   [When working with Xrm object from @types/xrm](#when-working-with-xrm-object-from-typesxrm)
     -   [When working with entity and attributes only](#when-working-with-entity-and-attributes-only)
 -   [🎮 Power Platform CLI Commands](#-power-platform-cli-commands)
--   [⌨ Keyboard Shortcuts](#-keyboard-shortcuts)
 -   [🎁 Early-Access Preview](#-early-access-preview)
 -   [🧪 Alpha-Testing](#-alpha-testing)
     -   [⌚ Features available for alpha-test](#-features-available-for-alpha-test)
@@ -223,12 +222,6 @@ All the Power Platform CLI commands are easily categorized in a tree format that
 ![PacCliCommands](https://github.com/Power-Maverick/DataverseDevTools-VSCode/blob/main/assets/PacCliCommands.gif?raw=true)
 
 ![PacCliModelBuilder](https://github.com/Power-Maverick/DataverseDevTools-VSCode/blob/main/assets/PacCliModelBuilder.gif?raw=true)
-
-## ⌨ Keyboard Shortcuts
-
-| Command                   | Keyboard Shortcut    |
-| ------------------------- | -------------------- |
-| Create TypeScript project | `Ctrl + D, Ctrl + T` |
 
 ## 🎁 Early-Access Preview
 
