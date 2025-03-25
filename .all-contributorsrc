@@ -118,7 +118,7 @@
             "name": "Lars Hildebrandt",
             "avatar_url": "https://avatars.githubusercontent.com/u/1198698?v=4",
             "profile": "https://github.com/cyco77",
-            "contributions": ["code", "ideas", "bug"]
+            "contributions": ["code", "ideas", "bug", "maintenance", "test"]
         },
         {
             "login": "uofirob",
@@ -126,6 +126,13 @@
             "avatar_url": "https://avatars.githubusercontent.com/u/1754842?v=4",
             "profile": "https://github.com/uofirob",
             "contributions": ["bug", "userTesting"]
+        },
+        {
+            "login": "kkazala",
+            "name": "Kinga",
+            "avatar_url": "https://avatars.githubusercontent.com/u/22429087?v=4",
+            "profile": "https://dev.to/kkazala",
+            "contributions": ["bug", "code", "maintenance", "test", "userTesting"]
         }
     ],
     "contributorsPerLine": 7

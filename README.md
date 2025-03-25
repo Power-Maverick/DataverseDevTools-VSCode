@@ -20,6 +20,9 @@
     <a href="https://github.com/Power-Maverick/DataverseDevTools-VSCode/blob/master/LICENSE" alt="License">
       <img src="https://img.shields.io/github/license/Power-Maverick/DataverseDevTools-VSCode"/>
     </a>
+    <a href="https://app.codacy.com/gh/Power-Maverick/DataverseDevTools-VSCode?utm_source=github.com&utm_medium=referral&utm_content=Power-Maverick/DataverseDevTools-VSCode&utm_campaign=Badge_Grade" alt="Codacy Badge">
+      <img src="https://api.codacy.com/project/badge/Grade/b947883a529941309d08736843cb126f"/>
+    </a>
 </p>
 
 <p align="center">
@@ -73,7 +76,6 @@
     -   [When working with Xrm object from @types/xrm](#when-working-with-xrm-object-from-typesxrm)
     -   [When working with entity and attributes only](#when-working-with-entity-and-attributes-only)
 -   [🎮 Power Platform CLI Commands](#-power-platform-cli-commands)
--   [⌨ Keyboard Shortcuts](#-keyboard-shortcuts)
 -   [🎁 Early-Access Preview](#-early-access-preview)
 -   [🧪 Alpha-Testing](#-alpha-testing)
     -   [⌚ Features available for alpha-test](#-features-available-for-alpha-test)
@@ -221,12 +223,6 @@ All the Power Platform CLI commands are easily categorized in a tree format that
 
 ![PacCliModelBuilder](https://github.com/Power-Maverick/DataverseDevTools-VSCode/blob/main/assets/PacCliModelBuilder.gif?raw=true)
 
-## ⌨ Keyboard Shortcuts
-
-| Command                   | Keyboard Shortcut    |
-| ------------------------- | -------------------- |
-| Create TypeScript project | `Ctrl + D, Ctrl + T` |
-
 ## 🎁 Early-Access Preview
 
 This list showcases the features that are build and ready but not fully tested to be released. You can enable these features by navigating to `File` > `Preferences` > `Settings` and search for `Dataverse DevTools` and make sure `Enable Early Access Preview` is **checked**.
@@ -247,8 +243,7 @@ There are different ways in which you can contribute to this open-source project
 
 #### ⌚ Features available for alpha-test
 
-1. **Ability for users to select their default TS template**: From the settings option you can now select your default TS Project Template. Selecting the default template will skip the question when you initiate a TS Project.
-2. **Improvement to Smart Match**: Smart Match has got a new look-and-feel. It is more robust, shows all the available local files with a status of linked, recommended link or not linked. Recommended link will have a confidence score that will help you link the local files with server files.
+> No features in alpha-testing at the moment.
 
 > Report any issues or feedback on GitHub.
 
@@ -256,7 +251,6 @@ There are different ways in which you can contribute to this open-source project
 
 -   [ ] Integrate with [Dataverse-ify](https://github.com/scottdurow/dataverse-ify/).
 -   [ ] Initiate plugin project.
--   [x] Ability to create JavaScript project and snippets (_smiliar to TypeScript version_).
 
 ## ✨ Contributing
 
@@ -300,8 +294,9 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     </tr>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/petrochuk"><img src="https://avatars.githubusercontent.com/u/30735471?v=4?s=100" width="100px;" alt="Andrew Petrochuk"/><br /><sub><b>Andrew Petrochuk</b></sub></a><br /><a href="#data-petrochuk" title="Data">🔣</a> <a href="#ideas-petrochuk" title="Ideas, Planning, & Feedback">🤔</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/cyco77"><img src="https://avatars.githubusercontent.com/u/1198698?v=4?s=100" width="100px;" alt="Lars Hildebrandt"/><br /><sub><b>Lars Hildebrandt</b></sub></a><br /><a href="https://github.com/Power-Maverick/DataverseDevTools-VSCode/commits?author=cyco77" title="Code">💻</a> <a href="#ideas-cyco77" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/Power-Maverick/DataverseDevTools-VSCode/issues?q=author%3Acyco77" title="Bug reports">🐛</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/cyco77"><img src="https://avatars.githubusercontent.com/u/1198698?v=4?s=100" width="100px;" alt="Lars Hildebrandt"/><br /><sub><b>Lars Hildebrandt</b></sub></a><br /><a href="https://github.com/Power-Maverick/DataverseDevTools-VSCode/commits?author=cyco77" title="Code">💻</a> <a href="#ideas-cyco77" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/Power-Maverick/DataverseDevTools-VSCode/issues?q=author%3Acyco77" title="Bug reports">🐛</a> <a href="#maintenance-cyco77" title="Maintenance">🚧</a> <a href="https://github.com/Power-Maverick/DataverseDevTools-VSCode/commits?author=cyco77" title="Tests">⚠️</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/uofirob"><img src="https://avatars.githubusercontent.com/u/1754842?v=4?s=100" width="100px;" alt="Rob Montague"/><br /><sub><b>Rob Montague</b></sub></a><br /><a href="https://github.com/Power-Maverick/DataverseDevTools-VSCode/issues?q=author%3Auofirob" title="Bug reports">🐛</a> <a href="#userTesting-uofirob" title="User Testing">📓</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://dev.to/kkazala"><img src="https://avatars.githubusercontent.com/u/22429087?v=4?s=100" width="100px;" alt="Kinga"/><br /><sub><b>Kinga</b></sub></a><br /><a href="https://github.com/Power-Maverick/DataverseDevTools-VSCode/issues?q=author%3Akkazala" title="Bug reports">🐛</a> <a href="https://github.com/Power-Maverick/DataverseDevTools-VSCode/commits?author=kkazala" title="Code">💻</a> <a href="#maintenance-kkazala" title="Maintenance">🚧</a> <a href="https://github.com/Power-Maverick/DataverseDevTools-VSCode/commits?author=kkazala" title="Tests">⚠️</a> <a href="#userTesting-kkazala" title="User Testing">📓</a></td>
     </tr>
   </tbody>
 </table>

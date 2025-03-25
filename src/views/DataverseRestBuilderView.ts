@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import * as path from "path";
 import { IConnection } from "../utils/Interfaces";
-import { Panel } from "./PanelBase";
+import { Panel } from "./base/PanelBase";
 import { readFileSync } from "../utils/FileSystem";
 import _ = require("lodash");
 import { connectionCurrentStoreKey } from "../utils/Constants";
