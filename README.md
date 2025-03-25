@@ -85,6 +85,8 @@
 
 ## ⚙ Features
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/b947883a529941309d08736843cb126f)](https://app.codacy.com/gh/Power-Maverick/DataverseDevTools-VSCode?utm_source=github.com&utm_medium=referral&utm_content=Power-Maverick/DataverseDevTools-VSCode&utm_campaign=Badge_Grade)
+
 ### Connect to your Dataverse environment
 
 There are 3 ways you can connect to your Dataverse Environment.
