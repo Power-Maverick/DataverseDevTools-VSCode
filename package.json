@@ -555,7 +555,7 @@
         "@types/node": "18.x",
         "@types/node-fetch": "^2.5.11",
         "@types/uuid": "^8.3.1",
-        "@types/vscode": "^1.80.0",
+        "@types/vscode": "^1.98.0",
         "@typescript-eslint/eslint-plugin": "^8.17.0",
         "@typescript-eslint/parser": "^6.15.0",
         "@vscode/test-cli": "^0.0.4",
