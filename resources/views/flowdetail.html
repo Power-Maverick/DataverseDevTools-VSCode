@@ -1,0 +1,95 @@
+<h2>!!{name}</h2>
+<br />
+<h3>!!{description}</h3>
+<br />
+<style>
+    .mermaid .node rect {
+        fill: var(--vscode-editor-findMatchBackground) !important;
+        stroke: var(--vscode-settings-textInputForeground) !important;
+        stroke-width: 1px !important;
+        font-size: 14px !important;
+    }
+
+    .mermaid path {
+        stroke: var(--vscode-settings-textInputForeground) !important;
+        stroke-width: 1px !important;
+    }
+
+    .mermaid .nodeLabel {
+        font-size: 12px !important;
+        font-size: var(--vscode-font-size);
+        font-weight: var(--vscode-font-weight);
+        color: var(--vscode-settings-textInputForeground) !important;
+    }
+    .mermaid .cluster rect {
+        font-size: 14px !important;
+        fill: var(--vscode-settings-textInputBackground) !important;
+        stroke: var(--vscode-settings-textInputForeground) !important;
+        stroke-width: 1px !important;
+    }
+</style>
+<style>
+    .hidden {
+        display: none;
+    }
+</style>
+
+<table>
+    <tr>
+        <td><label for="id">Id:</label></td>
+        <td><input class="vscode-textfield" readonly id="id" value="!!{id}" /></td>
+        <td></td>
+    </tr>
+</table>
+
+<br />
+<div class="tabs">
+    <div class="tab-buttons">
+        <button class="active vscode-tab" data-tab="tab1">Details</button>
+        <button class="vscode-tab" data-tab="tab2">Mermaid</button>
+        <button class="vscode-tab" data-tab="tab3">Json</button>
+    </div>
+    <div class="vscode-tab-content" id="tab1">
+        <br />
+        <pre id="mermaid" class="mermaid">
+          !!{mermaid}
+          </pre
+        >
+        <button class="vscode-button" onclick="copyToClipboardFromMermaid(event,'mermaid')">Copy to clipboard</button>
+        <button class="vscode-button" onclick="saveToFileFromMermaid(event,'mermaid')">Save to file</button>
+        <script type="module">
+            import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.6.0/+esm";
+        </script>
+    </div>
+    <div class="vscode-tab-content hidden" id="tab2">
+        <br />
+        <p id="mermaidContent">!!{mermaidFormated}</p>
+        <button class="vscode-button" onclick="copyToClipboardFromParagraph(event,'mermaidContent')">Copy to clipboard</button>
+    </div>
+    <div class="vscode-tab-content hidden" id="tab3">
+        <br />
+        <p id="jsonContent">!!{json}</p>
+        <button class="vscode-button" onclick="copyToClipboardFromParagraph(event,'jsonContent')">Copy to clipboard</button>
+    </div>
+</div>
+
+<script>
+    const tabButtons = document.querySelectorAll(".vscode-tab");
+    const tabContents = document.querySelectorAll(".vscode-tab-content");
+
+    tabButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+            // Remove active class from all buttons
+            tabButtons.forEach((btn) => btn.classList.remove("active"));
+            // Hide all tab contents
+            tabContents.forEach((tab) => tab.classList.add("hidden"));
+
+            // Add active class to the clicked button
+            button.classList.add("active");
+
+            // Show corresponding tab content
+            const tabId = button.getAttribute("data-tab");
+            document.getElementById(tabId).classList.remove("hidden");
+        });
+    });
+</script>

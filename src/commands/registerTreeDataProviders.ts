@@ -10,6 +10,7 @@ import { EntitiesDataProvider } from "../trees/entitiesDataProvider";
 import { WebResourcesDataProvider } from "../trees/webResourcesDataProvider";
 import { ICommand } from "../utils/Interfaces";
 import { ViewBase } from "../views/ViewBase";
+import { FlowsDataProvider } from "../trees/flowsDataProvider";
 
 /**
  * This function registers all the commands for Tree Data Provider that are available in the Dataverse DevTools extension.
@@ -28,6 +29,9 @@ export const registerTreeDataProviders = (vscontext: vscode.ExtensionContext, tr
 
     const entityMetadataProvider = new EntitiesDataProvider(vscontext, dvHelper);
     vscode.window.registerTreeDataProvider("dvEntities", entityMetadataProvider);
+
+    const flowsProvider = new FlowsDataProvider(vscontext, dvHelper);
+    vscode.window.registerTreeDataProvider("dvFlows", flowsProvider);
 
     const wrProvider = new WebResourcesDataProvider(vscontext, dvHelper, uploadHelper);
     vscode.window.registerTreeDataProvider("dvWebResources", wrProvider);
@@ -56,6 +60,20 @@ export const registerTreeDataProviders = (vscontext: vscode.ExtensionContext, tr
             callback: () => entityMetadataProvider.filter(),
         },
         {
+            command: "dvdt.explorer.flows.loadFlows",
+            callback: () => flowsProvider.refresh(),
+        },
+        {
+            command: "dvdt.explorer.flows.showFlowExplorer",
+            callback: async () => {
+                try {
+                    await dvHelper.showFlowExplorer(views);
+                } catch (error) {
+                    errorHandler.log(error, "showFlowExplorer");
+                }
+            },
+        },
+        {
             command: "dvdt.explorer.webresources.loadWebResources",
             callback: () => wrProvider.refresh(),
         },
@@ -68,6 +86,7 @@ export const registerTreeDataProviders = (vscontext: vscode.ExtensionContext, tr
             callback: () => wrProvider.filter(),
         },
         {
+            command: "dvdt.explorer.entities.showMetadataExplorer",
             callback: async () => {
                 try {
                     await dvHelper.showMetadataExplorer(views);
@@ -75,7 +94,6 @@ export const registerTreeDataProviders = (vscontext: vscode.ExtensionContext, tr
                     errorHandler.log(error, "showMetadataExplorer");
                 }
             },
-            command: "dvdt.explorer.entities.showMetadataExplorer",
         },
         {
             command: "dvdt.explorer.entities.searchon",

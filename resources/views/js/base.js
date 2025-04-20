@@ -17,6 +17,13 @@ $(document).ready(function () {
         });
     });
 
+    $("#flowsSearch").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+        $("#flowsTable tr").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+        });
+    });
+
     if ($matchTable && $matchTable.bootstrapTable) {
         $matchTable.bootstrapTable();
         $matchTable.bootstrapTable("refreshOptions", {
@@ -43,6 +50,82 @@ function copyToClipboard(event, id) {
         command: "showInfo",
         text: "Copied to clipboard",
     });
+}
+
+function copyToClipboardFromParagraph(event, id) {
+    event.preventDefault(); // Prevents the default behavior
+
+    var copyText = document.getElementById(id);
+
+    navigator.clipboard.writeText(copyText.textContent);
+
+    vscode.postMessage({
+        command: "showInfo",
+        text: "Copied to clipboard",
+    });
+}
+
+function copyToClipboardFromMermaid(event, id) {
+    event.preventDefault(); // Prevents the default behavior
+
+    var copyText = document.getElementById(id);
+    var value = copyText.innerHTML;
+
+    // our mermaid is a svg... but it has some issues
+
+    // now some styles that are not ok
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(value, "text/html");
+
+    // Replace all <style> tags inside any <div>
+    doc.querySelectorAll("div").forEach((div) => {
+        div.setAttribute("style", "line-height: 15px; font-size: 70%");
+    });
+
+    value = doc.body.innerHTML;
+
+    // we have to fix <br> into <br />
+    value = value.replace(/<br>/g, "<br />");
+
+    navigator.clipboard.writeText(value);
+
+    vscode.postMessage({
+        command: "showInfo",
+        text: "Copied to clipboard",
+    });
+}
+
+function saveToFileFromMermaid(event, id, name) {
+    event.preventDefault(); // Prevents the default behavior
+
+    var copyText = document.getElementById(id);
+    var value = copyText.innerHTML;
+
+    // our mermaid is a svg... but it has some issues
+
+    // now some styles that are not ok
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(value, "text/html");
+
+    // Replace all <style> tags inside any <div>
+    doc.querySelectorAll("div").forEach((div) => {
+        div.setAttribute("style", "line-height: 15px; font-size: 70%");
+    });
+
+    value = doc.body.innerHTML;
+
+    // we have to fix <br> into <br />
+    value = value.replace(/<br>/g, "<br />");
+
+    const blob = new Blob([value], { type: "image/svg+xml" });
+
+    const link = document.createElement("a");
+
+    link.href = URL.createObjectURL(blob);
+
+    link.download = "flow.svg";
+
+    link.click();
 }
 
 function linkSpecific(cScore) {

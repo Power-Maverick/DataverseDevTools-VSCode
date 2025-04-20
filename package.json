@@ -73,6 +73,10 @@
                     "name": "Entities"
                 },
                 {
+                    "id": "dvFlows",
+                    "name": "Flows"
+                },
+                {
                     "id": "dvWebResources",
                     "name": "Web Resources"
                 }
@@ -158,6 +162,21 @@
                     "group": "navigation@2"
                 },
                 {
+                    "command": "dvdt.explorer.flows.loadFlows",
+                    "when": "view == dvFlows",
+                    "group": "navigation@2"
+                },
+                {
+                    "command": "dvdt.explorer.flows.showFlowExplorer",
+                    "when": "view == dvFlows",
+                    "group": "navigation@2"
+                },
+                {
+                    "command": "dvdt.explorer.flows.showFlowDetails",
+                    "when": "view == dvFlows && viewItem == flowdata",
+                    "group": "navigation@2"
+                },
+                {
                     "command": "dvdt.explorer.webresources.smartMatch",
                     "when": "view == dvWebResources",
                     "group": "navigation@1"
@@ -222,6 +241,11 @@
                 {
                     "command": "dvdt.explorer.entities.showEntityDetails",
                     "when": "view == dvEntities && viewItem == entitymedata",
+                    "group": "navigation@2"
+                },
+                {
+                    "command": "dvdt.explorer.flows.showFlowDetails",
+                    "when": "view == dvFlows && viewItem == flowdata",
                     "group": "navigation@2"
                 },
                 {
@@ -335,6 +359,21 @@
                 }
             },
             {
+                "command": "dvdt.explorer.flows.loadFlows",
+                "title": "Load Flows",
+                "category": "%dvdt.explorer.category%",
+                "icon": {
+                    "light": "resources/light/refresh.svg",
+                    "dark": "resources/dark/refresh.svg"
+                }
+            },
+            {
+                "command": "dvdt.explorer.flows.showFlowDetails",
+                "title": "Show Flow Details",
+                "when": "false",
+                "category": "%dvdt.explorer.category%"
+            },
+            {
                 "command": "dvdt.explorer.connections.showConnectionDetails",
                 "title": "Show Connection Details",
                 "category": "%dvdt.explorer.category%"
@@ -415,6 +454,15 @@
             {
                 "command": "dvdt.explorer.entities.showMetadataExplorer",
                 "title": "Show Metadata Explorer",
+                "category": "%dvdt.explorer.category%",
+                "icon": {
+                    "light": "resources/light/table-light.svg",
+                    "dark": "resources/dark/table-light.svg"
+                }
+            },
+            {
+                "command": "dvdt.explorer.flows.showFlowExplorer",
+                "title": "Show Flow Explorer",
                 "category": "%dvdt.explorer.category%",
                 "icon": {
                     "light": "resources/light/table-light.svg",

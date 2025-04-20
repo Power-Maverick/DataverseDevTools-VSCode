@@ -10,6 +10,7 @@ import {
     customDataverseClientId,
     entityDefinitionsStoreKey,
     environmentTypes,
+    flowsDefinitionsStoreKey,
     reservedWords,
     solDefinitionsStoreKey,
     wrDefinitionsStoreKey,
@@ -22,6 +23,8 @@ import {
     IConnection,
     IEntityDefinition,
     IEntityMetadata,
+    IFlowDefinition,
+    IFlowsMetadata,
     IOptionSet,
     IOptionSetMetadata,
     ISolutionComponents,
@@ -38,6 +41,8 @@ import { EntityDetailsView } from "../views/EntityDetailsView";
 import { EntityListView } from "../views/EntityListView";
 import { ViewBase } from "../views/ViewBase";
 import { RequestHelper } from "./requestHelper";
+import { FlowDetailsView } from "../views/FlowDetailsView";
+import { FlowListView } from "../views/FlowListView";
 
 export class DataverseHelper {
     private vsstate: State;
@@ -134,6 +139,8 @@ export class DataverseHelper {
                     this.vsstate.saveInWorkspace(connectionCurrentStoreKey, conn);
                     progress.report({ increment: 30, message: "Getting entity metadata..." });
                     await this.getEntityDefinitions();
+                    progress.report({ increment: 50, message: "Getting flows..." });
+                    await this.getFlowsDefinitions();
                     progress.report({ increment: 70, message: "Getting web resources..." });
                     await this.getWebResources();
 
@@ -167,6 +174,7 @@ export class DataverseHelper {
         const connFromWS: IConnection = this.vsstate.getFromWorkspace(connectionCurrentStoreKey);
         if (connFromWS) {
             await this.getEntityDefinitions();
+            await this.getFlowsDefinitions();
             await this.getWebResources();
             return connFromWS;
         }
@@ -183,12 +191,47 @@ export class DataverseHelper {
     }
 
     /**
-     * Get the entty definition from the current connection.
+     * Get the entity definition from the current connection.
      */
     public async getEntityDefinitions() {
         const respData = await this.request.requestData<IEntityMetadata>("EntityDefinitions");
         this.vsstate.saveInWorkspace(entityDefinitionsStoreKey, respData);
         vscode.commands.executeCommand("dvdt.explorer.entities.loadEntities");
+    }
+
+    /**
+     * Get the flows definition from the current connection.
+     */
+    public async getFlowsDefinitions() {
+        const respData = await this.request.requestData<IEntityMetadata>("workflows?$filter=category eq 5&$select=name,description,workflowid,createdon,modifiedon,clientdata,statecode");
+        this.vsstate.saveInWorkspace(flowsDefinitionsStoreKey, respData);
+        vscode.commands.executeCommand("dvdt.explorer.flows.loadFlows");
+    }
+
+    /**
+     * Show the details of the flow for the current connection.
+     * @param {string} id - EntityName of tree item that was selected.
+     * @param {ViewBase} view - ViewBase - The view that is calling this method.
+     */
+    public async showFlowDetails(id: string, view: ViewBase) {
+
+        let flows: IFlowDefinition[] = [];
+
+        const vsstate = new State(this.vscontext);
+        const jsonConn: IFlowsMetadata = vsstate.getFromWorkspace(flowsDefinitionsStoreKey);
+        if (jsonConn) {
+            flows = jsonConn.value;
+        } else {
+            flows = [];
+        }
+
+        const flow: IFlowDefinition | undefined = flows.find((f) => f.workflowid === id);
+        if (!flow) {
+            vscode.window.showErrorMessage(`Flow with ID ${id} not found.`);
+            return;
+        }
+        const webview = await view.getWebView({ type: "showEntityDetails", title: `Flow Details: ${flow.name}` });
+        new FlowDetailsView(flow, webview, this.vscontext);
     }
 
     /**
@@ -282,7 +325,7 @@ export class DataverseHelper {
     }
 
     /**
-     * Show the details of the entity for the current connection.
+     * Show the list of the entities for the current connection.
      * @param {ViewBase} view - ViewBase - The view that is calling this method.
      */
     public async showMetadataExplorer(view: ViewBase) {
@@ -297,6 +340,24 @@ export class DataverseHelper {
 
         const webview = await view.getWebView({ type: "showEntityList", title: "Show Entity List" });
         new EntityListView(entities, webview, this.vscontext);
+    }
+
+    /**
+     * Show the list of the flow for the current connection.
+     * @param {ViewBase} view - ViewBase - The view that is calling this method.
+     */
+    public async showFlowExplorer(view: ViewBase) {
+        const vsstate = new State(this.vscontext);
+        const flowsMetadata: IFlowsMetadata = vsstate.getFromWorkspace(flowsDefinitionsStoreKey);
+
+        let flows: IFlowDefinition[] = [];
+
+        if (flowsMetadata) {
+            flows = flowsMetadata.value;
+        }
+
+        const webview = await view.getWebView({ type: "showFlowsList", title: "Show Flows List" });
+        new FlowListView(flows, webview, this.vscontext);
     }
 
     /**
@@ -632,4 +693,4 @@ export class DataverseHelper {
     //#endregion Private
 }
 
-async function redirectTimeout(): Promise<void> {}
+async function redirectTimeout(): Promise<void> { }

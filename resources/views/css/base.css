@@ -304,27 +304,60 @@ input.vscode-textfield:focus:invalid {
     border-color: var(--vscode-focusBorder);
 }
 
+/* Tabs */
+
+.vscode-tab {
+    align-items: center;
+    border-style: solid;
+    border-radius: 2px;
+    border-width: 1px;
+    cursor: pointer;
+    display: inline-flex;
+    font-family: var(--vscode-font-family);
+    font-size: var(--vscode-font-size);
+    font-weight: var(--vscode-font-weight);
+    line-height: 22px;
+    overflow: hidden;
+    padding: 1px 13px;
+    user-select: none;
+    white-space: nowrap;
+    color: var(--vscode-button-secondaryForeground);
+    background-color: var(--vscode-button-secondaryBackground);
+    border-color: var(--vscode-button-border, var(--vscode-button-secondaryBackground));
+}
+
+.vscode-tab.active {
+    color: var(--vscode-button-foreground);
+    background-color: var(--vscode-button-background);
+    border-color: var(--vscode-button-border, var(--vscode-button-background));
+}
+
 /* Table */
 
 #attributesTable th,
-#entitiesTable th {
+#entitiesTable th,
+#flowsTable th {
     font-weight: bold;
 }
 
 #attributesTable td,
 #attributesTable th,
 #entitiesTable td,
-#entitiesTable th {
+#entitiesTable th,
+#flowsTable td,
+#flowsTable th {
     margin: 8px;
     padding: 8px;
 }
 
 #attrTable tr:hover,
-#entTable tr:hover {
+#entTable tr:hover,
+#floTable tr:hover {
     background: var(--vscode-list-hoverBackground);
 }
 
 #attrTable td,
-#entTable td {
+#entTable td,
+#floTable td {
     white-space: nowrap;
 }

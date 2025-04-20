@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import * as path from "path";
-import { IConnection, IEntityDefinition, IPanel } from "../../utils/Interfaces";
+import { IConnection, IEntityDefinition, IFlowDefinition, IPanel } from "../../utils/Interfaces";
 import { readFileSync } from "../../utils/FileSystem";
 import _ = require("lodash");
 
@@ -10,6 +10,7 @@ export class VsCodePanel {
     private disposables: vscode.Disposable[] = [];
     conn?: IConnection;
     entity?: IEntityDefinition;
+    flow?: IFlowDefinition;
 
     constructor(public panelOptions: IPanel) {
         this.webViewPanel = panelOptions.panel;

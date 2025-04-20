@@ -1,106 +1,138 @@
 <h2>!!{entityLogicalName}</h2>
 <h3 style="display: inline">Schema Name: !!{entitySchemaName}</h3>
 <br />
-
+<style>
+    .hidden {
+        display: none;
+    }
+</style>
 <div>Description: !!{description}</div>
-
-<h4>Entity Details</h4>
-
-    <table>
-        <tr>
-            <td><label for="sla">SLA:</label></td>
-            <td><input class="vscode-textfield"  readonly id="sla" value="!!{sla}"></input></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td><label for="entityType">Entity Type:</label></td>
-            <td><input class="vscode-textfield"  readonly id="entityType" value="!!{entityType}"></input></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td><label for="objtypecode">Object Type Code:</label></td>
-            <td><input class="vscode-textfield"  readonly id="objtypecode" value="!!{objectTypeCode}"></input></td>
-            <td><button class="vscode-button" onclick="copyToClipboard(event,'objtypecode')">Copy</button></td>
-        </tr>
-        <tr>
-            <td><label for="pid">Primary ID Attribute:</label></td>
-            <td><input class="vscode-textfield"  readonly id="pid" value="!!{idAttr}"></input></td>
-            <td><button class="vscode-button" onclick="copyToClipboard(event,'pid')">Copy</button></td>
-        </tr>
-        <tr>
-            <td><label for="pname">Primary Name Attribute:</label></td>
-            <td><input class="vscode-textfield"  readonly id="pname" value="!!{nameAttr}"></input></td>
-            <td><button class="vscode-button" onclick="copyToClipboard(event,'pname')">Copy</button></td>
-        </tr>
-        <tr>
-            <td><label for="setname">Entity Set Name:</label></td>
-            <td><input class="vscode-textfield"  readonly id="setname" value="!!{setName}"></input></td>
-            <td><button class="vscode-button" onclick="copyToClipboard(event,'setname')">Copy</button></td>
-        </tr>
-    </table>
-
-<h4>Attributes</h4>
-
-<div class="attributesList">
-    <input class="vscode-textfield" id="attrSearch" placeholder="Search.."></input>
-    <br />
-    <table class="table table-bordered sortable" id="attributesTable">
-        <thead>
-            <th onclick="sortTable('attributesTable',0)">
-                Id
-                <div class="sort-icon">
-                    <span class="asc-icon">&#9650;</span>
-                    <span class="desc-icon">&#9660;</span>
-                </div>
-            </th>
-            <th onclick="sortTable('attributesTable',1)">
-                Logical Name
-                <div class="sort-icon">
-                    <span class="asc-icon">&#9650;</span>
-                    <span class="desc-icon">&#9660;</span>
-                </div>
-            </th>
-            <th onclick="sortTable('attributesTable',2)">
-                Schema Name
-                <div class="sort-icon">
-                    <span class="asc-icon">&#9650;</span>
-                    <span class="desc-icon">&#9660;</span>
-                </div>
-            </th>
-            <th onclick="sortTable('attributesTable',3)">
-                Type
-                <div class="sort-icon">
-                    <span class="asc-icon">&#9650;</span>
-                    <span class="desc-icon">&#9660;</span>
-                </div>
-            </th>
-            <th onclick="sortTable('attributesTable',4)">
-                Attribute Type Name
-                <div class="sort-icon">
-                    <span class="asc-icon">&#9650;</span>
-                    <span class="desc-icon">&#9660;</span>
-                </div>
-            </th>
-            <th onclick="sortTable('attributesTable',4)">
-                Attribute Of
-                <div class="sort-icon">
-                    <span class="asc-icon">&#9650;</span>
-                    <span class="desc-icon">&#9660;</span>
-                </div>
-            </th>
-            <th onclick="sortTable('attributesTable',5)">
-                Required Level
-                <div class="sort-icon">
-                    <span class="asc-icon">&#9650;</span>
-                    <span class="desc-icon">&#9660;</span>
-                </div>
-            </th>
-        </thead>
-        <tbody id="attrTable">
-            !!{attributes}
-        </tbody>
-    </table>
+<br />
+<div class="tabs">
+    <div class="tab-buttons">
+        <button class="active vscode-tab" data-tab="tab1">Entity Details</button>
+        <button class="vscode-tab" data-tab="tab2">Attributes</button>
+    </div>
+    <div class="vscode-tab-content" id="tab1">
+        <br />
+        <table>
+            <tr>
+                <td><label for="sla">SLA:</label></td>
+                <td><input class="vscode-textfield"  readonly id="sla" value="!!{sla}"></input></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><label for="entityType">Entity Type:</label></td>
+                <td><input class="vscode-textfield"  readonly id="entityType" value="!!{entityType}"></input></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><label for="objtypecode">Object Type Code:</label></td>
+                <td><input class="vscode-textfield"  readonly id="objtypecode" value="!!{objectTypeCode}"></input></td>
+                <td><button class="vscode-button" onclick="copyToClipboard(event,'objtypecode')">Copy</button></td>
+            </tr>
+            <tr>
+                <td><label for="pid">Primary ID Attribute:</label></td>
+                <td><input class="vscode-textfield"  readonly id="pid" value="!!{idAttr}"></input></td>
+                <td><button class="vscode-button" onclick="copyToClipboard(event,'pid')">Copy</button></td>
+            </tr>
+            <tr>
+                <td><label for="pname">Primary Name Attribute:</label></td>
+                <td><input class="vscode-textfield"  readonly id="pname" value="!!{nameAttr}"></input></td>
+                <td><button class="vscode-button" onclick="copyToClipboard(event,'pname')">Copy</button></td>
+            </tr>
+            <tr>
+                <td><label for="setname">Entity Set Name:</label></td>
+                <td><input class="vscode-textfield"  readonly id="setname" value="!!{setName}"></input></td>
+                <td><button class="vscode-button" onclick="copyToClipboard(event,'setname')">Copy</button></td>
+            </tr>
+        </table>
+    </div>
+    <div class="vscode-tab-content hidden" id="tab2">
+        <br />
+        <div class="attributesList">
+            <input class="vscode-textfield" id="attrSearch" placeholder="Search.."></input>
+            <br />
+            <table class="table table-bordered sortable" id="attributesTable">
+                <thead>
+                    <th onclick="sortTable('attributesTable',0)">
+                        Id
+                        <div class="sort-icon">
+                            <span class="asc-icon">&#9650;</span>
+                            <span class="desc-icon">&#9660;</span>
+                        </div>
+                    </th>
+                    <th onclick="sortTable('attributesTable',1)">
+                        Logical Name
+                        <div class="sort-icon">
+                            <span class="asc-icon">&#9650;</span>
+                            <span class="desc-icon">&#9660;</span>
+                        </div>
+                    </th>
+                    <th onclick="sortTable('attributesTable',2)">
+                        Schema Name
+                        <div class="sort-icon">
+                            <span class="asc-icon">&#9650;</span>
+                            <span class="desc-icon">&#9660;</span>
+                        </div>
+                    </th>
+                    <th onclick="sortTable('attributesTable',3)">
+                        Type
+                        <div class="sort-icon">
+                            <span class="asc-icon">&#9650;</span>
+                            <span class="desc-icon">&#9660;</span>
+                        </div>
+                    </th>
+                    <th onclick="sortTable('attributesTable',4)">
+                        Attribute Type Name
+                        <div class="sort-icon">
+                            <span class="asc-icon">&#9650;</span>
+                            <span class="desc-icon">&#9660;</span>
+                        </div>
+                    </th>
+                    <th onclick="sortTable('attributesTable',4)">
+                        Attribute Of
+                        <div class="sort-icon">
+                            <span class="asc-icon">&#9650;</span>
+                            <span class="desc-icon">&#9660;</span>
+                        </div>
+                    </th>
+                    <th onclick="sortTable('attributesTable',5)">
+                        Required Level
+                        <div class="sort-icon">
+                            <span class="asc-icon">&#9650;</span>
+                            <span class="desc-icon">&#9660;</span>
+                        </div>
+                    </th>
+                </thead>
+                <tbody id="attrTable">
+                    !!{attributes}
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 
 <div id="entity" class="col s12"></div>
 <div id="attributes" class="col s12"></div>
+
+<script>
+    const tabButtons = document.querySelectorAll(".vscode-tab");
+    const tabContents = document.querySelectorAll(".vscode-tab-content");
+
+    tabButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+            // Remove active class from all buttons
+            tabButtons.forEach((btn) => btn.classList.remove("active"));
+            // Hide all tab contents
+            tabContents.forEach((tab) => tab.classList.add("hidden"));
+
+            // Add active class to the clicked button
+            button.classList.add("active");
+
+            // Show corresponding tab content
+            const tabId = button.getAttribute("data-tab");
+            document.getElementById(tabId).classList.remove("hidden");
+        });
+    });
+</script>
