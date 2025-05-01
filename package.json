@@ -572,7 +572,7 @@
         "webpack-cli": "^5.1.4"
     },
     "dependencies": {
-        "@azure/identity": "^3.0.0",
+        "@azure/identity": "^4.9.1",
         "@azure/identity-vscode": "^1.0.0",
         "@azure/msal-node": "^2.16.2",
         "@types/fs-extra": "^9.0.12",
