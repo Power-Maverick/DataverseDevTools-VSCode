@@ -14,7 +14,7 @@ export class EntitiesDataProvider implements vscode.TreeDataProvider<EntitiesTre
     private areEntitiesFiltered: boolean = false;
     private areEntitiesSearched: boolean = false;
 
-    constructor(private vscontext: vscode.ExtensionContext, private dvHelper: DataverseHelper) {}
+    constructor(private vscontext: vscode.ExtensionContext, private dvHelper: DataverseHelper) { }
 
     refresh(): void {
         this.populateEntities();
@@ -119,7 +119,7 @@ export class EntitiesDataProvider implements vscode.TreeDataProvider<EntitiesTre
         const solutions = await this.dvHelper.getSolutions();
         if (solutions) {
             let solQPOptions = solutions.value.map((s) => {
-                return { label: s.friendlyname, data: s };
+                return { label: `${s.uniquename} (${s.version})`, data: s };
             });
             let solOptionsQP: vscode.QuickPickOptions = Placeholders.getQuickPickOptions(Placeholders.solutionSelection);
             let solQPResponse = await vscode.window.showQuickPick(solQPOptions, solOptionsQP);
