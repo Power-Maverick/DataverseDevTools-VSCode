@@ -530,7 +530,7 @@ export class WebResourceHelper {
         const solutions = await this.dvHelper.getSolutions();
         if (solutions) {
             let solQPOptions = solutions.value.map((s) => {
-                return { label: s.friendlyname, data: s };
+                return { label: `${s.uniquename} (${s.version})`, data: s };
             });
             let solOptionsQP: vscode.QuickPickOptions = Placeholders.getQuickPickOptions(Placeholders.solutionSelection);
             let solQPResponse = await vscode.window.showQuickPick(solQPOptions, solOptionsQP);
