@@ -6,6 +6,7 @@ import { flowsDefinitionsStoreKey } from "../utils/Constants";
 import { IFlowDefinition, IFlowsMetadata, IStore } from "../utils/Interfaces";
 import { State } from "../utils/State";
 import { TreeItemBase } from "./treeItemBase";
+import * as config from ".././utils/Config";
 
 export class FlowsDataProvider implements vscode.TreeDataProvider<FlowsTreeItem> {
     private refreshTreeData: vscode.EventEmitter<FlowsTreeItem | undefined | void> = new vscode.EventEmitter<FlowsTreeItem | undefined | void>();
@@ -14,6 +15,13 @@ export class FlowsDataProvider implements vscode.TreeDataProvider<FlowsTreeItem>
     constructor(private vscontext: vscode.ExtensionContext, private dvHelper: DataverseHelper) { }
 
     refresh(): void {
+        this.populateFlows();
+        this.refreshTreeData.fire();
+    }
+
+    activateLoadingAutomatically(): void {
+        config.set("loadFlowsAutomatically", true);
+        this.dvHelper.getFlowsDefinitions();
         this.populateFlows();
         this.refreshTreeData.fire();
     }

@@ -74,6 +74,10 @@ export const registerTreeDataProviders = (vscontext: vscode.ExtensionContext, tr
             },
         },
         {
+            command: "dvdt.explorer.flows.activateLoadingAutomatically",
+            callback: () => flowsProvider.activateLoadingAutomatically(),
+        },
+        {
             command: "dvdt.explorer.webresources.loadWebResources",
             callback: () => wrProvider.refresh(),
         },

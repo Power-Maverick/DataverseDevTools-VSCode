@@ -3,6 +3,8 @@ import { configSectionName } from "./Constants";
 
 export function get(key: "enableEarlyAccessPreview"): boolean;
 export function get(key: "defaultTypeScriptTemplate"): "None" | "Plain TypeScript" | "Webpack";
+export function get(key: "loadFlowsAutomatically"): boolean;
+
 
 export function get(key: any) {
     const extensionConfig = workspace.getConfiguration(configSectionName);

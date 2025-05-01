@@ -43,6 +43,7 @@ import { ViewBase } from "../views/ViewBase";
 import { RequestHelper } from "./requestHelper";
 import { FlowDetailsView } from "../views/FlowDetailsView";
 import { FlowListView } from "../views/FlowListView";
+import * as config from ".././utils/Config";
 
 export class DataverseHelper {
     private vsstate: State;
@@ -107,6 +108,7 @@ export class DataverseHelper {
     public async connectToDataverse(connItem: DataverseConnectionTreeItem): Promise<IConnection | undefined> {
         const conn: IConnection | undefined = this.getConnectionByName(connItem.label);
         if (conn) {
+
             return vscode.window.withProgress(
                 {
                     location: ProgressLocation.Notification,
@@ -139,8 +141,12 @@ export class DataverseHelper {
                     this.vsstate.saveInWorkspace(connectionCurrentStoreKey, conn);
                     progress.report({ increment: 30, message: "Getting entity metadata..." });
                     await this.getEntityDefinitions();
-                    progress.report({ increment: 50, message: "Getting flows..." });
-                    await this.getFlowsDefinitions();
+                    if (config.get("loadFlowsAutomatically")) {
+                        progress.report({ increment: 50, message: "Getting flows..." });
+                        await this.getFlowsDefinitions();
+                    } else {
+                        this.clearFlowDefintion();
+                    }
                     progress.report({ increment: 70, message: "Getting web resources..." });
                     await this.getWebResources();
 
@@ -174,7 +180,13 @@ export class DataverseHelper {
         const connFromWS: IConnection = this.vsstate.getFromWorkspace(connectionCurrentStoreKey);
         if (connFromWS) {
             await this.getEntityDefinitions();
-            await this.getFlowsDefinitions();
+
+            if (config.get("loadFlowsAutomatically")) {
+                await this.getFlowsDefinitions();
+            } else {
+                this.clearFlowDefintion();
+            }
+
             await this.getWebResources();
             return connFromWS;
         }
@@ -203,8 +215,13 @@ export class DataverseHelper {
      * Get the flows definition from the current connection.
      */
     public async getFlowsDefinitions() {
-        const respData = await this.request.requestData<IEntityMetadata>("workflows?$filter=category eq 5&$select=name,description,workflowid,createdon,modifiedon,clientdata,statecode");
+        const respData = await this.request.requestData<IEntityMetadata>("workflows?$filter=(category eq 5 and iscustomizable/Value eq true)&$select=name,description,workflowid,createdon,modifiedon,clientdata,statecode,iscustomizable");
         this.vsstate.saveInWorkspace(flowsDefinitionsStoreKey, respData);
+        vscode.commands.executeCommand("dvdt.explorer.flows.loadFlows");
+    }
+
+    public clearFlowDefintion() {
+        this.vsstate.unsetFromWorkspace(flowsDefinitionsStoreKey);
         vscode.commands.executeCommand("dvdt.explorer.flows.loadFlows");
     }
 

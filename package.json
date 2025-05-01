@@ -279,6 +279,10 @@
                 "contents": "No entities found.\n[Clear Filter](command:dvdt.explorer.entities.filteroff)"
             },
             {
+                "view": "dvFlows",
+                "contents": "No flow found or loading automatically is disabled in settings.\n[Activate](command:dvdt.explorer.flows.activateLoadingAutomatically)"
+            },
+            {
                 "view": "ppCLICommands",
                 "contents": "Unable to load CLI commands.\nPlease reload the tool."
             }
@@ -593,6 +597,11 @@
                         "Webpack"
                     ],
                     "markdownDescription": "%dvdt.config.defaultTSTemplate%"
+                },
+                "dataverse-devtools.loadFlowsAutomatically": {
+                    "type": "boolean",
+                    "default": false,
+                    "markdownDescription": "%dvdt.config.loadFlowsAutomatically%"
                 }
             }
         }
