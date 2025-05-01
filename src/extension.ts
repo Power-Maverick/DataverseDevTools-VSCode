@@ -6,7 +6,7 @@ import { registerCommands } from "./commands/registerCommands";
 import { registerTreeDataProviders } from "./commands/registerTreeDataProviders";
 import { DataverseHelper } from "./helpers/dataverseHelper";
 import * as config from "./utils/Config";
-import { aiKey, extensionPrefix, fileExtensions } from "./utils/Constants";
+import { aiKey, extensionCodeName, extensionPrefix, fileExtensions } from "./utils/Constants";
 
 const extensionId = "danish-naglekar.dataverse-devtools";
 const extension = vscode.extensions.getExtension(extensionId)!;
@@ -25,6 +25,13 @@ export function activate(context: vscode.ExtensionContext) {
 
     vscode.commands.executeCommand("setContext", `${extensionPrefix}.resourcesExtn`, fileExtensions);
     vscode.commands.executeCommand("setContext", `${extensionPrefix}.showPreviewOptions`, config.get("enableEarlyAccessPreview"));
+    vscode.commands.executeCommand("setContext", `${extensionPrefix}.loadFlowsAutomatically`, config.get("loadFlowsAutomatically"));
+
+    vscode.workspace.onDidChangeConfiguration((e) => {
+        if (e.affectsConfiguration(`${extensionCodeName}.loadFlowsAutomatically`)) {
+            vscode.commands.executeCommand("setContext", `${extensionPrefix}.loadFlowsAutomatically`, config.get("loadFlowsAutomatically"));
+        }
+    });
 
     registerTreeDataProviders(context, reporter);
     registerCommands(context, reporter);

@@ -101,6 +101,21 @@ export interface IEntityDefinition {
     Attributes: IAttributeMetadata;
 }
 
+export interface IFlowsMetadata {
+    value: IFlowDefinition[];
+}
+
+export interface IFlowDefinition {
+    name: string;
+    description: string;
+    workflowid: string;
+    createdon: Date;
+    modifiedon: Date;
+    clientdata: string;
+    statecode: number;
+    type: string;
+}
+
 export interface IAttributeMetadata {
     value: IAttributeDefinition[];
 }

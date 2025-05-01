@@ -15,6 +15,7 @@ import { connectionStatusBarUniqueId, extensionPrefix, jsConfigFileName, tsConfi
 import { ICommand, IConnection } from "../utils/Interfaces";
 import { ViewBase } from "../views/ViewBase";
 import { addConnection } from "./connections";
+import { FlowsTreeItem } from "../trees/flowsDataProvider";
 
 let dvStatusBarItem: vscode.StatusBarItem;
 
@@ -124,6 +125,7 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
             },
         },
         {
+            command: "dvdt.explorer.entities.showEntityDetailsByEntityName",
             callback: async (entityName: string) => {
                 try {
                     await dvHelper.showEntityDetails(entityName, views);
@@ -131,7 +133,6 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
                     errorHandler.log(error, "showEntityDetailsByEntityName");
                 }
             },
-            command: "dvdt.explorer.entities.showEntityDetailsByEntityName",
         },
         {
             command: "dvdt.commands.initTS",
@@ -140,6 +141,28 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
                     await templateHelper.initiateTypeScriptProject(uri.fsPath);
                 } catch (error) {
                     errorHandler.log(error, "initTS");
+                }
+            },
+        },
+        {
+            command: "dvdt.explorer.flows.showFlowDetails",
+            callback: async (item: FlowsTreeItem) => {
+                try {
+                    if (item.id !== undefined) {
+                        await dvHelper.showFlowDetails(item.id, views);
+                    }
+                } catch (error) {
+                    errorHandler.log(error, "showFlowDetails");
+                }
+            },
+        },
+        {
+            command: "dvdt.explorer.flows.showFlowDetailsById",
+            callback: async (id: string) => {
+                try {
+                    await dvHelper.showFlowDetails(id, views);
+                } catch (error) {
+                    errorHandler.log(error, "showFlowDetailsById");
                 }
             },
         },
@@ -342,5 +365,5 @@ export async function validateEnablingOptions() {
                 await vscode.commands.executeCommand("setContext", `${extensionPrefix}.isJSProject`, true);
             }
         }
-    } catch (e) {}
+    } catch (e) { }
 }

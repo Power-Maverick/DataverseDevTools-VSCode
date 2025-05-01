@@ -1,0 +1,60 @@
+<!-- <ul id="tabs-swipe-demo" class="tabs">
+    <li class="tab col s3"><a class="active" href="#entity">Entity Details</a></li>
+    <li class="tab col s3"><a href="#attributes">Attributes</a></li>
+</ul> -->
+<br /><br />
+
+<input class="vscode-textfield"  autofocus id="flowsSearch" placeholder="Search.."></input>
+
+<br />
+
+<table class="table table-bordered sortable" id="flowsTable">
+    <thead>
+        <th onclick="sortTable('flowsTable',0)">
+            Id
+            <div class="sort-icon">
+                <span class="asc-icon">&#9650;</span>
+                <span class="desc-icon">&#9660;</span>
+            </div>
+        </th>
+        <th onclick="sortTable('flowsTable',1)">
+            Name
+            <div class="sort-icon">
+                <span class="asc-icon">&#9650;</span>
+                <span class="desc-icon">&#9660;</span>
+            </div>
+        </th>
+        <th onclick="sortTable('flowsTable',2)">
+            Description
+            <div class="sort-icon">
+                <span class="asc-icon">&#9650;</span>
+                <span class="desc-icon">&#9660;</span>
+            </div>
+        </th>
+        <th onclick="sortTable('flowsTable',3)">
+            Status
+            <div class="sort-icon">
+                <span class="asc-icon">&#9650;</span>
+                <span class="desc-icon">&#9660;</span>
+            </div>
+        </th>
+        <th onclick="sortTable('flowsTable',4)">
+            Created
+            <div class="sort-icon">
+                <span class="asc-icon">&#9650;</span>
+                <span class="desc-icon">&#9660;</span>
+            </div>
+        </th>
+        <th onclick="sortTable('flowsTable',5)">
+            Modified
+            <div class="sort-icon">
+                <span class="asc-icon">&#9650;</span>
+                <span class="desc-icon">&#9660;</span>
+            </div>
+        </th>
+        
+    </thead>
+    <tbody id="floTable">
+        !!{flows}
+    </tbody>
+</table>

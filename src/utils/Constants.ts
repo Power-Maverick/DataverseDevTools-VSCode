@@ -14,6 +14,7 @@ export const apiPartUrl: string = `/api/data/${environmentVersion}/`;
 export const connectionStoreKey: string = `DataverseConnections`;
 export const connectionCurrentStoreKey: string = `LiveDVConnection`;
 export const entityDefinitionsStoreKey: string = `CurrentEntityDefinitions`;
+export const flowsDefinitionsStoreKey: string = `CurrentFlowsDefinitions`;
 export const wrDefinitionsStoreKey: string = `CurrentWRs`;
 export const solDefinitionsStoreKey: string = `CurrentSolutions`;
 export const smartMatchStoreKey: string = `CurrentSmartMatch`;
