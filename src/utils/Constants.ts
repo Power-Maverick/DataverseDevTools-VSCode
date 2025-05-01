@@ -32,7 +32,7 @@ export const tsConfigFileName: string = "tsconfig.json";
 export const jsConfigFileName: string = "jsconfig.json";
 
 export enum LoginTypes {
-    microsoftLogin = "Microsoft Login Prompt (Recommended)",
+    microsoftLogin = "Microsoft Login Prompt",
     clientIdSecret = "Client Id and Secret",
     userNamePassword = "Username/Password",
     // azure = "Azure",

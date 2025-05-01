@@ -69,9 +69,11 @@ export class DataverseHelper {
         try {
             if (conn) {
                 const tokenResponse = await this.connectInternal(conn.loginType, conn);
-                conn.currentAccessToken = tokenResponse.access_token!;
-                conn.refreshToken = tokenResponse.refresh_token!;
-                this.vsstate.saveInWorkspace(connectionCurrentStoreKey, conn);
+                if (tokenResponse) {
+                    conn.currentAccessToken = tokenResponse.access_token!;
+                    conn.refreshToken = tokenResponse.refresh_token!;
+                    this.vsstate.saveInWorkspace(connectionCurrentStoreKey, conn);
+                }
             }
         } catch (err) {
             throw err;
@@ -122,8 +124,9 @@ export class DataverseHelper {
                     });
                     progress.report({ increment: 0, message: "Connecting to environment..." });
                     const tokenResponse = await this.connectInternal(conn.loginType, conn);
-                    conn.currentAccessToken = tokenResponse.access_token!;
-                    if (tokenResponse.access_token) {
+
+                    if (tokenResponse && tokenResponse.access_token) {
+                        conn.currentAccessToken = tokenResponse.access_token!;
                         switch (conn.loginType) {
                             case LoginTypes.clientIdSecret:
                                 conn.userName = JSON.parse(Buffer.from(tokenResponse.access_token.split(".")[1], "base64").toString())?.appid;
@@ -135,8 +138,12 @@ export class DataverseHelper {
                                 conn.userName = JSON.parse(Buffer.from(tokenResponse.access_token.split(".")[1], "base64").toString())?.upn;
                                 break;
                         }
+                        conn.refreshToken = tokenResponse.refresh_token!;
+                    } else {
+                        vscode.window.showErrorMessage("Unable to connect to Dataverse. Please try again.");
+                        return undefined;
                     }
-                    conn.refreshToken = tokenResponse.refresh_token!;
+
                     progress.report({ increment: 10 });
                     this.vsstate.saveInWorkspace(connectionCurrentStoreKey, conn);
                     progress.report({ increment: 30, message: "Getting entity metadata..." });
@@ -487,6 +494,7 @@ export class DataverseHelper {
                     tokenResponse = await loginWithClientIdSecret(currentConnection.environmentUrl, currentConnection.userName!, currentConnection.password!, currentConnection.tenantId!);
                     break;
                 case LoginTypes.microsoftLogin:
+                case `${LoginTypes.microsoftLogin} (Recommended)`: // Support in-between version 2.2.3-2.2.4
                     tokenResponse = await loginWithMicrosoftPrompt(currentConnection.environmentUrl, openUri, redirectTimeout);
                     break;
                 // case LoginTypes.azure:
@@ -596,7 +604,7 @@ export class DataverseHelper {
         return conn;
     }
 
-    private async connectInternal(loginType: string, conn: IConnection): Promise<Token> {
+    private async connectInternal(loginType: string, conn: IConnection): Promise<Token | undefined> {
         switch (loginType) {
             case LoginTypes.userNamePassword:
                 return await loginWithUsernamePassword(conn.environmentUrl, conn.userName!, conn.password!);
@@ -605,9 +613,11 @@ export class DataverseHelper {
             // case LoginTypes.azure:
             //     return await loginWithAzure(conn.environmentUrl);
             case LoginTypes.microsoftLogin:
+            case `${LoginTypes.microsoftLogin} (Recommended)`: // Support in-between version 2.2.3-2.2.4
                 return await loginWithMicrosoftPrompt(conn.environmentUrl, openUri, redirectTimeout);
             default:
-                throw new Error(ErrorMessages.invalidLoginType);
+                vscode.window.showErrorMessage(ErrorMessages.invalidLoginType);
+                return undefined;
         }
     }
 
