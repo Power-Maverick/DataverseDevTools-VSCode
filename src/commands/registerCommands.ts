@@ -112,6 +112,16 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
             },
         },
         {
+            command: "dvdt.explorer.connections.updateStatusBar",
+            callback: (conn: IConnection | undefined) => {
+                try {
+                    updateConnectionStatusBar(conn);
+                } catch (error) {
+                    errorHandler.log(error, "updateStatusBar");
+                }
+            },
+        },
+        {
             command: "dvdt.explorer.entities.showEntityDetails",
             callback: async (enItem: EntitiesTreeItem) => {
                 try {

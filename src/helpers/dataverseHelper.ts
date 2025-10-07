@@ -185,6 +185,15 @@ export class DataverseHelper {
     }
 
     /**
+     * Get the current workspace connection without reloading data.
+     * @returns The connection object.
+     */
+    public getCurrentWorkspaceConnection(): IConnection | undefined {
+        const connFromWS: IConnection = this.vsstate.getFromWorkspace(connectionCurrentStoreKey);
+        return connFromWS;
+    }
+
+    /**
      * Get the current access token from the current connection.
      * @returns The current access token.
      */

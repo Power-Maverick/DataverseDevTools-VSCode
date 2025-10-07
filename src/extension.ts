@@ -79,6 +79,10 @@ function startTokenExpirationCheck(context: vscode.ExtensionContext) {
             
             // Refresh the connection tree to show expired icon
             vscode.commands.executeCommand("dvdt.explorer.connections.refreshConnection");
+            
+            // Update status bar to show expired state
+            const conn = dvHelper.getCurrentWorkspaceConnection();
+            vscode.commands.executeCommand("dvdt.explorer.connections.updateStatusBar", conn);
         } else if (!isExpired) {
             // Reset notification flag when token is refreshed
             lastNotifiedExpiration = false;
