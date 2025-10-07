@@ -417,43 +417,49 @@ export class WebResourceHelper {
                 title: `Uploading ${fileName}`,
             },
             async (progress, token) => {
-                let id: string = "";
-                let wrReturn: IWebResource | undefined;
-                token.onCancellationRequested(() => {
-                    console.log("User canceled the long running operation");
-                    return;
-                });
-                progress.report({ increment: 0, message: "Uploading..." });
-                if (resc && resc["@_Id"]) {
-                    const wr: IWebResource = {
-                        content: encodeToBase64(readFileSync(fullPath)),
-                    };
-                    await this.dvHelper.updateWebResourceContent(resc["@_Id"], wr);
-                    id = resc["@_Id"];
-                    wrReturn = wr;
-                    wrReturn.name = resc["@_dvFilePath"];
-                    wrReturn.displayname = resc["@_dvDisplayName"];
-                    wrReturn.webresourceid = resc["@_Id"];
-                } else {
-                    const wr = await this.webResourceCreateWizard(fullPath);
-                    if (wr) {
-                        const solutionUniqueName = wr.description!;
-                        wr.description = null;
-                        let wrId = await this.dvHelper.createWebResource(wr);
-                        if (wrId) {
-                            wrId = extractGuid(wrId)!;
-                            this.dvHelper.addWRToSolution(solutionUniqueName, wrId);
-                            wr.webresourceid = wrId;
-                            id = wrId;
-                            wrReturn = wr;
+                try {
+                    let id: string = "";
+                    let wrReturn: IWebResource | undefined;
+                    token.onCancellationRequested(() => {
+                        console.log("User canceled the long running operation");
+                        return;
+                    });
+                    progress.report({ increment: 0, message: "Uploading..." });
+                    if (resc && resc["@_Id"]) {
+                        const wr: IWebResource = {
+                            content: encodeToBase64(readFileSync(fullPath)),
+                        };
+                        await this.dvHelper.updateWebResourceContent(resc["@_Id"], wr);
+                        id = resc["@_Id"];
+                        wrReturn = wr;
+                        wrReturn.name = resc["@_dvFilePath"];
+                        wrReturn.displayname = resc["@_dvDisplayName"];
+                        wrReturn.webresourceid = resc["@_Id"];
+                    } else {
+                        const wr = await this.webResourceCreateWizard(fullPath);
+                        if (wr) {
+                            const solutionUniqueName = wr.description!;
+                            wr.description = null;
+                            let wrId = await this.dvHelper.createWebResource(wr);
+                            if (wrId) {
+                                wrId = extractGuid(wrId)!;
+                                this.dvHelper.addWRToSolution(solutionUniqueName, wrId);
+                                wr.webresourceid = wrId;
+                                id = wrId;
+                                wrReturn = wr;
+                            }
                         }
                     }
+                    progress.report({ increment: 50, message: "Publishing..." });
+                    await this.dvHelper.publishWebResource(id);
+                    progress.report({ increment: 100 });
+                    vscode.window.showInformationMessage(`${fileName} uploaded.`);
+                    return wrReturn;
+                } catch (error) {
+                    vscode.window.showErrorMessage(ErrorMessages.wrUploadError);
+                    console.error("Error uploading web resource:", error);
+                    throw error;
                 }
-                progress.report({ increment: 50, message: "Publishing..." });
-                await this.dvHelper.publishWebResource(id);
-                progress.report({ increment: 100 });
-                vscode.window.showInformationMessage(`${fileName} uploaded.`);
-                return wrReturn;
             },
         );
     }
