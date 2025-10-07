@@ -66,6 +66,8 @@ export class DataverseHelper {
                 if (tokenResponse) {
                     conn.currentAccessToken = tokenResponse.access_token!;
                     conn.refreshToken = tokenResponse.refresh_token!;
+                    // Set token expiration timestamp (expires_in is in seconds, convert to milliseconds)
+                    conn.tokenExpiresAt = Date.now() + (tokenResponse.expires_in * 1000);
                     this.vsstate.saveInWorkspace(connectionCurrentStoreKey, conn);
                 }
             }
@@ -132,6 +134,8 @@ export class DataverseHelper {
                                 break;
                         }
                         conn.refreshToken = tokenResponse.refresh_token!;
+                        // Set token expiration timestamp (expires_in is in seconds, convert to milliseconds)
+                        conn.tokenExpiresAt = Date.now() + (tokenResponse.expires_in * 1000);
                     } else {
                         vscode.window.showErrorMessage("Unable to connect to Dataverse. Please try again.");
                         return undefined;
@@ -187,6 +191,19 @@ export class DataverseHelper {
     public getTokenFromCurrentConnection(): string | undefined {
         const connFromWS: IConnection = this.vsstate.getFromWorkspace(connectionCurrentStoreKey);
         return connFromWS.currentAccessToken;
+    }
+
+    /**
+     * Check if the current connection's token is expired.
+     * @returns True if the token is expired, false otherwise.
+     */
+    public isCurrentConnectionTokenExpired(): boolean {
+        const connFromWS: IConnection = this.vsstate.getFromWorkspace(connectionCurrentStoreKey);
+        if (connFromWS && connFromWS.tokenExpiresAt) {
+            return Date.now() >= connFromWS.tokenExpiresAt;
+        }
+        // If no expiration time is set, assume it's not expired for backward compatibility
+        return false;
     }
 
     /**
@@ -428,6 +445,8 @@ export class DataverseHelper {
         if (tokenResponse) {
             currentConnection.currentAccessToken = tokenResponse.access_token;
             currentConnection.refreshToken = tokenResponse.refresh_token;
+            // Set token expiration timestamp (expires_in is in seconds, convert to milliseconds)
+            currentConnection.tokenExpiresAt = Date.now() + (tokenResponse.expires_in * 1000);
         }
 
         this.vsstate.saveInWorkspace(connectionCurrentStoreKey, currentConnection);
