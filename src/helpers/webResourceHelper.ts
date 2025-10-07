@@ -68,7 +68,7 @@ export class WebResourceHelper {
                 const tempFilePath = vscode.Uri.joinPath(tempDirUri, `temp-${resourceToCompare["@_localFileName"]}`);
                 writeFileSync(tempFilePath.fsPath, parsedContent);
 
-                await vscode.commands.executeCommand("vscode.diff", vscode.Uri.file(fullPath), tempFilePath, `Local <--> Server : ${resourceToCompare["@_dvDisplayName"]}`);
+                await vscode.commands.executeCommand("vscode.diff", tempFilePath, vscode.Uri.file(fullPath), `Server <--> Local : ${resourceToCompare["@_dvDisplayName"]}`);
             }
         } else {
             vscode.window.showErrorMessage(ErrorMessages.wrCompareError);
