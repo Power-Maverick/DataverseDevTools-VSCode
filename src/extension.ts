@@ -65,13 +65,25 @@ function startTokenExpirationCheck(context: vscode.ExtensionContext) {
         const isExpired = dvHelper.isCurrentConnectionTokenExpired();
         
         if (isExpired && !lastNotifiedExpiration) {
+            // Get current connection to create tree item for reconnect
+            const conn = dvHelper.getCurrentWorkspaceConnection();
+            
             // Show notification to user
             vscode.window.showWarningMessage(
                 "Your Dataverse connection token has expired. Please reconnect to continue working.",
                 "Reconnect"
             ).then(selection => {
-                if (selection === "Reconnect") {
-                    vscode.commands.executeCommand("dvdt.explorer.connections.connectDataverse");
+                if (selection === "Reconnect" && conn) {
+                    // Create a tree item with the connection name to pass to the command
+                    const connItem = {
+                        label: conn.connectionName,
+                        desc: conn.userName,
+                        collapsibleState: vscode.TreeItemCollapsibleState.Collapsed,
+                        level: 2,
+                        current: true,
+                        expired: true
+                    };
+                    vscode.commands.executeCommand("dvdt.explorer.connections.connectDataverse", connItem);
                 }
             });
             
@@ -81,8 +93,9 @@ function startTokenExpirationCheck(context: vscode.ExtensionContext) {
             vscode.commands.executeCommand("dvdt.explorer.connections.refreshConnection");
             
             // Update status bar to show expired state
-            const conn = dvHelper.getCurrentWorkspaceConnection();
-            vscode.commands.executeCommand("dvdt.explorer.connections.updateStatusBar", conn);
+            if (conn) {
+                vscode.commands.executeCommand("dvdt.explorer.connections.updateStatusBar", conn);
+            }
         } else if (!isExpired) {
             // Reset notification flag when token is refreshed
             lastNotifiedExpiration = false;
