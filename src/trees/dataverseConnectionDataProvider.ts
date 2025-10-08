@@ -134,7 +134,7 @@ export class DataverseConnectionTreeItem extends TreeItemBase {
                     : this.level === 2 && this.current && !this.expired
                     ? "dataverse.svg"
                     : this.level === 2 && this.current && this.expired
-                    ? "dataverse-off.svg"
+                    ? "dataverse-expired.svg"
                     : this.level === 2 && !this.current
                     ? "dataverse-off.svg"
                     : this.level === 3
@@ -153,7 +153,7 @@ export class DataverseConnectionTreeItem extends TreeItemBase {
                     : this.level === 2 && this.current && !this.expired
                     ? "dataverse.svg"
                     : this.level === 2 && this.current && this.expired
-                    ? "dataverse-off.svg"
+                    ? "dataverse-expired.svg"
                     : this.level === 2 && !this.current
                     ? "dataverse-off.svg"
                     : this.level === 3
