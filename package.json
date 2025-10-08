@@ -562,13 +562,13 @@
         "webpack-cli": "^5.1.4"
     },
     "dependencies": {
-        "@azure/identity": "^3.0.0",
-        "@azure/identity-vscode": "^1.0.0",
+        "@azure/identity": "^4.13.0",
+        "@azure/identity-vscode": "^1.0.1",
         "@azure/msal-node": "^2.16.2",
         "@types/fs-extra": "^9.0.12",
         "@types/lodash": "^4.14.171",
         "@vscode/extension-telemetry": "^0.9.2",
-        "axios": "^0.27.2",
+        "axios": "^0.30.2",
         "conditional-reduce": "^1.2.0",
         "dayjs": "^1.10.7",
         "dts-dom": "^3.6.0",
