@@ -96,6 +96,8 @@ export class DataverseConnectionDataProvider implements vscode.TreeDataProvider<
                 let ind = this.connections.findIndex((c) => c.connectionName === connFromWS.connectionName && c.environmentType === connFromWS.environmentType);
                 if (ind !== -1) {
                     this.connections[ind].isCurrentlyConnected = true;
+                    // Copy the tokenExpiresAt from workspace connection to show expired state
+                    this.connections[ind].tokenExpiresAt = connFromWS.tokenExpiresAt;
                 }
             }
         } else {
