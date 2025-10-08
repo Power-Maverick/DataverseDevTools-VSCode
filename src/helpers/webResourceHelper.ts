@@ -2,7 +2,7 @@
 import { reduce } from "conditional-reduce";
 import * as path from "path";
 import * as vscode from "vscode";
-import { WebResourceType, wrDefinitionsStoreKey } from "../utils/Constants";
+import { extensionPrefix, WebResourceType, wrDefinitionsStoreKey } from "../utils/Constants";
 import { ErrorMessages } from "../utils/ErrorMessages";
 import { decodeFromBase64, encodeToBase64, extractGuid } from "../utils/ExtensionMethods";
 import { copyFolderOrFile, createTempDirectory, getFileExtension, getFileName, getRelativeFilePath, getWorkspaceFolder, readFileAsBase64Sync, readFileSync, writeFileSync } from "../utils/FileSystem";
@@ -360,6 +360,7 @@ export class WebResourceHelper {
             }
             writeFileSync(linkerFile.fsPath, jsonToXML(linkerFileDataJson));
             vscode.commands.executeCommand("dvdt.explorer.webresources.loadWebResources");
+            await this.updateLinkedResourcesContext();
             return resc;
         }
     }
@@ -379,6 +380,7 @@ export class WebResourceHelper {
             }
             writeFileSync(linkerFile.fsPath, jsonToXML(linkerFileDataJson));
             vscode.commands.executeCommand("dvdt.explorer.webresources.loadWebResources");
+            await this.updateLinkedResourcesContext();
             return newResc;
         }
     }
@@ -405,6 +407,7 @@ export class WebResourceHelper {
             }
             writeFileSync(linkerFile.fsPath, jsonToXML(linkerFileDataJson));
             vscode.commands.executeCommand("dvdt.explorer.webresources.loadWebResources");
+            await this.updateLinkedResourcesContext();
         }
     }
 
@@ -577,15 +580,17 @@ export class WebResourceHelper {
                 return { displayname: wrDisplayNameUR, name: `${prefix}_${wrNameUR}`, webresourcetype: wrType, content: wrContent, solutionid: solId, description: solName };
             }
         }
-
-        //#endregion Private
-
-        // Ask for
-        //  Display Name
-        //  Name
-        //  Web Resource Type (infer it from file extension)
-        //  Content (get it from the file & convert it to base64)
     }
+
+    /**
+     * Update the VS Code context for linked resources to enable/disable context menu items
+     */
+    private async updateLinkedResourcesContext(): Promise<void> {
+        const linkedFileNames = await this.getLinkedResourceStrings("@_localFileName");
+        await vscode.commands.executeCommand("setContext", `${extensionPrefix}.linkedResources`, linkedFileNames);
+    }
+
+    //#endregion Private
 }
 
 /**
