@@ -54,46 +54,63 @@
   <a href="https://github.com/Power-Maverick/DataverseDevTools-VSCode/discussions/categories/q-a">Support</a>
 </h3>
 
+## 🆕 Recent Updates (v2.2.5)
+
+### What's New
+
+- **Enhanced Typings (v2.2.3)**: Entity typings now include detailed attribute metadata, providing information about attribute types and relationships for improved development experience.
+- **Improved Authentication (v2.2.4)**: Login flow enhanced with Dataverse Dev Client Id for more reliable authentication with MFA-enabled environments.
+- **Modern Themed UI (v2.2.5)**: All webviews now feature improved theming support with native CSS, ensuring better consistency with VS Code themes (light/dark modes).
+- **Stability Improvements (v2.2.2-v2.2.5)**:
+    - Fixed XML attribute version bug ([#200](https://github.com/Power-Maverick/DataverseDevTools-VSCode/issues/200))
+    - Updated dependencies: TypeScript (5.7.2), ESLint (9.16.0), @azure/msal-node (2.16.2), and more
+    - Various performance and security enhancements
+
+### Breaking Changes
+
+- **Keyboard bindings removed (v2.2.5)**: Custom keyboard shortcuts have been removed to prevent conflicts with other extensions and VS Code defaults. You can now configure your own shortcuts via VS Code's Keyboard Shortcuts settings.
+
 > Do check-out the [planned features](#-planned-features) list. We need your help to complete these planned features.
 
 **Table of contents**
 
--   [⚙ Features](#-features)
-    -   [Connect to your Dataverse environment](#connect-to-your-dataverse-environment)
-    -   [Remembers the connected environment per workspace](#remembers-the-connected-environment-per-workspace)
-    -   [See connection and entity details (with copy feature)](#see-connection-and-entity-details-with-copy-feature)
-    -   [Initialize TypeScript project \& add TS File](#initialize-typescript-project--add-ts-file)
-    -   [Generate Typings](#generate-typings)
-    -   [Intellisense for type generated](#intellisense-for-type-generated)
-    -   [Upload Web Resources](#upload-web-resources)
-    -   [Filter by solution](#filter-by-solution)
-        -   [Entities](#entities)
-        -   [Web Resources](#web-resources)
-    -   [Smart Match Web Resources](#smart-match-web-resources)
--   [⚒️ Tools](#️-tools)
--   [🔥 Using Typings](#-using-typings)
--   [Generate Typing](#generate-typing)
-    -   [When working with Xrm object from @types/xrm](#when-working-with-xrm-object-from-typesxrm)
-    -   [When working with entity and attributes only](#when-working-with-entity-and-attributes-only)
--   [🎮 Power Platform CLI Commands](#-power-platform-cli-commands)
--   [🎁 Early-Access Preview](#-early-access-preview)
--   [🧪 Alpha-Testing](#-alpha-testing)
-    -   [⌚ Features available for alpha-test](#-features-available-for-alpha-test)
--   [💭 Planned Features](#-planned-features)
--   [✨ Contributing](#-contributing)
--   [🔉 Discussions](#-discussions)
--   [📃 License](#-license)
--   [✍ Credits](#-credits)
+- [🆕 Recent Updates](#-recent-updates-v225)
+- [⚙ Features](#-features)
+    - [Connect to your Dataverse environment](#connect-to-your-dataverse-environment)
+    - [Remembers the connected environment per workspace](#remembers-the-connected-environment-per-workspace)
+    - [See connection and entity details (with copy feature)](#see-connection-and-entity-details-with-copy-feature)
+    - [Initialize TypeScript project \& add TS File](#initialize-typescript-project--add-ts-file)
+    - [Generate Typings](#generate-typings)
+    - [Intellisense for type generated](#intellisense-for-type-generated)
+    - [Upload Web Resources](#upload-web-resources)
+    - [Filter by solution](#filter-by-solution)
+        - [Entities](#entities)
+        - [Web Resources](#web-resources)
+    - [Smart Match Web Resources](#smart-match-web-resources)
+- [⚒️ Tools](#️-tools)
+- [🔥 Using Typings](#-using-typings)
+- [Generate Typing](#generate-typing)
+    - [When working with Xrm object from @types/xrm](#when-working-with-xrm-object-from-typesxrm)
+    - [When working with entity and attributes only](#when-working-with-entity-and-attributes-only)
+- [🎮 Power Platform CLI Commands](#-power-platform-cli-commands)
+- [🎁 Early-Access Preview](#-early-access-preview)
+- [🧪 Alpha-Testing](#-alpha-testing)
+    - [⌚ Features available for alpha-test](#-features-available-for-alpha-test)
+- [💭 Planned Features](#-planned-features)
+- [✨ Contributing](#-contributing)
+- [🔉 Discussions](#-discussions)
+- [📃 License](#-license)
+- [✍ Credits](#-credits)
 
 ## ⚙ Features
 
 ### Connect to your Dataverse environment
 
-There are 3 ways you can connect to your Dataverse Environment.
+There are 4 ways you can connect to your Dataverse Environment.
 
 | Connection Type                      | Description                                                                                                                                                                                                                                                                                                                                                                                                            |
 | ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Microsoft Login Prompt (Recommended) | Uses Microsoft Dev App Id. This connection will work with MFA-enabled authentication as well.                                                                                                                                                                                                                                                                                                                          |
+| Microsoft Login Prompt (Recommended) | Uses Dataverse Dev Client Id for authentication. This connection will work with MFA-enabled authentication as well. **Improved in v2.2.4** with enhanced authentication flow.                                                                                                                                                                                                                                          |
 | Username & Password                  | This works with environments without MFA-enabled and needs no extra configuration.                                                                                                                                                                                                                                                                                                                                     |
 | Client Id & Secret                   | This works with MFA-enabled authentication but needs extra configuration of Azure AD App Registration. To know more on app registration process [read here](https://docs.microsoft.com/en-us/powerapps/developer/data-platform/walkthrough-register-app-azure-active-directory?WT.mc_id=BA-MVP-5003877).                                                                                                               |
 | Azure                                | If you are already logged in inside VSCode using Az extension, Azure CLI or Azure PowerShell, you can leverage Azure Identity Framework to get authenticated against Dataverse. The developer has to use the same account for both Azure and Power Platform for this work (thanks to [Natraj Yegnaraman](https://github.com/rajyraman) for this method). This is a single-click authentication method with no prompts. |
@@ -118,10 +135,10 @@ This provides an ability for you to quikly check the details of the connection a
 
 You can instantiate a TypeScript project for Dataverse that automatically installs all the prerequisites needed:
 
--   [`@types/xrm`](https://www.npmjs.com/package/@types/xrm)
--   [`WebPack`](https://www.npmjs.com/package/webpack)
--   [`ESLint`](https://www.npmjs.com/package/eslint)
--   [`Prettier`](https://www.npmjs.com/package/prettier)
+- [`@types/xrm`](https://www.npmjs.com/package/@types/xrm)
+- [`WebPack`](https://www.npmjs.com/package/webpack)
+- [`ESLint`](https://www.npmjs.com/package/eslint)
+- [`Prettier`](https://www.npmjs.com/package/prettier)
 
 Below procecss shows how you can create a TypeScript project for Dataverse with one of the available options and also how you can add a TypeScript file that loads the code-snippet.
 
@@ -134,6 +151,8 @@ Below procecss shows how you can create a TypeScript project for Dataverse with 
 Typings help you write early-bound code. And with the help of `@types/xrm` you can provide types to all of your variables/methods.
 
 **Typings are also integrated with [`@types/xrm`](https://www.npmjs.com/package/@types/xrm)**
+
+**Enhanced in v2.2.3:** Typings now include entity attribute metadata, providing more detailed information about entity attributes including attribute type names and relationships.
 
 ![Typings](https://github.com/Power-Maverick/DataverseDevTools-VSCode/blob/main/assets/GenerateTypings.gif?raw=true)
 
@@ -166,6 +185,8 @@ Once you build your project you can upload your script directly from the VS Code
 ## ⚒️ Tools
 
 You can launch your favorite Power Platform tools right from VSCode. Below are the list of currently integrated tools with DVDT.
+
+> **UI Enhancement (v2.2.5)**: All tool views now feature modern themed interfaces that automatically adapt to your VS Code theme (light/dark mode).
 
 | Tool Name                | Author       |
 | ------------------------ | ------------ |
@@ -233,13 +254,13 @@ This list showcases the features that are build and ready but not fully tested t
 
 There are different ways in which you can contribute to this open-source project. One of the way is to be part of alpha-testing. In order to perform alpha-testing follow the below steps:
 
--   Fork this project and clone it on your local machine
--   Identify the changes in alpha-test mode (list is mentioned below)
--   Open the project in VS Code
--   Navigate to `Run and Debug` from **Activity Bar**
--   Make sure `Run Extension` is selected; click on ▶️ icon.
--   This will open another VS Code instance, this instance will have _Extention Development Host_ on it's title
--   You are ready to perform your tests
+- Fork this project and clone it on your local machine
+- Identify the changes in alpha-test mode (list is mentioned below)
+- Open the project in VS Code
+- Navigate to `Run and Debug` from **Activity Bar**
+- Make sure `Run Extension` is selected; click on ▶️ icon.
+- This will open another VS Code instance, this instance will have _Extention Development Host_ on it's title
+- You are ready to perform your tests
 
 #### ⌚ Features available for alpha-test
 
@@ -249,8 +270,8 @@ There are different ways in which you can contribute to this open-source project
 
 ## 💭 Planned Features
 
--   [ ] Integrate with [Dataverse-ify](https://github.com/scottdurow/dataverse-ify/).
--   [ ] Initiate plugin project.
+- [ ] Integrate with [Dataverse-ify](https://github.com/scottdurow/dataverse-ify/).
+- [ ] Initiate plugin project.
 
 ## ✨ Contributing
 
@@ -258,12 +279,12 @@ We encourage you to pitch in, join the team and showcase your name on this repo.
 
 **Different ways to contribute**:
 
--   Improve the code or fix a bug by creating a Pull Request.
--   Get involved in Alpha & Beta tests.
--   Provide suggestions, feedback or feature request on GitHub.
--   Report issues & bugs on GitHub.
--   Answer any open questions on the [Discussion Board](https://github.com/Power-Maverick/DataverseDevTools-VSCode/discussions).
--   Join [Power Platform LevelUP](https://discord.gg/MwdEqfeZXD) community on Discord to answer any of the questions that may rise w.r.t. this tool.
+- Improve the code or fix a bug by creating a Pull Request.
+- Get involved in Alpha & Beta tests.
+- Provide suggestions, feedback or feature request on GitHub.
+- Report issues & bugs on GitHub.
+- Answer any open questions on the [Discussion Board](https://github.com/Power-Maverick/DataverseDevTools-VSCode/discussions).
+- Join [Power Platform LevelUP](https://discord.gg/MwdEqfeZXD) community on Discord to answer any of the questions that may rise w.r.t. this tool.
 
 Before creating the pull request for contributing, please read the [Contributing Guidelines](CONTRIBUTING.md).
 
