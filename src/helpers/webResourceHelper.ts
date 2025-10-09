@@ -68,6 +68,9 @@ export class WebResourceHelper {
                 const tempFilePath = vscode.Uri.joinPath(tempDirUri, `temp-${resourceToCompare["@_localFileName"]}`);
                 writeFileSync(tempFilePath.fsPath, parsedContent);
 
+                // The parameter order for vscode.diff is: left (original) <--> right (modified).
+                // Here, we show the server version (tempFilePath) on the left and the local version (fullPath) on the right,
+                // matching the label "Server <--> Local". This order ensures users see changes from server to local.
                 await vscode.commands.executeCommand("vscode.diff", tempFilePath, vscode.Uri.file(fullPath), `Server <--> Local : ${resourceToCompare["@_dvDisplayName"]}`);
             }
         } else {
