@@ -60,9 +60,9 @@ export class DataverseConnectionDataProvider implements vscode.TreeDataProvider<
     }
 
     private getConnectionItems(connType: string, conns: IConnection[]): DataverseConnectionTreeItem[] {
-        const toConnections = (name: string, version: string, isConnected: boolean): DataverseConnectionTreeItem => {
+        const toConnections = (name: string, version: string, isConnected: boolean, isExpired: boolean): DataverseConnectionTreeItem => {
             if (conns) {
-                return new DataverseConnectionTreeItem(name, version, vscode.TreeItemCollapsibleState.Collapsed, 2, isConnected);
+                return new DataverseConnectionTreeItem(name, version, vscode.TreeItemCollapsibleState.Collapsed, 2, isConnected, isExpired);
             } else {
                 return new DataverseConnectionTreeItem(name, version, vscode.TreeItemCollapsibleState.None, 0);
             }
@@ -77,7 +77,11 @@ export class DataverseConnectionDataProvider implements vscode.TreeDataProvider<
             })
             : [];
 
-        const finalConnections = filteredConnections.map((fc) => toConnections(fc.connectionName, fc.userName!, fc.isCurrentlyConnected!));
+        const finalConnections = filteredConnections.map((fc) => {
+            // Check if token is expired
+            const isExpired = fc.isCurrentlyConnected && fc.tokenExpiresAt ? Date.now() >= fc.tokenExpiresAt : false;
+            return toConnections(fc.connectionName, fc.userName!, fc.isCurrentlyConnected!, isExpired);
+        });
         return finalConnections;
     }
 
@@ -92,6 +96,8 @@ export class DataverseConnectionDataProvider implements vscode.TreeDataProvider<
                 let ind = this.connections.findIndex((c) => c.connectionName === connFromWS.connectionName && c.environmentType === connFromWS.environmentType);
                 if (ind !== -1) {
                     this.connections[ind].isCurrentlyConnected = true;
+                    // Copy the tokenExpiresAt from workspace connection to show expired state
+                    this.connections[ind].tokenExpiresAt = connFromWS.tokenExpiresAt;
                 }
             }
         } else {
@@ -111,6 +117,7 @@ export class DataverseConnectionTreeItem extends TreeItemBase {
         public readonly collapsibleState: vscode.TreeItemCollapsibleState,
         public readonly level: number,
         public readonly current: boolean = false,
+        public readonly expired: boolean = false,
     ) {
         super(label, desc, collapsibleState);
     }
@@ -124,8 +131,10 @@ export class DataverseConnectionTreeItem extends TreeItemBase {
                 "light",
                 this.level === 1
                     ? "connection-type.svg"
-                    : this.level === 2 && this.current
+                    : this.level === 2 && this.current && !this.expired
                     ? "dataverse.svg"
+                    : this.level === 2 && this.current && this.expired
+                    ? "dataverse-expired.svg"
                     : this.level === 2 && !this.current
                     ? "dataverse-off.svg"
                     : this.level === 3
@@ -141,8 +150,10 @@ export class DataverseConnectionTreeItem extends TreeItemBase {
                 "dark",
                 this.level === 1
                     ? "connection-type.svg"
-                    : this.level === 2 && this.current
+                    : this.level === 2 && this.current && !this.expired
                     ? "dataverse.svg"
+                    : this.level === 2 && this.current && this.expired
+                    ? "dataverse-expired.svg"
                     : this.level === 2 && !this.current
                     ? "dataverse-off.svg"
                     : this.level === 3

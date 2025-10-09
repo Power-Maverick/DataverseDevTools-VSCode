@@ -112,6 +112,16 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
             },
         },
         {
+            command: "dvdt.explorer.connections.updateStatusBar",
+            callback: (conn: IConnection | undefined) => {
+                try {
+                    updateConnectionStatusBar(conn);
+                } catch (error) {
+                    errorHandler.log(error, "updateStatusBar");
+                }
+            },
+        },
+        {
             command: "dvdt.explorer.entities.showEntityDetails",
             callback: async (enItem: EntitiesTreeItem) => {
                 try {
@@ -313,7 +323,12 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
  */
 export function updateConnectionStatusBar(conn: IConnection | undefined): void {
     if (conn) {
-        dvStatusBarItem.text = conn.userName ? `Connected to: ${conn.environmentUrl} as ${conn.userName}` : `Connected to: ${conn.environmentUrl}`;
+        const isExpired = conn.tokenExpiresAt ? Date.now() >= conn.tokenExpiresAt : false;
+        const statusIcon = isExpired ? "$(warning)" : "$(plug)";
+        const statusSuffix = isExpired ? " (Token Expired)" : "";
+        dvStatusBarItem.text = conn.userName 
+            ? `${statusIcon} Connected to: ${conn.environmentUrl} as ${conn.userName}${statusSuffix}` 
+            : `${statusIcon} Connected to: ${conn.environmentUrl}${statusSuffix}`;
         dvStatusBarItem.show();
     } else {
         dvStatusBarItem.hide();
