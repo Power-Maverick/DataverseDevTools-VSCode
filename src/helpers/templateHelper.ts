@@ -5,7 +5,7 @@ import fetch from "node-fetch";
 import { copyFolderOrFile, createFolder, pathExists, readFileSync, writeFileSync } from "../utils/FileSystem";
 import { Commands } from "../terminals/commands";
 import { Console } from "../terminals/console";
-import { extensionName, tsTemplateType } from "../utils/Constants";
+import { extensionName, extensionPrefix, tsTemplateType } from "../utils/Constants";
 import { Placeholders } from "../utils/Placeholders";
 import { ErrorMessages } from "../utils/ErrorMessages";
 import { pascalize } from "../utils/ExtensionMethods";
@@ -62,6 +62,9 @@ export class TemplateHelper {
         let commands: string[] = Array();
         commands.push(Commands.LoadNpmPackages());
         Console.runCommand(commands);
+
+        // Update VS Code context to enable "Add Dataverse TS File" menu option
+        await vscode.commands.executeCommand("setContext", `${extensionPrefix}.isTSProject`, true);
 
         vscode.window.showInformationMessage(`${extensionName}: TypeScript project initialized.`);
     }
@@ -140,6 +143,9 @@ export class TemplateHelper {
         let commands: string[] = Array();
         commands.push(Commands.LoadNpmPackages());
         Console.runCommand(commands);
+
+        // Update VS Code context to enable "Add Dataverse JS File" menu option
+        await vscode.commands.executeCommand("setContext", `${extensionPrefix}.isJSProject`, true);
 
         vscode.window.showInformationMessage(`${extensionName}: JavaScript project initialized.`);
     }
