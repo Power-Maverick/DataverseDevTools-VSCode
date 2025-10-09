@@ -134,6 +134,7 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
             },
         },
         {
+            command: "dvdt.explorer.entities.showEntityDetailsByEntityName",
             callback: async (entityName: string) => {
                 try {
                     await dvHelper.showEntityDetails(entityName, views);
@@ -141,7 +142,6 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
                     errorHandler.log(error, "showEntityDetailsByEntityName");
                 }
             },
-            command: "dvdt.explorer.entities.showEntityDetailsByEntityName",
         },
         {
             command: "dvdt.commands.initTS",
@@ -325,10 +325,8 @@ export function updateConnectionStatusBar(conn: IConnection | undefined): void {
     if (conn) {
         const isExpired = conn.tokenExpiresAt ? Date.now() >= conn.tokenExpiresAt : false;
         const statusIcon = isExpired ? "$(warning)" : "$(plug)";
-        const statusSuffix = isExpired ? " (Token Expired)" : "";
-        dvStatusBarItem.text = conn.userName 
-            ? `${statusIcon} Connected to: ${conn.environmentUrl} as ${conn.userName}${statusSuffix}` 
-            : `${statusIcon} Connected to: ${conn.environmentUrl}${statusSuffix}`;
+        const statusText = isExpired ? "Dataverse connection token has expired." : conn.userName ? `Connected to: ${conn.environmentUrl} as ${conn.userName}` : `Connected to: ${conn.environmentUrl}`;
+        dvStatusBarItem.text = `${statusIcon} ${statusText}`;
         dvStatusBarItem.show();
     } else {
         dvStatusBarItem.hide();
