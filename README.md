@@ -54,53 +54,46 @@
   <a href="https://github.com/Power-Maverick/DataverseDevTools-VSCode/discussions/categories/q-a">Support</a>
 </h3>
 
-## 🆕 Recent Updates (v2.2.5)
+## 🆕 Recent Updates (v2.2.6)
 
 ### What's New
 
-- **Enhanced Typings (v2.2.3)**: Entity typings now include detailed attribute metadata, providing information about attribute types and relationships for improved development experience.
-- **Improved Authentication (v2.2.4)**: Login flow enhanced with Dataverse Dev Client Id for more reliable authentication with MFA-enabled environments.
-- **Modern Themed UI (v2.2.5)**: All webviews now feature improved theming support with native CSS, ensuring better consistency with VS Code themes (light/dark modes).
-- **Stability Improvements (v2.2.2-v2.2.5)**:
-    - Fixed XML attribute version bug ([#200](https://github.com/Power-Maverick/DataverseDevTools-VSCode/issues/200))
-    - Updated dependencies: TypeScript (5.7.2), ESLint (9.16.0), @azure/msal-node (2.16.2), and more
-    - Various performance and security enhancements
-
-### Breaking Changes
-
-- **Keyboard bindings removed (v2.2.5)**: Custom keyboard shortcuts have been removed to prevent conflicts with other extensions and VS Code defaults. You can now configure your own shortcuts via VS Code's Keyboard Shortcuts settings.
-
-> Do check-out the [planned features](#-planned-features) list. We need your help to complete these planned features.
+-   **Improved Comparison of files between local and server**: The tool now correctly shows file from server on the left-side and compares with the local file on the right-side. This is equivalent to GitHub compare where the incoming files are shown on the left and local changes are shown on the right.
+-   **Automatic Token Expiration Monitoring**: Implemented automatic token expiration monitoring with user notifications as well as visual indication on the Connection. Any connection that has a token expired will now been shown in "amber" colored Dataverse icon.
+-   **Stability Improvements**:
+    -   Fixed web resource upload issue when connection was timed out ([#283](https://github.com/Power-Maverick/DataverseDevTools-VSCode/issues/283))
+    -   Various performance and security enhancements
 
 **Table of contents**
 
-- [🆕 Recent Updates](#-recent-updates-v225)
-- [⚙ Features](#-features)
-    - [Connect to your Dataverse environment](#connect-to-your-dataverse-environment)
-    - [Remembers the connected environment per workspace](#remembers-the-connected-environment-per-workspace)
-    - [See connection and entity details (with copy feature)](#see-connection-and-entity-details-with-copy-feature)
-    - [Initialize TypeScript project \& add TS File](#initialize-typescript-project--add-ts-file)
-    - [Generate Typings](#generate-typings)
-    - [Intellisense for type generated](#intellisense-for-type-generated)
-    - [Upload Web Resources](#upload-web-resources)
-    - [Filter by solution](#filter-by-solution)
-        - [Entities](#entities)
-        - [Web Resources](#web-resources)
-    - [Smart Match Web Resources](#smart-match-web-resources)
-- [⚒️ Tools](#️-tools)
-- [🔥 Using Typings](#-using-typings)
-- [Generate Typing](#generate-typing)
-    - [When working with Xrm object from @types/xrm](#when-working-with-xrm-object-from-typesxrm)
-    - [When working with entity and attributes only](#when-working-with-entity-and-attributes-only)
-- [🎮 Power Platform CLI Commands](#-power-platform-cli-commands)
-- [🎁 Early-Access Preview](#-early-access-preview)
-- [🧪 Alpha-Testing](#-alpha-testing)
-    - [⌚ Features available for alpha-test](#-features-available-for-alpha-test)
-- [💭 Planned Features](#-planned-features)
-- [✨ Contributing](#-contributing)
-- [🔉 Discussions](#-discussions)
-- [📃 License](#-license)
-- [✍ Credits](#-credits)
+-   [🆕 Recent Updates (v2.2.6)](#-recent-updates-v226)
+    -   [What's New](#whats-new)
+-   [⚙ Features](#-features)
+    -   [Connect to your Dataverse environment](#connect-to-your-dataverse-environment)
+    -   [Remembers the connected environment per workspace](#remembers-the-connected-environment-per-workspace)
+    -   [See connection and entity details (with copy feature)](#see-connection-and-entity-details-with-copy-feature)
+    -   [Initialize TypeScript project \& add TS File](#initialize-typescript-project--add-ts-file)
+    -   [Generate Typings](#generate-typings)
+    -   [Intellisense for type generated](#intellisense-for-type-generated)
+    -   [Upload Web Resources](#upload-web-resources)
+    -   [Filter by solution](#filter-by-solution)
+        -   [Entities](#entities)
+        -   [Web Resources](#web-resources)
+    -   [Smart Match Web Resources](#smart-match-web-resources)
+-   [⚒️ Tools](#️-tools)
+-   [🔥 Using Typings](#-using-typings)
+-   [Generate Typing](#generate-typing)
+    -   [When working with Xrm object from @types/xrm](#when-working-with-xrm-object-from-typesxrm)
+    -   [When working with entity and attributes only](#when-working-with-entity-and-attributes-only)
+-   [🎮 Power Platform CLI Commands](#-power-platform-cli-commands)
+-   [🎁 Early-Access Preview](#-early-access-preview)
+-   [🧪 Alpha-Testing](#-alpha-testing)
+    -   [⌚ Features available for alpha-test](#-features-available-for-alpha-test)
+-   [💭 Planned Features](#-planned-features)
+-   [✨ Contributing](#-contributing)
+-   [🔉 Discussions](#-discussions)
+-   [📃 License](#-license)
+-   [✍ Credits](#-credits)
 
 ## ⚙ Features
 
@@ -135,10 +128,10 @@ This provides an ability for you to quikly check the details of the connection a
 
 You can instantiate a TypeScript project for Dataverse that automatically installs all the prerequisites needed:
 
-- [`@types/xrm`](https://www.npmjs.com/package/@types/xrm)
-- [`WebPack`](https://www.npmjs.com/package/webpack)
-- [`ESLint`](https://www.npmjs.com/package/eslint)
-- [`Prettier`](https://www.npmjs.com/package/prettier)
+-   [`@types/xrm`](https://www.npmjs.com/package/@types/xrm)
+-   [`WebPack`](https://www.npmjs.com/package/webpack)
+-   [`ESLint`](https://www.npmjs.com/package/eslint)
+-   [`Prettier`](https://www.npmjs.com/package/prettier)
 
 Below procecss shows how you can create a TypeScript project for Dataverse with one of the available options and also how you can add a TypeScript file that loads the code-snippet.
 
@@ -254,13 +247,13 @@ This list showcases the features that are build and ready but not fully tested t
 
 There are different ways in which you can contribute to this open-source project. One of the way is to be part of alpha-testing. In order to perform alpha-testing follow the below steps:
 
-- Fork this project and clone it on your local machine
-- Identify the changes in alpha-test mode (list is mentioned below)
-- Open the project in VS Code
-- Navigate to `Run and Debug` from **Activity Bar**
-- Make sure `Run Extension` is selected; click on ▶️ icon.
-- This will open another VS Code instance, this instance will have _Extention Development Host_ on it's title
-- You are ready to perform your tests
+-   Fork this project and clone it on your local machine
+-   Identify the changes in alpha-test mode (list is mentioned below)
+-   Open the project in VS Code
+-   Navigate to `Run and Debug` from **Activity Bar**
+-   Make sure `Run Extension` is selected; click on ▶️ icon.
+-   This will open another VS Code instance, this instance will have _Extention Development Host_ on it's title
+-   You are ready to perform your tests
 
 #### ⌚ Features available for alpha-test
 
@@ -270,8 +263,8 @@ There are different ways in which you can contribute to this open-source project
 
 ## 💭 Planned Features
 
-- [ ] Integrate with [Dataverse-ify](https://github.com/scottdurow/dataverse-ify/).
-- [ ] Initiate plugin project.
+-   [ ] Integrate with [Dataverse-ify](https://github.com/scottdurow/dataverse-ify/).
+-   [ ] Initiate plugin project.
 
 ## ✨ Contributing
 
@@ -279,12 +272,12 @@ We encourage you to pitch in, join the team and showcase your name on this repo.
 
 **Different ways to contribute**:
 
-- Improve the code or fix a bug by creating a Pull Request.
-- Get involved in Alpha & Beta tests.
-- Provide suggestions, feedback or feature request on GitHub.
-- Report issues & bugs on GitHub.
-- Answer any open questions on the [Discussion Board](https://github.com/Power-Maverick/DataverseDevTools-VSCode/discussions).
-- Join [Power Platform LevelUP](https://discord.gg/MwdEqfeZXD) community on Discord to answer any of the questions that may rise w.r.t. this tool.
+-   Improve the code or fix a bug by creating a Pull Request.
+-   Get involved in Alpha & Beta tests.
+-   Provide suggestions, feedback or feature request on GitHub.
+-   Report issues & bugs on GitHub.
+-   Answer any open questions on the [Discussion Board](https://github.com/Power-Maverick/DataverseDevTools-VSCode/discussions).
+-   Join [Power Platform LevelUP](https://discord.gg/MwdEqfeZXD) community on Discord to answer any of the questions that may rise w.r.t. this tool.
 
 Before creating the pull request for contributing, please read the [Contributing Guidelines](CONTRIBUTING.md).
 
