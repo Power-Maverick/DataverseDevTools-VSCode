@@ -54,16 +54,6 @@
   <a href="https://github.com/Power-Maverick/DataverseDevTools-VSCode/discussions/categories/q-a">Support</a>
 </h3>
 
-## 🆕 Recent Updates (v2.2.6)
-
-### What's New
-
--   **Improved Comparison of files between local and server**: The tool now correctly shows file from server on the left-side and compares with the local file on the right-side. This is equivalent to GitHub compare where the incoming files are shown on the left and local changes are shown on the right.
--   **Automatic Token Expiration Monitoring**: Implemented automatic token expiration monitoring with user notifications as well as visual indication on the Connection. Any connection that has a token expired will now been shown in "amber" colored Dataverse icon.
--   **Stability Improvements**:
-    -   Fixed web resource upload issue when connection was timed out ([#283](https://github.com/Power-Maverick/DataverseDevTools-VSCode/issues/283))
-    -   Various performance and security enhancements
-
 **Table of contents**
 
 -   [🆕 Recent Updates (v2.2.6)](#-recent-updates-v226)
@@ -94,6 +84,16 @@
 -   [🔉 Discussions](#-discussions)
 -   [📃 License](#-license)
 -   [✍ Credits](#-credits)
+
+## 🆕 Recent Updates (v2.2.6)
+
+### What's New
+
+-   **Improved Comparison of files between local and server**: The tool now correctly shows file from server on the left-side and compares with the local file on the right-side. This is equivalent to GitHub compare where the incoming files are shown on the left and local changes are shown on the right.
+-   **Automatic Token Expiration Monitoring**: Implemented automatic token expiration monitoring with user notifications as well as visual indication on the Connection. Any connection that has a token expired will now been shown in "amber" colored Dataverse icon.
+-   **Stability Improvements**:
+    -   Fixed web resource upload issue when connection was timed out ([#283](https://github.com/Power-Maverick/DataverseDevTools-VSCode/issues/283))
+    -   Various performance and security enhancements
 
 ## ⚙ Features
 
