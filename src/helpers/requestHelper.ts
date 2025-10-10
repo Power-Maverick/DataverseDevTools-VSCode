@@ -93,6 +93,7 @@ export class RequestHelper {
             }
         } catch (err) {
             console.log(err);
+            throw err;
         }
     }
 
@@ -133,6 +134,7 @@ export class RequestHelper {
             }
         } catch (err) {
             console.log(err);
+            throw err;
         }
     }
 }

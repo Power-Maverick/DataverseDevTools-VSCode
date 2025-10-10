@@ -112,6 +112,16 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
             },
         },
         {
+            command: "dvdt.explorer.connections.updateStatusBar",
+            callback: (conn: IConnection | undefined) => {
+                try {
+                    updateConnectionStatusBar(conn);
+                } catch (error) {
+                    errorHandler.log(error, "updateStatusBar");
+                }
+            },
+        },
+        {
             command: "dvdt.explorer.entities.showEntityDetails",
             callback: async (enItem: EntitiesTreeItem) => {
                 try {
@@ -124,6 +134,7 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
             },
         },
         {
+            command: "dvdt.explorer.entities.showEntityDetailsByEntityName",
             callback: async (entityName: string) => {
                 try {
                     await dvHelper.showEntityDetails(entityName, views);
@@ -131,7 +142,6 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
                     errorHandler.log(error, "showEntityDetailsByEntityName");
                 }
             },
-            command: "dvdt.explorer.entities.showEntityDetailsByEntityName",
         },
         {
             command: "dvdt.commands.initTS",
@@ -313,7 +323,10 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
  */
 export function updateConnectionStatusBar(conn: IConnection | undefined): void {
     if (conn) {
-        dvStatusBarItem.text = conn.userName ? `Connected to: ${conn.environmentUrl} as ${conn.userName}` : `Connected to: ${conn.environmentUrl}`;
+        const isExpired = conn.tokenExpiresAt ? Date.now() >= conn.tokenExpiresAt : false;
+        const statusIcon = isExpired ? "$(warning)" : "$(plug)";
+        const statusText = isExpired ? "Dataverse connection token has expired." : conn.userName ? `Connected to: ${conn.environmentUrl} as ${conn.userName}` : `Connected to: ${conn.environmentUrl}`;
+        dvStatusBarItem.text = `${statusIcon} ${statusText}`;
         dvStatusBarItem.show();
     } else {
         dvStatusBarItem.hide();

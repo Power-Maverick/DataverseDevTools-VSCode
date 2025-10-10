@@ -14,6 +14,7 @@ export interface IConnection {
     currentAccessToken?: string;
     refreshToken?: string;
     isCurrentlyConnected?: boolean;
+    tokenExpiresAt?: number; // Timestamp when the token expires (in milliseconds since epoch)
 }
 
 export interface Token {

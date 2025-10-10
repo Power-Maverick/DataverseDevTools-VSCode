@@ -54,10 +54,10 @@
   <a href="https://github.com/Power-Maverick/DataverseDevTools-VSCode/discussions/categories/q-a">Support</a>
 </h3>
 
-> Do check-out the [planned features](#-planned-features) list. We need your help to complete these planned features.
-
 **Table of contents**
 
+-   [🆕 Recent Updates (v2.2.6)](#-recent-updates-v226)
+    -   [What's New](#whats-new)
 -   [⚙ Features](#-features)
     -   [Connect to your Dataverse environment](#connect-to-your-dataverse-environment)
     -   [Remembers the connected environment per workspace](#remembers-the-connected-environment-per-workspace)
@@ -85,15 +85,25 @@
 -   [📃 License](#-license)
 -   [✍ Credits](#-credits)
 
+## 🆕 Recent Updates (v2.2.6)
+
+### What's New
+
+-   **Improved Comparison of files between local and server**: The tool now correctly shows file from server on the left-side and compares with the local file on the right-side. This is equivalent to GitHub compare where the incoming files are shown on the left and local changes are shown on the right.
+-   **Automatic Token Expiration Monitoring**: Implemented automatic token expiration monitoring with user notifications as well as visual indication on the Connection. Any connection that has a token expired will now been shown in "amber" colored Dataverse icon.
+-   **Stability Improvements**:
+    -   Fixed web resource upload issue when connection was timed out ([#283](https://github.com/Power-Maverick/DataverseDevTools-VSCode/issues/283))
+    -   Various performance and security enhancements
+
 ## ⚙ Features
 
 ### Connect to your Dataverse environment
 
-There are 3 ways you can connect to your Dataverse Environment.
+There are 4 ways you can connect to your Dataverse Environment.
 
 | Connection Type                      | Description                                                                                                                                                                                                                                                                                                                                                                                                            |
 | ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Microsoft Login Prompt (Recommended) | Uses Microsoft Dev App Id. This connection will work with MFA-enabled authentication as well.                                                                                                                                                                                                                                                                                                                          |
+| Microsoft Login Prompt (Recommended) | Uses Dataverse Dev Client Id for authentication. This connection will work with MFA-enabled authentication as well. **Improved in v2.2.4** with enhanced authentication flow.                                                                                                                                                                                                                                          |
 | Username & Password                  | This works with environments without MFA-enabled and needs no extra configuration.                                                                                                                                                                                                                                                                                                                                     |
 | Client Id & Secret                   | This works with MFA-enabled authentication but needs extra configuration of Azure AD App Registration. To know more on app registration process [read here](https://docs.microsoft.com/en-us/powerapps/developer/data-platform/walkthrough-register-app-azure-active-directory?WT.mc_id=BA-MVP-5003877).                                                                                                               |
 | Azure                                | If you are already logged in inside VSCode using Az extension, Azure CLI or Azure PowerShell, you can leverage Azure Identity Framework to get authenticated against Dataverse. The developer has to use the same account for both Azure and Power Platform for this work (thanks to [Natraj Yegnaraman](https://github.com/rajyraman) for this method). This is a single-click authentication method with no prompts. |
@@ -135,6 +145,8 @@ Typings help you write early-bound code. And with the help of `@types/xrm` you c
 
 **Typings are also integrated with [`@types/xrm`](https://www.npmjs.com/package/@types/xrm)**
 
+**Enhanced in v2.2.3:** Typings now include entity attribute metadata, providing more detailed information about entity attributes including attribute type names and relationships.
+
 ![Typings](https://github.com/Power-Maverick/DataverseDevTools-VSCode/blob/main/assets/GenerateTypings.gif?raw=true)
 
 ### Intellisense for type generated
@@ -166,6 +178,8 @@ Once you build your project you can upload your script directly from the VS Code
 ## ⚒️ Tools
 
 You can launch your favorite Power Platform tools right from VSCode. Below are the list of currently integrated tools with DVDT.
+
+> **UI Enhancement (v2.2.5)**: All tool views now feature modern themed interfaces that automatically adapt to your VS Code theme (light/dark mode).
 
 | Tool Name                | Author       |
 | ------------------------ | ------------ |

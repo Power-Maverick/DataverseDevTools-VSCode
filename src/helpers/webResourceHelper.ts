@@ -2,7 +2,7 @@
 import { reduce } from "conditional-reduce";
 import * as path from "path";
 import * as vscode from "vscode";
-import { WebResourceType, wrDefinitionsStoreKey } from "../utils/Constants";
+import { extensionPrefix, WebResourceType, wrDefinitionsStoreKey } from "../utils/Constants";
 import { ErrorMessages } from "../utils/ErrorMessages";
 import { decodeFromBase64, encodeToBase64, extractGuid } from "../utils/ExtensionMethods";
 import { copyFolderOrFile, createTempDirectory, getFileExtension, getFileName, getRelativeFilePath, getWorkspaceFolder, readFileAsBase64Sync, readFileSync, writeFileSync } from "../utils/FileSystem";
@@ -68,7 +68,10 @@ export class WebResourceHelper {
                 const tempFilePath = vscode.Uri.joinPath(tempDirUri, `temp-${resourceToCompare["@_localFileName"]}`);
                 writeFileSync(tempFilePath.fsPath, parsedContent);
 
-                await vscode.commands.executeCommand("vscode.diff", vscode.Uri.file(fullPath), tempFilePath, `Local <--> Server : ${resourceToCompare["@_dvDisplayName"]}`);
+                // The parameter order for vscode.diff is: left (original) <--> right (modified).
+                // Here, we show the server version (tempFilePath) on the left and the local version (fullPath) on the right,
+                // matching the label "Server <--> Local". This order ensures users see changes from server to local.
+                await vscode.commands.executeCommand("vscode.diff", tempFilePath, vscode.Uri.file(fullPath), `Server <--> Local : ${resourceToCompare["@_dvDisplayName"]}`);
             }
         } else {
             vscode.window.showErrorMessage(ErrorMessages.wrCompareError);
@@ -360,6 +363,7 @@ export class WebResourceHelper {
             }
             writeFileSync(linkerFile.fsPath, jsonToXML(linkerFileDataJson));
             vscode.commands.executeCommand("dvdt.explorer.webresources.loadWebResources");
+            await this.updateLinkedResourcesContext();
             return resc;
         }
     }
@@ -379,6 +383,7 @@ export class WebResourceHelper {
             }
             writeFileSync(linkerFile.fsPath, jsonToXML(linkerFileDataJson));
             vscode.commands.executeCommand("dvdt.explorer.webresources.loadWebResources");
+            await this.updateLinkedResourcesContext();
             return newResc;
         }
     }
@@ -405,6 +410,7 @@ export class WebResourceHelper {
             }
             writeFileSync(linkerFile.fsPath, jsonToXML(linkerFileDataJson));
             vscode.commands.executeCommand("dvdt.explorer.webresources.loadWebResources");
+            await this.updateLinkedResourcesContext();
         }
     }
 
@@ -417,43 +423,49 @@ export class WebResourceHelper {
                 title: `Uploading ${fileName}`,
             },
             async (progress, token) => {
-                let id: string = "";
-                let wrReturn: IWebResource | undefined;
-                token.onCancellationRequested(() => {
-                    console.log("User canceled the long running operation");
-                    return;
-                });
-                progress.report({ increment: 0, message: "Uploading..." });
-                if (resc && resc["@_Id"]) {
-                    const wr: IWebResource = {
-                        content: encodeToBase64(readFileSync(fullPath)),
-                    };
-                    await this.dvHelper.updateWebResourceContent(resc["@_Id"], wr);
-                    id = resc["@_Id"];
-                    wrReturn = wr;
-                    wrReturn.name = resc["@_dvFilePath"];
-                    wrReturn.displayname = resc["@_dvDisplayName"];
-                    wrReturn.webresourceid = resc["@_Id"];
-                } else {
-                    const wr = await this.webResourceCreateWizard(fullPath);
-                    if (wr) {
-                        const solutionUniqueName = wr.description!;
-                        wr.description = null;
-                        let wrId = await this.dvHelper.createWebResource(wr);
-                        if (wrId) {
-                            wrId = extractGuid(wrId)!;
-                            this.dvHelper.addWRToSolution(solutionUniqueName, wrId);
-                            wr.webresourceid = wrId;
-                            id = wrId;
-                            wrReturn = wr;
+                try {
+                    let id: string = "";
+                    let wrReturn: IWebResource | undefined;
+                    token.onCancellationRequested(() => {
+                        console.log("User canceled the long running operation");
+                        return;
+                    });
+                    progress.report({ increment: 0, message: "Uploading..." });
+                    if (resc && resc["@_Id"]) {
+                        const wr: IWebResource = {
+                            content: encodeToBase64(readFileSync(fullPath)),
+                        };
+                        await this.dvHelper.updateWebResourceContent(resc["@_Id"], wr);
+                        id = resc["@_Id"];
+                        wrReturn = wr;
+                        wrReturn.name = resc["@_dvFilePath"];
+                        wrReturn.displayname = resc["@_dvDisplayName"];
+                        wrReturn.webresourceid = resc["@_Id"];
+                    } else {
+                        const wr = await this.webResourceCreateWizard(fullPath);
+                        if (wr) {
+                            const solutionUniqueName = wr.description!;
+                            wr.description = null;
+                            let wrId = await this.dvHelper.createWebResource(wr);
+                            if (wrId) {
+                                wrId = extractGuid(wrId)!;
+                                this.dvHelper.addWRToSolution(solutionUniqueName, wrId);
+                                wr.webresourceid = wrId;
+                                id = wrId;
+                                wrReturn = wr;
+                            }
                         }
                     }
+                    progress.report({ increment: 50, message: "Publishing..." });
+                    await this.dvHelper.publishWebResource(id);
+                    progress.report({ increment: 100 });
+                    vscode.window.showInformationMessage(`${fileName} uploaded.`);
+                    return wrReturn;
+                } catch (error) {
+                    vscode.window.showErrorMessage(ErrorMessages.wrUploadError);
+                    console.error("Error uploading web resource:", error);
+                    throw error;
                 }
-                progress.report({ increment: 50, message: "Publishing..." });
-                await this.dvHelper.publishWebResource(id);
-                progress.report({ increment: 100 });
-                vscode.window.showInformationMessage(`${fileName} uploaded.`);
-                return wrReturn;
             },
         );
     }
@@ -571,15 +583,17 @@ export class WebResourceHelper {
                 return { displayname: wrDisplayNameUR, name: `${prefix}_${wrNameUR}`, webresourcetype: wrType, content: wrContent, solutionid: solId, description: solName };
             }
         }
-
-        //#endregion Private
-
-        // Ask for
-        //  Display Name
-        //  Name
-        //  Web Resource Type (infer it from file extension)
-        //  Content (get it from the file & convert it to base64)
     }
+
+    /**
+     * Update the VS Code context for linked resources to enable/disable context menu items
+     */
+    private async updateLinkedResourcesContext(): Promise<void> {
+        const linkedFileNames = await this.getLinkedResourceStrings("@_localFileName");
+        await vscode.commands.executeCommand("setContext", `${extensionPrefix}.linkedResources`, linkedFileNames);
+    }
+
+    //#endregion Private
 }
 
 /**
