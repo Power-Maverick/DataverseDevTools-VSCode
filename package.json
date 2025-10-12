@@ -167,7 +167,7 @@
                     "command": "dvdt.commands.showToolsPage",
                     "when": "view == ppToolBox",
                     "group": "navigation@1",
-                    "icon": "$(table)"
+                    "icon": "$(tools)"
                 },
                 {
                     "command": "dvdt.explorer.webresources.smartMatch",
@@ -514,7 +514,8 @@
             {
                 "command": "dvdt.commands.showToolsPage",
                 "title": "Show Tools Page",
-                "category": "%dvdt.commands.category%"
+                "category": "%dvdt.commands.category%",
+                "icon": "$(tools)"
             },
             {
                 "command": "dvdt.commands.launchToolByShortName",
