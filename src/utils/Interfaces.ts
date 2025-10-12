@@ -297,6 +297,8 @@ export interface IToolDetails {
     toolName: string;
     toolShortName: string;
     toolAuthor: string;
+    toolDescription?: string;
+    toolIcon?: string;
 }
 export interface ICliCommandList {
     commands: ICliCommand[];

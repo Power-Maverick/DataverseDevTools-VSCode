@@ -19,8 +19,9 @@ $(document).ready(function () {
 
     $("#toolsSearch").on("keyup", function () {
         var value = $(this).val().toLowerCase();
-        $("#toolsTableBody tr").filter(function () {
-            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+        $(".tool-card").filter(function () {
+            var isMatch = $(this).text().toLowerCase().indexOf(value) > -1;
+            $(this).toggleClass("hidden", !isMatch);
         });
     });
 

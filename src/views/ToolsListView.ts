@@ -38,12 +38,25 @@ export class ToolsListView extends VsCodePanel {
                 const escapedToolName = _.escape(tool.toolName);
                 const escapedShortName = _.escape(tool.toolShortName);
                 const escapedAuthor = _.escape(tool.toolAuthor);
-                return `<tr>
-                    <td>${escapedToolName}</td>
-                    <td>${escapedShortName}</td>
-                    <td>${escapedAuthor}</td>
-                    <td><button class="btn" onclick="launchTool('${escapedShortName}')">Launch</button></td>
-                </tr>`;
+                const escapedDescription = _.escape(tool.toolDescription || 'No description available');
+                const toolIcon = tool.toolIcon || '🔨';
+                
+                return `<div class="tool-card" onclick="launchTool('${escapedShortName}')">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">${toolIcon}</div>
+                        <div class="tool-info">
+                            <h3 class="tool-name">${escapedToolName}</h3>
+                            <p class="tool-author">by ${escapedAuthor}</p>
+                        </div>
+                    </div>
+                    <p class="tool-description">${escapedDescription}</p>
+                    <div class="tool-footer">
+                        <span class="tool-tag">${escapedShortName}</span>
+                        <button class="tool-launch-btn" onclick="event.stopPropagation(); launchTool('${escapedShortName}')">
+                            <span>▶</span> Launch
+                        </button>
+                    </div>
+                </div>`;
             }).join(''),
         };
 

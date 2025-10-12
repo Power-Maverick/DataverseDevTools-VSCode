@@ -88,6 +88,165 @@ body {
     opacity: 0.8;
 }
 
+/**** Tools Page Styling ****/
+.tools-header {
+    padding: 20px;
+    border-bottom: 1px solid var(--vscode-panel-border);
+    margin-bottom: 20px;
+}
+
+.tools-header h2 {
+    margin: 0 0 8px 0;
+    color: var(--vscode-foreground);
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.tools-description {
+    margin: 0 0 16px 0;
+    color: var(--vscode-descriptionForeground);
+    font-size: 0.9rem;
+}
+
+.search-container {
+    width: 100%;
+    max-width: 600px;
+}
+
+.tools-search {
+    width: 100%;
+    padding: 10px 16px;
+    background-color: var(--vscode-input-background);
+    color: var(--vscode-input-foreground);
+    border: 1px solid var(--vscode-input-border);
+    border-radius: 4px;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.tools-search:focus {
+    border-color: var(--vscode-focusBorder);
+}
+
+.tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 16px;
+    padding: 0 20px 20px 20px;
+}
+
+.tool-card {
+    background-color: var(--vscode-editor-background);
+    border: 1px solid var(--vscode-panel-border);
+    border-radius: 6px;
+    padding: 20px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.tool-card:hover {
+    border-color: var(--vscode-focusBorder);
+    background-color: var(--vscode-list-hoverBackground);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.tool-card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.tool-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--vscode-button-background), var(--vscode-button-hoverBackground));
+    border-radius: 8px;
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.tool-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.tool-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--vscode-foreground);
+    margin: 0 0 4px 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.tool-author {
+    font-size: 0.85rem;
+    color: var(--vscode-descriptionForeground);
+    margin: 0;
+}
+
+.tool-description {
+    font-size: 0.9rem;
+    color: var(--vscode-foreground);
+    line-height: 1.4;
+    margin: 0;
+}
+
+.tool-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8px;
+}
+
+.tool-tag {
+    display: inline-block;
+    padding: 4px 10px;
+    background-color: var(--vscode-badge-background);
+    color: var(--vscode-badge-foreground);
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.tool-launch-btn {
+    padding: 8px 16px;
+    background-color: var(--vscode-button-background);
+    color: var(--vscode-button-foreground);
+    border: none;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.tool-launch-btn:hover {
+    background-color: var(--vscode-button-hoverBackground);
+    transform: scale(1.05);
+}
+
+.tool-launch-btn:active {
+    transform: scale(0.98);
+}
+
+.tool-card.hidden {
+    display: none;
+}
+
 /**** Lables ****/
 label {
     font-size: 0.8rem;
