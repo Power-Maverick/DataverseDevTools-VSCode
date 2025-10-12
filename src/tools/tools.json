@@ -1,32 +1,36 @@
 {
     "tools": [
-        { 
-            "toolName": "Dataverse REST Builder", 
-            "toolShortName": "drb", 
-            "toolAuthor": "Guido Preite",
-            "toolDescription": "Build and test Dataverse Web API queries with an intuitive interface. Generate code snippets for JavaScript, C#, and more.",
-            "toolIcon": "🔧"
+        {
+            "name": "Dataverse REST Builder",
+            "shortName": "drb",
+            "author": "Guido Preite",
+            "icon": "drb.png",
+            "description": "Build and test Dataverse Web API queries with an intuitive interface. Generate code snippets for JavaScript, C#, and more.",
+            "emoji": "🔧"
         },
-        { 
-            "toolName": "Plugin Registration", 
-            "toolShortName": "prt", 
-            "toolAuthor": "Microsoft",
-            "toolDescription": "Register and manage plugins, custom workflow activities, and service endpoints for Dataverse.",
-            "toolIcon": "🔌"
+        {
+            "name": "Plugin Registration",
+            "shortName": "prt",
+            "author": "Microsoft",
+            "icon": "prt.png",
+            "description": "Register and manage plugins, custom workflow activities, and service endpoints for Dataverse.",
+            "emoji": "🔌"
         },
-        { 
-            "toolName": "Configuration Migration", 
-            "toolShortName": "cmt", 
-            "toolAuthor": "Microsoft",
-            "toolDescription": "Move configuration data across Dataverse environments. Export and import customizations, reference data, and more.",
-            "toolIcon": "📦"
+        {
+            "name": "Configuration Migration",
+            "shortName": "cmt",
+            "author": "Microsoft",
+            "icon": "cmt.png",
+            "description": "Move configuration data across Dataverse environments. Export and import customizations, reference data, and more.",
+            "emoji": "📦"
         },
-        { 
-            "toolName": "Package Deployer", 
-            "toolShortName": "pd", 
-            "toolAuthor": "Microsoft",
-            "toolDescription": "Deploy packages to Dataverse environments with pre and post-deployment actions. Automate solution deployment.",
-            "toolIcon": "🚀"
+        {
+            "name": "Package Deployer",
+            "shortName": "pd",
+            "author": "Microsoft",
+            "icon": "pd.png",
+            "description": "Deploy packages to Dataverse environments with pre and post-deployment actions. Automate solution deployment.",
+            "emoji": "🚀"
         }
     ]
 }

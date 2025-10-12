@@ -15,4 +15,5 @@ export class ErrorMessages {
     public static wrUploadError: string = "Failed to upload web resource. Please check your connection and try again.";
     public static drbConnectionError: string = "Connect to an environment before trying to load Dataverse REST Builder.";
     public static invalidLoginType: string = "Invalid Login Type.";
+    public static commonToolsError: string = "An error occurred while trying to open the tool. Please try again.";
 }

@@ -50,6 +50,7 @@
         "Power Platform",
         "Dynamics 365",
         "Xrm",
+        "DVDT",
         "Dev Tools"
     ],
     "qna": "https://github.com/Power-Maverick/DataverseDevTools-VSCode/discussions",

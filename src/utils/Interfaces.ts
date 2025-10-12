@@ -294,11 +294,12 @@ export interface ITools {
 }
 
 export interface IToolDetails {
-    toolName: string;
-    toolShortName: string;
-    toolAuthor: string;
-    toolDescription?: string;
-    toolIcon?: string;
+    name: string;
+    shortName: string;
+    author: string;
+    icon?: string;
+    description?: string;
+    emoji?: string;
 }
 export interface ICliCommandList {
     commands: ICliCommand[];

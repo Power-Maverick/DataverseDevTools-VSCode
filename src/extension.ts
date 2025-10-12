@@ -3,6 +3,7 @@
 import TelemetryReporter from "@vscode/extension-telemetry";
 import * as vscode from "vscode";
 import { registerCommands } from "./commands/registerCommands";
+import { registerToolsCommands } from "./commands/registerToolsCommands";
 import { registerTreeDataProviders } from "./commands/registerTreeDataProviders";
 import { DataverseHelper } from "./helpers/dataverseHelper";
 import * as config from "./utils/Config";
@@ -32,6 +33,9 @@ export function activate(context: vscode.ExtensionContext) {
 
     registerTreeDataProviders(context, reporter);
     registerCommands(context, reporter);
+    registerToolsCommands(context, reporter);
+
+    console.log(`Extension ${extensionId} v${extensionVersion} is now active!`);
 
     // Start periodic token expiration check
     startTokenExpirationCheck(context);
@@ -59,20 +63,17 @@ export function deactivate() {
  */
 function startTokenExpirationCheck(context: vscode.ExtensionContext) {
     let lastNotifiedExpiration = false;
-    
+
     tokenExpirationTimer = setInterval(() => {
         const dvHelper = new DataverseHelper(context);
         const isExpired = dvHelper.isCurrentConnectionTokenExpired();
-        
+
         if (isExpired && !lastNotifiedExpiration) {
             // Get current connection to create tree item for reconnect
             const conn = dvHelper.getCurrentWorkspaceConnection();
-            
+
             // Show notification to user
-            vscode.window.showWarningMessage(
-                "Your Dataverse connection token has expired. Please reconnect to continue working.",
-                "Reconnect"
-            ).then(selection => {
+            vscode.window.showWarningMessage("Your Dataverse connection token has expired. Please reconnect to continue working.", "Reconnect").then((selection) => {
                 if (selection === "Reconnect" && conn) {
                     // Create a tree item with the connection name to pass to the command
                     const connItem = {
@@ -81,17 +82,17 @@ function startTokenExpirationCheck(context: vscode.ExtensionContext) {
                         collapsibleState: vscode.TreeItemCollapsibleState.Collapsed,
                         level: 2,
                         current: true,
-                        expired: true
+                        expired: true,
                     };
                     vscode.commands.executeCommand("dvdt.explorer.connections.connectDataverse", connItem);
                 }
             });
-            
+
             lastNotifiedExpiration = true;
-            
+
             // Refresh the connection tree to show expired icon
             vscode.commands.executeCommand("dvdt.explorer.connections.refreshConnection");
-            
+
             // Update status bar to show expired state
             if (conn) {
                 vscode.commands.executeCommand("dvdt.explorer.connections.updateStatusBar", conn);
