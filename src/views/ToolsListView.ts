@@ -35,11 +35,14 @@ export class ToolsListView extends VsCodePanel {
 
         const viewModel = {
             tools: this.tools.map(tool => {
+                const escapedToolName = _.escape(tool.toolName);
+                const escapedShortName = _.escape(tool.toolShortName);
+                const escapedAuthor = _.escape(tool.toolAuthor);
                 return `<tr>
-                    <td>${tool.toolName}</td>
-                    <td>${tool.toolShortName}</td>
-                    <td>${tool.toolAuthor}</td>
-                    <td><button class="btn" onclick="launchTool('${tool.toolShortName}')">Launch</button></td>
+                    <td>${escapedToolName}</td>
+                    <td>${escapedShortName}</td>
+                    <td>${escapedAuthor}</td>
+                    <td><button class="btn" onclick="launchTool('${escapedShortName}')">Launch</button></td>
                 </tr>`;
             }).join(''),
         };
