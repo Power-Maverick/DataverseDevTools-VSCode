@@ -34,17 +34,15 @@ export class ToolsListView extends VsCodePanel {
         const compiled = _.template(fileHtml);
 
         const viewModel = {
-            tools: '',
+            tools: this.tools.map(tool => {
+                return `<tr>
+                    <td>${tool.toolName}</td>
+                    <td>${tool.toolShortName}</td>
+                    <td>${tool.toolAuthor}</td>
+                    <td><button class="btn" onclick="launchTool('${tool.toolShortName}')">Launch</button></td>
+                </tr>`;
+            }).join(''),
         };
-
-        this.tools.forEach(tool => {
-            viewModel.tools += `<tr>`;
-            viewModel.tools += `<td>${tool.toolName}</td>`;
-            viewModel.tools += `<td>${tool.toolShortName}</td>`;
-            viewModel.tools += `<td>${tool.toolAuthor}</td>`;
-            viewModel.tools += `<td><button class="btn" onclick="launchTool('${tool.toolShortName}')">Launch</button></td>`;
-            viewModel.tools += `</tr>`;
-        });
 
         return super.render(compiled(viewModel));
     }
