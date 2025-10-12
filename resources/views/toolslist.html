@@ -1,0 +1,37 @@
+<br /><br />
+
+<input class="vscode-textfield" autofocus id="toolsSearch" placeholder="Search tools..."></input>
+
+<br />
+
+<table class="table table-bordered sortable" id="toolsTable">
+    <thead>
+        <th onclick="sortTable('toolsTable',0)">
+            Tool Name
+            <div class="sort-icon">
+                <span class="asc-icon">&#9650;</span>
+                <span class="desc-icon">&#9660;</span>
+            </div>
+        </th>
+        <th onclick="sortTable('toolsTable',1)">
+            Short Name
+            <div class="sort-icon">
+                <span class="asc-icon">&#9650;</span>
+                <span class="desc-icon">&#9660;</span>
+            </div>
+        </th>
+        <th onclick="sortTable('toolsTable',2)">
+            Author
+            <div class="sort-icon">
+                <span class="asc-icon">&#9650;</span>
+                <span class="desc-icon">&#9660;</span>
+            </div>
+        </th>
+        <th>
+            Action
+        </th>
+    </thead>
+    <tbody id="toolsTableBody">
+        !!{tools}
+    </tbody>
+</table>

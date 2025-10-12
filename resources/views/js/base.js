@@ -17,6 +17,13 @@ $(document).ready(function () {
         });
     });
 
+    $("#toolsSearch").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+        $("#toolsTableBody tr").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+        });
+    });
+
     if ($matchTable && $matchTable.bootstrapTable) {
         $matchTable.bootstrapTable();
         $matchTable.bootstrapTable("refreshOptions", {
@@ -77,6 +84,13 @@ function link(fullPath, wrId) {
     vscode.postMessage({
         command: "link",
         value: `{ "fp": "${fullPath}", "id": "${wrId}" }`,
+    });
+}
+
+function launchTool(toolShortName) {
+    vscode.postMessage({
+        command: "launchTool",
+        toolShortName: toolShortName,
     });
 }
 

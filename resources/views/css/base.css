@@ -69,6 +69,25 @@ body {
     font-size: small;
 }
 
+.btn {
+    padding: 4px 12px;
+    cursor: pointer;
+    background-color: var(--vscode-button-background);
+    color: var(--vscode-button-foreground);
+    border: none;
+    border-radius: 2px;
+    font-size: 0.8rem;
+}
+
+.btn:hover {
+    background-color: var(--vscode-button-hoverBackground);
+}
+
+.btn:active {
+    background-color: var(--vscode-button-hoverBackground);
+    opacity: 0.8;
+}
+
 /**** Lables ****/
 label {
     font-size: 0.8rem;

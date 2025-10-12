@@ -1,0 +1,51 @@
+import * as vscode from "vscode";
+import * as path from "path";
+import { IToolDetails } from "../utils/Interfaces";
+import { readFileSync } from "../utils/FileSystem";
+import _ from "lodash";
+import { VsCodePanel } from "./base/VsCodePanelBase";
+import toolsInJson from "../tools/tools.json";
+
+export class ToolsListView extends VsCodePanel {
+    private tools: IToolDetails[];
+
+    constructor(webview: vscode.WebviewPanel, vscontext: vscode.ExtensionContext) {
+        super({ panel: webview, extensionUri: vscontext.extensionUri, webViewFileName: "toolslist.html" });
+        this.tools = toolsInJson.tools;
+        // Set the webview's initial html content
+        super.update();
+
+        // Set up message listener for launching tools
+        this.webViewPanel.webview.onDidReceiveMessage(
+            message => {
+                switch (message.command) {
+                    case 'launchTool':
+                        vscode.commands.executeCommand('dvdt.commands.launchToolByShortName', message.toolShortName);
+                        return;
+                }
+            }
+        );
+    }
+
+    public getHtmlForWebview(webviewFileName: string): string {
+        const pathOnDisk = path.join(this.panelOptions.extensionUri.fsPath, "resources", "views", webviewFileName);
+        const fileHtml = readFileSync(pathOnDisk).toString();
+        _.templateSettings.interpolate = /!!{([\s\S]+?)}/g;
+        const compiled = _.template(fileHtml);
+
+        const viewModel = {
+            tools: '',
+        };
+
+        this.tools.forEach(tool => {
+            viewModel.tools += `<tr>`;
+            viewModel.tools += `<td>${tool.toolName}</td>`;
+            viewModel.tools += `<td>${tool.toolShortName}</td>`;
+            viewModel.tools += `<td>${tool.toolAuthor}</td>`;
+            viewModel.tools += `<td><button class="btn" onclick="launchTool('${tool.toolShortName}')">Launch</button></td>`;
+            viewModel.tools += `</tr>`;
+        });
+
+        return super.render(compiled(viewModel));
+    }
+}

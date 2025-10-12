@@ -164,6 +164,12 @@
                     "group": "navigation@2"
                 },
                 {
+                    "command": "dvdt.commands.showToolsPage",
+                    "when": "view == ppToolBox",
+                    "group": "navigation@1",
+                    "icon": "$(table)"
+                },
+                {
                     "command": "dvdt.explorer.webresources.smartMatch",
                     "when": "view == dvWebResources",
                     "group": "navigation@1"
@@ -503,6 +509,17 @@
             {
                 "command": "dvdt.commands.openDRB",
                 "title": "Open Dataverse REST Builder (DRB)",
+                "category": "%dvdt.commands.category%"
+            },
+            {
+                "command": "dvdt.commands.showToolsPage",
+                "title": "Show Tools Page",
+                "category": "%dvdt.commands.category%"
+            },
+            {
+                "command": "dvdt.commands.launchToolByShortName",
+                "title": "Launch Tool",
+                "when": "false",
                 "category": "%dvdt.commands.category%"
             },
             {

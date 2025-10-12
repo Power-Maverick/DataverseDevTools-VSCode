@@ -244,6 +244,43 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
             },
         },
         {
+            command: "dvdt.commands.showToolsPage",
+            callback: async () => {
+                try {
+                    const webview = await views.getWebView({ type: "showToolsList", title: "Power Platform ToolBox" });
+                    const { ToolsListView } = await import("../views/ToolsListView");
+                    new ToolsListView(webview, vscontext);
+                } catch (error) {
+                    errorHandler.log(error, "showToolsPage");
+                }
+            },
+        },
+        {
+            command: "dvdt.commands.launchToolByShortName",
+            callback: async (toolShortName: string) => {
+                try {
+                    switch (toolShortName) {
+                        case "drb":
+                            drbHelper.openDRB(views);
+                            break;
+                        case "prt":
+                            cliHelper.launchPRT();
+                            break;
+                        case "cmt":
+                            cliHelper.launchCMT();
+                            break;
+                        case "pd":
+                            cliHelper.launchPD();
+                            break;
+                        default:
+                            break;
+                    }
+                } catch (error) {
+                    errorHandler.log(error, "launchToolByShortName");
+                }
+            },
+        },
+        {
             command: "dvdt.explorer.webresources.linkExistingWebResource",
             callback: async (uri: vscode.Uri) => {
                 try {
