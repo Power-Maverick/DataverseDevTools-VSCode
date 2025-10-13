@@ -21,14 +21,14 @@ export class ToolsHelper {
     public openTool(toolItem: ToolsTreeItem) {
         const views = new ViewBase(this.vscontext);
         const cliHelper = new CLIHelper(this.vscontext);
+        this.launchToolByShortName(toolItem.toolShortName, cliHelper, views);
+    }
 
-        switch (toolItem.toolShortName) {
+    public launchToolByShortName(shortName: string, cliHelper: CLIHelper, views: ViewBase) {
+        switch (shortName) {
             case "drb":
                 this.openDRB(views);
                 break;
-            // case "erd":
-            //     this.openERDGenerator();
-            //     break;
             case "prt":
                 cliHelper.launchPRT();
                 break;

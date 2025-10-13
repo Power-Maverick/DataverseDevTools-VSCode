@@ -4,6 +4,7 @@ import { CLIHelper } from "../helpers/cliHelper";
 import { ErrorHandler } from "../helpers/errorHandler";
 import { ToolsHelper } from "../helpers/toolsHelper";
 import { ICommand } from "../utils/Interfaces";
+import { ToolsListView } from "../views/ToolsListView";
 import { ViewBase } from "../views/ViewBase";
 
 export async function registerToolsCommands(vscontext: vscode.ExtensionContext, tr: TelemetryReporter): Promise<void> {
@@ -68,7 +69,6 @@ export async function registerToolsCommands(vscontext: vscode.ExtensionContext, 
             callback: async () => {
                 try {
                     const webview = await views.getWebView({ type: "showToolsList", title: "Power Platform ToolBox" });
-                    const { ToolsListView } = await import("../views/ToolsListView");
                     new ToolsListView(webview, vscontext);
                 } catch (error) {
                     errorHandler.log(error, "showToolsPage");
@@ -79,22 +79,7 @@ export async function registerToolsCommands(vscontext: vscode.ExtensionContext, 
             command: "dvdt.commands.launchToolByShortName",
             callback: async (toolShortName: string) => {
                 try {
-                    switch (toolShortName) {
-                        case "drb":
-                            toolHelper.openDRB(views);
-                            break;
-                        case "prt":
-                            cliHelper.launchPRT();
-                            break;
-                        case "cmt":
-                            cliHelper.launchCMT();
-                            break;
-                        case "pd":
-                            cliHelper.launchPD();
-                            break;
-                        default:
-                            break;
-                    }
+                    toolHelper.launchToolByShortName(toolShortName, cliHelper, views);
                 } catch (error) {
                     errorHandler.log(error, "launchToolByShortName");
                 }

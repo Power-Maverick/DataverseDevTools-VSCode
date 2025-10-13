@@ -299,7 +299,6 @@ export interface IToolDetails {
     author: string;
     icon?: string;
     description?: string;
-    emoji?: string;
 }
 export interface ICliCommandList {
     commands: ICliCommand[];

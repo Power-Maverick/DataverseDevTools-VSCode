@@ -199,6 +199,13 @@ body {
     color: var(--vscode-foreground);
     line-height: 1.4;
     margin: 0;
+    height: 64px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
 }
 
 .tool-footer {

@@ -5,32 +5,28 @@
             "shortName": "drb",
             "author": "Guido Preite",
             "icon": "drb.png",
-            "description": "Build and test Dataverse Web API queries with an intuitive interface. Generate code snippets for JavaScript, C#, and more.",
-            "emoji": "🔧"
+            "description": "Build and test Dataverse Web API queries with an intuitive interface. Generate code snippets for JavaScript, C#, and more."
         },
         {
             "name": "Plugin Registration",
             "shortName": "prt",
             "author": "Microsoft",
             "icon": "prt.png",
-            "description": "Register and manage plugins, custom workflow activities, and service endpoints for Dataverse.",
-            "emoji": "🔌"
+            "description": "Register and manage plugins, custom workflow activities, and service endpoints for Dataverse."
         },
         {
             "name": "Configuration Migration",
             "shortName": "cmt",
             "author": "Microsoft",
             "icon": "cmt.png",
-            "description": "Move configuration data across Dataverse environments. Export and import customizations, reference data, and more.",
-            "emoji": "📦"
+            "description": "Move configuration data across Dataverse environments. Export and import customizations, reference data, and more."
         },
         {
             "name": "Package Deployer",
             "shortName": "pd",
             "author": "Microsoft",
             "icon": "pd.png",
-            "description": "Deploy packages to Dataverse environments with pre and post-deployment actions. Automate solution deployment.",
-            "emoji": "🚀"
+            "description": "Deploy packages to Dataverse environments with pre and post-deployment actions. Automate solution deployment."
         }
     ]
 }

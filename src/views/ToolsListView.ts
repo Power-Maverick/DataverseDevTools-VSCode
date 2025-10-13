@@ -1,10 +1,10 @@
-import * as vscode from "vscode";
-import * as path from "path";
-import { IToolDetails } from "../utils/Interfaces";
-import { readFileSync } from "../utils/FileSystem";
 import _ from "lodash";
-import { VsCodePanel } from "./base/VsCodePanelBase";
+import * as path from "path";
+import * as vscode from "vscode";
 import toolsInJson from "../tools/tools.json";
+import { readFileSync } from "../utils/FileSystem";
+import { IToolDetails } from "../utils/Interfaces";
+import { VsCodePanel } from "./base/VsCodePanelBase";
 
 export class ToolsListView extends VsCodePanel {
     private tools: IToolDetails[];
@@ -16,15 +16,13 @@ export class ToolsListView extends VsCodePanel {
         super.update();
 
         // Set up message listener for launching tools
-        this.webViewPanel.webview.onDidReceiveMessage(
-            message => {
-                switch (message.command) {
-                    case 'launchTool':
-                        vscode.commands.executeCommand('dvdt.commands.launchToolByShortName', message.toolShortName);
-                        return;
-                }
+        this.webViewPanel.webview.onDidReceiveMessage((message) => {
+            switch (message.command) {
+                case "launchTool":
+                    vscode.commands.executeCommand("dvdt.commands.launchToolByShortName", message.toolShortName);
+                    return;
             }
-        );
+        });
     }
 
     public getHtmlForWebview(webviewFileName: string): string {
@@ -34,14 +32,19 @@ export class ToolsListView extends VsCodePanel {
         const compiled = _.template(fileHtml);
 
         const viewModel = {
-            tools: this.tools.map(tool => {
-                const escapedToolName = _.escape(tool.name);
-                const escapedShortName = _.escape(tool.shortName);
-                const escapedAuthor = _.escape(tool.author);
-                const escapedDescription = _.escape(tool.description || 'No description available');
-                const toolIcon = tool.emoji || '🔨';
-                
-                return `<div class="tool-card" onclick="launchTool('${escapedShortName}')">
+            tools: this.tools
+                .map((tool) => {
+                    const escapedToolName = _.escape(tool.name);
+                    const escapedShortName = _.escape(tool.shortName);
+                    const escapedAuthor = _.escape(tool.author);
+                    const escapedDescription = _.escape(tool.description || "No description available");
+                    const toolIcon = tool.icon
+                        ? `<img src="${this.webViewPanel.webview.asWebviewUri(
+                              vscode.Uri.file(path.join(this.panelOptions.extensionUri.fsPath, "resources", "toolIcons", "dark", tool.icon)),
+                          )}" alt="${escapedToolName} Icon" class="tool-icon-img" />`
+                        : `<span class="generic-tool-icon">🛠️</span>`;
+
+                    return `<div class="tool-card" onclick="launchTool('${escapedShortName}')">
                     <div class="tool-card-header">
                         <div class="tool-icon">${toolIcon}</div>
                         <div class="tool-info">
@@ -51,13 +54,13 @@ export class ToolsListView extends VsCodePanel {
                     </div>
                     <p class="tool-description">${escapedDescription}</p>
                     <div class="tool-footer">
-                        <span class="tool-tag">${escapedShortName}</span>
                         <button class="tool-launch-btn" onclick="event.stopPropagation(); launchTool('${escapedShortName}')">
                             <span>▶</span> Launch
                         </button>
                     </div>
                 </div>`;
-            }).join(''),
+                })
+                .join(""),
         };
 
         return super.render(compiled(viewModel));
