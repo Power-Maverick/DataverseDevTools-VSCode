@@ -8,6 +8,13 @@
             "description": "Build and test Dataverse Web API queries with an intuitive interface. Generate code snippets for JavaScript, C#, and more."
         },
         {
+            "name": "ERD Generator",
+            "shortName": "erd",
+            "author": "Power Maverick",
+            "icon": "erd.svg",
+            "description": "Generate Entity Relationship Diagrams for Dataverse models."
+        },
+        {
             "name": "Plugin Registration",
             "shortName": "prt",
             "author": "Microsoft",

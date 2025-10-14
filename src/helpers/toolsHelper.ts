@@ -1,3 +1,4 @@
+import { showERDPanel } from "dvdt-erd-generator";
 import * as vscode from "vscode";
 import { ToolsTreeItem } from "../tools/toolsDataProvider";
 import { connectionCurrentStoreKey } from "../utils/Constants";
@@ -29,6 +30,9 @@ export class ToolsHelper {
             case "drb":
                 this.openDRB(views);
                 break;
+            case "erd":
+                this.openERDGenerator();
+                break;
             case "prt":
                 cliHelper.launchPRT();
                 break;
@@ -53,12 +57,12 @@ export class ToolsHelper {
         }
     }
 
-    // public openERDGenerator(): void {
-    //     const connFromWS: IConnection = this.vsstate.getFromWorkspace(connectionCurrentStoreKey);
-    //     if (connFromWS && connFromWS.currentAccessToken) {
-    //         showERDPanel(this.vscontext.extensionUri, connFromWS.environmentUrl, connFromWS.currentAccessToken);
-    //     } else {
-    //         vscode.window.showErrorMessage(ErrorMessages.commonToolsError);
-    //     }
-    // }
+    public openERDGenerator(): void {
+        const connFromWS: IConnection = this.vsstate.getFromWorkspace(connectionCurrentStoreKey);
+        if (connFromWS && connFromWS.currentAccessToken) {
+            showERDPanel(this.vscontext.extensionUri, connFromWS.environmentUrl, connFromWS.currentAccessToken);
+        } else {
+            vscode.window.showErrorMessage(ErrorMessages.commonToolsError);
+        }
+    }
 }

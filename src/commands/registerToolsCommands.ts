@@ -24,16 +24,16 @@ export async function registerToolsCommands(vscontext: vscode.ExtensionContext, 
                 }
             },
         },
-        // {
-        //     command: "dvdt.commands.openERDGenerator",
-        //     callback: async () => {
-        //         try {
-        //             toolHelper.openERDGenerator();
-        //         } catch (error) {
-        //             errorHandler.log(error, "openERDGenerator");
-        //         }
-        //     },
-        // },
+        {
+            command: "dvdt.commands.openERDGenerator",
+            callback: async () => {
+                try {
+                    toolHelper.openERDGenerator();
+                } catch (error) {
+                    errorHandler.log(error, "openERDGenerator");
+                }
+            },
+        },
         {
             command: "dvdt.commands.launchPRT",
             callback: async () => {

@@ -597,6 +597,7 @@
         "conditional-reduce": "^1.2.0",
         "dayjs": "^1.10.7",
         "dts-dom": "^3.6.0",
+        "dvdt-erd-generator": "^0.0.6",
         "fast-xml-parser": "^4.5.0",
         "fs-extra": "^10.0.0",
         "lodash": "^4.17.21",
