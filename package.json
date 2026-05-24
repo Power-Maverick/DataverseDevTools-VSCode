@@ -120,6 +120,16 @@
                     "command": "dvdt.explorer.webresources.compareWebResource",
                     "when": "resourceExtname in devtools.resourcesExtn && resourceFilename in devtools.linkedResources",
                     "group": "%dvdt.menus.group.wr%@3"
+                },
+                {
+                    "command": "dvdt.explorer.plugins.linkPlugin",
+                    "when": "resourceExtname == .csproj",
+                    "group": "%dvdt.menus.group.plugin%@1"
+                },
+                {
+                    "command": "dvdt.explorer.plugins.pushPlugin",
+                    "when": "resourceExtname == .csproj",
+                    "group": "%dvdt.menus.group.plugin%@2"
                 }
             ],
             "view/title": [
@@ -523,6 +533,18 @@
                     "light": "resources/light/play.svg",
                     "dark": "resources/dark/play.svg"
                 }
+            },
+            {
+                "command": "dvdt.explorer.plugins.linkPlugin",
+                "title": "Link to Existing Dataverse Plugin",
+                "when": "false",
+                "category": "%dvdt.explorer.category%"
+            },
+            {
+                "command": "dvdt.explorer.plugins.pushPlugin",
+                "title": "Push Plugin to Dataverse",
+                "when": "false",
+                "category": "%dvdt.explorer.category%"
             }
         ],
         "configuration": {

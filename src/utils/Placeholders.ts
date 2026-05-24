@@ -122,6 +122,12 @@ export class Placeholders {
             case this.wrSearch:
                 qpOptions = { placeHolder: this.ipWRSearch.placeHolderText, title: this.ipWRSearch.prompt, ignoreFocusOut: ignoreFocus };
                 break;
+            case this.pluginSelection:
+                qpOptions = { placeHolder: this.ipPluginSelection.placeHolderText, title: this.ipPluginSelection.prompt, ignoreFocusOut: ignoreFocus };
+                break;
+            case this.pluginLinkSelection:
+                qpOptions = { placeHolder: this.ipPluginLinkSelection.placeHolderText, title: this.ipPluginLinkSelection.prompt, ignoreFocusOut: ignoreFocus };
+                break;
             default:
                 qpOptions = { placeHolder: "", ignoreFocusOut: ignoreFocus };
                 break;
@@ -151,6 +157,8 @@ export class Placeholders {
     public static tsTemplateType: string = "TS-TemplateType";
     public static entitiesSearch: string = "EntitiesSearch";
     public static wrSearch: string = "WRSearch";
+    public static pluginSelection: string = "PluginSelection";
+    public static pluginLinkSelection: string = "PluginLinkSelection";
 
     public static required: string = "[Required]";
     public static optional: string = "[Optional]";
@@ -238,5 +246,13 @@ export class Placeholders {
     private static ipWRSearch: IPlaceholder = {
         placeHolderText: `Search & Select Web Resources`,
         prompt: `Pick multiple web resources`,
+    };
+    private static ipPluginSelection: IPlaceholder = {
+        placeHolderText: `Select the plugin assembly or package`,
+        prompt: `Pick the Dataverse plugin to link with this project`,
+    };
+    private static ipPluginLinkSelection: IPlaceholder = {
+        placeHolderText: `Select your option`,
+        prompt: `This project isn't linked. Link to an existing plugin?`,
     };
 }
