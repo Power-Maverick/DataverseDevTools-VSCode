@@ -10,6 +10,8 @@ import {
     customDataverseClientId,
     entityDefinitionsStoreKey,
     environmentTypes,
+    pluginAssembliesStoreKey,
+    pluginPackagesStoreKey,
     reservedWords,
     solDefinitionsStoreKey,
     wrDefinitionsStoreKey,
@@ -24,6 +26,8 @@ import {
     IEntityMetadata,
     IOptionSet,
     IOptionSetMetadata,
+    IPluginAssemblies,
+    IPluginPackages,
     ISolutionComponents,
     ISolutions,
     IWebResource,
@@ -145,8 +149,8 @@ export class DataverseHelper {
                     this.vsstate.saveInWorkspace(connectionCurrentStoreKey, conn);
                     progress.report({ increment: 30, message: "Getting entity metadata..." });
                     await this.getEntityDefinitions();
-                    progress.report({ increment: 70, message: "Getting web resources..." });
-                    await this.getWebResources();
+                    progress.report({ increment: 70, message: "Getting web resources & plugins..." });
+                    await Promise.all([this.getWebResources(), this.getPluginAssemblies(), this.getPluginPackages()]);
 
                     vscode.commands.executeCommand("dvdt.explorer.connections.refreshConnection");
                     return new Promise<IConnection>((resolve) => {
@@ -178,7 +182,7 @@ export class DataverseHelper {
         const connFromWS: IConnection = this.vsstate.getFromWorkspace(connectionCurrentStoreKey);
         if (connFromWS) {
             await this.getEntityDefinitions();
-            await this.getWebResources();
+            await Promise.all([this.getWebResources(), this.getPluginAssemblies(), this.getPluginPackages()]);
             return connFromWS;
         }
         return undefined;
@@ -339,6 +343,24 @@ export class DataverseHelper {
         const respData = await this.request.requestData<IWebResources>("webresourceset?$filter=(ismanaged%20eq%20false%20and%20iscustomizable/Value%20eq%20true%20)");
         this.vsstate.saveInWorkspace(wrDefinitionsStoreKey, respData);
         vscode.commands.executeCommand("dvdt.explorer.webresources.loadWebResources");
+    }
+
+    /**
+     * Get plugin assemblies (unmanaged) from the current connection.
+     */
+    public async getPluginAssemblies(): Promise<IPluginAssemblies | undefined> {
+        const respData = await this.request.requestData<IPluginAssemblies>("pluginassemblies?$select=pluginassemblyid,name&$filter=ismanaged%20eq%20false%20and%20_packageid_value%20eq%20null");
+        this.vsstate.saveInWorkspace(pluginAssembliesStoreKey, respData);
+        return respData;
+    }
+
+    /**
+     * Get plugin packages (unmanaged) from the current connection.
+     */
+    public async getPluginPackages(): Promise<IPluginPackages | undefined> {
+        const respData = await this.request.requestData<IPluginPackages>("pluginpackages?$select=pluginpackageid,name&$filter=ismanaged%20eq%20false");
+        this.vsstate.saveInWorkspace(pluginPackagesStoreKey, respData);
+        return respData;
     }
 
     /**

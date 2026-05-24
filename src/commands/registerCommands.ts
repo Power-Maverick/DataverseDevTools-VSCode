@@ -4,6 +4,7 @@ import { CliCommandTreeItem } from "../cliCommands/cliCommandsDataProvider";
 import { CLIHelper } from "../helpers/cliHelper";
 import { DataverseHelper } from "../helpers/dataverseHelper";
 import { ErrorHandler } from "../helpers/errorHandler";
+import { PluginHelper } from "../helpers/pluginHelper";
 import { TemplateHelper } from "../helpers/templateHelper";
 import { ToolsHelper } from "../helpers/toolsHelper";
 import { TypingsHelper } from "../helpers/typingsHelper";
@@ -29,6 +30,7 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
     const cliHelper = new CLIHelper(vscontext);
     const templateHelper = new TemplateHelper(vscontext);
     const wrHelper = new WebResourceHelper(vscontext, dvHelper);
+    const pluginHelper = new PluginHelper(vscontext);
     const typingHelper = new TypingsHelper(vscontext, dvHelper);
     const errorHandler = new ErrorHandler(tr);
     const toolsHelper = new ToolsHelper(vscontext);
@@ -253,6 +255,26 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
                 }
             },
         },
+        {
+            command: "dvdt.explorer.plugins.linkPlugin",
+            callback: async (uri: vscode.Uri) => {
+                try {
+                    await pluginHelper.linkPlugin(uri.fsPath);
+                } catch (error) {
+                    errorHandler.log(error, "linkPlugin");
+                }
+            },
+        },
+        {
+            command: "dvdt.explorer.plugins.pushPlugin",
+            callback: async (uri: vscode.Uri) => {
+                try {
+                    await pluginHelper.pushPlugin(uri.fsPath);
+                } catch (error) {
+                    errorHandler.log(error, "pushPlugin");
+                }
+            },
+        },
     );
     cmds.forEach((c) => {
         vscontext.subscriptions.push(vscode.commands.registerCommand(c.command, c.callback));
@@ -260,6 +282,7 @@ export async function registerCommands(vscontext: vscode.ExtensionContext, tr: T
 
     updateConnectionStatusBar(await dvHelper.reloadWorkspaceConnection());
     vscode.commands.executeCommand("setContext", `${extensionPrefix}.linkedResources`, await wrHelper.getLinkedResourceStrings("@_localFileName"));
+    vscode.commands.executeCommand("setContext", `${extensionPrefix}.linkedPlugins`, await pluginHelper.getLinkedProjectPaths());
 }
 
 /**

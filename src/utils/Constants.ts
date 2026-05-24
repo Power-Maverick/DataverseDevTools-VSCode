@@ -15,6 +15,8 @@ export const connectionStoreKey: string = `DataverseConnections`;
 export const connectionCurrentStoreKey: string = `LiveDVConnection`;
 export const entityDefinitionsStoreKey: string = `CurrentEntityDefinitions`;
 export const wrDefinitionsStoreKey: string = `CurrentWRs`;
+export const pluginAssembliesStoreKey: string = `CurrentPluginAssemblies`;
+export const pluginPackagesStoreKey: string = `CurrentPluginPackages`;
 export const solDefinitionsStoreKey: string = `CurrentSolutions`;
 export const smartMatchStoreKey: string = `CurrentSmartMatch`;
 export const environmentTypes: string[] = ["Dev", "QA", "UAT", "Prod"];
@@ -50,6 +52,11 @@ export enum WebResourceType {
     svg = 11,
     resx = 12,
     others = -1,
+}
+
+export enum PluginType {
+    assembly = "Assembly",
+    nuget = "Nuget",
 }
 
 export enum ConfidenceScores {
