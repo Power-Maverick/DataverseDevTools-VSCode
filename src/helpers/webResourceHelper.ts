@@ -4,7 +4,7 @@ import * as path from "path";
 import * as vscode from "vscode";
 import { extensionPrefix, WebResourceType, wrDefinitionsStoreKey } from "../utils/Constants";
 import { ErrorMessages } from "../utils/ErrorMessages";
-import { decodeFromBase64, encodeToBase64, extractGuid } from "../utils/ExtensionMethods";
+import { decodeFromBase64ToUTF8, encodeToBase64, extractGuid } from "../utils/ExtensionMethods";
 import { copyFolderOrFile, createTempDirectory, getFileExtension, getFileName, getRelativeFilePath, getWorkspaceFolder, readFileAsBase64Sync, readFileSync, writeFileSync } from "../utils/FileSystem";
 import { ILinkerFile, ILinkerRes, ISmartMatchRecord, IWebResource, IWebResources } from "../utils/Interfaces";
 import { jsonToXML, xmlToJSON } from "../utils/Parsers";
@@ -63,7 +63,7 @@ export class WebResourceHelper {
         if (resourceToCompare) {
             const base64Content = await this.dvHelper.getWebResourceContent(resourceToCompare["@_Id"]);
             if (base64Content) {
-                const parsedContent = decodeFromBase64(base64Content);
+                const parsedContent = decodeFromBase64ToUTF8(base64Content);
                 const tempDirUri = await createTempDirectory();
                 const tempFilePath = vscode.Uri.joinPath(tempDirUri, `temp-${resourceToCompare["@_localFileName"]}`);
                 writeFileSync(tempFilePath.fsPath, parsedContent);
