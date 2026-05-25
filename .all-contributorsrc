@@ -133,6 +133,13 @@
             "avatar_url": "https://avatars.githubusercontent.com/u/22429087?v=4",
             "profile": "https://dev.to/kkazala",
             "contributions": ["bug", "code", "maintenance", "test", "userTesting"]
+        },
+        {
+            "login": "Mosh-K",
+            "name": "Mosh-K",
+            "avatar_url": "https://avatars.githubusercontent.com/u/158998622?v=4",
+            "profile": "https://github.com/Mosh-K",
+            "contributions": ["code", "design", "userTesting"]
         }
     ],
     "contributorsPerLine": 7
