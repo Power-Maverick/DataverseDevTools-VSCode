@@ -20,17 +20,11 @@
     <a href="https://github.com/Power-Maverick/DataverseDevTools-VSCode/blob/master/LICENSE" alt="License">
       <img src="https://img.shields.io/github/license/Power-Maverick/DataverseDevTools-VSCode"/>
     </a>
-    <a href="https://app.codacy.com/gh/Power-Maverick/DataverseDevTools-VSCode?utm_source=github.com&utm_medium=referral&utm_content=Power-Maverick/DataverseDevTools-VSCode&utm_campaign=Badge_Grade" alt="Codacy Badge">
-      <img src="https://api.codacy.com/project/badge/Grade/b947883a529941309d08736843cb126f"/>
-    </a>
 </p>
 
 <p align="center">
-    <a href="https://img.shields.io/visual-studio-marketplace/d/danish-naglekar.dataverse-devtools" alt="Visual Studio Marketplace Downloads">
-      <img src="https://img.shields.io/visual-studio-marketplace/d/danish-naglekar.dataverse-devtools" />
-    </a>
-    <a href="https://marketplace.visualstudio.com/items?itemName=danish-naglekar.dataverse-devtools" alt="Visual Studio Marketplace Version">
-      <img src="https://img.shields.io/visual-studio-marketplace/v/danish-naglekar.dataverse-devtools?label=vscode%20marketplace" />
+    <a href="https://app.codacy.com/gh/Power-Maverick/DataverseDevTools-VSCode?utm_source=github.com&utm_medium=referral&utm_content=Power-Maverick/DataverseDevTools-VSCode&utm_campaign=Badge_Grade" alt="Codacy Badge">
+      <img src="https://api.codacy.com/project/badge/Grade/b947883a529941309d08736843cb126f"/>
     </a>
     <a href="https://github.com/Power-Maverick/DataverseDevTools-VSCode" alt="GitHub Stars">
       <img src="https://img.shields.io/github/stars/Power-Maverick/DataverseDevTools-VSCode?label=github%20stars" />
@@ -66,6 +60,7 @@
     -   [Generate Typings](#generate-typings)
     -   [Intellisense for type generated](#intellisense-for-type-generated)
     -   [Upload Web Resources](#upload-web-resources)
+    -   [Upload Plugins (pac plugin push)](#upload-plugins-pac-plugin-push)
     -   [Filter by solution](#filter-by-solution)
         -   [Entities](#entities)
         -   [Web Resources](#web-resources)
@@ -160,6 +155,24 @@ When you generate typings for entities you are provided with an intellisense; pr
 Once you build your project you can upload your script directly from the VS Code with the help of Dataverse DevTools.
 
 ![WebResourceUpload](https://github.com/Power-Maverick/DataverseDevTools-VSCode/blob/main/assets/WebResourceUpload.gif?raw=true)
+
+### Upload Plugins (pac plugin push)
+
+You can push Dataverse plugins (assembly / NuGet package) directly from VS Code using the Power Platform CLI.
+
+**How it works**
+
+1. In VS Code Explorer, right-click your plugin project `.csproj` file.
+2. Select **Dataverse DevTools: Link to Existing Dataverse Plugin** and pick the target plugin from your connected environment.
+    - This creates/updates a `dvdt.linker.xml` file in your workspace to remember the link (plugin id, type and environment).
+3. Right-click the same `.csproj` file and select **Dataverse DevTools: Push Plugin to Dataverse**.
+    - Dataverse DevTools runs `pac plugin push --pluginId <id> --type <Assembly|Nuget> --environment <environmentUrl>` in the project folder.
+
+**Prerequisites**
+
+-   Power Platform CLI (`pac`) must be installed.
+-   `pac` must be authenticated to the target environment.
+    -   If no auth profile is found, the extension will prompt you to run `pac auth create --environment "<environmentUrl>"`.
 
 ### Filter by solution
 
