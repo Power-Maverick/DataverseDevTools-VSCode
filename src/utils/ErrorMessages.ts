@@ -15,4 +15,7 @@ export class ErrorMessages {
     public static wrUploadError: string = "Failed to upload web resource. Please check your connection and try again.";
     public static drbConnectionError: string = "Connect to an environment before trying to load Dataverse REST Builder.";
     public static invalidLoginType: string = "Invalid Login Type.";
+    public static commonToolsError: string = "An error occurred while trying to open the tool. Please try again.";
+    public static pluginPushFailed: string = "Failed to push plugin. See the 'Dataverse DevTools - Plugin Push' output channel for details.";
+    public static pluginListUnavailable: string = "No plugin assemblies or packages found in the connected environment.";
 }

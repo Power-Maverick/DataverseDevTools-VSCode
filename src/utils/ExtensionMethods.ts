@@ -79,6 +79,8 @@ export const extractGuid = (str: string): string | undefined => {
     }
 };
 
+export const decodeFromBase64ToUTF8 = (str: string): string => Buffer.from(str, "base64").toString("utf8");
+
 export const decodeFromBase64 = (str: string): string => Buffer.from(str, "base64").toString("binary");
 
 export const encodeToBase64 = (str: string): string => Buffer.from(str, "binary").toString("base64");

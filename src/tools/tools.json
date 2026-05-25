@@ -1,8 +1,28 @@
 {
     "tools": [
-        { "toolName": "Dataverse REST Builder", "toolShortName": "drb", "toolAuthor": "Guido Preite" },
-        { "toolName": "Plugin Registration", "toolShortName": "prt", "toolAuthor": "Microsoft" },
-        { "toolName": "Configuration Migration", "toolShortName": "cmt", "toolAuthor": "Microsoft" },
-        { "toolName": "Package Deployer", "toolShortName": "pd", "toolAuthor": "Microsoft" }
+        {
+            "name": "Dataverse REST Builder",
+            "shortName": "drb",
+            "author": "Guido Preite",
+            "icon": "drb.png"
+        },
+        {
+            "name": "Plugin Registration",
+            "shortName": "prt",
+            "author": "Microsoft",
+            "icon": "prt.png"
+        },
+        {
+            "name": "Configuration Migration",
+            "shortName": "cmt",
+            "author": "Microsoft",
+            "icon": "cmt.png"
+        },
+        {
+            "name": "Package Deployer",
+            "shortName": "pd",
+            "author": "Microsoft",
+            "icon": "pd.png"
+        }
     ]
 }

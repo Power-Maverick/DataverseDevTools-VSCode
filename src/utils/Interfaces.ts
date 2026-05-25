@@ -193,6 +193,7 @@ export interface ILinkerFile {
 
 export interface ILinkerRoot {
     WebResources: ILinkerResources;
+    Plugins?: ILinkerPlugins;
     Settings: any[];
 }
 
@@ -206,6 +207,36 @@ export interface ILinkerRes {
     "@_dvDisplayName": string;
     "@_dvFilePath": string;
     "@_Id": string;
+}
+
+export interface ILinkerPlugins {
+    Plugin: Array<ILinkerPlugin> | ILinkerPlugin;
+}
+
+export interface ILinkerPlugin {
+    "@_Id": string;
+    "@_dvName": string;
+    "@_type": string;
+    "@_localProjectPath": string;
+    "@_environment": string;
+}
+
+export interface IPluginAssemblies {
+    value: IPluginAssembly[];
+}
+
+export interface IPluginAssembly {
+    pluginassemblyid: string;
+    name: string;
+}
+
+export interface IPluginPackages {
+    value: IPluginPackage[];
+}
+
+export interface IPluginPackage {
+    pluginpackageid: string;
+    name: string;
 }
 
 export interface IOptionSetMetadata {
@@ -294,9 +325,10 @@ export interface ITools {
 }
 
 export interface IToolDetails {
-    toolName: string;
-    toolShortName: string;
-    toolAuthor: string;
+    name: string;
+    shortName: string;
+    author: string;
+    icon?: string;
 }
 export interface ICliCommandList {
     commands: ICliCommand[];
