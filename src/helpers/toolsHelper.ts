@@ -1,4 +1,3 @@
-import { showERDPanel } from "dvdt-erd-generator";
 import * as vscode from "vscode";
 import { ToolsTreeItem } from "../tools/toolsDataProvider";
 import { connectionCurrentStoreKey } from "../utils/Constants";
@@ -6,6 +5,7 @@ import { ErrorMessages } from "../utils/ErrorMessages";
 import { IConnection } from "../utils/Interfaces";
 import { State } from "../utils/State";
 import { DataverseRestBuilderView } from "../views/DataverseRestBuilderView";
+import { ERDGeneratorView } from "../views/ERDGeneratorView";
 import { ViewBase } from "../views/ViewBase";
 import { CLIHelper } from "./cliHelper";
 
@@ -31,7 +31,7 @@ export class ToolsHelper {
                 this.openDRB(views);
                 break;
             case "erd":
-                this.openERDGenerator();
+                this.openERDGenerator(views);
                 break;
             case "prt":
                 cliHelper.launchPRT();
@@ -57,12 +57,18 @@ export class ToolsHelper {
         }
     }
 
-    public openERDGenerator(): void {
+    public async openERDGenerator(view: ViewBase): Promise<void> {
         const connFromWS: IConnection = this.vsstate.getFromWorkspace(connectionCurrentStoreKey);
+
         if (connFromWS && connFromWS.currentAccessToken) {
-            showERDPanel(this.vscontext.extensionUri, connFromWS.environmentUrl, connFromWS.currentAccessToken);
+            const webview = await view.getWebView({
+                type: "erdGenerator",
+                title: "ERD Generator",
+            });
+
+            new ERDGeneratorView(webview, this.vscontext, connFromWS.environmentUrl, connFromWS.currentAccessToken);
         } else {
-            vscode.window.showErrorMessage(ErrorMessages.commonToolsError);
+            vscode.window.showErrorMessage("No active Dataverse connection. Please connect first.");
         }
     }
 }

@@ -28,7 +28,7 @@ export async function registerToolsCommands(vscontext: vscode.ExtensionContext, 
             command: "dvdt.commands.openERDGenerator",
             callback: async () => {
                 try {
-                    toolHelper.openERDGenerator();
+                    toolHelper.openERDGenerator(views);
                 } catch (error) {
                     errorHandler.log(error, "openERDGenerator");
                 }
