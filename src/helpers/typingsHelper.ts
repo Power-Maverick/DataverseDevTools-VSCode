@@ -5,7 +5,7 @@ import { getWorkspaceFolder, writeFileSync } from "../utils/FileSystem";
 import { IOptionSet } from "../utils/Interfaces";
 import { Placeholders } from "../utils/Placeholders";
 import { DataverseHelper } from "./dataverseHelper";
-import { EnumResolver, ITypingEnumOption, buildTyping, emitTyping, resolveTypingModel } from "./typingsBuilder";
+import { EnumResolver, ITypingEnumOption, buildTyping, emitTyping, multiSelectPicklistTypeName, resolveTypingModel } from "./typingsBuilder";
 
 export class TypingsHelper {
     /**
@@ -38,7 +38,7 @@ export class TypingsHelper {
     private createEnumResolver(entityLogicalName: string): EnumResolver {
         return async (attrLogicalName: string, attributeTypeName: string): Promise<ITypingEnumOption[] | undefined> => {
             const optionset: IOptionSet =
-                attributeTypeName === "MultiSelectPicklistType"
+                attributeTypeName === multiSelectPicklistTypeName
                     ? await this.dvHelper.getMultiSelectOptionsetForAttribute(entityLogicalName, attrLogicalName)
                     : await this.dvHelper.getOptionsetForAttribute(entityLogicalName, attrLogicalName);
             if (optionset && optionset.Options) {

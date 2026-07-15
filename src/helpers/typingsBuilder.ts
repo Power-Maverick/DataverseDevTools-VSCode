@@ -38,6 +38,8 @@ export interface ITypingNamespaces {
     nsXrm: dom.NamespaceDeclaration;
 }
 
+export const multiSelectPicklistTypeName = "MultiSelectPicklistType";
+
 const typingNamespace: string = "Xrm";
 const typingInterface: string = "EventContext";
 const typingMethod: string = "getFormContext";
@@ -61,7 +63,7 @@ const attributeTypeDefMap = new Map<string, string>([
     ["LookupType", "Attributes.LookupAttribute"],
     ["MemoType", "Attributes.StringAttribute"],
     ["MoneyType", "Attributes.NumberAttribute"],
-    ["MultiSelectPicklistType", "Attributes.MultiSelectOptionSetAttribute"],
+    [multiSelectPicklistTypeName, "Attributes.MultiSelectOptionSetAttribute"],
     ["OwnerType", "Attributes.LookupAttribute"],
     ["PartyListType", "Attributes.LookupAttribute"],
     ["PicklistType", "Attributes.OptionSetAttribute"],
@@ -82,7 +84,7 @@ const controlTypeDefMap = new Map<string, string>([
     ["LookupType", "Controls.LookupControl"],
     ["MemoType", "Controls.StringControl"],
     ["MoneyType", "Controls.NumberControl"],
-    ["MultiSelectPicklistType", "Controls.MultiSelectOptionSetControl"],
+    [multiSelectPicklistTypeName, "Controls.MultiSelectOptionSetControl"],
     ["OwnerType", "Controls.LookupControl"],
     ["PartyListType", "Controls.LookupControl"],
     ["PicklistType", "Controls.OptionSetControl"],
@@ -92,7 +94,7 @@ const controlTypeDefMap = new Map<string, string>([
 ]);
 
 // Types whose option values are resolvable to enums.
-const choiceTypes = new Set<string>(["PicklistType", "MultiSelectPicklistType", "StateType", "StatusType"]);
+const choiceTypes = new Set<string>(["PicklistType", multiSelectPicklistTypeName, "StateType", "StatusType"]);
 
 // A column is generated iff its type is mapped and the platform says it can
 // be placed on a form. IsCustomizable and the _base exclusion are legacy
