@@ -1,6 +1,8 @@
 import * as dom from "dts-dom";
 import { camelize, pascalize } from "../utils/ExtensionMethods";
 
+/* eslint-disable @typescript-eslint/naming-convention */
+
 // Structural view of the attribute metadata this module needs. Kept separate
 // from IAttributeDefinition (utils/Interfaces.ts imports vscode) so the
 // builder and its unit tests run in plain Node.
@@ -41,8 +43,6 @@ const typingInterface: string = "EventContext";
 const typingMethod: string = "getFormContext";
 const typingOmitAttribute = "Omit<FormContext, 'getAttribute'>";
 const typingOmitControl = "Omit<FormContext, 'getControl'>";
-const xrmAttribute = "Attributes.Attribute";
-const xrmControl = "Controls.StandardControl";
 
 // Keyed on AttributeTypeName.Value (AttributeTypeDisplayName). The legacy
 // AttributeType enum is incomplete for newer column types — multi-select,
@@ -101,6 +101,14 @@ export function isGeneratedAttribute(a: ITypingSourceAttribute): boolean {
     return attributeTypeDefMap.has(a.AttributeTypeName.Value) && a.IsValidForForm === true && !a.IsPrimaryId && a.IsCustomizable.Value && !a.LogicalName.endsWith("_base");
 }
 
+function requireMapped(map: Map<string, string>, attributeTypeName: string): string {
+    const typeRef = map.get(attributeTypeName);
+    if (!typeRef) {
+        throw new Error(`No Xrm type mapping for attribute type ${attributeTypeName}`);
+    }
+    return typeRef;
+}
+
 function sortByLogicalName(a1: ITypingSourceAttribute, a2: ITypingSourceAttribute): number {
     if (a1.LogicalName > a2.LogicalName) {
         return 1;
@@ -112,7 +120,7 @@ function sortByLogicalName(a1: ITypingSourceAttribute, a2: ITypingSourceAttribut
 }
 
 export async function resolveTypingModel(entityLogicalName: string, attributes: ITypingSourceAttribute[], enumResolver: EnumResolver): Promise<ITypingModel> {
-    const filteredAttributes = [...attributes].filter(isGeneratedAttribute).sort(sortByLogicalName);
+    const filteredAttributes = attributes.filter(isGeneratedAttribute).sort(sortByLogicalName);
     const resolvedAttributes = await Promise.all(
         filteredAttributes.map(
             async (a) =>
@@ -141,11 +149,11 @@ export function buildTyping(model: ITypingModel): ITypingNamespaces {
 
     model.attributes.forEach((a) => {
         const nameParam = dom.create.parameter("name", dom.type.stringLiteral(camelize(a.logicalName)));
-        interfaceAttributes.members.push(dom.create.method("getAttribute", [nameParam], dom.create.namedTypeReference(attributeTypeDefMap.get(a.attributeTypeName) || xrmAttribute)));
+        interfaceAttributes.members.push(dom.create.method("getAttribute", [nameParam], dom.create.namedTypeReference(requireMapped(attributeTypeDefMap, a.attributeTypeName))));
     });
     model.attributes.forEach((a) => {
         const nameParam = dom.create.parameter("name", dom.type.stringLiteral(camelize(a.logicalName)));
-        interfaceAttributes.members.push(dom.create.method("getControl", [nameParam], dom.create.namedTypeReference(controlTypeDefMap.get(a.attributeTypeName) || xrmControl)));
+        interfaceAttributes.members.push(dom.create.method("getControl", [nameParam], dom.create.namedTypeReference(requireMapped(controlTypeDefMap, a.attributeTypeName))));
     });
     nsXrm.members.push(interfaceAttributes);
 
@@ -161,6 +169,7 @@ export function buildTyping(model: ITypingModel): ITypingNamespaces {
         if (a.options) {
             const e = dom.create.enum(a.logicalName, true, dom.DeclarationFlags.ReadOnly);
             a.options.forEach((o) => {
+                // Skip options whose label sanitizes to an empty string (e.g. entirely non-Latin labels).
                 if (o.name) {
                     e.members.push(dom.create.enumValue(o.name, o.value));
                 }

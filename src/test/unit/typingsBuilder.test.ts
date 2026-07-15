@@ -1,6 +1,8 @@
 import * as assert from "assert";
 import { ITypingEnumOption, ITypingSourceAttribute, buildTyping, emitTyping, resolveTypingModel } from "../../helpers/typingsBuilder";
 
+/* eslint-disable @typescript-eslint/naming-convention */
+
 function attr(logicalName: string, typeName: string, overrides?: Partial<ITypingSourceAttribute>): ITypingSourceAttribute {
     return {
         LogicalName: logicalName,
@@ -69,6 +71,15 @@ describe("resolveTypingModel", () => {
         assert.strictEqual(source[0].LogicalName, "new_zzz");
     });
 
+    it("excludes attributes whose IsValidForForm is null", async () => {
+        const source = [attr("new_kept", "StringType"), attr("new_nullvff", "StringType", { IsValidForForm: null })];
+        const model = await resolveTypingModel("account", source, noEnums);
+        assert.deepStrictEqual(
+            model.attributes.map((a) => a.logicalName),
+            ["new_kept"],
+        );
+    });
+
     it("awaits deferred enum resolution for every choice attribute (race regression)", async () => {
         const deferred = (options: ITypingEnumOption[]) => new Promise<ITypingEnumOption[]>((resolve) => setTimeout(() => resolve(options), 20));
         const resolver = async (name: string) => deferred([{ name: `${name}Option`, value: 1 }]);
@@ -121,5 +132,15 @@ describe("buildTyping", () => {
         assert.ok(output.includes('new_a = "new_a"'), output);
         assert.ok(output.includes('new_b = "new_b"'), output);
         assert.ok(output.includes('"account"'), output);
+    });
+
+    it("throws for an unmapped attribute type in a hand-built model", () => {
+        assert.throws(() => buildTyping({ entityLogicalName: "account", attributes: [{ logicalName: "new_x", attributeTypeName: "BogusType" }] }), /No Xrm type mapping/);
+    });
+
+    it("emits a triple-slash reference to the xrm typings", async () => {
+        const model = await resolveTypingModel("account", [attr("new_text", "StringType")], noEnums);
+        const output = emitTyping(buildTyping(model));
+        assert.ok(output.includes('path="../node_modules/@types/xrm/index.d.ts"'), output);
     });
 });
