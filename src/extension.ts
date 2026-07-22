@@ -63,12 +63,20 @@ export function deactivate() {
  */
 function startTokenExpirationCheck(context: vscode.ExtensionContext) {
     let lastNotifiedExpiration = false;
+    // Tracks whether a valid token has been observed since activation, so the notification
+    // only fires for an expiration that happens during this session, not a stale connection
+    // left over from before a VS Code restart.
+    let hasObservedValidToken = false;
 
     tokenExpirationTimer = setInterval(() => {
         const dvHelper = new DataverseHelper(context);
         const isExpired = dvHelper.isCurrentConnectionTokenExpired();
 
-        if (isExpired && !lastNotifiedExpiration) {
+        if (!isExpired) {
+            // Reset notification flag when token is refreshed
+            hasObservedValidToken = true;
+            lastNotifiedExpiration = false;
+        } else if (hasObservedValidToken && !lastNotifiedExpiration) {
             // Get current connection to create tree item for reconnect
             const conn = dvHelper.getCurrentWorkspaceConnection();
 
@@ -97,9 +105,6 @@ function startTokenExpirationCheck(context: vscode.ExtensionContext) {
             if (conn) {
                 vscode.commands.executeCommand("dvdt.explorer.connections.updateStatusBar", conn);
             }
-        } else if (!isExpired) {
-            // Reset notification flag when token is refreshed
-            lastNotifiedExpiration = false;
         }
     }, TOKEN_CHECK_INTERVAL);
 }
