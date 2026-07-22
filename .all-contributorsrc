@@ -139,7 +139,7 @@
             "name": "Mosh-K",
             "avatar_url": "https://avatars.githubusercontent.com/u/158998622?v=4",
             "profile": "https://github.com/Mosh-K",
-            "contributions": ["code", "design", "userTesting"]
+            "contributions": ["code", "design", "userTesting", "bug", "maintenance", "test"]
         }
     ],
     "contributorsPerLine": 7
