@@ -1,4 +1,5 @@
 out
+out-tests
 node_modulesout
 node_modules
 .vscode-test/

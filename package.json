@@ -31,6 +31,7 @@
         "pretest": "npm run compile-tests && npm run compile && npm run lint",
         "lint": "eslint src --ext ts",
         "test": "vscode-test",
+        "test:unit": "tsc -p tsconfig.tests.json && mocha \"out-tests/test/unit/**/*.test.js\"",
         "format": "prettier --write src",
         "version": "auto-changelog -p && git add CHANGELOG.md",
         "contributors:add": "all-contributors add",
