@@ -1,7 +1,6 @@
 {
     "dvdt.commands.category": "Dataverse DevTools",
     "dvdt.explorer.category": "Explorer",
-    "dvdt.menus.group.ts": "dvdevtools-ts",
     "dvdt.menus.group.wr": "dvdevtools-wr",
     "dvdt.menus.group.plugin": "dvdevtools-plugin",
     "dvdt.config.title": "Dataverse DevTools",
