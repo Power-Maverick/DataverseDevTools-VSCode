@@ -9,8 +9,6 @@ import { camelize, pascalize } from "../utils/ExtensionMethods";
 export interface ITypingSourceAttribute {
     LogicalName: string;
     AttributeTypeName: { Value: string };
-    IsValidForForm: boolean | null;
-    IsPrimaryId: boolean;
     IsCustomizable: { Value: boolean };
 }
 
@@ -39,12 +37,15 @@ export interface ITypingNamespaces {
 }
 
 export const multiSelectPicklistTypeName = "MultiSelectPicklistType";
+const virtualTypeName = "VirtualType";
 
 const typingNamespace: string = "Xrm";
 const typingInterface: string = "EventContext";
 const typingMethod: string = "getFormContext";
 const typingOmitAttribute = "Omit<FormContext, 'getAttribute'>";
 const typingOmitControl = "Omit<FormContext, 'getControl'>";
+const xrmAttribute = "Attributes.Attribute";
+const xrmControl = "Controls.StandardControl";
 
 // Keyed on AttributeTypeName.Value (AttributeTypeDisplayName). The legacy
 // AttributeType enum is incomplete for newer column types — multi-select,
@@ -96,19 +97,19 @@ const controlTypeDefMap = new Map<string, string>([
 // Types whose option values are resolvable to enums.
 const choiceTypes = new Set<string>(["PicklistType", multiSelectPicklistTypeName, "StateType", "StatusType"]);
 
-// A column is generated iff its type is mapped and the platform says it can
-// be placed on a form. IsCustomizable and the _base exclusion are legacy
-// restrictions carried over from the previous implementation.
+// Only true virtual columns are skipped; every other customizable, non-_base
+// column is generated. The exclusion keys on AttributeTypeName because the
+// legacy AttributeType enum reports "Virtual" for multi-select, file and
+// image columns, which do need typings.
 export function isGeneratedAttribute(a: ITypingSourceAttribute): boolean {
-    return attributeTypeDefMap.has(a.AttributeTypeName.Value) && a.IsValidForForm === true && !a.IsPrimaryId && a.IsCustomizable.Value && !a.LogicalName.endsWith("_base");
+    return a.AttributeTypeName.Value !== virtualTypeName && a.IsCustomizable.Value && !a.LogicalName.endsWith("_base");
 }
 
-function requireMapped(map: Map<string, string>, attributeTypeName: string): string {
-    const typeRef = map.get(attributeTypeName);
-    if (!typeRef) {
-        throw new Error(`No Xrm type mapping for attribute type ${attributeTypeName}`);
-    }
-    return typeRef;
+// Unmapped types fall back to the generic Xrm types so that a column type this
+// version does not know about still gets a usable signature instead of being
+// dropped from the output.
+function mappedOrDefault(map: Map<string, string>, attributeTypeName: string, fallback: string): string {
+    return map.get(attributeTypeName) ?? fallback;
 }
 
 function sortByLogicalName(a1: ITypingSourceAttribute, a2: ITypingSourceAttribute): number {
@@ -151,11 +152,11 @@ export function buildTyping(model: ITypingModel): ITypingNamespaces {
 
     model.attributes.forEach((a) => {
         const nameParam = dom.create.parameter("name", dom.type.stringLiteral(camelize(a.logicalName)));
-        interfaceAttributes.members.push(dom.create.method("getAttribute", [nameParam], dom.create.namedTypeReference(requireMapped(attributeTypeDefMap, a.attributeTypeName))));
+        interfaceAttributes.members.push(dom.create.method("getAttribute", [nameParam], dom.create.namedTypeReference(mappedOrDefault(attributeTypeDefMap, a.attributeTypeName, xrmAttribute))));
     });
     model.attributes.forEach((a) => {
         const nameParam = dom.create.parameter("name", dom.type.stringLiteral(camelize(a.logicalName)));
-        interfaceAttributes.members.push(dom.create.method("getControl", [nameParam], dom.create.namedTypeReference(requireMapped(controlTypeDefMap, a.attributeTypeName))));
+        interfaceAttributes.members.push(dom.create.method("getControl", [nameParam], dom.create.namedTypeReference(mappedOrDefault(controlTypeDefMap, a.attributeTypeName, xrmControl))));
     });
     nsXrm.members.push(interfaceAttributes);
 

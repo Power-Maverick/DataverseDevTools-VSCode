@@ -114,7 +114,6 @@ export interface IAttributeDefinition {
     AttributeType: string;
     AttributeTypeName: IAttributeTypeName;
     AttributeOf: string;
-    IsValidForForm: boolean | null;
     MaxLength: number;
     IsPrimaryId: boolean;
     IsSearchable: boolean;

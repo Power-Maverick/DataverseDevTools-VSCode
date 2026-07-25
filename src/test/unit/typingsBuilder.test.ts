@@ -7,8 +7,6 @@ function attr(logicalName: string, typeName: string, overrides?: Partial<ITyping
     return {
         LogicalName: logicalName,
         AttributeTypeName: { Value: typeName },
-        IsValidForForm: true,
-        IsPrimaryId: false,
         IsCustomizable: { Value: true },
         ...overrides,
     };
@@ -43,22 +41,49 @@ describe("resolveTypingModel", () => {
         assert.strictEqual(model.entityLogicalName, "account");
     });
 
-    it("excludes primary ids, non-form, non-customizable, _base, unmapped and BigInt attributes", async () => {
+    // Primary ids and system columns are not placeable on a form, so filtering
+    // on form eligibility silently dropped them from generated typings.
+    it("retains primary ids and system columns that cannot go on a form", async () => {
+        const source = [
+            attr("accountid", "UniqueidentifierType"),
+            attr("importsequencenumber", "IntegerType"),
+            attr("owninguser", "LookupType"),
+            attr("owningbusinessunitname", "StringType"),
+        ];
+        const model = await resolveTypingModel("account", source, noEnums);
+        assert.deepStrictEqual(
+            model.attributes.map((a) => a.logicalName),
+            ["accountid", "importsequencenumber", "owningbusinessunitname", "owninguser"],
+        );
+    });
+
+    it("retains attribute types that have no dedicated Xrm mapping", async () => {
+        const source = [attr("new_bigint", "BigIntType"), attr("new_entityname", "EntityNameType"), attr("new_unknown", "SomeFutureType")];
+        const model = await resolveTypingModel("account", source, noEnums);
+        assert.deepStrictEqual(
+            model.attributes.map((a) => a.logicalName),
+            ["new_bigint", "new_entityname", "new_unknown"],
+        );
+    });
+
+    it("excludes non-customizable, _base and true virtual attributes", async () => {
         const source = [
             attr("new_kept", "StringType"),
-            attr("accountid", "UniqueidentifierType", { IsPrimaryId: true, IsValidForForm: false }),
-            attr("new_hidden", "StringType", { IsValidForForm: false }),
             attr("new_locked", "StringType", { IsCustomizable: { Value: false } }),
             attr("new_amount_base", "MoneyType"),
-            attr("new_categoryname", "VirtualType", { IsValidForForm: false }),
-            attr("new_bigint", "BigIntType"),
-            attr("new_entityname", "EntityNameType", { IsValidForForm: false }),
+            attr("new_categoryname", "VirtualType"),
         ];
         const model = await resolveTypingModel("account", source, noEnums);
         assert.deepStrictEqual(
             model.attributes.map((a) => a.logicalName),
             ["new_kept"],
         );
+    });
+
+    it("includes multi-select, file and image columns despite their legacy Virtual AttributeType", async () => {
+        const source = [attr("new_multi", "MultiSelectPicklistType"), attr("new_file", "FileType"), attr("entityimage_big", "ImageType")];
+        const model = await resolveTypingModel("account", source, noEnums);
+        assert.strictEqual(model.attributes.length, 3);
     });
 
     it("sorts attributes by logical name without mutating the input", async () => {
@@ -69,15 +94,6 @@ describe("resolveTypingModel", () => {
             ["new_aaa", "new_zzz"],
         );
         assert.strictEqual(source[0].LogicalName, "new_zzz");
-    });
-
-    it("excludes attributes whose IsValidForForm is null", async () => {
-        const source = [attr("new_kept", "StringType"), attr("new_nullvff", "StringType", { IsValidForForm: null })];
-        const model = await resolveTypingModel("account", source, noEnums);
-        assert.deepStrictEqual(
-            model.attributes.map((a) => a.logicalName),
-            ["new_kept"],
-        );
     });
 
     it("awaits deferred enum resolution for every choice attribute (race regression)", async () => {
@@ -104,10 +120,24 @@ describe("buildTyping", () => {
     it("emits correctly typed getAttribute/getControl signatures", async () => {
         const model = await resolveTypingModel(
             "account",
-            [attr("new_multi", "MultiSelectPicklistType"), attr("new_bool", "BooleanType"), attr("new_text", "StringType"), attr("new_file", "FileType")],
+            [
+                attr("accountid", "UniqueidentifierType"),
+                attr("importsequencenumber", "IntegerType"),
+                attr("new_multi", "MultiSelectPicklistType"),
+                attr("new_bool", "BooleanType"),
+                attr("new_text", "StringType"),
+                attr("new_file", "FileType"),
+                attr("owningbusinessunitname", "StringType"),
+                attr("owninguser", "LookupType"),
+            ],
             noEnums,
         );
         const output = emitTyping(buildTyping(model));
+        assert.ok(output.includes('getAttribute(name: "importsequencenumber"): Attributes.NumberAttribute;'), output);
+        assert.ok(output.includes('getAttribute(name: "owningbusinessunitname"): Attributes.StringAttribute;'), output);
+        assert.ok(output.includes('getAttribute(name: "owninguser"): Attributes.LookupAttribute;'), output);
+        assert.ok(output.includes('getControl(name: "owninguser"): Controls.LookupControl;'), output);
+        assert.ok(output.includes('accountid = "accountid"'), output);
         assert.ok(output.includes('getAttribute(name: "new_multi"): Attributes.MultiSelectOptionSetAttribute;'), output);
         assert.ok(output.includes('getControl(name: "new_multi"): Controls.MultiSelectOptionSetControl;'), output);
         assert.ok(output.includes('getAttribute(name: "new_bool"): Attributes.BooleanAttribute;'), output);
@@ -134,8 +164,10 @@ describe("buildTyping", () => {
         assert.ok(output.includes('"account"'), output);
     });
 
-    it("throws for an unmapped attribute type in a hand-built model", () => {
-        assert.throws(() => buildTyping({ entityLogicalName: "account", attributes: [{ logicalName: "new_x", attributeTypeName: "BogusType" }] }), /No Xrm type mapping/);
+    it("falls back to the generic Xrm types for an unmapped attribute type", () => {
+        const output = emitTyping(buildTyping({ entityLogicalName: "account", attributes: [{ logicalName: "new_x", attributeTypeName: "SomeFutureType" }] }));
+        assert.ok(output.includes('getAttribute(name: "new_x"): Attributes.Attribute;'), output);
+        assert.ok(output.includes('getControl(name: "new_x"): Controls.StandardControl;'), output);
     });
 
     it("emits a triple-slash reference to the xrm typings", async () => {
