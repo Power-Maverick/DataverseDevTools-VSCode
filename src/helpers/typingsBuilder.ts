@@ -53,15 +53,19 @@ const xrmControl = "Controls.StandardControl";
 // File/image have no dedicated @types/xrm interfaces yet; the generic
 // Attribute/StandardControl mappings are conservative fallbacks.
 const attributeTypeDefMap = new Map<string, string>([
+    ["BigIntType", "Attributes.NumberAttribute"],
     ["BooleanType", "Attributes.BooleanAttribute"],
+    ["CalendarRulesType", "Attributes.Attribute"],
     ["CustomerType", "Attributes.LookupAttribute"],
     ["DateTimeType", "Attributes.DateAttribute"],
     ["DecimalType", "Attributes.NumberAttribute"],
     ["DoubleType", "Attributes.NumberAttribute"],
+    ["EntityNameType", "Attributes.Attribute"],
     ["FileType", "Attributes.Attribute"],
     ["ImageType", "Attributes.Attribute"],
     ["IntegerType", "Attributes.NumberAttribute"],
     ["LookupType", "Attributes.LookupAttribute"],
+    ["ManagedPropertyType", "Attributes.Attribute"],
     ["MemoType", "Attributes.StringAttribute"],
     ["MoneyType", "Attributes.NumberAttribute"],
     [multiSelectPicklistTypeName, "Attributes.MultiSelectOptionSetAttribute"],
@@ -71,18 +75,23 @@ const attributeTypeDefMap = new Map<string, string>([
     ["StateType", "Attributes.OptionSetAttribute"],
     ["StatusType", "Attributes.OptionSetAttribute"],
     ["StringType", "Attributes.StringAttribute"],
+    ["UniqueidentifierType", "Attributes.StringAttribute"],
 ]);
 
 const controlTypeDefMap = new Map<string, string>([
+    ["BigIntType", "Controls.NumberControl"],
     ["BooleanType", "Controls.BooleanControl"],
+    ["CalendarRulesType", "Controls.Control"],
     ["CustomerType", "Controls.LookupControl"],
     ["DateTimeType", "Controls.DateControl"],
     ["DecimalType", "Controls.NumberControl"],
     ["DoubleType", "Controls.NumberControl"],
+    ["EntityNameType", "Controls.Control"],
     ["FileType", "Controls.StandardControl"],
     ["ImageType", "Controls.StandardControl"],
     ["IntegerType", "Controls.NumberControl"],
     ["LookupType", "Controls.LookupControl"],
+    ["ManagedPropertyType", "Controls.Control"],
     ["MemoType", "Controls.StringControl"],
     ["MoneyType", "Controls.NumberControl"],
     [multiSelectPicklistTypeName, "Controls.MultiSelectOptionSetControl"],
@@ -92,6 +101,7 @@ const controlTypeDefMap = new Map<string, string>([
     ["StateType", "Controls.OptionSetControl"],
     ["StatusType", "Controls.OptionSetControl"],
     ["StringType", "Controls.StringControl"],
+    ["UniqueidentifierType", "Controls.StringControl"],
 ]);
 
 // Types whose option values are resolvable to enums.

@@ -17,8 +17,13 @@ const noEnums = async () => undefined;
 describe("resolveTypingModel", () => {
     it("includes every mapped attribute type", async () => {
         const source = [
+            attr("new_bigint", "BigIntType"),
             attr("new_bool", "BooleanType"),
+            attr("new_calendarrules", "CalendarRulesType"),
             attr("new_customer", "CustomerType"),
+            attr("new_entityname", "EntityNameType"),
+            attr("new_managedproperty", "ManagedPropertyType"),
+            attr("accountid", "UniqueidentifierType"),
             attr("new_date", "DateTimeType"),
             attr("new_decimal", "DecimalType"),
             attr("new_double", "DoubleType"),
@@ -57,12 +62,11 @@ describe("resolveTypingModel", () => {
         );
     });
 
-    it("retains attribute types that have no dedicated Xrm mapping", async () => {
-        const source = [attr("new_bigint", "BigIntType"), attr("new_entityname", "EntityNameType"), attr("new_unknown", "SomeFutureType")];
-        const model = await resolveTypingModel("account", source, noEnums);
+    it("retains an attribute type that has no dedicated Xrm mapping", async () => {
+        const model = await resolveTypingModel("account", [attr("new_unknown", "SomeFutureType")], noEnums);
         assert.deepStrictEqual(
             model.attributes.map((a) => a.logicalName),
-            ["new_bigint", "new_entityname", "new_unknown"],
+            ["new_unknown"],
         );
     });
 
@@ -133,6 +137,8 @@ describe("buildTyping", () => {
             noEnums,
         );
         const output = emitTyping(buildTyping(model));
+        assert.ok(output.includes('getAttribute(name: "accountid"): Attributes.StringAttribute;'), output);
+        assert.ok(output.includes('getControl(name: "accountid"): Controls.StringControl;'), output);
         assert.ok(output.includes('getAttribute(name: "importsequencenumber"): Attributes.NumberAttribute;'), output);
         assert.ok(output.includes('getAttribute(name: "owningbusinessunitname"): Attributes.StringAttribute;'), output);
         assert.ok(output.includes('getAttribute(name: "owninguser"): Attributes.LookupAttribute;'), output);
