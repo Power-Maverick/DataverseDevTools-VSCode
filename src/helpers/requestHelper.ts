@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import fetch from "node-fetch";
+import fetch, { Response } from "node-fetch";
 import { v4 as uuid } from "uuid";
 import { apiPartUrl, connectionCurrentStoreKey, customDataverseClientId, LoginTypes, maxRetries } from "../utils/Constants";
 import { IConnection } from "../utils/Interfaces";
@@ -46,7 +46,7 @@ export class RequestHelper {
                         throw new Error("Unable to finish the requested query");
                     }
                 } else {
-                    return undefined;
+                    await this.raiseResponseError(response);
                 }
             }
         } catch (err) {
@@ -88,7 +88,7 @@ export class RequestHelper {
                         throw new Error("Unable to finish the requested query");
                     }
                 } else {
-                    return undefined;
+                    await this.raiseResponseError(response);
                 }
             }
         } catch (err) {
@@ -129,7 +129,7 @@ export class RequestHelper {
                         throw new Error("Unable to finish the requested query");
                     }
                 } else {
-                    return undefined;
+                    await this.raiseResponseError(response);
                 }
             }
         } catch (err) {
@@ -137,6 +137,19 @@ export class RequestHelper {
             throw err;
         }
     }
-}
 
-async function redirectTimeout(): Promise<void> {}
+    private async raiseResponseError(response: Response): Promise<never> {
+        let message = `Request failed with status ${response.status}`;
+        try {
+            const body = (await response.json()) as { error?: { code?: string; message?: string } };
+            if (body?.error?.message) {
+                message = body.error.message;
+            } else if (body?.error?.code) {
+                message = `Error code: ${body.error.code}`;
+            }
+        } catch {
+            // ignore JSON parse errors; use the default message
+        }
+        throw new Error(message);
+    }
+}
